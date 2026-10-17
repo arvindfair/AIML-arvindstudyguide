@@ -1,0 +1,117 @@
+Welcome to the course titled ‘Advanced Machine Learning’.
+
+ 
+
+Machine learning continues to evolve rapidly, with new techniques and applications constantly expanding what intelligent systems can achieve. This course builds on core machine learning foundations and introduces advanced models, selection strategies, interpretability methods, and practical paradigms used in high-impact domains today.
+
+ 
+
+You will begin with powerful supervised learning techniques such as Support Vector Machines and Naive Bayes, examining both their theoretical underpinnings and applied workflows. From there, you will progress to model selection and explainability - learning how to choose the right model for the task, tune it effectively, and ensure that its behaviour can be understood and trusted.
+
+ 
+
+In the modules that follow, you will explore the structure and forecasting of sequential data using time series modelling techniques, followed by modern recommendation system design driven by user behaviour and ranking mechanisms. Throughout the course, we will focus on balancing mathematical understanding with hands-on implementation and evaluation.
+
+ 
+
+ 
+
+Course Topics
+ 
+
+This course is divided into the following modules:
+
+ 
+
+Support Vector Machines and Naive Bayes
+Margin-based and probabilistic classification methods, kernel techniques, hyperparameter refinement, and practical modelling strategies
+ 
+Model Selection and Explainability
+Model selection frameworks, tuning and search methods, feature selection approaches, post-hoc explainability techniques (PDP, ICE, permutation importance, LIME, SHAP), global surrogate models, and association rule mining with support, confidence, lift, and Apriori
+ 
+Time Series Modelling
+Fundamentals of time-dependent data, simple and exponential smoothing models, prerequisites for autoregressive analysis, and AR-based forecasting
+ 
+Recommendation Systems
+User–item interaction modelling, collaborative filtering and matrix factorisation, and learning-to-rank approaches for personalised recommendations
+ 
+
+ 
+
+Learning Outcomes
+ 
+
+By the end of this course, you should be able to:
+
+Apply advanced supervised learning methods to real-world classification problems
+
+Perform robust model selection, tuning, and interpretation to ensure reliable and explainable AI outcomes
+
+Analyse and forecast sequential patterns using core time series models
+
+Build and evaluate recommendation systems using collaborative and ranking-based methods
+
+Select appropriate techniques based on data type, business objectives, and generalisation behaviour
+
+ 
+
+ 
+
+ 
+
+Prerequisites
+To make the most of this course, learners should have:
+
+A solid understanding of fundamental machine learning and deep learning concepts
+
+Familiarity with regularisation, hyperparameters, and model tuning concepts
+
+Practical experience in Python for data analysis and modelling, including libraries such as NumPy, Pandas, Scikit-learn, and visualisation tools
+
+ 
+
+This course prepares you to operate confidently in areas where advanced machine learning techniques are essential such as high-risk predictive modelling and intelligent recommendation systems, strengthening both your theoretical grounding and your applied expertise.
+
+Welcome to the module ‘Support Vector Machines and Naive Bayes’.  
+
+ 
+
+This module introduces two classification models that represent contrasting approaches within machine learning. We will talk about Support Vector Machines (SVMs) and Naive Bayes models.  
+
+ 
+
+SVMs take a geometric approach, identifying boundaries that best separate categories of data, while Naive Bayes relies on probability and independence assumptions to make fast, effective predictions. 
+
+ 
+
+SVM introduces the powerful idea of hyperplanes as separators in multidimensional spaces, aiming not just to divide classes, but to do so with optimal confidence. As data becomes more complex, SVM extends naturally through soft margins and kernel methods, enabling flexible modelling of nonlinear relationships. Although SVMs can be applied to regression tasks as well, we will focus on their classification abilities only in this module. 
+
+ 
+
+Naive Bayes, on the other hand, keeps computation light and assumptions simple. Built on Bayes’ Theorem, it applies conditional probability to classification problems, proving especially effective in domains such as text analytics where feature independence can be a reasonable approximation. Despite its simplicity, it remains a robust baseline model thanks to its efficiency, versatility, and strong performance on high-dimensional features. 
+
+ 
+
+ 
+
+Learning Objectives 
+
+ 
+
+By the end of this module, you should be able to: 
+
+Explain the core principles behind SVMs and Naive Bayes as classification models 
+
+Understand hyperplanes, margins, and the role of slack variables in SVM optimisation 
+
+Recognise how kernel methods enable SVMs to model nonlinear decision boundaries 
+
+Derive and interpret the Naive Bayes classifier starting from Bayes’ Theorem 
+
+Distinguish between Gaussian, Multinomial, and Bernoulli Naive Bayes models and their appropriate use cases 
+
+ 
+
+Next, you can find the datasets and IPYNB notebooks used across this module.  
+Module-Resources-SVM-and-Naive-Bayes Folder 
+

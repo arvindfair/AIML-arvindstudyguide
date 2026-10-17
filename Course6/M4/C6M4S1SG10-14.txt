@@ -1,0 +1,304 @@
+Learning-to-Rank
+
+Let's now shift our focus to learning-to-rank methods, where the aim is to teach the model not just what to recommend but how to order those recommendations using pointwise, pairwise, or listwise ideas. 
+
+00:00:00 - 00:00:34
+Introduction to Learning to Rank in Recommendation Systems
+In many recommendation systems, the items that need should be shown to the user might be clear based on the recent items or recently released or relevant and so on. But what is what becomes the most important part here is how do we rank them? Which item should be shown first? Which item should be given higher preference in the order of viewing compared to others? That is what we refer to as learning to rank where our objective is to build the models that ranks the list of items that need to be shown to the user.
+00:00:35 - 00:01:08
+Importance of Item Ranking in Recommendation Systems
+The next few slides we are going to see very nice techniques telling us how we can rank the items given to the user. So in this paradigm our objective is to produce a ranked list of items for each user. As I earlier indicated, in some recommendation systems, for example in movie recommendation systems or let us say e-commerce recommendation system, there is business need to show certain items to user may be because of recency or popularity or whatever reason that might be.
+00:01:09 - 00:01:45
+Ranking in Search Engines and Recommendation Systems
+But the question now becomes what should be shown first, let us say on the top left corner of your screen and what should be shown at the bottom right corner of your screen. So the order in which we show the items is very, very important to increase the engagement and the interaction of users towards your items, right? So ranking is central in recommendation systems and what better example than search? When you search a query on let us say Google or Yahoo Oregon, Bing, right. The order in which your results are shown is place a prominent role, right? So there are three main approaches that we follow.
+00:01:45 - 00:02:13
+Point Wise Learning to Rank Approach
+One is point wise, pair wise and list wise. And very intuitively they are named because in point wise as we will see, we are going to give a rank to each item. In pair wise, we are going to give preference of one item over the other. In the list wise, the output is simply the ordered list of items in which they needs to be shown. So each approach defines a different training objective, different paradigm of ranking the items.
+00:02:13 - 00:03:01
+Point Wise Learning: Regression and Classification Tasks
+So as I mentioned briefly, the point wise learning to rank treat the ranking as a regression task. And why am I saying it is also classification task? If the number of items are fixed, let us say we have to rank among one to 10, then you can basically look at this problem as classifying this item into one of these ranks is not it. But more generally, we can also treat them as a regression problem. So what are we doing here? We want to predict this score. What is the rank associated with the item I for the user U? That is what Y hat UI represents. Again, repeating what is the rank that needs to be associated for the user U to the item I.
+00:03:02 - 00:04:04
+Pair Wise Learning to Rank Approach
+Right. So how would we do this guys? We will collect first the data, that is, we will see what is the relevant and actual rank associated for that user U for item I. Once you collect the data set of such interactions, that is you can have the user, you can have the item and the rank. So user U, item I and the actual rank is YUI. So such interaction, such data set now can be used to perform this regression. So we want to learn this model which fits these two. And as you just saw, it is a very simple, scalable and easy to implement paradigm, right? And unfortunately this does not directly optimize the ranking order. This you might have a conflicts among the interactions or the items that are ranked by this model. So it does not directly work with optimizing the ranking order. Now comes slightly extended paradigm which is called pair wise learning to rank.
+00:04:04 - 00:05:12
+Bayesian Personalized Ranking in Pair Wise Learning
+Again, Please note the name. The name gives away most of the content here. So here instead of learning the exact rank or preference for an item, we learn relative preference. So the question becomes for a user U, should I rate item I highly than item J or not? Which item should be ranked higher? Before you further see the slides guys, can you guess Did we read or did we study a technique to do this? You are right, Bayesian personalized ranking does exactly that. Please recall BPR works with triplets. The user I values are interacted with item I over the item J. So you can invoke the same model and learn what is the ranking that the model gives for user U towards item I and item J and then learn the relative preference. So this formula is exactly the same of PPR objective. Please recall right? So this tells us how to rank pair wise, right? And it is very good. It captures the ordering directly and it is widely used for top K recommendation systems.
+00:05:13 - 00:06:12
+List Wise Learning to Rank Approach
+And then comes list wise learning to rank. What is the objective here guys? I will tell you what is the input and output and I am sure you can think a bit and come up with the model that we will be trying to solve it. The input to this model is a list of items that needs to be shown. Output is ranked list right? So the list will be ordered in the order of preferences, sorted in the order of preferences. Highest preference being the first item being the highest preference. Now you might ask, how would I go about building such a model? Again, please recall one of the metrics that we studied called NDCG. I am sure all of you remember this metric. So the simple intuition here is why do not we maximize maximize the NDCG of a given list that we get right? Because NDCG represents the ranking of a list compare to the ideal ranking, is not it?
+00:06:12 - 00:07:13
+Optimizing NDCG in List Wise Learning
+So our objective simply becomes the metric, right? Our objective becomes symmetric here. So why do not we maximize the NDCG of the given list? In other words, minimize the negative of NDCG, right? And that is the simplest way of getting a sorted list of items. So my method will have the parameters to sort this given input list such that north DCG of the resulting output is as high as possible. Or in other words, the loss function which is negative of north DCG is as small as minimum as possible. Again a gradient descent scheme which implicitly which learns or adjust gradients to improve the ranking matrix. And if you really think about it, this idea aligns best with actual recommendation objectives because it is no longer point wise nor it is pair wise.
+00:07:13 - 00:08:08
+Comparison of Point Wise, Pair Wise, and List Wise Approaches
+We are giving the list of items to the system and it is sorting it in the order of preferences that it thinks the user will assign to the items. So there we have we have seen 3 approaches for ranking the given list of items point wise which predicts the score per item. It is very simple. And then you have pair wise which learns the ordering of item pairs or optimizes the ranking. But unfortunately we still need sampling. Please recall one of the pitfall of our Bayesian personalized ranking is how do you call what do you call as a negative samples. So that still carries over and the list wise it optimizes the full list matrix and it is the best alignment that you have for recommendation systems. But on the other side of the coin, the computational complexity is bit more compared to other two above.
+00:08:09 - 00:08:27
+Choosing the Right Ranking Approach Based on Objectives and Data
+And as we always say, the common wisdom here, we are supposed to choose the approach based on what is the objective, how much of the data we have, and what sort of a data do we have. These parameters determine the objective or the approach that you would pick.
+
+You have learnt how learning-to-rank methods help organise recommendations in a meaningful order. Next, we will cover feature engineering, where this organised data is turned into useful inputs for the model. 
+
+Feature Engineering
+
+We earlier discussed how good train-test splits and preventing leakage help us evaluate models properly. Here, you will learn how this organised data is turned into useful features that help a recommendation system learn patterns and make better predictions. 
+
+00:00:00 - 00:00:44
+Introduction to Data and Features in Models
+You often say your model is as good as the data, but there is an additional line I would like to add here. Your data is as good as the features, right? So please recall in the simple and the basic mill models, these models do not have capability to this to see or hear or feel right. It only takes what we are feeding it as an input. So when what becomes the most crucial part here is how are we representing our data, basically the features that we pass as input to the model, right. So that is what we are going to discuss next. What are the necessary features that we are going we have to include to build an efficient model and efficient recommendation system pipeline.
+00:00:45 - 00:01:18
+Importance of User Features in Model Performance
+Good features significantly improve model performance because good features imply good data and good data of course gives you better models. For simplicity, let us start with user features and what are the aspects of a user that needs to be captured in order to improve the performance or build models, right? And some of the features that we really want to capture is recency popularity, session based signals and matrix factorization latent scores, right?
+00:01:18 - 00:01:50
+Overview of User Feature Types
+And these are very nicely put together that represents both long term as well as the short term behavior patterns. So let us look at each of these aspects in detail and understand how they play a crucial role in building good models. Regency features a very common sense feature you definitely want to have in your model, which captures how recently a user interacted with items or categories, in simple words, the last time they entered your platform, right?
+00:01:50 - 00:02:25
+Recency Features and Exponential Time Decay
+And how do you assign a score? Again, recall the exponential time decay. The more recent they are, the higher scores they are willing to get right? So times in last interaction, time since last session, time of the day or weekday features, and the score that you associate. The feature that you write as a numerical input here can be calculated as a exponential time decay, right? And as before, this is very, very important data point for platform such as news, trending feeds and fast changing domains, right?
+00:02:25 - 00:03:30
+Popularity Features and Cold Start Problem
+Because what you want to show for a recent user and what you want to recommend for relatively older user might be very different in these domains. Then comes popularity features. It captures the global demand or trends across all users. What do we mean by that? Some examples here, the total interaction count for an item I and recent interaction count and what is the trending score, right? These are some of the examples of the popularity features that we would like to include for a given user, right? So how can I calculate the trending score popularity of an item? I right You are multiplying it as a convex combination of a recency and the total score that I have. And this really helps with cold start and smoothing recall. What do we mean by cold start? When we do not have enough information about a particular user, we can leverage what is happening around them, collect the popular features and associate that with the user.
+00:03:30 - 00:04:32
+Session Features and Immediate User Intent
+A quick example, if you all login to one of the media platforms, let us say YouTube and if you do not sign in, what are the videos that are probably shown to you, the ones which are popular is not it. So that is how it helps in the cold start problem. If you do not have enough information about a user, we can show what are the popular items around that particular user and session features very important it understand the short term and immediate intent of the user. Because what are the features that the user did in the current session that they have interacted with? And as I said, it computed from current session sequence, what are the last item that they have viewed? What are the last N items that they have viewed and category distribution in the session? What are the various categories that were shown to the user and how much time they spent in this session, right? And I am sure you are all relate with me when I say that the user tastes more often is influenced by recency features, right?
+00:04:32 - 00:05:09
+Matrix Factorization and Latent Features
+So we all hear music. So the songs that we played recently have a lot of important role to be played in the songs that we are going to listen next, right? So the session that just concluded, the latest items that we visited, that we interacted with play very dominant role in the recommendation of the next item that the user might interact with, right? And then why leave out the complex features that we collected, right? So we have spent so much energy and time in computing the features via your AL S Oregon BPR, right?
+00:05:09 - 00:06:40
+Combining Features for Robust User Representation
+So there is no nothing wrong including this features that we computed the latent features that we computed as a part of user feature vector, right? So we compute XUIU and what is matrix factorization score? Just the dot product between user I and user U and item I. And these embeddings capture collaborative patterns that are not explicitly available from the raw features. These were intelligently computed features like via our models like AL, South and BPR. And then once we have all these features put together, that is our MF session features, popularity features, and recency features. Putting them together will give you a robust and rigorous representation of A user, right? So in summary, Regency features captures freshness and recent activity, popularity captures the global trends, helps with cold start problems. Of course, if I do not have enough information about you, I will suggest which is popular around you. And the session captures the short term intent what happened just immediately. And then you have matrix factorization scores that captures the latent or hidden user item preferences. And then these feature engineering techniques combines signals across multiple time scales, that is both short term and long term interactions.
+
+We discussed how features provide the model with clearer signals to learn from. Next, let's explore how negative examples are chosen, which affects the training quality and fairness of the learning process. 
+
+Negative Sampling Strategies
+
+00:00:00 - 00:00:30
+Importance of balanced data in model building
+It is known that we need good data for building good models. Now what is meant by good data? Just having the positive examples suffices to be a good data. Of course not. We need a balance of positive and negative signals in the data so that the model understands what is meant by positive and what is meant by negative. Unfortunately, in recommendation systems, right when a user interacts with the system, we get a preference, we get a indication that they like it.
+00:00:30 - 00:01:02
+Challenges in capturing negative user preferences
+But how do we understand whether a user does not like something? One quick way they give a negative rating that is very sparse. So are there any techniques that we can learn from the interactions or lack of interactions for that matter? So to collect data about negative preferences of user towards items, that is what we are going to see next. How do we create a good enough data set with not just positive interactions but also with negative interactions?
+00:01:02 - 00:02:00
+Implicit vs explicit data in recommendation systems
+So let us go and study that negative sampling. Why is it needed? I am sure you should be answering this. At this point. Implicit data contains only positive interactions, whether the user has clicked, has viewed, has purchased, even the implicit data, right. On other hand, explicit data might contain negative experiences. When a user absolutely dislike a product, or a movie Oregon an item for that matter, they can go and negatively rate them. But I am sure you agree with me that these indications are very sparse, very less is not it? So we do not have explicit dislike labels or very sparse dislike labels. But for a model to do well, for a machine learning model to do well, we need good balance data set. If not 5050 which is like a gold standard which we all desire for we at least need a good balance of positive and negative interactions.
+00:02:01 - 00:02:57
+Negative sampling techniques in data collection
+Then comes how do we go about it? How do we build a data or construct, create data out of the interactions to create this negative samples, right? So there are some ideas that we can think of. The simplest being if the user has not observed some items, let us treat them as negatives. That makes a lot of sense, right? And we are really waiting for the negative signals to come forward. And this is 1 simple idea to do that where we treat unobserved items. The items that user has not interacted with, we consider them as negatives. So there are many items that user has not interacted with. You can randomly sample some of them and call them to be negative samples for this particular user. Because common wisdom is you make a hypothesis or assumption that user has not viewed them because probably they dislike them, right?
+00:02:57 - 00:03:38
+Random negative sampling method
+So that is how the thesis is and we sample some of the negative items in this manner, right? As I just said, random negative sampling stands for when sample items uniformly from the set of items that the user did not interact with. And what are the advantages? It should be pretty clear. It is very simple and of course widely used. And you recall BPR requires a negative samples and it works well for matrix factorization and TPR. But what are the limitations? User may not have seen those items for various reasons, it does not have to be just because they dislike them.
+00:03:39 - 00:04:23
+Limitations of random negative sampling
+And that is what my point here says. Unseen does not always mean negative preference. It can so happen that your UI did not show it right. So it brings in the popularity bias because the more popular items are of course seen and you consider them to be positive. While it might be easily possible that user can dislike a popular item, but they do not show unfortunately. So what is the other way of doing things? The time aware negative sampling which says sample negatives from the items that were actually exposed to the user, that is items which were shown but not clicked and items from the same session or the page that the user interacted with but they did not open those items.
+00:04:24 - 00:04:49
+Time-aware negative sampling approach
+And what are the items that were recently displayed but were not shown interest Right? And compared to the previous way of doing things, its is more realistic negatives. It reduces the exposure bias and it is seen to improve the top K ranking quality, right? So what is exposure bias? Please recall you are only going to see what you are shown right?
+00:04:49 - 00:05:13
+Exposure bias in recommendation systems
+So assuming that if you have not seen you do not like is not very realistic. You are only picking from the ones we are showing you. That is how recommendation systems work, right? So it reduces when you explicitly take that we have shown it, but they have not clicked it with a much more stronger signal than saying they have not clicked it because they did not like it. And what are the biases induced or introduced by negative sampling?
+00:05:14 - 00:06:26
+Biases and mitigation in negative sampling
+Very very important thing to keep in mind is negatives are assumed not observed is not it? These are always assumed. And on the random sampling bias you have, popular items will be sampled more often as negatives leads to under recommendation of long tail items and exposure bias. That is items that user never saw or treated as dislike. Because we are only going to see what we are showing you and how do we mitigated guys. So we have time aware sampling that we discussed or you can weigh these negative samples that you have sampled and then you can also calibrate what is the probability to of sampling a negative item from the given corpus of items that we have. So in summary, it is necessary, it is very important, it is an essential process for training on implicit feedback and random sampling introduces bias, time aware samples, items that users actually saw and correct sampling policy, improves all the models that we build, ranking and BPR ALS all the models and it reduces the exposure bias.
+
+
+You learnt how different sampling choices shape training data. Next, we will take a look at multi-modal approaches, where different types of signals come together to strengthen the overall recommendation system.
+
+Multi-Modal Recommendation System
+
+
+You have learnt how learning-to-rank methods arrange recommendations. Multi-modal systems build on this by combining signals such as text, images, audio, and behaviour to create a fuller picture of users and items. 
+
+
+
+00:00:00 - 00:01:12
+Introduction to Feature Engineering and Multimodal Recommendation Systems
+Recall, during feature engineering, we said the onus is on us to create features that accurately represent the entity. And we also said, look, the model does not have eyes and ears, but modern recommendation systems do have eyes and ears. What do we mean by that? Let us see. Going forward, the modern recommendation systems have access to images, text, audio and video, various modalities. It is not just one modality, but the data that we collect implicitly have all of them. Take an example e-commerce platform, you have an image of an object, you have a description of that object, you have the reviews of the object, you have a videos of how the product is working. So the immediate and important question that arises is can we leverage these modalities to create features, to create a model that is so rich, richer than the features that were hand crafted by bias, right. So that is the owners of what we are going to discuss next, the multimodal recommendation systems.
+00:01:12 - 00:02:06
+Multimodal Recommendation Systems and CLIP Paradigm
+So these systems use multiple signals to improve recommendations because please recall the better you represent the entity, the better will be your recommendation system results, right. So these models are inspired from paradigm called CLIP which stands for contrastive language image pairs and that learns shared embedding across modalities. We are going to look at this in detail in few minutes, right? And this is also very critical for cold start problem and content driven scenarios where not just what an entity is enough but you also need to see the image of an entity, audio, video, various modalities, right. So that is how we are going to leverage this signals and build efficient models.
+00:02:07 - 00:03:16
+Contrastive Learning in Multimodal Systems
+Again. Why multimodal? The behavioral data can be very sparse or insufficient. The content provides a strong signals, for example, images for fashion or product, text, descriptions, reviews, transcripts, audio and video signals and it helps in cold start item ranking, it helps in finding item similarities and it improves the quality of top key item lists. Why? Because the central thesis being we get better representations that is the central thesis and clip as an inspiration. Let me quickly give you a very brief idea or thought process of this technique called clip. If I show an image and if I describe an image, the same image. Suppose for example, if I show an image of a dog and if I say this is a dog you want or you expect that the embedding, the representation of the image and the representation of the description that I gave about the image should be similar.
+00:03:17 - 00:04:43
+Image and Text Embedding Alignment
+Are you getting the point here? So the point here is the similar modalities, right? Similar items in different modalities should share similar representations. An image of a dog and the description that this is a dog. These two representations should align. So how does it translate to recommendation systems? If I show you an image of a shirt of a particular company and then give the description of the shirt of that company, the embeddings of this image and the embeddings of this text should be similar compared to any other pair of image and text. So let us see. So we have two encoders to align the image and text embeddings via contrastive learning. I will explain why this is called contrastive very soon, right. So ZIMG is the embedding representation of the image. X&F is a function that we are applying. It can be any neural network or transformer or whatever architecture that you have studied prior. And this Z text is the representation of the text corresponding to the image, right? So when I say XT, it represents the same object. X is in one modality space called image, T is in one modality space called text.
+00:04:43 - 00:06:06
+Contrastive Objective in Recommendation Systems
+But they represent the same thing, right? Our objective that which you are going to see pretty shortly, will encourage to have high similarity between Z image and Z text. That is, they should share this hidden or latent space. Very beautiful, is not it? As discussed earlier, the function that we use to encode these modalities, in the case of text, it can be any sequence to sequence model, for example, Berter transformer, which is a sequence to sequence. And then for images, you have image models like CNN's or Vision Transformers. And in the case of processing audio or video signals, we have spectrogram or video Transformers, right? But Please note the core principle, the heart of these techniques map all modalities in a shared embedding space, right? So we should remember this again. Recall the example, an image of a particular brands shirt. Should the representation, the embedding of this image should align with the description of the same image. If I extract the embedding or representation of the text that describes the image and the representation of the image, they should be closer. So let us see how it is done.
+00:06:07 - 00:07:09
+Application of Multimodal Embeddings in Algorithms
+Again, we need positive and negative pairs and then we create pairs like this. The suppose you collect the pairs like this X1 and T1 like earlier X2 and T2 and so on. You want the representation of X1 to be closer to the representation of T1 compared. The denominator is exactly that compared to the representation of X1 with other T's. Getting the point representation of the image X should be closer to representation of the description T compared to the distance between the representation of X with all other descriptions. So that is what we are trying to do here, right? So ZI is a representation of the image I. It should align with representation of the corresponding text D when compared to corresponding text. TJTJ is the representation of the other items.
+00:07:10 - 00:08:55
+Fusion Strategies for Multimodal Embeddings
+So we want this to happen. That is why it is contrastive. It is contrasting between the representations of its corresponding pair and the other pairs. That is why it is a contrastive objective write. It aligns the representations across modalities, embeddings. Once we train this model from image, description pairs in this example, we get very rigorous, very rich embeddings. And once you have very rich features are embeddings, right. So we have all the stage set to apply any of the algorithms that you learnt so far, collaborative filtering, AL S, BPR anything with these rich embeddings and how do we use multimodal embeddings? As I said, feel free to use whatever algorithm that you have seen earlier. We can have even simpler things like this. We just use the embedding of an item which is obtained via the clip training that we did earlier. And then we take the dot product with the users representation to get a score, right? You can combine with collaborative embedding, you can do recency or popularity features, you can include session features. Anything is possible, right? And what is the beautiful bit, guys? Please note it is very strong for cold start because the embeddings have nothing to do with whether users have interacted or not. I am taking the image and the description which is given by the seller themselves and I am building a model, I am building a representation. So it is such a beautiful paradigm to start to go ahead with the to solve the cold start problems.
+00:08:56 - 00:10:02
+Training Pipeline for Multimodal Systems
+How do we infuse these things? Right now you have embeddings of image, you have embeddings of text, you have embeddings of probably audio, right? So immediate question that comes to your mind is should I combine all of them and call it as a common embedding or representation of an item or what is the other alternative? Guys, you work with each of the embeddings separately and then combine them. So that is what is meant by fusion strategies. When do you bring together these various modalities? One option as I said is early fusion. That is you just concatenate. You just put all of them together and we are done. Late fusion that is with each independent modality features you work with them. You you get a scores, whatever scores their ranks or your regression scores, whatever it is, and then combine them. Or you can use something like cross attention or diffusion where you can choose to learn a model which chooses which modality is appropriate at which point in time. That is, what is the cross attention?
+00:10:02 - 00:12:09
+Summary of Multimodal Recommendation Systems
+It attends to the most important features at a given relevant time step. And of course, like always, a choice depends on the problem that you are solving and how good each modality is. Here we are assuming all of them are equally important. But suppose one modality dominates if you have more images of a products than the descriptions of them. Then of course the common sense tells us to prioritize the image embeddings. Is not it? But typical training pipeline will look like this. We have a pre trained modality encoders the sequence to sequence models which takes whatever modality image or a text and gives you a representation. And Step 2, we might not have to rely entirely on those pre trained models. You are free to fine tune on the data that you are working with. And then you train the model with this multimodal embeddings and combined with behaviour embeddings in whatever fusion way possible. You combine them and train it or you train them and combine it. It does not make a difference. It depends on problem to problem. It depends on use case to use case. And finally, you evaluate these models using the matrix that we have seen or in the production via AB tests, right? In summary, the multimodal recommendation systems not just uses the behavior data, that is the interaction data, but it also uses the content of that particular data and it uses multiple modalities. That is why it is called multimodal. And it is a clip style contrastive learning metric that we saw which aligns the modalities into the common space. And these embeddings will of course enhance retrieval, ranking and cold start problems. And fusion strategies can intelligently combine these modalities and it is industry standard and becoming more and more relevant in practical recommendation systems.
+
+
+Note: This preliminary discussion involves some advanced generative AI concepts. At this stage, they are presented only to provide a high-level overview in the context of multimodal recommender systems. A detailed treatment of these concepts will be taken up later, when we discuss advanced generative AI topics.
+
+ 
+
+You learnt how multiple data sources can strengthen a recommendation model. Now, attempt the upcoming questions to test your understanding from this session.
+
+Recommendation System Fundamentals - Ungraded Assessment
+
+Which of the following best describes retrieval in a recommendation system? 
+
+Selecting the single best item for a user 
+
+Sorting all items in the catalogue 
+
+Reducing a large catalogue to a smaller set of candidate items 
+
+Predicting the exact next item a user will choose 
+
+Answer
+---------
+Reducing a large catalogue to a smaller set of candidate items
+
+Why: Retrieval is the first stage of a typical multi-stage recommendation pipeline (retrieval → ranking → re-ranking). Its job is to quickly narrow down a massive catalogue (potentially millions of items) to a much smaller candidate set (hundreds), using cheap, approximate methods (e.g., embedding similarity, ANN search, collaborative filtering signals). This is necessary because scoring every single item precisely for every user is computationally infeasible.
+
+The other options describe different stages or misconceptions:
+
+Selecting the single best item — that's closer to the final output after ranking/re-ranking.
+Sorting all items in the catalogue — that's ranking, which happens after retrieval, and typically only on the smaller candidate set, not the whole catalogue.
+Predicting the exact next item — this describes a specific task formulation (like next-item prediction), not the general purpose of retrieval.
+
+Which of the following is an example of implicit feedback? 
+
+A user giving a star rating 
+
+A user marking an item as 'favourite' 
+
+A user writing a review 
+
+A user viewing an item page 
+
+
+A user viewing an item page
+
+Why: Implicit feedback is inferred from user behavior rather than explicitly stated preference — the user isn't directly telling the system "I like this" or "I don't like this." Viewing a page is a behavioral signal that suggests interest, but it's indirect and noisy (they might have clicked accidentally, or viewed it and disliked it).
+
+The other options are all forms of explicit feedback, where the user directly and intentionally states their preference:
+
+Star rating — a direct, quantified preference signal.
+Marking as 'favourite' — an explicit, deliberate action indicating preference.
+Writing a review — an explicit, detailed expression of opinion.
+
+A useful mental model: implicit feedback = clicks, views, dwell time, purchases, scroll behavior (inferred intent). Explicit feedback = ratings, likes, reviews, thumbs up/down (stated intent).
+
+Why do we use recency, popularity, session-based signals, and MF latent scores in recommendation feature engineering? 
+
+To clean the dataset by removing old interactions 
+
+To capture different aspects of user behaviour and combine long-term and short-term patterns 
+
+To generate more training samples 
+
+To replace user and item IDs with new ones 
+
+To capture different aspects of user behaviour and combine long-term and short-term patterns
+
+Why: Each of these signals contributes a different, complementary piece of information about user preferences:
+
+Recency — captures short-term, time-sensitive intent (what's relevant to the user right now).
+Popularity — captures general item quality/trends, useful especially for cold-start scenarios where little is known about a specific user.
+Session-based signals — capture immediate, in-the-moment context (what the user is doing in this browsing session).
+MF (Matrix Factorization) latent scores — capture long-term, stable patterns in user-item affinity learned from historical interaction data.
+
+By combining these, a recommendation model gets a richer, more balanced feature set that reflects both fleeting short-term intent and stable long-term preference, rather than relying on any single signal (which would miss important context).
+
+The other options are incorrect:
+
+These signals aren't about data cleaning (removing old interactions).
+They're feature engineering, not a technique for generating synthetic training samples.
+They don't involve replacing IDs — that would relate to embedding/encoding schemes, not these behavioral signals.
+
+Which situation is an example of data leakage? 
+
+Using implicit feedback instead of explicit feedback 
+
+Sorting data by timestamp 
+
+Including future interactions from validation inside the training set 
+
+Using item popularity as a feature 
+
+Correct. Training on future interactions leaks information that the model should not have. 
+
+Why is time-aware negative sampling preferred over random negative sampling? 
+
+It reduces the number of negative samples required 
+
+It chooses the negatives that the user realistically ignored at that moment 
+
+It guarantees higher accuracy 
+
+It eliminates the need for evaluation metrics 
+
+Correct. It picks negatives based on what was available to the user at that time. 
+
+Recommendation System Techniques - Ungraded Assessment
+
+
+Which baseline method relies on the idea that recently interacted items are more relevant to the user? 
+
+Recency-based 
+
+Correct. Recency-based models prioritise items the user interacted with most recently. 
+
+Fill in the blank in the following sentence. 
+
+In item–item collaborative filtering, recommendations are generated by ________. 
+Comparing an item to other items based on shared interactions 
+
+Correct. Item–item CF groups items that receive similar user interactions. 
+
+What is the main goal of implicit matrix factorisation? 
+
+To cluster items into fixed groups 
+
+To learn low-dimensional user and item representations from implicit behaviour 
+
+To sort all items by global popularity 
+
+To increase the number of training labels 
+
+Correct. MF learns compact latent vectors for users and items based on implicit interactions. 
+
+Which learning-to-rank objective focuses on comparing pairs of items to learn ordering? 
+
+Pairwise 
+
+Correct. Pairwise methods compare two items to learn relative ranking. 
+
+In an LTR feature set, what does group_id typically represent? 
+
+A unique identifier for each user 
+
+The set of items being ranked for the same query or user 
+
+The popularity score of each item 
+
+The model used to generate the features 
+
+The set of items being ranked for the same query or user
+
+Why: In Learning-to-Rank (LTR), training data is organized into groups (also called "query groups"), where each group contains all the candidate items that need to be ranked relative to each other for a single query/user/session/context. The group_id tells the LTR algorithm (e.g., LambdaMART, XGBoost's rank:pairwise/rank:ndcg objectives) which items belong together so it can learn relative ordering within each group rather than comparing items across unrelated groups.
+
+This matters because ranking is inherently a within-group comparison problem — you want item A ranked above item B for the same user/query, not comparing item A for User 1 against item B for User 2 on an absolute scale.
+
+The other options are incorrect:
+
+A unique identifier for each user — that would just be a user_id, not necessarily tied to grouping items for ranking.
+Popularity score — that's a separate feature, unrelated to grouping.
+The model used to generate features — group_id has nothing to do with model identity; it's a data structuring field.
+
+
+
+
+

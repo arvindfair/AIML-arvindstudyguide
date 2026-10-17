@@ -1,0 +1,332 @@
+Session Overview
+
+Welcome to the session ‘Association Rule Mining’.
+
+ 
+
+Association rule mining is a powerful approach for discovering meaningful relationships within large sets of transactional data. Through simple and familiar examples like supermarket baskets, it becomes clear how analysing items that frequently occur together can reveal valuable insights. These insights influence everything from product placement and cross-selling to recommendation strategies and operational decisions.  
+
+ 
+
+The distinction between association rules and recommendation systems is also highlighted, showing how one uncovers broad behavioural patterns while the other focuses on personalised suggestions. The IF–THEN structure of these rules provides an intuitive way to express such relationships. 
+
+ 
+
+The exploration continues with the key metrics used to evaluate the quality of these rules — support, confidence, lift, and leverage. Using small transaction examples, the concepts of frequent itemsets and rule strength become easier to understand, along with the motivations behind thresholds and probability-based measures.  
+
+ 
+
+The overview also addresses common pitfalls, reminding us that strong numerical values do not always imply meaningful or causal relationships. Context, domain knowledge, and careful interpretation remain essential for applying association rule mining effectively in real-world scenarios. 
+
+ 
+
+The lecture notes for this session can be downloaded from below.
+Introduction
+
+
+Let’s begin with how data mining helps uncover meaningful patterns from large volumes of information. Association rule mining is one such technique that identifies items frequently bought together, often illustrated through simple grocery store examples. These patterns guide decisions in product placement, promotions, and customer experience.  
+
+ 
+
+Professor Raghavan will introduce how this technique works. 
+
+00:00:05 - 00:00:12
+Introduction to Association Rule Mining
+Today we are going to discuss association rule mining, which is an important technique in data mining.
+00:00:13 - 00:00:26
+Definition of Data Mining
+What is data mining? It is the exploration and analysis of large quantities of data and to extract meaningful patterns and insights from that data.
+00:00:26 - 00:00:37
+Distinction from Predictive Data Modeling
+This is not exactly predictive data modeling, so we are not going to be talking about machine learning. I just wanted to make this distinction.
+00:00:38 - 00:01:31
+Purpose and Benefits of Data Mining
+Machine learning is basically about building predictive models from training data and using that to make predictions in unknown situations later on. Here it is more passive. We are given a lot of data and from the data we are trying to extract useful information and it is more for understanding and of course we can use this understanding to make our enterprises, businesses and processes lot more efficient than what they are today. Association rule mining is as I said, one important technique in data mining and association rule mining basically involves trying to figure out interesting associations between items involved in transaction.
+00:01:31 - 00:02:44
+Concept of Association Rule Mining
+So I have used 2 specific terms here. Items and transactions transaction is any interaction between two parties. So typically say you and may be the departmental store that you go to you and e-commerce website or it could even be to to enterprises, right? In a transaction, there would be multiple units involved, multiple items involved, right? So if I am going to a departmental store to buy something, I would be buying XYZI, could be buying milk, I could be buying some cereals, I could be buying rice, I could be buying bread and so on, right? So these are the individual items that form part of the transaction and association rule mining specifically tries to understand Co occurrences or the the likelihood of typical collections of these items occurring together in a transaction.
+00:02:44 - 00:03:06
+Example of Item Co-occurrence
+So we would guess, I am sure any departmental store manager would know that well, if somebody is buying a milk packet, they would probably also buy, you know, cereals, right, Because you would eat cereals with milk and these two have a likelihood of going together.
+00:03:07 - 00:04:11
+Extracting Patterns from Transaction Data
+So can we extract these sort of patterns from the data that is available? So assume that you have all the transaction data, let's say from a departmental store for the last one year. OK, which means customer one transaction, they bought XYZ, customer 2 bought these these items, customer 3 bought these 33 items and so on, right. So I have a record of all of these. So that's the data that is available to you from this. Can you extract interesting associations of this kind? So that's basically the problem that we are talking about today. Another example, diapers then very likely I would also buy baby wipes, right? Yeah. So because these two will go together when you use diapers, when you want to change diapers, you will use wipes. So there are these associations and and this process is also often known as Market Basket analysis.
+00:04:12 - 00:04:20
+Market Basket Analysis
+And the other more, I guess technical name is association rule mining. Now why do we care?
+00:04:21 - 00:04:39
+Applications of Association Rule Mining
+I mean, why is association rule mining important at all? So there are there are several applications of association rule mining. This includes product placement, promotions, managing your stocks and inventory.
+
+
+Having explored these applications, you’ve seen how association rule mining supports recommendations, promotions, and operational efficiency across industries.  
+
+ 
+
+In the next video, we’ll move on to how these rules are created and how to assess their quality. 
+
+Applications of Association Rule Mining
+
+Now let’s begin to explore the applications of association rule mining.  
+
+ 
+
+Professor Raghavan will take you through how businesses use “bought together” patterns for cross-selling, product placement, promotions, and efficient stocking. 00:00:00 - 00:01:17
+Introduction to Association Rule Mining in E-commerce
+So when you shop on an e-commerce website like Flipkart or Amazon or something, you often see this that when you when you are trying to buy something just before you check out, it will also show you OK, people who have bought this have also bought these these these items. So would you like to buy these together? Now, how does the site figure out what are these additional things that need to be shown along with the one that you are actually planning to buy? Now that typically comes from association rule mining presumably runs an algorithm in the background which tells them that these collections of items typically go together. And so if I am buying X, then very likely I am also going to be buying Y&Z. So if I am buying a laptop from the website, then I may also be interested in a laptop bag, I may be interested in a mouse. If I am buying a phone, I may want a screen guard, I may want a cover for the mobile and so on. South there are these things would typically go together and they would try to show you those additional items as well. OK.
+00:01:17 - 00:02:18
+Cross-selling and Transaction Collections
+So obviously it it helps the e-commerce site and it also makes it I guess easier for you. You don't have to go searching for these individual items separately. This also helps the the store or the website do cross selling. So some of these items that they try to sell together are not probably directly related to each other, right. But it just so happens that those items happen to be bought typically together. There is a large likelihood that those items that are being shown will appear together as a collection in a transaction, and hence it makes sense to promote these additional items as well. The other way association rule mining can help is in better store layout for a departmental store.
+00:02:19 - 00:03:23
+Store Layout Optimization with Association Rule Mining
+I know that two items are going to be bought together very often, then it obviously makes sense for me to keep them together in the shelf, right? I don't want the customer to be going to 1 corner of the store for one item and another corner of the store for the second item when I know for sure that these two items are going to be bought together very often, right? So if I am buying groceries, then all the grocery items would be stacked together in the place. So when I am picking up rice, I also pick up Dal. I also pick up a few other things which are all kind of related to each other, right? So these interesting associations between items obviously helps in better layout or better item placement within departmental stores. This is also called affinity positioning because there is an affinity between two items.
+00:03:23 - 00:04:08
+Affinity Positioning in Departmental Stores
+You would like to position them together, position them in a virtual sense, or position them physically on the shelves of the departmental store. It also helps in operational management. So if I know that two items are going to be bought together or they will often be part of a single transaction, then it obviously does not make sense for the e-commerce supplier to be keeping the two items and two completely different warehouses, right? So that makes it very inefficient for them for the same transaction.
+00:04:08 - 00:05:11
+Operational Management and Warehouse Efficiency
+They have to pick one item from here and other item from somewhere else, right? It would be far more efficient. They can increase their throughput. They can make sure the deliveries can happen faster when they know that these items are going to be clubbed together and they need to be kept within the same warehouse. The items that are not so related to each other can kept be kept in separate warehouses. So it also helps in operation management and obviously as you know the the 10-15 minute deliveries kind of become very popular. These sort of operational optimization techniques actually do become very, very important because they will not be able to meet those 1015 minute SLA's with their customers unless they manage their operations very, very efficiently. It helps their delivery costs. They don't have to go to multiple places to pick up the items belonging to a single order.
+
+
+Having explored these applications, you’ve seen how association rule mining supports everything from cross-selling to smarter product placement and stocking decisions.  
+
+ 
+
+In the next video, we’ll look at how this differs from recommendation systems and why personalised suggestions rely on additional techniques beyond simple “bought together” patterns. 
+
+
+Differences From Recommendation Systems
+
+
+Earlier, we explored how association rule mining is used in real-life applications. 
+
+ 
+
+Now we look at how it differs from recommendation systems, which focus on personalised suggestions. Professor Raghavan will take you through this distinction. 
+
+ 00:00:00 - 00:00:26
+Introduction to Association Rule Mining and Recommendation Systems
+So we have been talking about association rule mining. You may also have heard a term called recommendation system. Now these two are related, but they are not exactly the same. Recommendation systems would use association rule mining techniques as well, but recommendation systems is a much bigger animal than association rule mining.
+00:00:26 - 00:01:11
+Recommendation Systems: Personalization and Data Utilization
+Association rule mining, as I said, is extracting those interesting associations between items in individual transactions. Now recommendation system goes way beyond that. So recommendation systems is a very personalized service. They take into account your previous buying patterns, the the sort of books that you have shown interest in, even even the time you spend browsing a particular item, looking at the specs and all that shows that you have an interest in it. Right now.
+00:01:11 - 00:02:22
+Sequential Pattern Matching vs. Association Rule Mining
+All these things go into a recommendation system and there is another related problem which is sequential pattern matching where this is a temporal thing. So overtime I did something today and am I likely to do something else maybe two months from now? Like the the good example is if somebody is buying baby diapers today, very likely within a few months, the person is likely to be interested in baby feed, right? Yeah. So baby, baby powders and those kind of things, right. Baby cereals and all that. So as the baby grows up, you know that the the sort of thing that the parent would be interested in will keep on changing as the baby grows up and that you can extrapolate over a period of time. So again, this is in contrast with association rule mining. Association rule mining is static. There is no temporality involved in it. It just looks at transactions items, That is it.
+00:02:23 - 00:03:25
+Static Nature of Association Rule Mining
+And but here in sequential pattern matching you are looking at how the buying patterns of a customer will change over a period of time, right. So this is again a different problem and that is not something that we are going to discuss in this. Then the other thing that one needs to be careful about is, and this is a very common fallacy that people get into, typically those who are not very conversant with formal logic. So if A implies B, meaning if if I know that B is likely to happen, if A happens, that does not mean that the the same relationship holds the other way round, right?
+00:03:25 - 00:03:44
+Understanding Implications in Formal Logic
+So if I if I bang against something then I am going to feel pain, but if I feel pain it does not necessarily mean I banged against something, right? So the implications do not work both ways.
+00:03:44 - 00:04:27
+Asymmetry in Implications and Consumer Behavior
+It is typically one way. It is an asymmetric thing. OK. So if you conclude that someone who buys milk is also very likely to buy cereals, it does not necessarily imply the other way round as well. You need to do a separate test to see if the other way round also holds. Yeah. So the other example, I mean, if somebody is interested in beauty products, they may be interested in health products as well. But the other way around may not be true. Someone who is interested in health products may not necessarily be interested in beauty products.
+
+In the video, we saw how association rule mining uncovers broad patterns across many customers, while recommendation systems personalise suggestions based on individual behaviour.  
+
+ 
+
+In the next video, we’ll move on to the IF-THEN structure behind association rules and understand how these rules are defined and evaluated. 
+
+Key Concepts
+
+
+Previously, we saw how association rule mining finds general patterns while recommendation systems focus on personalised suggestions. 
+Now, we move into the key concepts behind association rules, especially the IF-THEN structure and how antecedents, consequents, and rule strength are defined. 
+
+
+Professor Raghavan will help us understand these foundational ideas. 
+
+00:00:00 - 00:00:15
+Introduction to Association Rule Mining
+So we talked about association tool mining. Now let's actually jump into some specific concepts in association tool mining. Yeah, so it is the the.
+00:00:16 - 00:01:18
+Definition of Association Rule
+So let's first talk about what an association rule is. An association is just the fact that two items are likely to Co occur within a transaction. That's what an association is. Now an association rule is is a very specific term that is used for for an implication for an if then, right? So if I buy bread, then I am likely to buy butter. I am. I am not simply saying that butter and bread are likely to be bought together. I am actually making a slightly stronger statement. I am saying if you are buying butter or if you are buying bread, then you are very likely to also buy butter. So the the trigger is the the bread in some sense and the and the consequence is the butter.
+00:01:19 - 00:02:37
+Components of Association Rule: Antecedent and Consequent
+So the trigger is what is referred to as the antecedent in the rule. And the consequent is the is what you can infer from the antecedent. So an association rule is consists of an antecedent and the consequent. And the association rule basically states that it is likely that whenever the antecedent happens, the consequent is also likely to happen. Yeah. And so since we are just talking about collections of items within transactions, both the antecedent and the consequent are just sets or collections of items. So if somebody buys this set of items, then they are also likely to buy another set of items. Or if this set of items appears in a transaction, very likely some other set of items will also appear in the same transaction. This kind of a statement is what is called an association rule. And association rule mining is the process of extracting these kind of rules from tons and tons of data.
+00:02:39 - 00:03:05
+Purpose and Challenges of Association Rule Mining
+So we want to create good rules. So what is a good rule? A rule that will that will be true very often. The rule which will help me take better decisions, better placements, better operational management, all of that, right. Yeah. But is that does that come for free? No.
+00:03:05 - 00:04:17
+Computational Intensity in Association Rule Mining
+Obviously there are some challenges that you need to be aware of Indiana being able to produce good association rules. The association rule mining is quite computation intensive as you can imagine. Transactions by definition are high volume, right? They happen like if you are looking at e-commerce for example, the transactions are of the order of several millions or several maybe hundreds of millions every day, right. And so we are talking of huge volumes and we are talking about an inventory of items running into millions or billions. And sifting through all this data to extract interesting patterns is definitely very, very computation intensive. And now once I have got some candidate rules, how do I evaluate them?
+00:04:17 - 00:05:14
+Evaluating Association Rules: Metrics and Benchmarks
+On what basis do I say this rule is good, this rule is not good, and so on South this this is an important thing because unless you have some metrics, some benchmarks with which you can decide what rules are good and what rules are not good, then anything goes right. You will definitely not be able to create useful rules using your algorithm. Let us now look at some metrics for Oregon, some criteria with which we can evaluate a the quality of the rules that we extract. How we are going to extract the rules is something that we will discuss in a bit.
+00:05:15 - 00:06:52
+Importance of Rule Occurrence: Support Criterion
+For now, let us first understand what makes something a good rule. Are there ways, are there numbers, metrics that you can actually compute with which we will get some sense of how good or bad a rule is? Now, the first notion here is that for an association between items to be of any value, right, they must be occurring quite often, if not, if not always. Like if I have data for some departmental store and it it so happens that say out of one oh, oh, oh, oh transactions, two transactions had items A&B appearing together in B transaction. So let us say diapers and coke appearing together in just two transactions out of one oh, oh, oh, oh. Now yes, I mean that that is an association. They did occur together, but does that mean anything? Obviously not, right? You would give some importance to their Co occurrence only if, say out of one, oh, oh, oh, oh, at least in maybe a few thousands of those transactions. You find these two occurring together, then you would take them seriously, right? Not otherwise. So there is this notion of support.
+00:06:53 - 00:07:26
+Applicability of Rules in Transactions
+We will introduce these terms very soon. The most basic criterion for how useful a rule is is in how many of the transactions that you have with you in terms of the data that you have access to. For how many of those transactions is that rule at all applicable? If it is applicable only to a minuscule fraction of the transactions, then obviously it is not something that is useful.
+
+
+We have seen how association rules use IF-THEN statements, how antecedents and consequents are represented, and why computation and evaluation matter when generating useful rules. 
+
+
+In the next video, we’ll look at a simple example using a small transaction dataset to understand how frequent itemsets are identified. 
+
+Example
+In the previous video, we looked at the key building blocks of association rules, including how IF-THEN relationships are formed and evaluated. 
+ 
+
+In this video, we shift to a practical example and see how a minimum frequency threshold helps determine which itemsets are worth considering. 
+
+
+Professor Raghavan will walk you through this example. 
+00:00:00 - 00:00:16
+Introduction to utility in transactions
+So suppose I would consider something to be of reasonable utility if they occur together in at least two transactions.
+00:00:18 - 00:01:04
+Analyzing individual item frequency in transactions
+So here is simple an example data set. So there are 6 transactions here, and each transaction gives you the list of items in the individual transactions. In this now you can see that bread seems to have been bought very often. In four of these transactions you have bread appearing. You have milk appearing in five of these transactions. You have diapers appearing in four, beer appearing in four, eggs appearing in two, Coke appearing in 2. So we we just looked at individual items right now, let us start looking at pairs of items.
+00:01:04 - 00:02:28
+Analyzing pairs of items in transactions
+So let us look at bread and milk, bread and diapers, bread and beer. How often did these pairs appear in these six transactions that we have with us? Right. So bread and milk appeared 3 times, bread and diapers appeared 3 times, bread and beer appeared twice. But bread and eggs, bread and coke, they appeared only once. And since we set ourselves a minimum threshold frequency of two, I am going to ignore bread eggs and bread Coke as just incidental. I'm not going to take these very seriously, OK? And similarly, milk and eggs has just one occurrence out of six. So again, I'm going to reject it. OK, So you can look at all other pairs. There are other pairs like diapers, eggs, beer, Coke, eggs, and Coke. All of these are not associations. They are associations. I mean they because they did occur in some transaction. I mean, X and Coke, for instance, did not occur in any transaction at all. So that is clearly out of the question. But even the others, right, they did occur together, but that is just an accident, right? It did not occur frequently enough for me to take that association seriously. Now let us move on to triplets of items.
+00:02:29 - 00:03:35
+Analyzing triplets of items in transactions
+OK, so three items together, how often do they occur among these six transactions? And again, we are still sticking to our minimum threshold frequency of 2. So we do not want to take anything seriously if it is going to occur in less than two, which is 30% of the transactions. And again, a few triplets sort of fall out. Bread, milk, beer, bread, milk, coke, bread, diapers, Coke, bread, beer, and eggs. Milk, beer, and coke, milk, beer, eggs, diapers, beer, coke, diapers, beer, eggs. All of these do not meet the minimum criterion that we set for ourselves. So one trend that you will immediately notice is that as you keep increasing the size of the collection, the frequencies will keep dropping right you you do not expect bread, milk and diapers to occur as frequently as bread alone or bread and milk together.
+00:03:36 - 00:05:21
+Impact of collection size on frequency
+The number of occurrences of any collection across transactions will definitely not be more than the number of occurrences of any of its individual subsets. Like if bread, diapers appears three times and some of those occurrences may have milk, some may not have milk. So the ones that include milk also will definitely need to be less than the number of occurrences of justice, bread and diapers. So as you keep increasing the size of the collection, the frequency will keep dropping. No collection can have a frequency of occurrence which is more than the frequency of any of its subsets. So the other way to say it is that if say A&B together is not a very frequent occurrence, it does not pass our minimum threshold criterion, then anything you add on top of it also cannot definitely meet our criterion because the frequency can only drop, it can definitely not go up, right. So the the the moment I find a collection which falls below the threshold, then I can ignore anything which is built on top of it. Yeah. So the formal way of saying this is that any subset of a frequent item set, item set jargon that is used in association rule mining for the collection of items that we are talking about and any collection of items is referred to as an item set.
+00:05:22 - 00:06:33
+Frequent item sets and subset frequency
+A frequent item set is an item set that occurs more number of times than the minimum threshold that I have set for myself. And if there is an item set that that crosses the threshold, then every subset of the item set. So if you remove some items from that item set, what is left? That item set must also be frequent because it's occurrence frequency can only go up when you. So if I have an item set and it has say a frequency of 100, there are 100 transactions in which this item set appears. If I remove items from this item set, then the number of transactions where this reduced item set appears cannot be less than 100, it has to be more than 100. So let's say this example, Milk and diapers together appear three times, so that crosses are threshold of two, which clearly means that milk alone also meets the threshold. Diapers alone will also meet the threshold.
+
+
+In this example, we examined how item combinations are filtered based on how often they appear in the dataset, helping us focus only on meaningful patterns. 
+
+
+In the next video, we will introduce the idea of support and understand how it measures the presence of an itemset across all transactions. 
+
+Support
+
+So far, we explored an example showing how minimum frequency helps identify frequent itemsets. 
+
+
+Now, we turn to the concept of support — how often an itemset appears in the entire dataset and what that tells us about item co-occurrence. 
+
+
+Professor Raghavan will explain how support is computed and why it is useful. 
+
+ 00:00:01 - 00:00:10
+Introduction to metrics for evaluating association rules
+So let's now look at some metrics for evaluating association rules.
+00:00:11 - 00:00:35
+Definition and explanation of support metric
+The first one is that of support. Support is just the fraction of the transactions where this item set is found. So we are talking about metrics for item sets and association rule. So what is the difference between an item set and an association rule?
+00:00:35 - 00:01:16
+Difference between item sets and association rules
+An item set is just a collection of items. An association rule, as I mentioned earlier is is a relationship between two item sets. If if this item set, then some other item set that is an association rule. Now, support is is a metric that is often used for item sets, and it is simply the fraction of transactions in which this item set appears as a whole, right? All the items in the item set appear in those in at least that fraction of transactions.
+00:01:17 - 00:02:21
+Calculating support for item sets with examples
+That is what it means. So that is what is support. So how do you calculate support? You count the number of transactions in which this item set appears and divide that by the total number of transactions in your data set, and you can see from this example how you can calculate support for any given item set. The support for bread is 4 by 6. There are 6 transactions, so that goes in the denominator. 4 is the number of transactions where bread appears, so the support is 4 by 6, which is 0.67, and you can check for the others as well. Yeah. Now the other way to interpret this is if I pick a transaction at random uniformly, meaning every transaction is equally likely, I pick one of them blindly, right?
+00:02:22 - 00:03:12
+
+Then how likely is it that this item set will appear in that transaction? OK, so like for example, suppose a customer walks in right to your departmental store and I have a candidate item set in mind. So let's say bread and milk, support will tell me, OK, is this because this customer who has walked in is a random customer, right? And so I know nothing about this customer. If I want to make a guess on whether this person is going to buy milk and bread together, with what confidence can I say it? And that exactly is what the support is.
+
+
+We learnt how support measures the overall presence of an itemset and helps assess the strength of a rule. 
+
+
+In the next video, we look at confidence and how it evaluates the reliability of an association rule. 
+
+Confidence
+Earlier, we discussed support and how it measures how often an itemset appears across all transactions. 
+
+
+Now, we shift to confidence, which tells us how reliably the consequent follows when the antecedent occurs. It helps us judge the strength of an association rule using conditional probability. 
+
+
+Professor Raghavan will take you through this measure. 
+00:00:00 - 00:00:06
+Introduction to Association Rules
+Support is typically used for an item set. Now we are going to talk about an association rule, right.
+00:00:07 - 00:00:40
+Understanding Confidence in Association Rules
+So where we are talking about one item set implies another item set. If somebody is buying this, then that person is also likely to buy this. OK, so here we are taking something conditional. I mean we are looking at only those transactions where item set A has appeared, right? Among those, how often has B also appeared? So it is like this measure is what is called the confidence.
+00:00:42 - 00:02:28
+Calculating Confidence with Examples
+So how do I compute confidence? It is the number of transactions with all items in both the item sets, the antecedent and the consequent together. OK. And that divided by the number of transactions with only the antecedent. So how do you calculate confidence? Yeah. So here in this example, if I am trying to evaluate the rule milk and diapers implies beer or so milk and diapers appears in 3 transactions out of 6. So, I am going to ignore the other three. Take only these three. Among these three in how many has beer appeared? It has appeared in two of them. So, the confidence of milk and diapers implying beer is 2 by three which is 0.66, the confidence of beer implying milk and diapers. So now I am going to do a different calculation. I am going to first look at all the transactions which have beer, right. So 1234, there are 4 transactions which have beer. Among these four, how many also have milk and diapers? And that happens to be two, which is half, right? So you can see that if I see somebody picking up a beer, I cannot say with great confidence that the person will also pick up milk and diapers. On the other hand, if somebody is picking up milk and diapers, the confidence with which I can say this person will also pick up beer is much higher. Yes. So these are the 2 main metrics.
+00:02:28 - 00:03:09
+High Confidence vs. Causation
+There are couple of other metrics which we will look at, but these two metrics are the ones that are used very, very often. But a few words of caution here. Yeah, high support or high confidence, right, does not imply causation. Now what does that mean? It basically means that in the transactions that I happen to see, it so happens that like in the earlier example that we saw whenever there was milk and diapers in a transaction, very likely it will have beer.
+00:03:10 - 00:03:39
+Distinction Between Correlation and Causation
+Now, you cannot conclude from this that the person is buying beer because the person is buying milk and diapers. No, there is no causal connection. The act of buying milk and diapers is not causing this person also buy beer. This distinction is actually quite important. They just happen to appear together.
+00:03:41 - 00:05:21
+Low Support and High Value Items
+It is like saying, you know, the the hen crows every morning whenever the sun rises. So these two occur together. Yeah, but can you say that the sun rose because the hen crowed? No, obviously not that. That would be absolute nonsense, right? Yeah. So there is no because relationship between the antecedent and the consequent. It just so happens that in a lot of transactions they appear together. Now this we mentioned earlier also support is very low then it is not going to be terribly interesting because it is it appears in just very, very few transactions. So I mean why should I bother, right? But yeah, there could be exceptions if there are are rules where the support may be low, but it it's possible that the the consequent particularly is a very, very high value, right, right. So in in that case, yeah, obviously then it's not going to be occurring very often, right. But it may be important for the the seller or the departmental store to be aware of this, right? Because it is a very high valued item. So the in terms of support, it may be very low because very few transactions are anyway going to have B, right because it is a high valued item. But I would like to recognize when this high valued item is likely to be bought.
+00:05:21 - 00:06:12
+Promoting High Value Items
+So if I see somebody buying A, then because the confidence is high, then I may actually be tempted to believe that this person will also pick up B, which is actually interesting for me since it's a high valued item, right? So, so one way to sell, you know, high valued items could be to promote A to then entice the person into actually putting their money into B. And example here is like caviar versus champagne. Champagne is the high value item, right? Yeah. Now, so the other question that you might often have is, well, how do I set these numbers? So so the minimum threshold that I set for myself, should I set it at whatever, 20 percent, 10%, thirty percent, 50% What?
+00:06:12 - 00:07:32
+Setting Thresholds for Support and Confidence
+And what about confidence? Again, the same thing, right? Because these are fractions support and confidence. Please remember both are numbers between zero and one. OK, so if you if you are going to disqualify item sets which do not meet a minimum support criterion, you should be then very careful about where you are going to set your support threshold. If you set the threshold too low, then you are probably end up getting too many rules and frequent item sets which are actually useless, right? You, you will, you will end up with a spam of sorts, right? On the other hand, if you set the support too high, if you are going to be very, very picky and juicy about what you are going to accept, then you might hardly get anything right. So the the the real sweet spot is somewhere in between and what exactly the the correct support level or the confidence level you need to set us. That depends on the domain, depends on what you are looking for. And so it it's very very problem and scenario dependent. But that is something you need to be careful about.
+
+In this video, we learnt how confidence evaluates the reliability of a rule and why high confidence does not automatically imply causation. We also saw how business value can make even low-support but high-confidence rules meaningful.
+
+ 
+In the next video, we move to lift ratio and understand how it goes beyond confidence to capture the true strength of an association. 
+
+Lift Ratio
+
+
+Previously, we explored confidence and understood how it reflects the reliability of an association rule. 
+
+
+Now let’s begin with the lift ratio, which compares a rule’s confidence to what we would expect if the items were independent, helping us judge whether the association is truly meaningful. 
+
+
+Professor Raghavan will walk us through how lift is calculated and interpreted. 
+00:00:00 - 00:00:11
+Introduction to association rule mining metrics
+So couple of more metrics which you need to take into account when you are doing serious association rule mining.
+00:00:13 - 00:02:20
+Understanding confidence in association rules
+One of them is lift ratio now. So take an example of association rule which has a very high confidence. So very high confidence means what with high probability, whenever the antecedent appears, the consequent will also appear. Now suppose the consequent is something that appears in, say 90% of the transactions anyway, right? Irrespective of what the antecedent is then. So for example, suppose let us take a typical grocery kind of situation, right? People usually buy milk almost every day, right? So it may be reasonable to assume that almost every grocery transaction is probably going to contain milk. So milk has a very high probability of occurrence in any case, right, Irrespective of what you are antecedent. So Please remember we are looking at the confidence of an association rule. So how likely is B to appear if A appears right conditioned on the antecedent, how likely is the consequent? That's the question we are asking. But the consequent will anyway appear, right? So the confidence will definitely be high, but that is not because the because the trigger is coming from the antecedent, it that the the confidence shows up as a high value simply because the consequent is a very, very common occurrence, right? So how do you discount this? How do you make sure that the rule, the antecedent implying the consequent actually makes sense?
+00:02:21 - 00:04:05
+Explaining lift ratio in association rules
+OK, so that is exactly where the lift ratio comes in. Let's look at it this way. Let's go back to the same example that we took earlier, right? Milk implies cereals. OK, so now there is a customer walking in. I try to guess whether this person is going to buy cereals or not. Cereal is the consequent, right? So I want to guess whether this person is going to buy cereal. With what confidence will I be able to say it. So that that is 1 the other thing. Now let me do another calculation. Let me wait till this person buys something and I see that this person is picking up a bottle of milk. Now I try to guess whether this person will buy cereal or not. So the second guess that I am making, am I going to be more confident making the second guess compared to the first guess? That's the question we are asking because I saw milk, does that increase my confidence in being able to predict that this person will buy serials as well as opposed to being able to predict this person will buy serial right at the beginning without knowing anything about what this person is going to buy, right. So if my the chances that this person will buy cereal will increase having bought milk, then you know that milk actually has an influence on this person buying cereal, right? In a rough manner.
+00:04:05 - 00:06:03
+Calculating lift ratio with examples
+And that is exactly what lift ratio tries to measure. So how did we compute confidence? We took the frequency of the consequent among the transactions where the antecedent appears right. So that ratio is what the confidence is. And I want this confidence to be more than just the probability of finding the consequent in some arbitrary transaction without, with, or without the antecedent. So if the confidence of having seen the the antecedent is more than I would consider the lift to be good. So typically I would want the lift ratio to be greater than one for the rule to make sense. OK, let's look at the confidence for the rule. Coke implies milk, right? So let's first look at all the transactions which have Coke, which is 2 of them. Among these two in how many does milk appear? It appears in both. So which means the confidence is one. OK, so, so whenever somebody bought Coke, they also had milk along with it in the transaction. OK, so that is the numerator in the lift ratio. Yeah. But I want to now contrast this against the the support for milk alone, which is milk is the consequent. OK, milk appears in how many transactions Out of the six it appears in 12345 S 5 by 6 is the benchmark confidence for milk alone, and 1 / 5 by 6 is 1.2. So that means the fact that I saw Coke actually is increasing my confidence that this person is also going to buy milk.
+
+
+ 
+
+We have seen how the lift ratio adjusts for how common the consequent is and helps identify whether items truly occur together more often than chance. 
+
+
+In the next video, we move to leverage, another measure that contrasts observed co-occurrence with expected co-occurrence under independence. 
+
+Leverage
+After understanding the lift ratio and how it reveals associations stronger than chance, let’s begin with leverage — a measure that compares the observed co-occurrence of items with what we would expect if they were independent. This helps us identify patterns that genuinely stand out. 
+ 
+
+Professor Raghavan will explain how leverage is calculated and interpreted. 
+
+ 
+00:00:00 - 00:03:38
+Understanding Leverage in Item Sets
+Then finally, let's look at another metric which is leverage. So it tries to measure the propensity of two item sets to appear together within the same transaction. And yeah, so if they were completely independent. So if there is no real connection between the two in the sense that I mean having known that item set A is appearing in the transaction doesn't tell me anything about whether item set B will appear in the same transaction or not. OK, so then what is the likelihood of A&B appearing together? I take the support of A and support of B, Just multiply the two. OK. So if one item is likely to appear in 50% and another item is likely to appear on 50% of the transaction, and if these two are completely independent of each other, what is the probability that both will appear together in a transaction? It will be 50% into 50%, which is 25%, right? So I want to contrast this against the actual support for A&B together. So it is like, take a simple example, right? Yeah. So I take 2 coins, OK. And I toss these two coins independently 100 times each, OK? So toss one, toss 2, toss 3 for point A and toss one, toss 2, toss three, toss 100 for coin B OK. And yeah, so I toss both together once, twice, thrice, 100 times, OK, Now each of them individually, what is the likelihood that assume they are fair points. So what is the probability that they will come up heads? It's 50%. What about this point? It's again 50%. But if I ask you in how many of these simultaneous tosses will I see heads in both, then it is 25%, right? You won't expect more than 1/4 of the simultaneous tosses to have heads for both the coins. That's exactly what we are talking about here. OK, But if they are related to each other in some way, right? If I had some hidden wire between them or something like that, right? Where though? I mean, when I toss both of them, there is a strong connection between them. So if one comes up heads, there is also a likelihood that the other comes up also heads. OK. So in that case, the likelihood that both will come up heads will be much, much bigger than 25%, right, Because they are connected with each other. If they are completely independent, then it's only 25%. So if you look at the difference between the actual Co occurrence of A&B against the product of the occurrence of A, the support of A and support of B, which is when they are independent. But if the former is much bigger than the latter, then you know that there is actually a strong bond of some sort. There is a correlation between A&B. They are not entirely independent of each other. And that is essentially what leverage measures. So leverage looks at the support for A&B together minus the support of A multiplied by support of B. OK.
+
+n this video, we learnt how leverage highlights meaningful associations by contrasting actual and expected frequencies. 
+
+
+In the next video, we explore common pitfalls in association rule mining and why strong numerical measures alone may not guarantee useful insights. 
+
+Pitfalls to Consider
+
+
+00:00:00 - 00:01:12
+Understanding Metrics: Support, Confidence, Lift, and Leverage
+So we have these 4 metrics, right? So support, confidence, lift and leverage. Yeah, they will give you a sense of how interesting a rule is likely to be. But that is not the end of the story because you you simply cannot take away the human element from this. You need the main knowledge to assess whether something is really going to be interesting or not. There will be lots and lots of false positives in this exercise. When you do a large scale data analysis, it will throw up a whole bunch of seemingly credible association rules or item sets which may not actually make sense to a domain expert, right? So yeah, in the process you've also spent a lot of computation generating these worthless associations, correct? So this is something you need to be careful about. And this is where you know, setting the right confidence and support levels when you run your algorithm actually matters a lot. And yes, the domain knowledge and the statistical significance are extremely, extremely important.
+
+In this video, we learnt that numerical strength alone doesn’t guarantee meaningful insights — domain understanding and context are essential to avoid misinterpreting associations. 
+
+
+Next, we move on to the Apriori Principle Concepts, where we understand the foundational idea that guides how frequent itemsets are identified efficiently. 

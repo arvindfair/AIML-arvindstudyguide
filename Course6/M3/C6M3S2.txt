@@ -1,0 +1,455 @@
+Simple Time Series Models
+Session Overview
+
+
+Welcome to the session ‘Simple Time Series Models’.
+
+ 
+
+In this session, you will move from understanding time series data to building simple forecasting models. These models use basic assumptions about past behaviour to generate predictions.
+
+ 
+
+Now, Professor Ramesh will walk you through this.
+00:00:05 - 00:00:20
+Introduction to Time Series Models
+Welcome to the session on simple Time series models. In this session we move from understanding time series data to building simple models that help us make predictions.
+00:00:21 - 00:00:31
+Transition from Data Understanding to Model Building
+Before applying models, we will understand some modeling essentials including the concept of training and testing splits, evaluation metrics.
+00:00:31 - 00:00:47
+Modeling Essentials: Training, Testing, Evaluation Metrics
+We will try to fit a linear regression, the time series data and see how it is not an appropriate model for the prediction task and how this motivates for more specific models for time series data.
+00:00:47 - 00:00:57
+Linear Regression on Time Series Data
+We will also discuss some time series forecasting models such as Naive Forecast, Simple Average Model and Simple Moving Average models.
+00:00:58 - 00:01:06
+Time Series Forecasting Models Overview
+By the end of this session, you will be ready to build and evaluate simple time series forecasting models.
+
+
+ 
+
+In this session, you will:
+
+Understand modelling essentials such as training–testing splits and evaluation metrics
+
+Examine why linear regression is not well-suited for time series forecasting
+
+Build and interpret simple forecasting models such as the naïve model, simple average model, and simple moving average model
+
+ 
+
+By the end of this session, you will be able to build and evaluate basic time series forecasting models.
+
+Modelling Essentials
+
+As mentioned in the session overview, you will construct several basic time series forecasting models for making predictions. However, before you build any models, you must understand a few essential aspects of modelling that should consistently be in this module. These include:
+
+Train-test split of the data set
+
+Visualisation of the predicted values
+
+Calculation of RMSE and MAPE values
+
+ 
+
+Before learning more about the modelling essentials, let’s take a look at another data set that we will be using in this module to explain the working of any model we will build. This data set is a simplified version of the website traffic data set you saw before. 
+
+ 
+
+Let’s hear from Professor Ramesh as he elaborates on the simplified website traffic data set and then explains the modelling essentials.
+
+00:00:00 - 00:00:24
+Introduction to Time Series Data Modeling
+In this session, we will discuss on how to model time series data. So this is similar to the way machine learning models or model you will look at on how to model time series data here. So let us say we have the website traffic data. So this is from over this many number of months and this is number of visitors in thousands.
+00:00:24 - 00:01:10
+Train-Test Split in Time Series Data
+So if we have to model this so we can we have we will take the train test. Basically the train test split here is again 7037 and three we have taken 7 samples for the training and three samples for the prediction. If you see these are the predictions based on the past observation. So this is the train and test data and these are the predictions. If you see. So this is the this is a train and test part and these are the predictions part. Basically this is the prediction part. So this is we have 7 samples for training and three samples for test and we are trying to do the test and we are also doing the prediction. So the predictions are here. So there are there are some no answers here.
+00:01:10 - 00:02:38
+Difference Between Time Series and Machine Learning Models
+So this can be the test. And one important thing about time series as compared to a machine learning model is the machine learning model. For example linear division is an interpolation model. So time series is an extrapolation model. Basically you can extrapolate, you have the predictions here. Further, you can do the predictions for next intervals. Basically that is the difference in time series. So you have done that is we have done it for November. So in the case of linear regression, it is an interpolation problem. In this time series prediction, you can do the predictions for, you can do the prediction for the next month. Basically you can do the prediction for December, January and so on. South, this is an extrapolation problem. So we can do time series and extrapolation problem linear regression. Other things are interpolation problem within data set. So the difference between machine learning model and time series model seen in the case of linear regression. You fit a line here and then you try to predict an unseen sample. You try to do the predictions for an unseen sample. But in the case of time series you will be able to do extrapolate. Basically you can it is an extrapolation problem. You can try to you can you can predict beyond this time instances. Basically you can do the extrapolation also. Basically it is an extrapolation model. We can try to predict the the value in the next time step is important difference between machine learning and time series models. So how do we evaluate the performance of a time series prediction?
+00:02:38 - 00:03:49
+Evaluating Time Series Prediction Performance
+So there are standard measures for this, the root mean square error and mean absolute percentage error. So there are other measures but the prominent ones are the RMSE and map mean absolute percent error. Basically for all the time samples I is equal to 1 to N 2 minus predicted the whole square divided by north. So basically take the difference and square it and take the mean of that. And basically the root means square. So this is the square part. This is the mean part in the root root part. Basically what we are trying to do here is this. This RMSE takes care of the positive and negative errors will take the difference and square it so that they do not get negated. That is the side about why we use RMSE in this case. And then mean absolute percent error is basically 1 minus. This is a mod. Basically you do not take the sign into consideration here. This is a mod 1 minus predicted by true value. So this is another, I mean absolute percentage error. So this is the absolute percentage error that. So these are two important measures to evaluate the performance predictions of a time series forecasting.
+
+
+ 
+
+The data set consisted of the monthly website traffic of a company’s web page. As the values are simple, and the plot showed that the data set also has some patterns. We will use this data set to explain the working of the models we will build in this module.
+
+ 
+
+Here are a few essential aspects of modelling:
+
+Train-test split: We will divide the data set into training and testing sets. The training set will be used to train the model, while the testing set will be used to evaluate its performance.
+
+Note that we will be using the following color scheme to represent the train and test data:
+
+Training data: Blue
+
+Testing data: Green
+ 
+
+Visualisation of the predicted values: We will visually represent the predicted values alongside the actual values to gain insights into the model's performance and how well it captures the underlying patterns.
+
+We will use purple to represent the predicted values. Given a set of arbitrary predictions, you can see how they appear below.
+
+Here is the representation of the data set's train-test split along with the predictions.
+
+ 
+
+MODELLING ESSENTIALS
+
+ 
+
+
+
+ 
+
+Calculation of RMSE and MAPE values: To assess the accuracy of the predictions, we will calculate the root mean squared error (RMSE) and mean absolute percentage error (MAPE). These metrics provide a quantitative measure of the prediction errors.
+
+ 
+
+Now that you have learnt about the essentials of modelling, you are ready to build prediction models. Next, you will build simple models to predict future values.
+
+
+Simple Time Series Models
+
+
+
+You will now understand how prediction models are constructed. Although specialised models exist for time series forecasting, we will begin with a familiar approach: linear regression, before moving on to baseline time series models such as the naïve model, the simple average model, and the simple moving average model.
+
+Hand Raise
+
+
+00:00:00 - 00:00:23
+Introduction to time series models
+We will look at the time series models. There are different class of models, simple methods. The other one is smoothing models and autoregressive models. Each one of them have got their own characteristics. We will look at that. What we will do is we will try to do fit a linear regression model to a time series and see how linear regression does not work well for a time series.
+00:00:23 - 00:00:27
+Linear regression model for time series
+And that would be the motivation for us to look at other models.
+00:00:27 - 00:01:12
+Limitations of linear regression in time series
+We will try to fit a linear regression model to this data. So let us say we have this again the website traffic data. So this is our data. If you fit a linear regression line like this, let us say a naughty plus A1X is these are the bias in the coefficient. So we are trying to train a regression model equation for this. So these are the these are the coefficients. This would be prediction equation if you fit a linear regression for a time series data. The errors are very high here you can see this is the predicted. This is actual value so predicted actual. So the errors are very high here, which also means that if I plot try to plot the error residuals here, it would be something like this. Somewhere the error is less, somewhere the error is high.
+00:01:12 - 00:02:06
+Root mean square error and model evaluation
+So this makes the model heteroscedastic. So fitting a linear regression into a time series data does not work at all. So this makes a model heteroscedastic. These are let us say these are the error residuals here. So these are error residuals. This is the X axis is the actual minus the predicted value. So if you try to plot them so the points would be like this, it makes it a heteroscedastic model. You might have read it in linear regression. So this is a unstable model. So, so this is a motivation for us to look at other types of models for modeling time series data. So in this case, 19 -, 2 five .14 you would see the difference between the actual and predicted square them and take the root. This is the difference. So root mean square should be high or low. So closer it is to the predicted value.
+00:02:07 - 00:02:21
+Naive model forecasting
+Lower the root mean square error better is the model. Similarly, the map. We will now look at different types of model. We will try to fit simple models here. We will discuss a few simple models here. 1 is the very fundamental model.
+00:02:22 - 00:03:26
+Evaluation of naive method with RMSE and MAP
+It is a naive model forecasting basically in this case the proposed naive model equation Y cap, Y cap or Y hat is the predicted value, the predicted values, the last true value. It means the predicted value of this time series is the last value. So if you see this is the last value. The next value is just the last value. So if you see 20 to 22, the predicted values are just the last value. As it says is a naive prediction. Pick up the last value of the time series and that would be the predictions of the subsequent time horizon. Again we will evaluate the naive method with RMSE and MAP. If you see the error is 3.87 and it is 15.78% here. As we discussed, the prediction is made considering only the last true value. We have any other historic value. So we just pick up the last value and that would be the prediction actually. So this is the nine method. We will now look at a simple averaged method.
+00:03:26 - 00:04:24
+Simple average method for prediction
+In the case of simple average, take the mean of all of these samples and the predicted value is the mean. So these are very simple methods. Mean of all the training data points is the in the simple average method, the average of all of these methods. So 26 + 8 + 17 up to this. So you take the average of all of this and that would be the predicted value. Average of all of this is 21.86. So this is the predicted, it is a predicted value. This is a predicted value and this is a test data. The data that we have, this is the data that we have let me see the again computed here the actual manipulated predicted the square divided by number of samples under the root which will give you the RMSE is 3.76 and is one 7.43%. So these are very simple methods. So we will try to now look at simple moving average, simple moving average here in this case instead of taking the average of all of them, this is will be a gross generalization.
+00:04:24 - 00:06:02
+Simple moving average method
+What we will do is we take mean of previous M data points. Mean of previous M data point. Basically you pick up the the just three samples. Here M is equal to three. Basically you you pick up the the previous samples and the subsequent one would be the mean of all the predictions would be the mean of the three points. Basically if you see in this case we will take an example here. If you see the trained sample moving arrays 34 + 17 + 3022 so by two 4.33. So the the sample out is 3417 and 22 the subsequent samples is the mean of the three-part last three samples. Similarly, this sample this this prediction would be the mean of these three samples. So in this case moving average, we take the, we take a window and then we take the average of that. The predicted value would be the moving average value of the of the last previous 3 sample. In this case we have these three samples. Average of these 3 is a prediction of this particular time forecast. These three forecast OK. Again if you see the RMSE has increased here compared to the previous one, which again this is the difference between actual and predicted values. We have computing RMSE for simple moving average and map as well. So we have seen three simple models. One is naive model, 1 is the simple average model and simple moving average model. So predictions depend only on the limited number of recent past values. We have a moving average window. That window size is M.
+
+
+We started by applying linear regression by treating time itself as the independent variable. Each time point was assigned a numerical index, and a regression line was fitted to the data.
+ 
+
+The proposed equation is Equation, where Equation is the predicted value of the dependent variable at time Equation, and Equation is the numeric time index (independent variable).
+ 
+
+While linear regression captured the overall trend, it is not well suited for time series forecasting because:
+
+It treats observations as independent and ignores temporal dependence,
+
+It does not model autocorrelation or seasonality explicitly,
+
+Its performance deteriorates when patterns become non-linear or seasonal.
+
+
+For these reasons, specialised time series models are preferred. So we then applied the naïve model, which uses the most recent observation value as the forecast for all future time points. The general equation is Equation. This model ignores the rest of the historical data and serves as a simple baseline.
+
+ 
+We then applied the simple average model, which uses mean of all available historical data to generate predictions. The general equation is Equation. This approach smooths fluctuations but does not adapt to recent changes.
+
+ 
+Finally, we applied the simple moving average model, which focuses on recent history by averaging a fixed number of past observations. The general equation is Equation. Each prediction Equation is the average of the previous Equationobservations, where Equationis the window size. Predictions beyond the training period are typically based on the final window average. This approach balances noise reduction with sensitivity to short-term patterns.
+
+ 
+
+Together, these models illustrate how forecasting behaviour changes depending on how much historical information is used and how it is weighted. Next, you will see how these models are implemented in Python for the same problem statement that we had covered in the previous session.
+
+Python Demonstration: Simple Time Series Models
+
+
+
+00:00:00 - 00:00:16
+Introduction to Simple Time Series Model
+Welcome back. Let us continue our series which is a Part 3 which we will talk about the simple time series model. So where we will begin with the modeling process by you know establishing a performance baseline using the simplest methods here.
+00:00:16 - 00:00:43
+Establishing Performance Baseline in Time Series
+So this will confirms like which components of the time series like whether it's a trend or level which are the most dominant driving or need for more complex models, right? So to do so, first, you know, we need to split the data where into training and testing where we splitted here like 40-2 months for training and the last six months for testing, right?
+00:00:43 - 00:00:55
+Data Splitting for Training and Testing
+So let us start with, you know, a linear regression as our first trend aware model where you know, we need to fit a simple straight line is in the time index feature.
+00:00:55 - 00:01:43
+Linear Regression Model for Time Series
+So to do so, we need to 1st create the independent variable for the linear regression model, right? Then we need to convert the variables into 2D arrays and we will initialize the linear regression and then we will fit the model and once we done that we will create the independent variables for the complete data set. And finally we will get the predictions from the model and then convert the predictions into the single one simple 1D array, right? So if you visualize the predictions along the data here this how the plot look likes where you know this conforms straight upward sloping line which is successfully capturing the general growth, right?
+00:01:43 - 00:02:13
+Evaluating Linear Regression Model Performance
+So if we go ahead and evaluate my model, so I can quickly import the necessary packages and here I am calculating the RMSE and the map where if you observe the result, my RMSE is around 187 six, right? This is the score like all subsequent models or the simple model that we are going to try must beat, right? So let us move on to the another method which is a name method.
+00:02:14 - 00:03:19
+Naive Method for Time Series Forecasting
+So name method, it is nothing but it is predict the last value observed which is resulting in a flat forecasting line, right? So if we quickly generate the predictions for the test data and if you want to visualize our predictions look like if you can see here, it is a flat forecasting line, right? So this name method, if you if you evaluate on the, you know, if we get the matrix on the data on the test set by using RMSE and map. So we got, you know, around 18774, which is where we can say that naive model performs worse than our linear regression, confirming that upward trend is more significant, right? So let us quickly move on to the another method, which is the simple average method where the simple averages mean it uses the mean of all the historical data, right?
+00:03:20 - 00:04:10
+Simple Average Method for Time Series Forecasting
+So I will quickly generate the predictions and similarly I want to visualize the plot here. If you can see the plot here, this shows it severely underestimate the current sales level right now. If I quickly evaluate this model again on the test set and see the performance with our simple average, we got an RMSE of around you know 30846 this models records and it shows the worst performance compared to the other two showing this penalty for ignoring the upward trend here. Now let us quickly move on to the another method which is simple moving average method.
+00:04:11 - 00:05:30
+Simple Moving Average Method for Time Series Forecasting
+So unlike the simple average model, this model predicts the future values using the mean value of a contiguous set of training data point that fall within adjustable window here, right. So now again, let me quickly generate the prediction and let us. So if you observe the output this SME which is a simple moving average, it uses average of you know, if we observe the previous one, we use an average of small recent window which is a three months. But still it produce a flat forecast here, right? If I go ahead and evaluate my model and observe the results, my SMA value is. I mean the RMSA value is better than the simple average, but still it's performing poorly when compared to the other two models because it fails to extrapolate the track. So with this, let me conclude this where you know, our simple benchmark models have established a critical fact like any effective forecast must explicitly model the upper trend, right?
+00:05:31 - 00:05:41
+Conclusion on Benchmark Models Performance
+So out of all these experiments, So what we observed is like our current best performer is a linear regression model, but we know it's too simple.
+
+
+You were already familiar with building a linear regression model. In the naïve model, predictions were based only on the most recent observed value, while the simple average model used the mean of all historical data.
+
+ 
+
+For the simple moving average method we used the rolling() function to emulate a moving window on the data set and obtain mean values for each window. The rolling() function has window as the input parameter, which is the window size. In the demonstration we used a window size of 3.
+
+ 
+
+Let’s take a look at the results of each model applied on the superstore data set.
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+ 
+
+As can be observed, the linear regression model demonstrates better RMSE and MAPE values. However, it is important to consider the reasons for this outcome. One possible explanation is that the data set used in this example may not be complex enough, leading to accurate predictions of only the underlying trend. Additionally, the performance of the linear regression model might deteriorate when attempting to predict over a longer time period. Note that the assumption in the linear regression model, where time is considered as the cause of the dependent variable, is incorrect in the context of time series modelling. Therefore, you should not be misled solely by the superior error values of the linear regression model in this case.
+
+ 
+
+The simple methods run on the assumption that past values influence the future values perform somewhat well but they are not as good as the linear regression model. This is because we have not trained the model properly. The models we built were way too simple. Therefore, we need more advanced models that can capture the other components of the data as well.
+
+ 
+
+You are now familiar with some simple forecasting models, all of which assume that the past values of a time series influence its future values. These methods essentially differ in the way they assign importance to various past values.
+
+ 
+
+Next, we will summarise what you learnt in this session.
+
+
+# Part 3 - Simple Time Series Models
+In this part of the demonstration we will fit basic models to the data and analyse their performance using RMSE and MAPE values. We will build following models:
+- Linear regression
+- Naive
+- Simple average
+- Simple moving average
+We have analysed our time series data and studied its components. Let's now split the data into training and testing sets so that we're ready to build and evaluate time series models on the data.
+
+# Split the data into training and testing data sets
+train_len = 42
+df_train = df[:train_len] # first 42 months as training set
+df_test = df[train_len:] # last 6 months as out-of-time test set
+
+
+
+### Subpart 1 - Linear Regression Method
+We will begin by fitting a linear regression model to the training data and analyse its performance.
+
+# Import 'LinearRegression' from 'sklearn' for building regression models
+from sklearn.linear_model import LinearRegression
+
+# Create the independent variable for the linear regression model
+linreg_X = np.arange(0, train_len, 1)
+
+
+# Convert the training variables into 2D arrays
+linreg_X = linreg_X.reshape(-1, 1)
+linreg_y = np.array(df_train['Sales']).reshape(-1, 1)
+
+# Create and fit a linear regression model to the training data
+linreg_model = LinearRegression()
+linreg_model.fit(X = linreg_X, y = linreg_y);
+
+# Create the independent variable for the complete data set
+linreg_X_all = np.arange(0, len(df), 1)
+linreg_X_all = linreg_X_all.reshape(-1, 1)
+
+# Generate the complete regression line including both the training and testing data
+y_pred_lr = linreg_model.predict(linreg_X_all)
+
+# Convert the predictions into a 1D array
+y_pred_lr = y_pred_lr.reshape(len(y_pred_lr))
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df, x = 'Order Date', y = y_pred_lr, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Linear Regression Method');
+
+
+
+# Import 'mean_squared_error' from 'sklearn' for error computations
+from sklearn.metrics import mean_squared_error
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_lr_list = y_pred_lr[train_len:]
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_lr_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_lr_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df = pd.DataFrame(index = [0],
+                              data = {'Model': 'Linear Regression', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df.set_index(keys = 'Model', inplace = True)
+
+performance_df
+
+
+### Subpart 2 -  Naive Method
+
+# Generate predictions for the test data
+y_pred_n = df_train['Sales'][train_len - 1]
+
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_n, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Naive Method');
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_n_list = [y_pred_n] * len(df_test)
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_n_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_n_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Naive', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+### Subpart 3 -  Simple Average Method
+
+We will now build another simple model, the simple average model, which uses the mean of all the values in the training data set as the prediction for all future timesteps.
+
+# Generate predictions for the test data
+y_pred_sa = df_train['Sales'].mean()
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_sa, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Simple Average Method');
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_sa_list = [y_pred_sa] * len(df_test)
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_sa_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_sa_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Simple Average', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+
+### Subpart 4 -  Simple Moving Average Method
+
+Now we will fit a simple moving average model to the training data. Unlike the simple average model, this model predicts future values using the mean value of a contiguous set of training data points that fall within an adjustable window.
+
+**Note:** The window size can be adjusted to optimise the model's performance.
+
+
+# Generate predictions for the test data
+ma_window = 3
+y_pred_sma = df['Sales'].rolling(window = ma_window).mean()
+y_pred_sma = y_pred_sma.shift(periods = 1)
+y_pred_sma[train_len:] = y_pred_sma[train_len - 1]
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df, x = 'Order Date', y = y_pred_sma, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Simple Moving Average Method');
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_sma_list = [y_pred_sma[train_len]] * len(df_test)
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_sma_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_sma_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Simple Moving Average', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+Session Summary
+
+
+In this session, you moved from understanding time series data to building simple forecasting models. You learnt modelling essentials and why linear regression is not well suited for time series forecasting and how this motivates the need for specialised models. You then built and interpreted simple forecasting methods such as the naïve model, simple average model, and simple moving average model.
+
+ 
+
+By the end of the session, you were able to build, apply, and evaluate basic time series forecasting models.
+
+ 
+
+Next, you will learn about exponential smoothing models. But before that, you will answer a few questions based on this session to assess your understanding.
+

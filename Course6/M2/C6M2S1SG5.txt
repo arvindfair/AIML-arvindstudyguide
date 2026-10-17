@@ -1,0 +1,436 @@
+Demonstration: Hyperparameter Search Techniques
+
+Once we have a reliable validation setup, the next step is to discover which hyperparameter configuration gives the model its best chance to generalise.  
+
+
+
+Instead of manually testing combinations, in the next video, we will demonstrate how to use automated search techniques that systematically evaluate models through cross-validation. 
+
+00:00:00 - 00:01:06
+Introduction to Hyperparameter Optimization Techniques
+Now let's move on to the hyperparameter optimization, where these hyperparameters are settings that are external to the model and whose values cannot be estimated from the data, right? So they need to be said before the learning process begins. For example, you know the C parameter in the SVM or you know some other parameters that will usually the default values that are present for any model. So here we are going to explore 2 common and powerful techniques which are the grid search Cove and the randomized search Cove where our goal is to see how these techniques can improve the model performance and as well as the computational cost. So for this, we are going to apply them to two different model classes, which is the logistic regression and the SVM which is, you know, more flexible or potentially complex model than the simple logistic regression, right?
+00:01:07 - 00:02:26
+Application of Techniques to Logistic Regression and SVM
+So for this, let us quickly import all the necessary packages for the libraries here. And for this demonstration that we are going to use the bank marketing data set from the UCA repository. This data set contains the information about direct marketing campaigns which are conducted by the Portuguese bank, right? So basically our task is to predict whether a client will subscribe to a term deposit or not, which is a target variable. So this is, you know, a typical business decision making scenario with the specific challenges that we have, which are class and violence where you know, there are far fewer clients who subscribe to a term deposit compared to those who don't. So, so that's why you know this requires a careful handling and the error cost here the misclassification have the real world cost for instance, contacting an uninterested customer waste the resources, right. So while missing a potential subscriber means lost the Oregon losing the revenue here. And then there is some another scenario which is the consistent performance.
+00:02:27 - 00:03:17
+Bank Marketing Dataset Overview
+We need our models to perform well across all classes, not just the majority class, right. So let's move on and load our data set quickly where we can see the top five. So these are all the features that are available in the data set. And this Y is our target variable here, right? And if we quickly click on the data info where it provides summary of our new data set where we see like we have around 41188 entries and we in total we have 21 columns here, right? And as usual, if you observe the D type mini or object and the and several are like int and the float right?
+00:03:18 - 00:03:39
+Data Cleaning and Target Variable Conversion
+So again all columns have shows 41188 non null counts indicating there are no missing values in the raw data set which simplifies our initial cleaning. And the target variable Y is currently an object right? Which is may be the South Oregon no here, right.
+00:03:40 - 00:05:19
+Class Imbalance and Downsampling Strategy
+So let us quickly convert our target variable into numerical format saying that S is 1 and MO is for the 0 here, meaning did not subscribe, right? And then if you quickly see the value counts here to understand the class distribution we saw here like we have around 36548 instances of no subscription and only 4640 instances of subscriptions, right? So this shows there is a significant imbalance in the classes with the negative class being, you know, roughly around 8 times more frequent than the first two class, right? So here you know this is such extreme class imbalance which can lead to models to simply predict the majority class achieving high accuracy but failing to identify the minority or the positive class here. So one common approach we will usually do is to downsample the majority class. In order to reduce this imbalance. We downsample the majority class due to the extremely large number of the negative samples here. Bringing it down to a value compared with the positive class might mean losing too much information from the majority class, right? Instead, let's use the strategy here to downsample the majority class to around 15000 instances, right?
+00:05:19 - 00:07:03
+Data Preparation and Splitting for Model Training
+This is a compromise, I agree, but it's still more than half of the original negative information. But it brings the balance closure to approximately 3 is to one rather than 8 is to one in the previous case. So to do so, let us quickly down sample here, where selecting instances where Y is 0 and then randomly sampling only one five oh oh oh of them rather than having around 36000. So here now we are concatenating this town sample measured class with all instances of the minority class where Y is 1. So now we are ready with the new data set where if you can see now, our new data set only have 19640 entries, which are the 21 columns here, right? So again, once we did this, now if we observe the value counts here, we can see that there are approximately 76 point 3% for class 0 and 23% for Class 1. So as we discussed, this is much better balance than the original huge imbalance, which will help our models learn better from the minority class. And then finally let us take the X&Y and then finally split into the training and the testing samples to fit our models. So now with our balance split ready, we can now set up the pipelines for the hyperparameter searching.
+00:07:05 - 00:09:15
+Grid Search for Logistic Regression Hyperparameters
+So the fundamental principles of using pipelines remain the same. Just you know to avoid the data leakage and ensure reproducible and the robust evaluation. Here for scoring, we will excretely use map of 1 score. The reason behind is that so herein, if you recall the class imbalance right, accuracy alone can be misleading. The F1 score is nothing but the harmonic mean of precision and recall, providing a better balance between the correctly identified positive cases and avoiding the false positives. Whereas the macro F1 score computes the F1 score for each class independently and then takes the unweighted average of these F1 scores. So basically this is crucial because it treats both the majority and the minority classes equally. Rewarding models that perform consistently well across all classes, not just the abundant 1 here, right? So basically this aligns perfectly with our business need to identify both potential subscriber as well as the non subscribers efficiently, right. So as we all know that our data headset has both numerical and category attributes. So basically we are identifying them and we are preprocessing the pipeline and now we are ready to go for the grid search, right. So as we know grid search is an access to search method for the hyperparameter optimization, right? Where this will systematically tries every possible combinations of the values that we will provide and for each combination it can perform the cross validation to evaluate the model, right. So here what we are doing, we are reporting this logistic regression model and then here we are preparing the pipeline with the preprocess and we are calling the regression model.
+00:09:15 - 00:11:10
+Evaluation of Logistic Regression Model Performance
+And here there is a log grid which is a grid for hyperparameters. Here like for logist regression, a key parameter is C which controls the inverse of regularization strength, right? Smaller C values means stronger regularization while larger C values mean the weaker regularization here right? So once I have that so we are passing all the important information to the grid search function and then here we are fitting the model and then we are calling this log and GS dot best estimator. And similarly the params where we are trying to retrieve the best model and the best hyper parameters that are well is found right? And if we observe the best parameter found for the for CI mean when C is 100 here. This suggests that for logistic regression less regularization was preferred for optimal macro F1 on the status quo. Let us quickly check logistic regression accuracy on the test set which is approximately 87% here. And we also check recall score and the precision score for the best log Reg model on the test set. And we have see this recall score is approximately 76% and precision score is approximately 65.77 percent. So these metrics give us more nuance of view that just accuracy, especially important given the class imbalance here. Now let's move to another model which is an SVM.
+00:11:10 - 00:13:11
+Grid Search for SVM Hyperparameters
+So these SVMS are powerful models that find an optimal hyperplane to separate the classes so they can use different kernels to handle the non linear relationships. For this we can perform grid search CV for an SVM exploring different kernel types and their associated hyperparameters. So for this again we are calling the pipeline and we are calling the SVC here with the. Now we are trying with the different kernels and different C and the gamma values where once we pass this again we are passing all the information to the grid search CV function. We are fitting the model and again we are taking the best parameters and the best estimator here. So here we fitted 3 folds for each of 20 candidates which are totalling 60 widths highlighting the extensive search here and the best parameters which are found are ran AC10 and the gamma is at 0.01 and the kernel is RBF. So this suggests that RBF kernel with the specific C and gamma values was optimal for the microphone score here, right? So here we evaluate the best SVM model and our independent X test and the Y test here. And if you observe the accuracy, it's around eight 7.7%. And similarly, if you check the recall score, it is around seven 4.4% and the precision score is approximately seven 3.5%, right? So comparing with this, this regression SVM has slightly lower recall but a higher precision, meaning it might miss a few more actual positive but makes fewer false positive predictions, right? Yeah.
+00:13:11 - 00:15:18
+Learning Curves Analysis for Model Behavior
+So let's move on to learning curves, right? So after tuning the hyper parameters, it's crucial to understand how our models behave as the amount of the training data increases here. Like you know the learning curves, the plot, the models performance as a function of the training set size here right? The hyperparameters that we use don't just affect the finite cross validation score, they also influence a models learning dynamics here. So basically this learning curve allow us to examine two key aspects here. 1 is under fitting and over fitting meaning a large gap between the training performance and the validation performance suggests potential over fitting. The model is memorizing the training data but not generalizing well. And in the similar scenario, if you have the low scores for both, meaning if both training and the validation scores are low, the model might be underpowered or lacking complexity, meaning it hasn't learnt enough from the data. So potentially it is leading to the underfitting here, right? And the second is the data dependency, where if the validation performance continues to improve as we add more data, it suggests that further data collection might be beneficial for improving the model, right? If the validation performance plateaus early, it implies that adding more data might not be as impactful as focusing on model tuning or feature engineering, right? So let us quickly compare the learning curves for the logistic equation and the SVM, right?
+00:15:19 - 00:17:47
+SVM Model Improvement with Random Search
+So here we are passing this model, model training data and all the necessary information to our learning curve function. And if you see the output of this, how the learning curve behaves for both the logist regression and the SVM here. So from this logist regression we can see that both the training and the CV curves flatten out, you know, very early. These curves are relatively close together with a small gap in between, right? So this suggests that there is a low variance, meaning the model is not highly sensitive to the specific training data which is not over fitting. And the model might be too simple to fully capture the complexity of the underlying data patterns, right? So it has likely learned most of what it can for its level of complexity. Overall, this loss regression is likely under fitting, meaning it is not complex enough to fully exploit the information in the training data. Even with more training examples, adding more more data would probably not significantly improve performance in this case here. Similarly, if you observe the SVM here, the gap between the training and the validation performance larger, especially at the smaller training steps. So the validation performance is clearly now it is still rising as a training data size increases here. This suggests that the larger gap at smaller size hints that the SVM is more fixable and can overfit if data is a scarce. And the raising validation curve indicates that the SVM could potentially benefit significantly from adding training data to improve its generalization ability further, right? So basically, this model demonstrates a stronger potential to improve more data or potentially more refined tuning as it hasn't yet fully reached its performance platform, right? So now let us see like fine tuning the SVM with the random search.
+00:17:47 - 00:21:00
+Comparison of Grid Search and Random Search for SVM
+Like from the SVM learning curve we saw that it has a potential for further improvement and the benefits for more data. So this suggests that it might still be slightly under tuned or its hyperparameters could be refined. So while the grid search is exhaustive, it can be computationally expensive if the search space is large. So this randomized search Cove it offers an effective alternate meaning. Italy evaluates a fixed number of randomly sampled hyperparameter configurations from defined distributions instead of doing an exhaustive grid here. So basically it aims to approximate the best model without testing every single possibility making it much faster for large scale spaces here right. So basically here we are passing all the parameters here and then now we are passing the required information for the random search and then we are fitting the model and we are getting the best parameter and the best model here. So if we see the result. So here we have the the best parameter and the best model achieved at C is 0.521 and the gamma is around 0.00.0, right? And if we see the plot observed carefully here, this was the performance for each of the hyper parameters combination evaluate. We can observe the scores you know fluctuating across the iterations here with the best score you know reaching around some 0.825, right? So this visual helps confirm the stability of the model performance within the refined search here, right? And if you quickly evaluate the score on the best model and the recall scores here, so we can see that approximately 0.880 accuracy and the recall score is around 74% and the question is around 75% here like compared to the grid search SVM, the improvements are very minor here. And this indicates that the initial grid search already found a good region, and further fine tuning provides only the marginal gains here. So the remaining performance gap is likely due to the inherent limits of the data or model rather than hyperparameters in the small range right? Like. However, you know this randomizer CV often takes much less time than exhaust to get cell CV, making it a better strategy for effective fine tuning, especially with many hyperparameters or in a very wide search space if you have so. Now if we quickly observe the learning curve of the SVM here, this updated learning curve shows a clear separation between the training and the validation line here, right?
+00:21:01 - 00:22:45
+Final Model Evaluation and Comparison
+So the training score gradually declines as the model is required to generalize and the validation score is continuously rise with increasing training size here, right. So basically it suggests that SVM, you know, it can still benefit the additional data and has not yet fully reached its generalized capital capacity right now, if you quickly compare our both the models here, right? So basically we have built on tune several models. So basically this model called hack and help stakeholders answer critical questions like when should this model be used? Where might it fall or behave? Unpredictability. What risk should decision makers be aware of? Right? So quickly we can gather the candidates here which regression and SVM grid search and the SVM random here. So for each model, we are again going through our for loop and getting the output here. So if we quickly see the outputs here, right? So basically we have around 81 oh .09% of large depression and 83 around 83 is a grid search and eight 3.5 is a random value here. So this confirms that SVM models practically the one from the random size search, right? Which achieves higher microphone score compared to the large depression here.
+
+
+After the regular preprocessing and transformation pipeline, we applied two hyperparameter search tools.
+
+ 
+
+In GridSearchCV, we provide a dictionary where each hyperparameter is linked to a list of possible values. The function evaluates every combination using cross-validation. Key inputs include: 
+
+estimator: the pipeline or model to tune 
+
+param_grid: the grid of hyperparameter values 
+
+cv: the cross-validation strategy 
+
+scoring: the evaluation metric 
+
+ 
+
+After fitting, GridSearchCV() offers the following attributes: 
+
+ best_params_: the chosen hyperparameters 
+
+ best_estimator_: the full pipeline with those settings 
+
+ cv_results_: detailed scores for each configuration 
+
+ 
+
+In RandomizedSearchCV, instead of exhaustively searching, we sample a fixed number of random hyperparameter combinations from given distributions, controlled by the n_iter parameter. This is particularly helpful when the search space is large, and we do not know which ranges matter most. It shares the same key attributes as GridSearchCV() for analysis and model selection. 
+
+ 
+
+Both techniques combine model tuning with cross-validation, ensuring that chosen hyperparameters lead to improvement on unseen data rather than resulting in accidental gains on a particular split. 
+
+ 
+
+Next, we will move to feature selection, exploring how the number and nature of input variables affect model quality and interpretability. 
+
+# Hyperparameter Search Techniques
+
+Now we will use search techniques such as `GridSearchCV` and `RandomizedSearchCV` to see how hyperparameter optimisation influences performance and computational cost. We will apply grid search and random search to two different model classes:
+- Logistic Regression
+- SVM
+
+
+# imports
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt, seaborn as sns
+from scipy.stats import randint, loguniform
+import time
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, train_test_split, learning_curve
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, classification_report
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+We will use the Bank Marketing dataset from the UCI Repository, which contains information about customers contacted during direct marketing campaigns by a Portuguese bank. The target is whether a contacted client subscribes to a term deposit.
+
+This is a realistic business decision-making scenario where:
+
+- Class imbalance exists (fewer customers subscribe than decline)
+- Errors have different costs (contacting uninterested customers wastes budget)
+- Consistent performance across classes is essential
+
+# marketing dataset (semicolon separated)
+data = pd.read_csv('./datasets/bank-additional/bank-additional-full.csv', sep=';')
+data.head()
+
+data.info()
+
+# convert target yes/no to 1/0
+data["y"] = data["y"].map({"yes": 1, "no": 0})
+
+data['y'].value_counts()
+
+There is a significant imbalance in the classes
+
+One way is to downsample the number of class '0' to bring down the imbalance. Due to the extremely large number of negative class samples, we cannot bring them down to a value comparable with class '1' (around 4-5 thousand). 
+
+However, we can try to downsample the number of negative class samples to somewhere around 15,000 (which is still more than half of the information lost), but this will make the class balance around 3:1, which is much better than earlier.
+
+
+# first sample from the majority class
+downsample = data[data['y'] == 0].sample(n=15000, random_state=1)
+# combine back together
+df = pd.concat([downsample, data[data['y'] == 1]])
+
+# reshuffle
+df = df.sample(frac=1, random_state=1).reset_index(drop=True)
+df.info()
+
+df['y'].value_counts(normalize=True)
+
+X = df.drop("y", axis=1)
+y = df["y"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=1)
+X_train.shape, X_test.shape, y_test.shape, y_train.shape
+
+
+### Hyperparameter Search Pipelines
+
+Once again, we will set up a basic transformation and model pipeline. For scoring, we will use F1-score, as we want to identify both potential conversions and avoid false positives. 
+
+The distribution is imbalanced and only a fraction of the marketing leads were converted. To ensure fair class performance, we use macro F1 score:
+
+$$
+\text{Macro-F1} = \frac{1}{C} \sum_{c=1}^{C} F1_c
+$$
+
+This computes F1 for each class independently and then takes the simple (unweighted) average. Macro-F1 rewards models that do consistently well across all classes.
+
+
+This dataset contains both numeric and categorical attributes. To ensure numerically stable training and prevent information leakage during tuning, we wrap preprocessing and modelling within a single pipeline:
+
+- One-hot encoding of categorical features
+- StandardScaler applied only to numeric columns
+- Classifier as the final step
+
+Using a unified pipeline allows the same model selection workflow to apply cleanly to both classical and neural models, while guaranteeing that preprocessing is refit properly within each cross-validation split.
+
+# Identify feature types
+cat_cols = X.select_dtypes(include=["object"]).columns.tolist()
+num_cols = X.select_dtypes(include=["int64", "float64"]).columns.tolist()
+
+# Preprocessing pipeline
+preprocess = ColumnTransformer([("num", StandardScaler(), num_cols),
+                                ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols)])
+
+#### Grid Search
+
+For grid search, we define a grid of all hyperparameter values, which cross validation uses while seaching. 
+
+> `GridSearchCV(estimator, param_grid, cv, scoring, n_jobs)` tests combinations of hyperparameters under cross-validation to find the best model. After `.fit()`, use `best_params_` and `best_estimator_` to retrieve the optimal configuration.
+
+
+Let's start with small grids first.
+
+
+##### Model 1: Logistic Regression
+
+
+logreg_pipe = Pipeline([("prep", preprocess),
+                        ("clf", LogisticRegression(max_iter=500))])
+
+logreg_grid = {"clf__C": [0.01, 0.1, 1.0, 10.0, 100.0]}  # inverse regularisation strength
+
+logreg_gs = GridSearchCV(logreg_pipe, logreg_grid,
+                         scoring='f1_macro', cv=3,
+                         n_jobs=-1, return_train_score=True)
+
+logreg_gs.fit(X_train, y_train)
+
+best_logreg = logreg_gs.best_estimator_
+logreg_gs.best_params_
+
+
+A point to note here is that inside a Pipeline, hyperparameters must be prefixed with the step name. Here the step name is *"clf"*.
+
+# let's check accuracy of the model
+accuracy_score(best_logreg.predict(X_test), y_test)
+
+
+MODEL2 SVM 
+
+##### Model 2: SVM
+
+Here, let's pass two types of kernels to grid search. Note that we do not need to provide values for `gamma` in case of linear SVC. In this case, we can give two different parameter grids, as a list.
+
+svm_pipe = Pipeline([("prep", preprocess),
+                     ("clf", SVC(random_state=1))]) 
+
+svm_grid = [
+    {
+        "clf__kernel": ["linear"],
+        "clf__C": [0.1, 1, 10, 100]
+    },
+    {
+        "clf__kernel": ["rbf"],
+        "clf__C": [0.1, 1, 10, 100],
+        "clf__gamma": [0.001, 0.01, 0.1, 1]
+    }
+]
+
+svm_gs = GridSearchCV(svm_pipe, svm_grid, 
+                      scoring='f1_macro', cv=3, n_jobs=-1,    # cv: 3-Fold CV splits
+                      return_train_score=True, verbose = 3)
+
+svm_gs.fit(X_train, y_train)
+best_svm = svm_gs.best_estimator_
+svm_gs.best_params_
+
+# let's check accuracy of the SVM
+accuracy_score(best_svm.predict(X_test), y_test)
+
+recall_score(best_svm.predict(X_test), y_test), precision_score(best_svm.predict(X_test), y_test) # recall and precision
+
+
+##### Learning Curves
+
+We should pause here and to understand how the current tuned models behave as the amount of training data increases, over the course of the training cycle. Hyperparameters dont only influence the final cross-validated score, they also shape the model’s learning dynamics.
+
+Learning curves allow us to examine two key aspects
+
+1. Underfitting and overfitting
+   - Large gap between training and validation performance shows potential overfitting while low scores for both means model may be underpowered or lacking complexity
+
+2. Data dependence
+   - If validation performance continues rising as we add more data, further data collection may be beneficial
+   - If performance plateaus early, tuning might be more impactful than adding data (early stopping)
+
+By comparing Logistic Regression and SVM side-by-side, we can observe whether their current hyperparameter configurations support good generalisation behavior
+
+def plot_learning_curve(model, title):
+    sizes, train_scores, val_scores = learning_curve(model, X_train, y_train, 
+                                                     cv=3, scoring='f1_macro', 
+                                                     train_sizes=np.linspace(0.2, 1.0, 5), n_jobs=-1 )
+    plt.figure()
+    plt.plot(sizes, train_scores.mean(axis=1), label="Train")
+    plt.plot(sizes, val_scores.mean(axis=1), label="CV")
+    plt.title(title)
+    plt.xlabel("Training Size")
+    plt.ylabel("Macro-F1")
+    plt.legend()
+    plt.show()
+
+plot_learning_curve(best_logreg, "Learning Curve - LogReg")
+plot_learning_curve(best_svm, "Learning Curve - SVM")
+
+
+**Logistic Regression**
+
+Both the training and validation curves flatten early and stay close together. This suggests low variance and limited capacity (increasing data does not significantly improve generalisation)
+
+The slight decrease in training score as sample size grows is expected. With more instances to fit, the model becomes less able to perfectly match all points, so training performance declines while the model stays simple and stable.
+
+Overall, logistic regression is likely underfitting the underlying structure. It has learned most of what is possible for its level of complexity. 
+
+<br>
+
+**SVM (RBF Kernel)**
+
+Here, the gap between training and validation is larger, especially at small sample sizes. This shows higher variance in small-data regimes.
+
+Validation performance improves as training size increases, matching intuition that SVM benefits more from additional examples. The training curve declines gradually as the decision boundary needs to generalise over a broader set of points.
+
+This behaviour shows that the SVM can still learn more as data increases
+
+
+Thus, the SVM demonstrates stronger potential to benefit from tuning and data. So, let's try random search on SVM to try and find a bit more optimised set of hyperparameters.
+
+
+> *The CV curves can be slightly noisy (common with small k). Small oscillations may occur due to 3-fold variability and not model instability.*
+
+
+#### Random Search for Fine Tuning SVM
+
+> `RandomizedSearchCV(estimator, param_distributions, n_iter, cv, scoring, n_jobs)` evaluates a specified number of randomly sampled hyperparameter configurations drawn from defined distributions under cross-validation. It aims to efficiently approximate the best model without exhaustively testing all possibilities. 
+> 
+> After `.fit()`, use `best_params_` and `best_estimator_` to obtain the optimal result identified.
+
+
+Grid Search helped us locate a good region in the (C, gamma) space. We now refine our search around those best values using Random Search. The aim is to find stronger hyperparameters without expanding the search too widely and increasing runtime.
+
+We can
+- search C values slightly above and below 10
+- search gamma values slightly above and below 0.01 on a log scale
+
+
+# focused search around the best grid params
+svm_local_params = {"clf__C": loguniform(5, 50),           # search around C ≈ 10
+                    "clf__gamma": loguniform(1e-3, 5e-2),  # search around gamma ≈ 0.01
+}
+
+svm_local_rs = RandomizedSearchCV(svm_pipe, svm_local_params, 
+                                  n_iter=20,              # slightly more exploration because the space is small
+                                  scoring='f1_macro', cv=3,
+                                  n_jobs=-1, random_state=1)
+
+svm_local_rs.fit(X_train, y_train)
+
+best_svm_rs = svm_local_rs.best_estimator_
+
+svm_local_rs.best_params_
+
+plt.plot(svm_local_rs.cv_results_["mean_test_score"], marker="o")
+plt.xlabel("Iteration")
+plt.ylabel("Mean CV Macro-F1")
+plt.title("Local Random Search Progress - SVM")
+plt.show()
+
+# metrics
+accuracy_score(best_svm_rs.predict(X_test), y_test), recall_score(best_svm_rs.predict(X_test), y_test), precision_score(best_svm_rs.predict(X_test), y_test) 
+
+
+The fine-tuning of hyperparameters did not reveal any particularly major improvements. In other words, the remaining performance gap is more likely due to the limits of the data rather than hyperparameter sensitivity in a small range.
+
+
+However, random search took much lesser time than grid search to perform cross-validation, and may prove a better strategy for fine-tuning rather than exhaustive searching. 
+
+Let's take a look at the learning curve as well
+
+
+plot_learning_curve(best_svm_rs, "Learning Curve - SVM")
+
+The updated learning curve for SVM shows a clearer separation between the training and validation lines. The training score gradually declines as the model is required to generalise, and the validation score continues to rise slowly with increasing training size.
+
+This pattern suggests that the SVM still benefits from additional data and has not yet fully reached its generalisation capacity. The model is not strongly overfitting: the gap between train and validation performance is moderate but stable.
+
+
+### Comparison and Model Cards
+
+
+A **model card** is a concise report that summarises a model’s behaviour, strengths, limitations, and appropriate usage scenarios. It supports responsible deployment by ensuring that the chosen model is not only accurate, but also aligned with operational and fairness requirements.
+
+Model cards help stakeholders answer:
+- When should this model be used?
+- Where might it fail or behave unpredictably?
+- What risks should decision makers be aware of?
+
+This allows us to justify our selection in terms of both performance and practicality, rather than relying solely on a single evaluation metric.
+
+
+
+candidates = {"LogReg (Grid)": best_logreg, "SVM (Grid)": best_svm, "SVM (Random)": best_svm_rs}
+
+results = {}
+for name, model in candidates.items():
+    preds = model.predict(X_test)
+    report = classification_report(y_test, preds, output_dict=True)
+    results[name] = report["macro avg"]["f1-score"]
+
+results
+
+# report
+
+
+
+##### Logistic Regression
+**Core idea:** Linear decision boundary separating classes
+
+**Strengths**
+- Very fast to train and predict
+- Highly interpretable weights
+- Stable behaviour with limited training data
+
+**Weaknesses**
+- Underfits non-linear relationships
+- Performance saturates early
+
+**Best use case:** When transparency and deployment speed are priorities, and slight accuracy trade-offs are acceptable
+
+
+##### SVM 
+**Core idea:** Flexible nonlinear separator using an RBF kernel
+
+**Strengths**
+- Better captures complex boundaries in the data
+- Benefits from more training data
+- Higher Macro-F1 in both CV and test evaluation
+
+**Weaknesses**
+- More computationally expensive at inference time
+- Requires careful tuning
+
+**Best use case:** When predictive performance matters most and inference load is manageable
+
+
+
+
+To select the final model, final decision criteria applied:
+1. Macro-F1 as the primary performance measure  
+2. If scores close → prefer simpler + faster inference  
+3. Consider learning curve diagnostics (under/overfitting behaviour)
+
+
+We can select SVM as the choice for this simple demonstration. 
+
+In real world problems, you will face much more complex data patterns, model performances, and model choices. But the core ideas of model selection will remain the same:
+- Business and domain understanding
+- Interpretability needs
+- Data characterstics
+- Cost considerations and scalability
+- Justifiability of the model
+
+
+

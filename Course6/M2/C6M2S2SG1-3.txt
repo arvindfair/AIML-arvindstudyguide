@@ -1,0 +1,256 @@
+Class Imbalance.
+Session Overview
+
+Welcome to the session on Class Imbalance.
+
+ 
+
+Here, you will learn concepts and principles for handling imbalanced class problems.
+
+ 
+
+In this session:
+You have now learned a wide variety of classification techniques. Now, in this session, you will focus on perhaps the most commonly faced challenge in classification problems which is class imbalance. You will build a conceptual foundation that will be useful for every class-imbalanced machine learning problem you may encounter in the future. 
+
+
+The topics and some important jargon in this session include:
+
+Identifying class imbalance
+Techniques for handling an imbalanced class
+Model evaluation for an imbalanced class problem
+
+
+Let's watch the next video to understand a broad-level view of the steps involved in the demonstration and learn about the data set that we will be dealing with in the Python demonstration.
+00:00:00 - 00:00:36
+Introduction to Class Imbalance Problem
+OK, so let's go ahead and understand what a class imbalance problem is. We'll try to introduce the problem. We'll try to understand one case study. We'll go through the problem statement. We'll also go through the data understanding part. We'll also spend some time understanding various data analysis, like we'll do some exploratory analysis, and then we'll also do some kind of feature engineering. And then we will spend some time understanding various ways and techniques to handle imbalance classes.
+00:00:37 - 00:01:03
+Techniques to Handle Imbalance Classes
+And then we'll also see the problem of accuracy paradox. And then we'll try to check which of the evaluation metric shall we go ahead and use it for our imbalance problems. So let's get started. So in an classification problem, most of the times we encounter problem of class imbalance.
+00:01:04 - 00:01:17
+Understanding Imbalance in Classification Problems
+It is very important to understand what an imbalance data set is and how do we handle and evaluate the classification model. For example, you are given a data set to predict insurance claims.
+00:01:18 - 00:02:32
+Insurance Claims Prediction Case Study
+So you have built a classification model and achieved an accuracy of 96%. Why shouldn't you be happy about your model performance? What can you do about it? One of the largest auto insurance company is facing problem of inaccuracies in car insurance claim predictions. But this eventually leads them to raise the cost of insurance of good drivers and reduce it for bad drivers. The company wants you to build a model that predicts the probability that the driver will file an insurance claim in a coming year. And the data set contains close to 6600 thousand observations and we have around 59 variables. Of course, this 59 variables also contains one ID and a target column where an ID refers to the rows where whether the claims have been filed or not. The ID is representative of the the car insurance folder and we are left with 57 of the features inputs.
+00:02:33 - 00:03:10
+Data Set Description and Anonymization
+The data set that we have is anonymized in order to protect the company's secrets, trade secrets. But we do have some information around what kind of a nature of the variable is. And as I mentioned, the nature of response to the policy holder and the target column give us the information whether the claim was filed or not. So let's try to understand the data set. And we'll also go through in detail when we visualise the data set, when we see the values of -1, that indicates that the feature has missing observations.
+00:03:13 - 00:04:14
+Understanding Data Set Features and Variables
+And also like target columns that tell us whether the claim was filed for that particular policy holder, the variables that contain Ind, is it related to individual or a driver related information, RG related to the region for which region it belongs to. And car is related to car itself. So maybe example of maybe say again 4 wheel drive or two wheel drive car. So beaches around that and calc where this is this is the calculated feature feature names which include post tricks of bin it indicates binary features and where it is post tricks of cat, it indicate categorical features, features where we don't have any kind of these kind of designations. It means that the features are either continuous features or the ordinal features.
+
+As you learnt in the video, the data set consists of nearly 600k observations with 59 features. Here, the response variable is ‘target’, which signifies whether a claim was filed or not. The features in the data set are related to each individual along with the information about their car and region. There are some missing values and binary, categorical and numerical features in the data set.
+
+ 
+
+Now, in the next video, you will learn about the steps involved in understanding the data.
+
+Data Understanding and Cleaning
+
+
+Let's perform some basic data exploration to understand the data better and perform any cleaning steps as necessary.
+
+00:00:00 - 00:00:38
+Importing Libraries for Data Handling and Visualization
+So here what we are trying to do is we are trying to import the libraries which is which will help us in loading the data set, transforming the data set and also will help us in visualization. So we are importing pandas data library and then we are importing numpy. Then we also are importing matlot Lib which will help us in plotting of the charts and then we also have cpon which will again help us in the visualization. So as we have loaded the important libraries which will be using it throughout our exercise in Python.
+00:00:39 - 00:01:25
+Loading and Exploring Dataset Shape and Structure
+Now let us load the data set and we will try to see its shape by shape. We will get how many number of observation do we have in our data set and how many columns do we have in our data set and then we will try to print them and we will try to visualize few of the observation and see how our data set looks like. So here if you see I am just reading my CSV file training which is my data set and then I am printing the shape of it and then we will go through the view of the rows of the data set. So if you see we have close to 600-0000 rows observations and 59 columns and this is how my data looks like.
+00:01:25 - 00:02:18
+Understanding Dataset Columns and Features
+So this 59 columns of course as discussed include ID, target and then there are a lot of columns which as I mentioned if there is Ind it means related to individual, if there is cat which means category. Similarly, if we have bin here it means binary. So we can see 0 ones in category variables. We can see for example in Ind zero to cat we can see 214. These are categories that have been defined and therefore we have another features such as calc. So this means this is the calculated feature. And yeah, so this is how our data looks like. So now what we will do is let's quickly scan through it, whether do we have any duplicates in the data.
+00:02:18 - 00:03:13
+Checking for Duplicates in the Dataset
+We will try to run a function from Paradise, which is drop duplicates. And then again I will try to see whether how many rows I have removed during the duplicates. Removing duplicates. So what I see here is our data set is pretty neat with respect to duplicacy. So here I have close to 595 two 1259 columns. So here it is 595212 which do not have any duplicates. So now let us see what kind of data in especially we will look for data type and we will look for null values that we have. So if we runthroughdf.info with this particular function gives us the all the columns and description above all the columns.
+00:03:13 - 00:03:39
+Analyzing Data Types and Null Values
+By description I mean how many rows it has with null values, what kind of a data type it is. If you see we have ID, target and all the other 57 features mentioned here. And if you see most in all the cases I can see, we don't see any kind of null values here. So as I mentioned, this is CAG, which means categorical bin means these are binaries.
+00:03:40 - 00:04:55
+Handling Missing Values and Data Description
+So I can see monal values overall. Yeah, So overall like the monal values here and more data type, what I can see here is int and flow. Yeah. So now if you remember, recollect that when we discussed about our data description, we talked about if the data has missing values and so those missing values null values were replaced by -1. Therefore, when we had taken the info of my data set, I could not see any null values here because all of them were replaced by -1. And as discussed all what we can see, the major types are integer and flow data types. So what we'll do is we'll now try to see what missing values, how many columns missing, missing values are and let's try to print and see what is the like the percentage of my missing values.
+00:04:56 - 00:06:22
+Identifying and Quantifying Missing Values
+So, So what I am doing here is I am trying to find the missing values for my columns. So I am creating a kind of a list open list here missing OPS. And then I am running up a loop where I is my column name and I am running through all the columns in my data set. So DF dot columns. So it will pick one column one by one and then it will check nulls. So the null says like if in my data set if a column I is having is any of the values present there is equal to -1 then take that count. Just keep that count of wherever I can see the values in this particular column as -1. So once we have this count what we can do is only I am running a if condition where I am saying only if my nulls are greater than 0. Which means wherever I see a missing value then just append that particular column in my list, keep up ending that column in my list and then also create a percentage. So by percentage here I mean So what is the nulls, the count that we had here divided by the total number of observations, total number of rows here.
+00:06:22 - 00:08:09
+Deciding on Column Removal Based on Missing Data
+So and then what I am doing here is I am just taking the print print of my columns and then I am taking the print of my nulls which are the count of the missing values. And then I am taking the percentage as well. And this percentage I am passing it as give it as to 2 decimal points. So as we see here we have the missing values printed here. So this is the column PS and O2 cat which has 216 missing observations which accounted for 0.04 percentage of missing. And therefore what we can see here there are two columns like PS cars oh through cat and PS car 05 cat, which are like very high in their observations, which are missing, which means 69% and 44 percentage of them are missing, which is really, really high. So typically what as a practice, what we can do here is whatever missing values are greater than like 25% and sometimes 30 percentage. So we can go ahead and delete this columns. So so much of missing values if we have in a column, it's better to remove this column itself. So, So what we'll do in our next steps, what we will try to remove these two columns which are 03 cat and 05 cat. OK. So what about the others like where we have missing values of like 9% or 18%.
+00:08:09 - 00:09:20
+Dropping Columns with High Missing Values
+So we will try to compute that by imputation. I mean we will do a, we will replace this missing values with some kind of a imputation method. So let us go and see how do we imputed it. Right now as discussed, I am dropping these variables here. So from my data set I am dropping these two columns O3 cat and 05 cat. So therefore I am again taking a shape to see if those columns are dropped. So right now my shape is 59 which earlier was 7 earlier was 59 now it is 57. So therefore we have dropped these two columns here and then I am. I will try to impute my missing value. So here if you see I am calling from SK learn impute. I am importing simple imputer and this simple imputer I am creating a imputer method of mean imputation where where I am saying that if missing values we see as -1 try to replace that value with mean.
+00:09:21 - 00:10:31
+Imputing Missing Values with Mean and Mode
+So that is what if you see here in simple imputer I am using the strategy of mean what what means is like if I have to do a missing value treatment where I want to input by mean I will use this mean imputation. And similarly I am creating the similar format for my mode imputation. So mostly if you see typically in a continuous variable, what we do is we try to replace that with mean medium depends on the problem. I am using here mean and for my categorical variable I will be using mode in prediction. So therefore we see the most frequent mode in prediction. So and then I am just passing my variables here. So wherever I see values of continuous variable I am doing that mean imputation and I am seeing the categorical variable I am passing a board imputation.
+
+
+ 
+
+So, you have imported the required libraries and read the data set. You have also checked for any duplicates or null values in the data set. Now, you must have observed that all the null values in the data set are replaced with -1, and so, you need to treat the missing values in order to impute them. You drop the features with a high percentage of missing values and impute the ones with relatively lower count with the mean and mode for continuous and categorical features, respectively.
+
+ 
+
+Next, we will explore the different types of columns present in the data and try to observe the patterns in numerical and categorical features.
+
+Exploring Numerical and Categorical Columns
+
+
+In the next video, you will understand the cardinality of categorical features in the data set and also look into the correlations of the continuous features with the target variable and with one another.
+
+ 
+00:00:00 - 00:04:02
+Analyzing Cardinality of Categorical Variables
+So once my imputation is done and we have treated our missing values, then what do we do? We let's we shall try to analyze the cardinality of the categorical variables. So what do we mean by cardinality of categorical variables? It means that we need to understand how many unique values are present for those categorical variables. So if you take an example of say BS and O2 cat and if you see we saw earlier that the values where around 214. So how many those kind of values are there which are unique. So how many times 2 is present? How many times 1 is present? So I will just take the values where like it is it has four unique values 214 all it has. So if I try to explain it in a categorical fashion it will be say for example if PSN O2, cat has a value such as AB and C So I am trying to understand like how many of these values are there How many values of ABC like the unique values. So by unique again I mean A should be there, B should be there. So what is the count of that? So right now what I'm doing here is so these are the columns that I want to check the cardinality. So I'm passing all my categorical columns here and then I'm just running a for loop which will which I'm using again in this list which the call which I have for calls with cardinality. And once I run it, what I am doing here is take the unique categories. So unique categories here it means take the value, take the columns here and take the value counts for for all the for all the unique categories take the value count. And so if you see here I am just trying to value count, what it will do is it will take the bounce of all the unique values which it has and then I am taking the shape of 0 which means I am taking the rows how many rows I am getting for those value bounds. So therefore that will give me a unique list of my cardinal values present in the those categorical variables. So and then finally what I'm doing here is I'm to take printing and printing the column name and then I'm printing the unique categories there which we are calculating it here. So go and see how our cardinalities. So these are all my categorical variables. We can see, OK, it has four unique values, 4 PSN 04 CAT has two unique values. These are that's fine. But notice here PS Car 11 cat has 104 unique values, which are like very high cardinality for this particular categorical variable PS Car. So we will try to deal PS Car 11 Cat during our future engineering part and we will see what what can we do about this particular feature. So now let us go ahead and see few of the Let us explore little bit more data to understand its correlations.
+00:04:03 - 00:06:09
+Exploring Data Correlations with Continuous Variables
+Again I have taken the shape of my data set. It looks same after talking those two columns. So I have 595 thousand rows with 37 columns and then now I am just trying to check the correlation of all my continuous variables present in the data set with the target variable. So I am just trying to see how how my continuous variables are kind of I have been correlated with the target variable. So here I am creating a list of all those continuous variables and and as you can see also I have a target variable here and then I am running a correlation and for this correlation I am using the for function and passing it all my columns in the list that I have created here. So once I do that, I plotted as a heat map which will be which is very easier to read any of the correlation metrics that we get the plot figure here under the plot and giving the size of 2020. And then I am creating a heat map and these are the few of the parameters which you pass to get to a heat map and I need I want my correlation with two decimal points. So therefore I added two decimal points. Therefore now we are busy. I have the correlation with us and then so to see here target variable is there. And with target variable I have to see there are the correlations that I can see. And also I can see some of the correlation between the variables as well like PS X03 and PS02 which are present.
+00:06:11 - 00:08:18
+Correlation Analysis of Ordinal Variables
+And also if you see here one of the insight like wherever PS calc 01, PS calc O2, PS calc 03. So this does not have any kind of a correlation. So here it's like target also you see 000. So, so let's let's also see for the coefficient with another set of values, another set of say ordinal values that we have, where these values are like numeric values, which are ordinal values. So what we'll try to do here is we'll try to check the correlation for these particular ordinal values. And again, we'll also try to see along with our target how does it behave, how it is correlated. So, so again, I am passing a list here again with all those ordinal columns. And then I am also creating a correlation using the core function and then passing all my columns which are present in this list. And then as discussed before I am using a lot C bone heat map plot to visualize my correlations. So here is the correlation matrix where and I can see here the correlations. But mostly I can see here zeros. So which zeros are typically where about I see calc, calc, calc pscalc 04, it has no relation with any of them along with targets they have pscalc 05 no relation and you see that wherever calc is, there is absolutely no relation do we have. So this is one of the good insight that we have got which will help us in our feature selection phase and therefore so we are good with the correlations right now.
+
+
+Cardinality refers to the number of unique values in a categorical variable. You saw that ps_car_11_cat has 104 distinct values, which is quite high. How do you deal with such variables in the data set? Try to recall, and you will find the answer in subsequent videos.
+
+ 
+
+You also saw that there are correlation values between some of the continuous variables, such as ps_reg_02 and ps_reg_03, ps_car_12 and ps_car_13 and so on. The ordinal variables do not show many correlations with one another. You saw that the variables with ‘calc’ have absolutely no correlations among them.
+
+ 
+
+This correlation analysis will help you in feature selection, which will be done in the latter part of the demonstration.
+
+Cardinality refers to the number of unique values in a categorical variable. You saw that ps_car_11_cat has 104 distinct values, which is quite high. How do you deal with such variables in the data set? Try to recall, and you will find the answer in subsequent videos.
+
+ 
+
+You also saw that there are correlation values between some of the continuous variables, such as ps_reg_02 and ps_reg_03, ps_car_12 and ps_car_13 and so on. The ordinal variables do not show many correlations with one another. You saw that the variables with ‘calc’ have absolutely no correlations among them.
+
+ 
+
+This correlation analysis will help you in feature selection, which will be done in the latter part of the demonstration.
+
+Feature Engineering Techniques
+
+
+So far, you have got an understanding of what the data set is all about and learnt about the basic exploratory data analysis techniques. In the upcoming video, you will learn about some of the feature engineering techniques that can be applied to handle the different variable types and also derive better insights from the data set.
+
+ 
+00:00:00 - 00:00:34
+Introduction to Feature Engineering and Categorical Features
+Let's let's get into feature engineering where we'll quickly try to understand how do we deal with the categorical features. And then we'll also try to understand what kind of a encoding method we want to use for our categorical features here in our case. So we'll mostly talk about here encoding methodology around label encoding, frequency encoding and one hot encoding. So let's understand what is label encoding.
+00:00:34 - 00:01:25
+Explanation of Label Encoding
+So in label encoding, if you see here is simply converting each value in a column to a number. So when we see any categorical variables, let's take a example for example, if a categorical variable is there with where we can see the value such as forward wheel drive or a rear wheel drive or 4 wheel drive. So what what what label encoding would do is label encoding would kind of convert this into numerics to adding a number for that. So here you see like 01/2 is kind of label encoded or FWD or WD or OWD.
+00:01:25 - 00:03:36
+Limitations of Label Encoding in Algorithms
+So, so now these 01/2 is kind of the label encoding that we do in case of the categorical variables, we just convert our values into numbers. Now these are like few of the areas where we see that this converting to numbers again, it makes them as kind of ordinal values. And then once we make them as ordinal values, most of the times the algorithm will take these as you know to to be greater than one, one being greater than 0. So try to represent the algorithm takes that as the as these values you know as greater or smaller from each other and try to compute it. But which is usually not the case here because we are just trying to convert forward forward wheel drive or rear wheel drive. So this doesn't give us any kind of ordinality here like rear wheel drive is greater than 4 wheel forward wheel drive or 4 wheel drive is greater than rear wheel drive. So, so, so therefore typically this label encoding is not referred in most of the algorithms and here in our data set, what we will see here is we already have, you know, categorical variables where which has numbers. So therefore what it means is that it's already might have been converted into label encoding. Therefore, right now what we will do is we will try to take this label encoding encoding and we will try to use some non ordinal method such as say frequency encoding and one hot encoding to encoder categorical variables.
+00:03:37 - 00:05:06
+Introduction to Frequency Encoding
+So now let's see what frequency encoding is. Now in frequency encoding, what typically is done is like you take the frequency of the fraction of the times that particular values is present in your data set. Taking example here, how many times 0 is present? So what is the fraction of let's say 20 percentage or how many times 1 is present, so say maybe 70 percentage or how many times 2 is presences they may be again one percent, 5%. So I'm just trying to we're just trying to convert them into those fractions there. So idea, we have frequency coding to represent the levels with the categorical features and which we observe in our data set. And one of the reasons doing this is like. So most, most of the frequently observed level often behave in a similar way. Then that's the intuition behind using frequency encoding. But that not be the case most of the time because because it can also sometimes behave as a kind of other values just representing some kind of the way we represent ordinal values.
+00:05:07 - 00:06:43
+Frequency Encoding Process and Example
+So we will try to understand that. An example here. So here I am passing all my categorical variables and then but but what we will try to study here is we will try to study passing one of the variables and see how my frequency encoding frequency encoding we are doing so. So I'm just creating a different data set here because I just want to create a copy where I want to save my frequency encoding values. So here I am trying to create that frequency encoded for say the column PSI and D0 to cat. So here I'm using the data set PS3 which I have just created here and then I am doing the group by for PSN O2 cap and whatever size that we have in that group by that gets divided by the total length of the my data set which is the DF free. So that is how I get the frequency encoding and so therefore right now I am just renaming that particular column and adding that_free and then mapping my the equation or the value that I HAVE the calculation that I HAVE done here to calculate the frequency coding and.
+00:06:43 - 00:08:04
+Application of Frequency Encoding and Introduction to One Hot Encoding
+Let us now see how our free data set looks like so. Here you see here PSN 0 to cat is there where I HAVE 21412 and then here is where I GET the frequency imported values so. Where PSN 0 to cat frequency is there and then the value of 2 is represented by say 20 percentage the. Value of 4 is or one is 72 percentage and four is oh point 1%. Now this also kind of gets repeated. So wherever 2 will be there, it will be 20% wherever one is there, it will be 72%. So, so this is how frequency inputting is done. And for the our analysis this is typically preferred in the algorithms which are kind of tree based. But but in our analysis what we will do is we will try to do 1 hot importing for our categorical variables. And also the reason is like 1 hot importing is kind of goes well with the tree base as well as non tree based algorithm. And in our model building exercise we will try both 3 and non tree based algorithms. So therefore we will try to 1 hot importing here.
+
+
+So you saw three types of feature engineering techniques for handling categorical variables in the video. They are as follows:
+
+Label encoding
+Frequency encoding
+One-hot encoding
+ 
+
+Label encoding refers to the conversion of different categories in a feature into numerical values. This is done because most of the machine learning algorithms prefer numbers over string values. However, it has a potential disadvantage. Often, these numerical values are misinterpreted by the algorithms and impose an ordinal logic that does not necessarily exist within the observations. In this data set, most of the variables are already label-encoded into numbers for different categories.
+
+ 
+
+Other non-ordinal techniques for handling categorical features are frequency encoding and one-hot encoding.
+
+ 
+
+Frequency encoding is a method of representing the different levels in a categorical feature using the frequency of their appearance in the data set. The one that appears most frequently in a data set is, in a way, given more weight.
+
+ 
+
+ 
+
+We will talk about one-hot encoding next.
+
+
+One-Hot Encoding
+
+
+Now, you will learn about one-hot encoding and the challenges associated with it.
+
+
+00:00:00 - 00:02:55
+Introduction to One Hot Encoding and its application in categorical variables
+What is 1 hot encoding? So in one hot encoding, we try to map each category to a vector which contains 01 and 0. So, so try to we'll try to understand where there are categorical variables and just just I'll take the example of people that discussed here around say 1. A categorical feature has values of forward wheel drive where wheel drive and all-wheel drive. Now in one hot encoding. What we do here is we try to convert these as into columns and then we create the binaries there. We create the dummies where we say if forward wheel drive is present just highlighted as one else 0 and therefore if rear wheel drive is present highlight it as 1L0. So all the rows here it will be 10 wherever the rear wheel drive will be present. Similarly for 4 wheel drive. So if the cardinality for this particular feature is 3. So typically we tend to create 3 columns with the binaries. But as a best practice what we do is after one hot encoding we create two of the so K -, 1 for cardinality of categorical. So here what I'll do is I'll just save my columns or only two of them. So I'll drop this first column. So why I do that is since if you understand like we are converting this as one and 0. So power wheel drive wherever it is present is 1L0 rear wheel drive wherever it is present is 1 and 0 and therefore 4 wheel drive wherever it is present is 1 and 0. So, so if you try to see if I just try to drop it here power wheel drive and we just keep having a tray wheel drive and four wheel drive. So these values, if these are zeros and zeros, that automatically means that is a forward wheel drive. So therefore we are able to get to the entire information for this particular feature with having only two of the dummy variables rather than three. So, so in the machine learning or in a model building exercise is always better to have, you know, reduced feature where I'm getting the same information having only two of them rather than three. We try to keep K1 rows. So let's go ahead and understand how do we do 1 hot encoding.
+00:02:56 - 00:05:12
+Implementation of One Hot Encoding using Pandas get_dummies function
+So here is my columns that I passed. So I created my list of all the categorical features here and then. So I'm sure I'm just passing all my. I'm trying to print that how many features are present here. So I'm just trying to print the shape of my shape here. I'm calling it as one because I want to know the columns how many columns is present in the data set that. And then what I do here is I create my one hot encoded values. So as I just explained what I'm doing, I'm doing a creating the dummies by the means I mean I'm creating the columns with binaries 1 and zeros. So we can use pandas function called get dummies and this will create all dummy variable for my categorical variables. And I'm passing my data set and then I'm passing my the columns list which on which columns I want to pass by. I want to get my dummies. And then here as as I discussed like, I'll be dropping one of the the first one of the one hot encoded values. So, so and the reason here again as I discussed about like we can get similar information, same information with lesser values K -, 1 columns. So therefore we don't need K columns for in the case when we do 1 hot encoding. And now I'm just trying to take a print like hey I have converted all my columns into dummies now let me see how many new columns are getting generated. So I'm just again taking the shape of my number of columns here. So if you see here we when we started one hot encoding, we had close to 58 features. And then when we are done with our one hot encoded values, then we have close to 205 features here, which means that we have actually grown up close to, you know, four times of our features here.
+00:05:13 - 00:07:36
+Challenges of High Cardinality in One Hot Encoding and Curse of Dimensionality
+And then we'll try to see how how we have, you know, which all categorical vary values had a lot of cardinality in it. And if you remember while we were discussing the cardinality variables, we could see we had one feature which is PS CAR 0 PS CAR 11 cat where we had 104 distinct values in it. Which means like when we started doing 1 hot importing, so PS CAR 11 cat 104 values was got converted into like say 103 columns with, you know, binary variables. And therefore so this is where you know, we'll get very high number of features here. Now again there is a question about how this you know cat introducing 100 plus variables and original data set. So we might face problem of what we say, you know the curse of dimensionality when we try to work in a high dimensional space. By high dimensional space I mean this particular feature when we convert that it gets into 100 plus column which means that the data becomes very sparse and becomes highly dimensional and therefore we might you know end up having the problem of course of dimensionality here. Now course of dimensionality also the curse of dimensionality also works where you know there is optimal number of features that that we should select for a machine learning model or a model building exercise and and beyond using that optimal number of features, your performance of the model starts decreasing. It starts performing worse than your earlier model performance with the less number of dimensions that you have or the optimal number of dimensions that you have.
+00:07:36 - 00:10:03
+Understanding Dummy Trap and Multicollinearity in One Hot Encoding
+So that is what we mean by because of dimensionality. So therefore what we'll do is we'll kind of drop this variable for now and we'll try to run our one part encoding to move in this variable. So another concept that I also wanted to touch upon as on dummy trap. So what dummy trap means is as we have already discussed why we are dropping one of the one of the columns in that after we convert into one encoded values. So as K -, 1 is what we will be using it for our model building exercise. But if we are using K like we are not removing up, we are not dropping the 1st and we saw here we're not dropping the first column and then we are using all the dummy columns. Then we also get into a problem where where we have problems into say what we call it as a dummy trap. So one another reason is like just visualise or you know, think about a column which has a gender. So now gender is a categorical variable and and I just do A1 hot encoding for gender. And so typically in gender, what we see is male and female. Therefore now I have two columns where male is 1 and then females is 0. And and vice versa, wherever female is 1, male is 0. So therefore, so here I can derive that information using only one column. For example, if I use only female, if female is 0, automatically it means that it is male and female is one. That means it is a female is 1. But if you do not drop it, then if you try to plot a correlation metrics, what you'll see is these two will be like kind of negatively correlated to each other. And again we'll have problem of kind of multicolinearity in our input set in our data set. So it's always advisable to drop the column first column during the one part encoding method.
+00:10:04 - 00:12:05
+Practical Example of One Hot Encoding and Feature Engineering Techniques
+So, so right now what we are doing here is so this is we are dropping one of the variable as we discussed here. PS Car 01 cat, we will drop this variable as it has a very high cardinality and we don't want to get into a problem of course of. So we are removing that particular column and then we are running the one heart encoding method again. I am doing the same exercise. I am getting dummies. I am passing my data set and I am using the columns. Here I am creating the list all the variables and then working the first value and calling it as true. So drop the first value and get the print of how many features we are getting created for hot import. So here we are left with 58. We start with 58 features. Then we are left with 1/3 features in our data set. We just want to take a quick sneak peek into how the converted data looks like. So we will have some things. For example here if you see PR car 09 Cat, PPS car 09 cat 2 as 10 S all of them are like converted into binaries. PS star 09 cat 1 is like 0 and therefore US *10 cat. So these are kind of new variables that for generated after one heart encoding method and these are the binary values generate. So this is what we will be doing here. For which engineering? There are other feature engineering methods that you can try. Test is around creating new features based on your existing features. You can take an interaction of the variables and create new features.
+
+As you learnt in the video, one-hot encoding is a feature engineering technique in which the different levels in a categorical column are converted into vectors of 0s and 1s depending on whether it is present or not. So, 0 and 1 indicate the presence and absence of a label, respectively. This means that if there is a categorical feature with n different levels, then n-1 new columns are created indicating the presence or absence of each label.
+
+ 
+
+However, there are some major problems associated with one-hot encoding. They are as follows:
+
+ 
+
+Curse of dimensionality: Performing one-hot encoding on categorical features with a large number of levels leads to the creation of many new columns that are sparse, which, in turn, leads to a high-dimensional data set.
+It is always advisable to build a model on the optimum number of features. Otherwise, you will end up building a complex model with poor predictive performance.
+ 
+Dummy variable trap: This situation occurs when two or more variables are highly correlated with one another, and one variable is able to predict the value of the other due to multicollinearity.
+This hampers the performance of the model. Therefore, it is necessary to drop one dummy variable to avoid this problem.
+ 
+
+We will discuss feature selection to handle the curse of dimensionality.
+
+Feature Selection Techniques
+
+
+There are situations when the data set contains many features that may not be of much importance for prediction. Keeping them in the model affects their performance because they do not have any correlation with the response variable. And, applying data preparation and feature engineering techniques on such variables may lead to the problems that we discussed previously. Let’s understand this better by watching the next video.
+
+ 
+
+00:00:00 - 00:02:02
+Introduction to Feature Selection and Initial Steps
+Now let's go ahead and do a feature selection. Feature selection is again very important build in our model build exercise. So, so, so right now, now all the analysis, exploratory data analysis and feature engineering and cardinality, what we have seen about we use all our learnings and then we'll start doing our feature selection approach here. So what, what, what we had learned during our EDA was during when we checked our correlation, what we saw was there were columns which are like calc. So wherever calc was present, we absolutely had no correlation with the target variable and so therefore it does not at all add any value during our model build exercise or whatever. Change in care will not reflect any change in our target. So therefore it will be very very kind of non predictive information. Therefore, first as a first type of feature selection, I'm dropping all those variables from my list and also I'm dropping PS card 11 cat as we discussed on the personal denominability issue of very high cardinality of 104. So for that reason I'm dropping that particular variable as well right now from my data set. So, so here I'm passing all the columns that I have to draw. So call to draw and then I'm dropping all those columns in there and I'm just trying to replace my data set after topping that column and then Access is going to drop those columns here. So again I'm taking the shape to see how many of the rows and columns I'm left with.
+00:02:02 - 00:03:32
+Splitting Dataset into Train and Test Sets
+I have close to similar rows, same rows 595 thousand with 81 columns 81 inches. So now what I'm doing next is I'm trying to split my data set into train and test and for which I'm loading from SQL model selection. I'm importing a train test is split so training test split. What it does is it will try to split my data set which is like 500 and five 500,000 rows into two data set which is like train and test data set. Now in training what we try to do is we try to create data sets which are extreme and X test and then Y train and Y test kind of the four splits will be doing. But before that what we are doing is we are calling it our Y variable. So Y variable is our target variable. So therefore we are calling Y as target and then X is where first time dropping target variable because already I have called that as Y&X would be typically be all the features, the input features that we want to run in our model. So therefore I drop target and then also I drop ID because ID again is not a feature that I will be using our build exercise.
+00:03:32 - 00:06:20
+Random Forest Classifier for Feature Importance
+Therefore I am dropping the ID and then I am running split and I want to split into four where strain X test and Y train Y test set will be created. I am using train test split function where I am calling as X here which I created for all my features and then Y which is my target variable and then I'm doing a split size of 30 percentage and that is a test size. So I want my test size to be 30 percentage of the entire set. And then I'm also using a stratify as Y, which means that I want to do a stratified sampling and I want to have exact whatever the pattern distribution of you know, Y is that I have it my entire data set. I want it in my train and test data sets. For that reason, I am doing my stratify as Y and then I am calling a random state which I am providing you can provide any number here which will give us a kind of it generates a seed where if I try to split again, it will work the same splits after I split my data set. Then what I'm going to do is so my purpose here is to is for feature selection and for feature selection I'm running a random forest classifier for which typically I'm looking for a feature importance. So for that what I do here is I load is from a skill and ensemble I load random forest classifier and I call that classifier Rhino forest model. And then here I am passing our smaller tree here by number of trees like to pass 25 S an estimate is you give it as 25. And then I am trying to fit my model into the train set that I have created. I am passing X train and Y tree. And the features that I am using is all the features that I have in my extreme. So therefore, right I'm creating a list of features where I have all the columns in the features and using this speeds list I am creating for each feature zip. So for each columns here give me the feature importance value that we generate from the random forest classifier.
+00:06:21 - 00:08:47
+Selecting Features Based on Importance Values
+And then once I get this, I'm trying to print all my features here. So, so we get all the features list along with the feature importance values. So just try to, you know, I'll try to pick the top feature importance values, the columns here and those I'll use it in my model building exercise. So this is just one of the method during which using which you can do feature selection. You should definitely try other approaches like lasso regression where you do a regularised regression method to select features and and therefore here I have just used a random forest and got my feature important values. So and then here I am selecting the columns that I want to run it in my model selection part. So therefore I pick up all the values which have higher which has higher feature importance. So it will be close to 17 of the columns that I have picked up and using that 17 columns. Here you just see that I have created a data set and where I have just called use only the columns for the model and here just as a iteration purpose. If I need to add a few more columns later, I'm just creating a different data set where I have here present all the columns in DF2. But right now again from DF2 I'm calling all the columns which I'll be using for the model build, therefore DF I'm taking a shape. So right now I have all my 590-5000 to those along with my 18 columns. So now I'm ready with my set with which I'll like to go ahead and run my models and especially will try to understand how this imbalance data set, which all techniques can be used, how we can use those techniques and build the model and get the accuracy, sorry, the evaluation metric and the performance metrics.
+00:08:47 - 00:09:14
+Preparing Dataset for Model Building and Handling Imbalanced Data
+So, so and here if you see I just, I'm printing the columns, you just see which are columns name is present in our data set. And so we are good to go now or next we will deal with the important concepts of how, what are the ways and techniques? How do we handle imbalance data set?
+
+
+So, as you saw, dealing with the large number of features that do not contribute enough to the prediction is quite important.
+
+ 
+
+You also saw that we removed all the features with zero correlation with the target variable and the categorical columns with many levels in order to avoid the problem of the curse of dimensionality.
+
+ 
+
+After removing these features, a train-test split was made, and the important features for prediction were selected using the random forest feature importance technique. Apart from this, there are other techniques that help in feature selection. Some of them are lasso regression, PCA, RFE and so on.
+
+ 
+
+Now, we are almost ready with the data set. However, the data set still has the class imbalance problem. What do we do about it? You will understand the concept of class imbalance and learn about the techniques of dealing with it in the next segment.

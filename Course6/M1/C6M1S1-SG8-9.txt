@@ -1,0 +1,119 @@
+Building a Linear SVC
+
+
+Having developed a clear understanding of hyperplanes, margins, slack variables, and the cost of misclassification, it is time to apply these ideas in practice.
+
+ 
+
+In this demonstration, we will build a linear Support Vector Machine classifier using Python to identify whether an email is spam or ham. The dataset we will use is sourced from the UCI Machine Learning Repository, where most features represent the frequency of specific words or patterns common in spam emails. You can find the detailed data description here. The dataset is provided with the module resources in the module overview section.
+
+ 
+
+Before implementing the model, it is crucial to interpret hyperparameters correctly. Although we discussed the parameter C in the theoretical formulation of SVMs as a measure linked to slack variables, the meaning of C in sklearn.svm.SVC() is inverted, acting as a regularisation strength. 
+
+ 
+
+In theory:  A high C allows more misclassifications; more generalisable 
+
+In sklearn: A high C penalises misclassification; more likely to overfit 
+
+ 
+
+In the next video, we will begin by training a linear SVM with default settings and evaluating its initial performance. We will then employ k-fold cross-validation using cross_val_score() for a more reliable estimate of accuracy. This approach trains multiple models on different train–test splits and aggregates performance across them. 
+
+https://archive.ics.uci.edu/dataset/94/spambase
+00:00:00 - 00:00:24
+Introduction to Linear Support Vector Machine for Email Classification
+Welcome to the session. And in this session our goal is to build a linear support vector machine, a classifier which is used to categorize the emails into spam or ham. And the data set that we are going to use is a well known spam based data set which contains around 4600 labeled emails. So let us quickly understand the data set before doing that.
+00:00:24 - 00:00:52
+Understanding and Importing Libraries for Data Analysis
+So let us import all the required libraries numpy, pandas and also the several crucial modules will pick from the SK learn like SVC, K4, bridge, search, CV etc. The rest of the packages that we are importing here and now. Let us first load our data set and let us understand the five rows that are present in the data set.
+00:00:52 - 00:01:50
+Exploring the Dataset: Structure and Features
+So if we see the head here, so we have the five rows and we have around the 48 columns and the last column which is a spam which says about you know it's a binary target variable representing one for spam and 0 for ham, right? So now these are the features that we have in the in our data set. So if you quickly look into the shape, I have around 4601 samples with 58 columns, right? So if I run the info, what is the data types and all. So if you observe that all the data types are rough type floor 64 and we have 4601 non null counts for all the columns that are present here, right? This is the great where there are no missing values that we need to handle because we don't have any null values right.
+00:01:50 - 00:02:47
+Data Preparation: Rescaling and Standardization
+So now if I again quickly do the another check of null values, we can see here all the values are here 0, meaning we don't have any missing values in the data right now. If I describe my spam feature here, it shows me right the summary statistics of this my spam column, where the mean of the spam column is approximately 0.394, which tells us that three 9.4% of the emails in our data set are labeled as spam, right? So this represents A slight manageable class imbalance that we can handle right now. Once we understand the data set, let us quickly prepare our data set right.
+00:02:47 - 00:03:15
+Splitting Data into Training and Testing Sets
+So to do so, let's do some preliminary data preparation steps, that is rescaling the variables to understand why the rescaling is required, right? So again, if I describe my e-mail input which have all my features, I am calculating the count, mean, Max and all the details.
+00:03:15 - 00:05:17
+Building and Training Linear SVC Model
+So if you see the outputs the word frequency features have, the mean is near to 0 right? But if we see this lengths where the mean is around 52283, so this difference in the scale would Causeway a large magnitude features to dominate the distance calculations. So first we must standardize the data before we pass to the SVM models which are distance based algorithms. 1st we will split the data before we do the scaling. So here we are splitting into X&Y where I am getting the spam emails and the corresponding label associated with that. And once I have this, I am splitting into the training and testing where my size is 0.3 which is for the 7030 split and with a random state which ensures the reproducibility. Right now let's scale the features using the standard scalar. So first here we are initializing the scalar and then we are using the fit transform on the training data, but only dot transform on the test data. So because we must not fit on the test data as that would you know leak the information about the test sets of distribution into our training process, right. So if you quickly see the mean and for both the training and testing if they have the similar distribution of spam and ham e-mail. So this shows that both the train and test have the similar distribution right? Now once we have this setup ready, we need to next step is to build the models here first let us build a linear SVC model. But before going through that, go through the help that is present here about the SVC model in detail so that you will have more clarity on that particular method.
+00:05:17 - 00:07:08
+Evaluating Model Performance: Confusion Matrix and Metrics
+What are the parameters, what are the usefulness and all of those details here. So here while building the model, first we are initializing the SVC with a linear kernel here where we explicitly choose the linear kernel because this is a high dimensional feature space and often you know a linear boundary is sufficient and it is also a computational efficient. Then we are fitting the model here on the training data and the corresponding labels. And then we are getting the predictions as well on the test set by using the model that we train, right? So if I quickly show you the model here, we are fitting the model where C equal to 1 and with the kernel is a linear here, right? So now if we evaluate our model that we just built where here we are importing the required libraries first the matrix 1st and then we pass the predictions and the two labels to get the confusion matrix here right. If you observe the confusion matrix where we have the two negatives as 796 and two positives as a 462, meaning this correctly predicted ham and the correctly predicted form here. So if we quickly see the accuracy position recall as well. So the accuracy we got around 91% which is the overall percentage of corrected predictions. And then we have the precision of nine 1.8% which measures the quality of the POS, I mean the positive predictions and the recall is you know, it measures the ability to find all the actual positive cases that are present in the data set which is around eight 4.9%, right.
+00:07:09 - 00:09:10
+Hyperparameter Tuning and Cross-Validation
+And similarly, if you see the specificity which is around 95%, meaning this is ability to correctly identify the true HAM cases here in our case, right. So if we quickly interpret our results, so we have around 91% of the accuracy and 85% of the spams are identified correctly and the specificity is around the 95%, right. So now let's move to the another interesting step which is the hyperparameter tuning. So the hyperparameter tuning, first let's run a simple K fold cross validation to get a sense on the average matrix as composed over the multiple folds. So here we will do this by passing the information to the K fold function where here we are passing the splits as 5 meaning we are performing the five fold of this data and we are shuffling and having the random state with the same output every time. Now I am initializing a model with C equal to 1 where let me talk about the parameter C here. So this the role of the C is a regularization parameter which governs the trade off between achieving a large margin and penalizing the misclassification address whenever you have a small C This results in a wide margin tolerating the more misclassifications but the large C it aims for 0 misclassification in the training data which lead to narrow margin and potentially over fitting on the training data. That is why we are going to use the grid search in the next step to search the optimal value via cross validation. So for now, we are using the C equal to one with that.
+00:09:10 - 00:09:41
+
+So we are passing all this information to the cross valve score function where we are passing our model, we are passing our training and the corresponding labels and the folds that we have here. And the scoring mechanism that we want here is a accuracy, right? So if I quickly print the results now, I have the five different accuracies across the five folds. And if you see the mean accuracy, the mean accuracy now slightly improved compared to the previous one.
+
+
+NOTE: At 7:08, the calculation of specificity (Equation) is hardcoded to different values than the ones we got after the model evaluation. Because Sklearn does not provide a function to calculate the specificity score, we need to calculate it manually. The correct calculation according to the results received will be Equation 
+
+ 
+
+ 
+
+Now that you have seen how a linear SVM is implemented and evaluated, we can build on this workflow to optimise the model further. Next, we will adjust hyperparameters using Grid Search to identify settings that achieve stronger generalisation. This will guide us toward constructing an effective soft margin classifier before moving into kernel-based SVMs for nonlinear problems. 
+
+ 
+
+Next, we will try to find an optimal value for C by testing the performance on different values.  
+
+Tuning Hyperparameter C
+----------------------
+With the baseline linear SVM model trained and evaluated, the next step is to refine its performance by selecting an appropriate value for the C hyperparameter. As discussed earlier, in scikit-learn’s implementation, C determines the penalty for misclassification, controlling how strictly the model separates the training data.
+
+ 
+
+A very high C forces the decision boundary to classify nearly all training points correctly, which may lead to overfitting. A very low C relaxes this constraint, allowing a wider margin at the cost of misclassifying some points, thereby improving generalisation.
+
+ 
+
+To ensure that this choice is not arbitrary, we will use Grid Search with cross-validation to systematically evaluate multiple C values. This allows us to compare performance across different configurations and select the one that provides the best balance between accuracy and generalisation.
+
+ 
+
+Let’s take a look at the tuning process in the next video. 
+
+00:00:00 - 00:01:03
+Grid Search for Optimal Hyperparameter C
+Now let us see the grid search. How to use the grid search to find the optimal hyperparameter C that I mentioned before, right? So here here we are using the range of the parameters of C which ranges from 0.001 to 300 where we are initializing the model with the same linear kernel and we are passing all the parameters through the grid search CV for the fivefold with the five fold cross validation right? And now if you fit the model for the X train by passing the training data on the corresponding labels. If you can see here for each parameter we are getting the result for I mean the training score for all the five folds. This happens for each and every parameter here, right? So with this we have We perform the grid search to find the optimal parameter C value here.
+00:01:03 - 00:02:28
+Analysis of Training and Test Accuracies with Varying C Values
+Now let's quickly see the results of the grid search here where so all the results across different splits with the different parameters of the different C values that we have for the different splits. We have all the scores represented here in this data plane. So let us quickly plot the training on the test accuracies again as C to understand or to get the insights from that right. So here, as we see at very small C, the accuracies of both the training and the testing are low, indicating that the model is too simple and fails to learn the data adequately, right? And at the optimal, like whenever AC increases here, both the accuracies raise and the peak of the test accuracy curve, it's roughly, you know, around 10 to 100 in between. This represents optimal C value where the model generalizes best to the unseen data. So with large values, training accuracy becomes very high, but the test accuracy slightly decreases here and the widening gap between the train and the test accuracy in this region signifies that overfitting where the model performs poorly on the new data.
+00:02:29 - 00:03:52
+Optimal C Value and Model Performance Metrics
+So this figure clearly illustrates that you know the bias variance state of moving from high bias or low variance at small C to low bias or high variance at the large C and with the optimal C observed in between is balancing the straight off, right? So now once we understood this analysis, let us quickly see what is the highest value accuracy at particular C value. So here at C is equal to 100, we got the highest test accuracy which is around oh .93% right now. Let us see what are the matrix look like corresponding to 1C equal to 100 here. So here again we are initializing the model with the linear kernel and here we are fitting the model with the train data and the corresponding predictions. And then we are getting the predictions of to the model by passing the test data. Once we did that, let us print the accuracies and observe that. Now here my accuracy is 91% and the pressure impression is also about 91% and the recall is around oh, .85%. Now let's quickly pick the two best features.
+00:03:53 - 00:05:14
+Feature Selection and Visualization in 2D Plot
+What frequency they address, what frequency free? These are the 2 features that I selected from the data set. Now we are getting the column indices and then we are slicing from the scale number is. And then we are fitting a 2D model for plotting these things. So let us quickly visualize how my features look like in this 2D plot, right? So this is the total projection of a data points classified by. Now you know the linear SVM that we saw and basically the pass, it's visible here. The X axis is what frequency addresses and the Y axis is what frequency 3, indicating that they know the frequency of the certain words, right? So the data points are if you observe closely, they are either colored with yellow, right? So if you can see, these are the yellow points and it's visible as here the black points, right? SO2 data points are represented in the two different colors, right? And the horizontal purple line here at Word frequency free 0 is the SVM linear decision boundary, suggesting that the model primarily uses the word frequency free feature to separate the two different classes here, right?
+00:05:15 - 00:06:54
+SVM Decision Boundary and Support Vectors
+These uncircled points indicates that the support vectors which are the data points closest to the decision boundary and thus most influencing defining it. So this plot basically reveals that the two classes are largely separable based on the vote frequency free feature with most black points having very low or zero vote frequency free, right? While if you see observe the yellow points on the other class show a wider range often the higher vote frequency free values, right? So now we can try plotting lot other features like this. Let us say if you can quickly see for the two other features how it look like. So again, it's the same scenario here where the do different colors, the yellow or black. And if you observe this, the purple line where this line serves now as a SVM decision boundary. So the support vectors marked by the circles, these are concentrated near this boundary, highlighting their importance in defining the separation. And this distribution suggests that, you know, these classes are not linearly separable in this 2D space as a decision boundary is curved and effectively separate the cluster of a black coins right from the more you know, dispersed yellow points here, which tend to have, you know, higher frequencies for vote frequency free and vote frequency are right.
+00:06:56 - 00:08:31
+Optimizing Evaluation Metrics Beyond Accuracy
+So now once we visualize the different feature sets, the another thing is now we are optimizing the other evaluation matrix. So here we have optimized the model based on overall accuracy but you can also optimize on the different metrics which it can be recall right? And it can be the other metrics as well. So basically here we are calling the parameters, we are passing the parameters. Now the my scores is accuracy recall and for each score here I am getting the I am doing the grid search and I am then fitting the model to get the final thing. The whole point here is that so we can always get the best metric to optimize. For example, you know previously we considered accuracy, but accuracy might not be the best metric always. So if you concern more about catching all spams, you might want to maximize the 2.2 rate or the sensitivity, right? If on the other hand, if you want to avoid classifying Rams as spams, you would maximize the true negative rate or the specificity, right? So this is the important point to note. So if you observe the result, so the highest accuracy score is 93% at C equal to 100 and the same if you see observe for the recall, the highest recall score is 90% at the same C value 100, right?
+
+
+
+This demonstration shows how the choice of C influences the model’s behaviour and how systematically evaluating candidate values through grid search helps in identifying an appropriate balance between enforcement of correct classification and margin flexibility. We can also tune the hyperparameter for different evaluation metrics to see what value of C is optimal for the chosen metric.
+
+ 
+
+ 
+
+Let's summarise the learnings from this session.
+
+In this session, you examined how bias and variance contribute to prediction error and why controlling model complexity is essential for reliable generalisation. Building on this, you explored Support Vector Machines as linear classifiers, understanding how they seek a separating hyperplane with the largest possible margin. 
+
+ 
+
+You compared the Maximal Margin Classifier, which assumes perfectly separable data, with the more practical Soft Margin Classifier, where misclassifications are permitted through slack variables. The hyperparameter C determines the degree of this flexibility, linking SVM behaviour directly to the bias-variance trade-off. A larger allowance for violations leads to greater generalisation, while enforcing strict separation increases sensitivity to noise. 
+
+ 
+
+Finally, you implemented a linear SVM in Python, applied cross-validation to assess performance robustly, and used Grid Search to select an appropriate value of C. These steps established a solid foundation for advancing to nonlinear SVMs in upcoming sessions. 

@@ -1,0 +1,130 @@
+Apriori Principle Concepts
+
+Let’s begin with the core ideas behind association rules. The slides introduce the key measures — support and confidence — and show how minimum thresholds help filter meaningful patterns while keeping the search efficient. These concepts set the foundation for building and evaluating useful association rules. 
+
+ 
+
+ Professor Raghavan will guide you through these fundamentals. 
+00:00:00 - 00:00:12
+Introduction to association rule extraction algorithms
+In this session, we will discuss one specific algorithm for extracting the association rules. This is a very popular algorithm called the Apriori algorithm.
+00:00:13 - 00:00:20
+Overview of Apriori algorithm
+There are two well known algorithms for association rule mining, the Apriori algorithm and the FP tree algorithm.
+00:00:20 - 00:00:23
+Comparison of Apriori and FP tree algorithms
+FP stands for Frequent Pattern Tree algorithm.
+00:00:24 - 00:00:37
+Focus on Apriori algorithm for session
+Today we will discuss the Apriori algorithm. The Apriori algorithm, the name comes basically from the Apriori principle, which is something we mentioned without giving the name.
+00:00:37 - 00:00:53
+Explanation of Apriori principle
+And the principle is quite simple. It is that if an item set, an item set as I mentioned, is a collection of items that form a part of a transaction.
+00:00:53 - 00:01:13
+Definition of frequent item sets and support threshold
+The Apriori principle basically says that an item set is frequent only when every subset of the item set is also frequent. Now what do we mean by frequent in the context of item sets?
+00:01:13 - 00:02:07
+Apriori principle and algorithm basics
+We mean an item set is frequent when the number of occurrences of the item set across transactions. The number of transactions in my data set where this collection of items, the item set appears if that number is more than a minimum threshold that I set called the support. So if the support of the item set is more than the minimum support threshold, then we call it a frequent item set. So the Apriori principle states that every subset of a frequent item set must also be frequent. This is quite an obvious thing. The a priori algorithm is based on this very simple principle. So and this immediately suggests an A systematic way to build up frequent itemsets.
+00:02:08 - 00:02:48
+Example of frequent item sets with bread and butter
+Now yeah, before we move on to the algorithm, a simple example. So if you have two items in an item set like bread and butter, and if this collection bread and butter together are frequent, then bread also must be frequent individually as an item and butter should be frequent again individually as an item. And so this also then tells you a way to eliminate of an item set by saying this is not frequent.
+00:02:48 - 00:03:38
+Elimination of infrequent item sets using Apriori principle
+How do you eliminate? You check each one of its subsets, and if any subset happens to be infrequent, then you know that this item set also cannot be frequent, right? So the a priori principle, it said that every subset must be frequent for this to be frequent. If there is a subset which is not frequent, then obviously this item set, the parent item set, can also not be frequent. So this is how you can eliminate item sets which are not meeting your minimum support threshold. So by doing this in a structured manner you can reduce your computation time and not allow too many the false item sets to kind of build up and clutter up your search space.
+
+We learnt how support identifies frequent itemsets and how confidence captures the strength of associations, along with why minimum thresholds are important for controlling complexity.  
+
+ 
+
+Next, we move on to the Apriori Algorithm and see how it builds larger patterns using candidate generation and pruning. 
+Apriori Algorithm
+
+
+After understanding the Apriori principle and how support, confidence, and minimum thresholds help identify meaningful associations, now let’s begin exploring the Apriori Algorithm. This method uses candidate generation and pruning to systematically build larger itemsets and keep the search efficient.  
+
+ 
+
+Prof. Raghavan will explain how the algorithm progresses step by step. 
+
+ 
+00:00:00 - 00:02:10
+Introduction to Apriori Algorithm and Item Sets
+That the way the algorithm works is in in a way it is kind of structured trial and error. Yeah. But you can't just do pure trial and error. I mean, you can't take, you know, all the items, take every possible subset and check if it is frequent or not. And then so like if I have say 10 items, right, can you do this? Can you just take one alone as an item set, check how many times it appears, Does it cross the minimum threshold? Then if it does, then park it away as a frequent item set. Otherwise, don't do this for every one of the items individually. Then take every pair 12131415, etcetera, 232425343536374546 and so on. Right? So do this for all pairs, then all triplets, all quadruplets, all quintuplets. Keep on doing this right? So if for every subset possible subset of items you check, you just walk through all the transaction. This is. This would be a naive but quite a dumb way of doing it, right? Why dumb way? Because if if I have say 100 items in my inventory, then the total number of subsets that are possible is. I am sure you know this from your basic set theory. The total number of subsets that are possible is 2 power 100, which is probably more than the number of atoms in the universe, right? So it is simply computationally impossible for you to check everyone of those subsets your search space. You have to smartly eliminate the subsets which simply cannot be part of your candidate list at all, and the Apriori principle comes in very handy in doing that. So you start with item sets of size 1, then check which of them are frequent, eliminate the infrequent ones, keep only the frequent ones.
+00:02:10 - 00:05:08
+Apriori Algorithm Process and Pruning Steps
+Then the next step from the frequent item sets of size one that you have already identified, generate frequent item sets of size 2 and again do the same thing. Eliminate the ones that cannot be candidates, either because some subset is infrequent or the item set itself is not frequent. And finally, reduce the list of candidates that you have generated to the actual set of frequent item sets of size 2. Now continue this process using the frequent item sets of size 2. Generate candidate item sets of size 3. Eliminate the ones that cannot be frequent item sets. Then finally come to the frequent item sets of size 3. Keep on doing this till you hit the maximum. So this is basically how the a priori algorithm will work. Pruning step essentially removes candidates that have infrequent subsets or the item set itself is infrequent. Now how do you eliminate the infrequent ones? You basically count the number of occurrences of that item set across the transactions and see if the count happens to be more than the minimum support that you have specified before you started building your list of frequent item sets. OK, so you first set a threshold support value and and then use that to eliminate the infrequent 1. So you can definitely expect that if you set your support to be too low, then you're going to have lots and lots of candidates. If you set the support too high, then you will not get that many candidates. So where do you actually set it? That's not an algorithmic problem. That is left to the user to decide depending on what makes sense in that context. There is no silver bullet for this. You actually have to try out a few support values and see what works best. Actually look at the sort of rules that you you are getting and then use those to sort of intuitively evaluate of those rules are making sense. Are you getting too few than you expected? Are you getting too many more than you're expected? And so on. So depending on that, if the number of rules produced by the algorithm is too few and doesn't meet your expectations, then you may have to reduce the support level, the minimum support level and vice versa, right? If it is producing too many, then you may have to raise the bar little bit. So far we have been talking about, you know, generating item sets.
+00:05:08 - 00:06:12
+Setting Minimum Support Threshold
+Now what about association rules? So before you generate association rules, you first have to generate item sets. Item set is just the collection. Now after you get the collections, the frequent collections, you then look at association rules. You derive association rules from the itemsets. Now just just recalling a definition of an association rule and association rule is an implication. If the antecedent, then the consequent right you put. Typically we put an arrow the between the antecedent, an arrow pointing from the antecedent to the consequent, right? So what we do is we first have to identify an item set. And obviously for an association rule to make sense, both the antecedent and the consequent together have to appear in enough transactions, right?
+00:06:12 - 00:07:05
+Generating Association Rules from Item Sets
+So clearly the item set which consists of both the antecedent and the consequent, both these together have to occur enough number of times for you to even talk about an association rule with these two, right? So that is why we first have to identify the item sets and then derive the association rules from the item set. So given an item set, how do you derive an association rule from that? There could be multiple association rules coming out of the same item set. But how do you do that? You split the item set into two into an antecedent and a consequent and put an arrow in between. That becomes an association rule. So how many such association rules can you potentially generate from any item set? It is because each the both the antecedent and the consequent are subsets of the item set, right?
+00:07:06 - 00:09:11
+Evaluating Association Rules with Confidence
+And in fact, consequent is basically the complement of the the antecedent. So you remove all the elements of the antecedent from the original item set, you get the consequent, right? So what you need to do is basically generate every possible subset of the item set and for each of those subsets you have a complement. So the the subset that you take becomes the antecedent and its complement with respect to the original item set becomes the consequent. OK, so you from an item set of size 5, you can potentially generate 2 power 5, which is 32 different association rules. Now though, all these association rules make sense? No, obviously not. Now again, you have to check which of these association rules are actually useful or even important to be considered. And how do you do that? We talked about another measure last time for measuring the strength of an association rule and that is confidence. Generate the potential association rules from the item set. You compute the confidence for each one of them, and if the confidence goes above a fixed threshold that you have set, like you set the minimum support, you also have to set the minimum confidence level and whichever association rule passes that criterion. Then you say these are association rules that probably make sense. Finally, you have to strike the right balance between the minimum support confidence and your own domain understanding of what kind of rules make sense to you. So you set the confidence too high, you will hardly get any association rules. You set the confidence too low, then you will get a whole association rules, many of which may not make sense.
+
+
+ 
+
+We learnt how the Apriori algorithm expands itemsets through candidate generation and removes unlikely patterns through pruning, making association rule mining scalable and structured.  
+
+ 
+
+Up next, we will look at a simple example to see how this process works in practice. 
+
+Example
+So far we learnt how the Apriori Algorithm builds and prunes candidate itemsets, now let’s begin with a simple example to see the process in action. This walkthrough helps connect the algorithmic steps to real transaction data and shows how frequent itemsets are identified in practice. 
+
+ 
+
+ Prof. Raghavan will guide you through the illustration. 
+00:00:00 - 00:00:22
+Introduction to toy example and algorithm overview
+Let us jump into an example. This is a simple toy example just to illustrate the overall algorithm. OK, say there are three transactions, milk, bread, butter in one, milk, bread in another, and bread and butter in a in the third one. Let us fix some minimum support in minimum confidence values 0.4 and 0.6 for support in confidence.
+00:00:22 - 00:00:57
+Calculating support for Singleton item sets
+Now let us start with Singleton item sets. So there are how many items? Now there are milk, bread, and butter. There are three items and milk occurs in two, bread occurs in all three, butter occurs in two. The support for each of them is 2 by 3, three by three, and two by three. And all of them are more than .4, which means all the Singleton candidates pass our criteria. So we have the list of all one frequent item sets, which is milk, bread, and butter.
+00:00:57 - 00:02:23
+Generating and evaluating pairs using Apriori principle
+Now let us look at pairs. So how do you generate pairs? First thing you should remember is to construct the two item sets. Item sets with two items. I do not have to look at every item because we know already that every subset must be a frequent item set, right? Otherwise, obviously, the item set I construct is not going to be frequent. That is precisely the Apriori principle. So what do I do? I I already know the list of frequent one item sets, which is in this case milk, bread, and butter. So I only need to work with these without worrying about any other item. Only these will ever participate in the two item sets that I'm going to create. So I just need to pair these ones into item sets of size 2. So how many pairs do you get Milk, bread, bread, butter, and milk and butter. Now here if you look at the support for each of these, for milk and bread, it is 2 transactions, which means the support is 2 by three, which is 0.66, which is more than minimum support 0.4. So that qualifies. Bread and butter will also qualify. Milk butter is 1 by 3, which is less than 0.4. So milk and butter will now get eliminated. Yeah.
+00:02:23 - 00:03:40
+Deriving association rules from frequent item sets
+So after eliminating milk butter, you are left with milk bread as one item set and bread butter is another frequent item set. Now you can derive association rules from this. So if you take the item set milk, bread, how do you create association tools from this? You take every subset and that subset becomes the antecedent. Its complement becomes the consequence. So in this case there are only two items, milk and bread. So you take milk as the antecedent, the bread becomes consequent. If you take bread as the antecedent, milk becomes the consequent. So you can get 2 possible association tools from here, bread to milk or milk to bread. And you can evaluate the confidence for both. And it turns out that both the confidences are reasonably high. They are higher than the threshold that we set, which was, if you remember, it is .6, right? Yeah. So bread to milk, milk to bread, and similar calculation for butter to bread and bread to butter. It turns out that all four are valid association rules as far as the confidence level that we have set.
+00:03:41 - 00:05:00
+Iterative process and domain knowledge in setting confidence levels
+So to generate an item set of size 3 from this, I could have combined milk, bread and bread butter, These two frequent item sets of size 2 each. I can combine them. I'll get milk, bread, butter together as an item set. Now does that qualify? There is only one transaction which has all three, which is way below the support threshold that we have a point for. So that anyway gets disqualified. So what we are finally left with is just milk, bread butter as individual item sets and then milk, bread, bread butter as two frequent item sets and four association rules from these two. So that's basically what it is for this very, very simple toy example. In the toy example, we ended up seeing that all four association rules that we generated are actually qualifying based on 0.6. On the other hand, if I had set my confidence threshold to say .75 instead of .6, then I would have been left with just two association tools, right? So you need to do this iteratively depending on what makes sense for you in terms of domain knowledge. So like for example, milk to bread versus bread to milk, right?
+00:05:00 - 00:05:35
+
+Which do you think is more likely? I mean, would the person be laying his or her hands on a milk bottle first or a bread packet first? A store manager will may have a good sense of what people pick up first and and then as a result pick up something else, right. So this this kind of, you know, on the ground knowledge does help a lot. And use this to then set the appropriate confidence level and arrive at the right set of association tools that makes sense for your context.
+
+
+We learnt how the Apriori process unfolds on actual transactions and how frequent itemsets emerge from candidate generation and pruning.  
+
+ 
+
+Next, we move to tuning minimum support and confidence, where we explore how threshold choices affect the number and quality of patterns discovered. 
+
+Tuning Min. Support and Confidence
+
+
+Earlier, we looked at an example to understand how the Apriori process identifies frequent itemsets step by step. Now, we move on to how minimum support and minimum confidence are tuned. These thresholds decide which patterns are retained and which are filtered out, helping maintain both relevance and efficiency. 
+
+ 
+
+Prof. Raghavan will explain how these settings influence the rules we discover. 
+00:00:00 - 00:00:18
+Introduction to support and confidence in rule generation
+So you will have to work with the support and the confidence together. And if you want a more sophisticated control over the kind of rules that you are going to generate, then you can look at the other two metrics that we discussed last time, which is lift and leverage, right?
+00:00:18 - 00:01:38
+Understanding lift in association rules
+Lifters, how much more so if I am talking about a rule A to BA leading to B, right? A&B are two item sets. So what is the lift of this rule? The lift of this rule is how so I I have a certain confidence associated with A implying B, which means what is the probability of seeing B if I already know that A is there in the item set, correct? Now B may have an independent occurrence probability of its own. If you remember the context in which we discussed lift, it is to eliminate the scenario where confidence looks high, but not because the antecedent is actually leading to the consequent, but simply because the consequent is anyway far too frequent, right? So to eliminate these kind of of scenarios, we create this metric called lift, which is the confidence of the association rule divided by the support of the consequent independent.
+00:01:40 - 00:02:11
+Explaining leverage in association rules
+And then the leverage is how are these two the the antecedent and the consequent? How closely are they tied to each other? So we look at the difference between the support of A to B as opposed to just the product of the supports for A&B together, and if this difference is positive, then we say this association rule has a leverage.
+
+We learnt how setting appropriate support and confidence thresholds controls which itemsets and rules are considered useful, and why tuning these values is essential for avoiding trivial or overwhelming outputs.  
+
+ 
+
+Next, we will explore the practical considerations that affect how association rules are applied in real-world scenarios. 

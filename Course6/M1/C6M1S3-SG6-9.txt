@@ -1,0 +1,153 @@
+Multinomial Naïve Bayes
+
+You will now explore how Naïve Bayes adapts to different types of data. Depending on whether features are represented as counts, binary indicators or continuous values, the model uses specific variants to capture their characteristics effectively. Here, you will also learn about one of the variants: Multinomial Naïve Bayes, which models features represented as counts or frequencies and is widely used for text classification tasks.
+
+
+00:00:00 - 00:00:23
+Introduction to Naive Bayes Classifier and Data Types
+We know that Naive Bayes classifier always follows 1 core principle. It uses Bayes theorem to identify the most probable class. However, real data sets are not all the same. Some contain frequency and count based data, others use binary features and some consist of continuous values.
+00:00:23 - 00:00:33
+Adapting Naive Bayes for Different Data Types
+This brings us to an important question. How does Naive Bayes adapt to classify these different types of data effectively?
+00:00:33 - 00:01:38
+Examples of Naive Bayes with Binary and Categorical Features
+We will now explore how its variance handle each of these scenarios and we will also see how all of these features can be present in a given data set and how naive based layers can be used to solve the data sets with all type of features. Let us take another example here where we have multiple features. Let us say we have message text. Let us say we have buy limited items special offer sale and let's meet tomorrow and see you soon. So we have binary class, we have class of spam and not spam and we have multiple message text. Basically these are the different features. So determine if the message buy items is spam or not spam. So we have to say this is our observation here. All the X1 to XN and this is AC which is zero and one. So in this case our objective is determine if the message buy items is spam or not spam. This is the If you see, we are slowly building upon the complexity of the problem.
+00:01:38 - 00:02:10
+Example of Naive Bayes with Continuous Variables
+There is another example here. We have multiple names here and we we want to classify given a set of features given name of the animal here. And then we have there are certain features here, whether they can give birth, can fly and so many other features. Basically there are X1 to XN here whether they live in water and they have legs. So we have the class This is the P of C Basically P of C is equal to 1 which is mammal C is equal to 0 which is non mammal.
+00:02:10 - 00:02:23
+Variants of Naive Bayes Classifier
+Given this we want to predict this class. Given these observations basically we want to predict. So these are the observations and this is the class we want to predict. If you see the variables here are categorical variables.
+00:02:23 - 00:03:09
+Multinomial Naive Bayes Classifier
+Then given this conditions features we have to predict whether the class the class here is whether this classes mammal or non mammal. And we take another example here where we have continuous variables here. So we can say the height, the weight and food size. So if you see in this case all of them were yes, no and sometimes basically these are categorical variable. Here we have numerical variables or continuous variables because height can be in feet, weight in KG and foot size. And again the class is going to be male or female. Even the height and weight and foot size we have to classify whether it's a male or a female.
+00:03:09 - 00:03:12
+Bernoulli and Gaussian Naive Bayes Classifiers
+Now we will discuss the variance of naive base.
+00:03:12 - 00:03:43
+Understanding Multinomial Naive Bayes
+We have variance of naive base based on the features. We have features where we the features are representative accounts, they are binary and they are continuous variables. Based on those feature characteristics we have different variants of naive base. One is. The first one is multinomial live base used when features represent frequencies or counts such as the number of times a words appears in an e-mail or document.
+00:03:44 - 00:04:20
+Example of Multinomial Naive Bayes with Word Counts
+And then we have Bernoulli naive base where the features are binary such as whether a word is either present or absent or a symptom is experienced or not. So basically these are categorical variables. And we also have a Gaussian naive base used when features are continuous values such as height, weight, temperature on any numeric measurement. So this Gaussian naive base assume that this continuous variable has a normal distribution. So now let us start by understanding how multinomial live base works.
+00:04:20 - 00:05:40
+Calculating Probabilities in Multinomial Naive Bayes
+As we have seen, multinomial live base classifier is used when features are discrete counts or frequencies such as word occurrences in a document. Example, number of times a word like offer appears in a document, it models the discounts using the probability mass function of the multinomial distribution. In this case, P of X given C is north factorial divided by X1 factorial, X2 factorial on until XN factorial and the product of P of WI given C to the power of XI where I is equal to 1 to north. For classification these constants dropped. So we have P of X given C is proportional to product of P of WI given C to the power XI. So basically WI is the is the count basically. So the posterior probabilities is given by P of C given X is proportional to P of C, the prior and the product of the count West I given C to the power XI. So this is the multinomial based classifier. Let us take an example here where you have this text and this is the class.
+00:05:40 - 00:06:01
+Example of Spam Classification with Multinomial Naive Bayes
+So we have buy limited items, a special offered sale and let us meet tomorrow and then see you. So let us say if you have another incoming e-mail which has with the message buy items and buy items, we have to determine if this e-mail is spam or not spam.
+00:06:01 - 00:09:29
+Detailed Calculation of Spam Classification Using Multinomial Naive Bayes
+In an example here we have vocabulary which has by limited items. Special offer is all of the ones which have this vocabulary and then the vocabulary size V is equal to 12 here. Now let us say a spam class as M1 and M2 not spam as M3 and M4. So in this case by is equal to 1 because we are looking at multinomial here. By occurs once limited once item one. This is a count of the occurrence of this the total words is 6. Similarly for not spam, they have meet tomorrow. See and you all of count is the total word count is 6 here. We will compute the probabilities now. So these are the prior probabilities we have. Spam is number of spam messages by total messages here. If you see yeah. So this is spam by total messages 2 by 4 and 2 by 4. So they are the prior probabilities here. So 2 by 4 and 2 by 4. This is 0.5 each. Now we will estimate the word probabilities using Laplace smoothing. This Laplace smoothing is used to ensure that there are no 0 probability. It provides A bias here if there are 0 probability of 0. Since it is a product, it might skew the entire probability to pull it to a zero. That is the reason why there is this bias or Laplace smoothing that is used. So now we are trying to compute for spam probability of by given spam is 1 + 1 / 6 + 1. This is total words in C plus the vocabulary here. So 1 + 1 / 2 by 18 P of items given spams. Item count in spam is 1 1 + 1 divided by again total words in C + P this is 2 by 18 for not spam. PF by given not spam is 0 + 1 / 18 again if you see otherwise this would have become 0 by 18 would have been 0. This is the advantage of having the bias or Laplace smoothing here. This plus one, it makes it 1 by 18. And then PF items given not spam is 0 + 1 divided by the whole of words in C + v this is 1 by 18. We now have the probabilities so each word appears twice in FY, so that is 2 and F items is 2. So posterior spam given D is proportional to is the prior PF spam into PFY given spam the whole squared and PF items given spam the whole squared. This is X cover ISO. There is 0.5 into 2 by 18 power, 41.5 into 10 power -4 the posterior not spam given D is proportional to the prior not spam into PF by given not spam the whole square into PF items given not spam the whole square. This is 0.5 into 1 by 18 to the power 4, so this is 1 by. This value is 9.5 into 10 power -6, so posterior spam given D is greater than posterior not spam. So predicted class is spam.
+
+
+You learnt that Multinomial Naïve Bayes represents data as word-frequency distributions and computes class-conditional probabilities for each feature. The use of Laplace smoothing ensures that even unseen words are assigned small, non-zero probabilities, making the model more stable and reliable for text-based applications. 
+
+ 
+
+Next, we will discuss another variant: Bernoulli Naïve Bayes, which focuses on binary presence–absence features rather than counts.
+
+Bernoulli Naïve Bayes
+
+You will now explore Bernoulli Naïve Bayes, which is suited to data where features represent their presence or absence instead of frequency. It is particularly useful when the existence of a signal is more meaningful than its quantity.
+
+
+00:00:00 - 00:00:16
+Introduction to Bernoulli Naive Bayes classifier
+The next variant is Bernoulli Naive Bayes classifier. It is used for binary features where each attribute can be present one or absent and predicts a class based on how likely this combination of yes, no attributes is under each class.
+00:00:16 - 00:01:07
+Explanation of Bernoulli Naive Bayes formula and distribution
+In this, the likelihood of a feature P of X given C is given by product of P of X given C to power XI into 1 -, P of P of X I given C into one minus XI. So probability that feature I does not appear in Class C This is the probability that feature I appears in Class C This is the application of Bernoulli's theorem. Here the posterior probabilities in case of Bernoulli Naive Bayes classifier is given by P of C given X is proportional to again the prior of product of P of XI given C power XI into 1 -, P of XI given C to the power 1 minus XI. So this is based on the Bernoulli distribution.
+00:01:07 - 00:01:28
+Example setup: Predicting mammal or non-mammal
+Let us take an example here where we have Bernoulli variables. Here the example where we have Bernoulli variables or categorical variables of yes or no. The same data set where we want to predict if a class of animal is mammal or non mammal based on some binary variables.
+00:01:30 - 00:03:19
+Calculating probabilities for mammal class
+Here we have to. Given this we have to predict given this sample where give birth is equal to yes. So these are binary variables. We want to predict the class here. So we have a class of PF mammal and non mammal. So for mammals we will compute these probabilities. So let us say given birth is equal to 1 given M So it means for all mammals we have seven samples which are mammals here 123-4567 to out of this out of in this case give you birth is equal to 1 is 6 out of seven which means out of all the samples which have classes mammal, how many of them have got give birth is equal to 1 which yes. So basically this give birth is equal to 1 is equal to yes and 0 is equal to no. We have 123, 4-5, and six. This is 6 out of seven. Similarly, among all the mammals, how many of them say can't fly is equal to yes? If you see all out of all of them, can't fly is equal to yes. This is one out of seven. And then lives in water is 2 out of seven. Of all the mammals, how many of them have lives in water is equal to yes. This is 1 and this is 2, so 2 out of seven. Similarly we do it for half legs is equal to 1 out of them. Half legs is equal to all the mammals you have half legs is equal to yes. So on and so forth. You find out given for the mammals and for non mammals, you find these probabilities and then we have to predict for give birth is equal to yes or this sample. We have to say whether this animal is mammal or not mammal or this sample.
+00:03:19 - 00:04:16
+Calculating probabilities for non-mammal class
+Let us compute. So for mammal P of a given this is a likelihood. So P of a given M is P of G is equal to 1 given M and these are the conditions 1 -, P of P of C is equal to 1 given M. So we accompany these probabilities. So it is a product of all of these probabilities. We get 0.06. Similarly for non P of GB is equal to 1 and then these are the condition 1 -, P of CF is equal to 1. Given N 1 -, P of lives in five lives is equal to. So these are probability that we have. We have computed, we multiply these probabilities and yet we get point. These are the likelihoods so 0.06 and this is for mammals and this is for non mammals. So we compute the posterior probabilities. Now posterior probabilities P of M is equal to 7 by 20 again 0.06 into 0.35.
+00:04:16 - 00:05:03
+Comparing posterior probabilities and prediction
+So we have computed this as 0.06 here. And then for posterior non mammal P of a given N into P of north this is 0.040042 into 0.65. So basically this is oh point 0042 into 0.65. So this is comparing the posterior. So this posterior M is P of the likelihood into the prior. This is likelihood into the prior or mammal and non mammal. We compute the posterior 0.021 and 0.0027. We can see that the posterior for mammal is higher than the posterior for non mammal. So the prediction is predicted class is Mammal.
+
+
+You learnt that Bernoulli Naïve Bayes models whether each feature is present within a class and compares these probabilities to classify new instances. It performs well on sparse, binary inputs such as document term matrices of 1s and 0s. 
+
+ 
+
+Next, you will learn about Gaussian Naïve Bayes, which adapts the same principle for continuous numerical features.
+
+
+Gaussian Naïve Bayes
+-------------------
+
+You will now learn about Gaussian Naïve Bayes, where you will learn how it handles continuous attributes by modelling each feature as a Gaussian (normal) distribution within each class. The model estimates mean and variance parameters to compute likelihoods for new data.
+
+
+00:00:00 - 00:00:18
+Introduction to Gaussian Naive Bayes Classifier
+We will move to the next variant of naive base classifier. It's Gaussian naive base classifier. These are used when the features are continuous such as height, weight, temperature, distance and basically continuous variables and threadings.
+00:00:18 - 00:00:45
+Assumptions and Probability Distributions in Gaussian Naive Bayes
+And assume that it assume that the value of each feature in a class follow a normal distribution. This is another constraint. Here it assumed that the data is normally distributed, In this case the P of X given A, the probability of observing X if X comes from the Class A distribution, and then probability of X given B the probability of observing X if the X came from the Class B distribution.
+00:00:45 - 00:01:55
+Probability Density Function and Z-Score in Gaussian Naive Bayes
+These are and then these are the probabilities X minus MU a by Sigma A rather. So this is Z score. You see for probability distribution probability contribution we will transform that into AZ score. So Z score for Class A and Class B. So because there there are two distributions SO2 distribution one is for Class A and Class B and each one of them will have a distribution distribution of class This is distribution of Class A and this is distribution of Class B. Gaussian naive base chooses the class. Whole distribution gives a higher probability density of for X. So if you should understand here, in the case of Gaussian naive base classifier, this is A PDF. This is the PDF basically distribution function. This is a PD, this is a distribution. This is not actual probabilities. This is a PDF actually. So it is not the actual class probability. In the case of Gaussian naive base, we will look at the higher probability density of. We look at the higher probability density, not actual probabilities. So likelihood of a feature.
+00:01:55 - 00:02:58
+Posterior Probability and Class Prediction in Gaussian Naive Bayes
+We use the probability density function of the normal distribution to estimate how likely a continuous continuous feature value is for a given Class C We are here we use again normal distribution here P of XI given C. The feature value of XI for a given Class C is 1 by 2π Sigma C ^2 E power minus XI minus MU C by two Sigma C square here. OK. Now the posterior probability is given by P of C given X is proportion to P of C and then this is a prior into this. This is the distribution. Each features Gaussian likelihood is multiplied with a class prior and the class with the higher posterior becomes the prediction. So we will try to multiply basically the with the class prior and that has a higher posterior becomes the prediction. So we will this is the this is the prior and this is the condition basically the likelihood.
+00:02:58 - 00:04:00
+Example of Gaussian Naive Bayes with Continuous Data
+So we have seen, we have discussed about the difference between likelihood and probabilities here in the previous discussion. Now to understand it better, let us take an example. We have, we have seen count data, we have seen where we did multinomial, we have looked at binomial where we have categorical variables yes or no. And then this is the continuous variable. So we will take an example to understand this better. So we have different features here. This is X1X2 and X3 and this is given P of C given X is equal to X1X2X3. So and this is the data set and then now we have to given unseen sample here given this height, weight and foot size you want to predict the class. Hope we are able to follow. In the first example we had count data where we did multinomial.
+00:04:00 - 00:05:38
+Prior Probabilities and Mean-Variance Computation
+In the second example we had binomial data. We had yes, no variables. Here we are having continuous data where we are trying to do Gaussian base classifier. Let us go ahead with this example now. So posterior M is proportional to the prior into these probabilities. So basically these likelihoods P of H given MW given M FS put size given M if you see these are the likelihoods, basically this is the product of the likelihoods. This is posterior is prior into product of the likelihoods. So the likelihoods we are trying to compute based on a data type. In this data type we have continuous variable. So for we are trying to compute the likelihoods. This we are trying to compute posterior for male and female Here. Let us look at the actual computation now. So prior probabilities again P of M is number of male samples, total number of sample. This is number of samples male plus female where we have. So there are 4 equal probabilities equal prior probabilities. You have got 4 males and four females. The prior probabilities are 4 by 4 + 4 this is 4 by 8 this is 0.5. Similarly, the priors for number of females is again expected outcomes, total outcome outcomes. We have number of female samples, number of females divided by total this is 0.5. So we have computed the prior and then we will have to compute the mean and variance computation for each of the classes.
+00:05:38 - 00:06:14
+Posterior Probability Calculation for Male and Female Classes
+We are doing class wise mean and variance variance computation. We will do that for weight and food size. Similarly we also do it for the female class. We try to find the mean and variance for for these features for these class. So we have found the mean and variance. So now we have we have got the mean and variance for male class for each of the features and we have got mean and variance values for the female class for each of the features. So now we will compute the posterior probability. So this is prior is P of M.
+00:06:14 - 00:07:06
+Likelihood Calculation for Height, Weight, and Foot Size
+This is the likelihoods P of H given MH given MP of West given MP of FS given M So we will compute. So we will and then similarly posterior female is π RP of probability of female into likelihoods H given FW given F and then foot size given F for this is for male, this is for female. We compute the probability of height being 5.2 given that person is made with the P of H given M is 1 by we have got the mean and variance plugging the mean and variance here, this is 5.6 -, 5.97. So this is this -5.97. If you see it would be the P of H given M going back here, yeah, this is 5.97. This 5.97 is coming here, so on and so forth.
+00:07:06 - 00:08:30
+Final Class Prediction Based on Posterior Probabilities
+So this will give 0.27 probability of weight being 59 given that the person is made. So this is the likelihood here. So this is 59 minus should be the mean here. So we we compute W given M and FS given M So we compute likelihood H given MWUNMF is given. Similarly we also compute the posterior probabilities again P of M prior and then these are the likelihoods. Product of the likelihoods we get posterior probability of male using this. Similarly, we compute for female, we did it for male, we look at prior for probability of female and these are the likelihoods for female. So similarly we have computed it. This is basically prior into probability of the likelihoods .5 into .293 into .035. We have computed all of this here. Finally we compare the argmax C We will try to find out the probability highest probability of highest posterior probability for a given class. So if you can see predicted class is female, so this is higher 0.0047 is greater than this so the predicted class is female.
+
+
+You learnt that Gaussian Naïve Bayes computes likelihoods from class-specific normal distributions, making it effective for continuous numerical data such as sensor readings or measurements. By combining class priors and feature likelihoods, the model identifies the most probable class efficiently. 
+
+ 
+
+But when probabilities become extremely small, how do we ensure that the computations remain accurate and stable? We will explore this next.
+
+
+Numerical Stability and Log Computation
+You will now explore why multiplying several small probability values can cause numerical underflow and how working in log-space preserves accuracy.
+
+ 
+
+Hand Raise
+
+00:00:00 - 00:01:05
+Introduction to Naive Bayes and Numerical Underflow
+In Naive Bayes, we multiply several small probabilities to decide which class is most likely. However, when too many small values are multiplied, the result can become extremely close to 0. At this point the computer may treat it as a 0 due to numerical limits. The model is still correct. The issue lies in computation. Let us understand why this happens and how we can resolve it. Naive base multiplies many probabilities. In this case we have P of C, the prior and the product of likelihoods. Actually, if you see, as we know probabilities are in the range of 0 to 1, it will be less than one. So each term P of XI given C is less than one, product rapidly shrinks, shrinks. So this is the prior. And if you start multiplying with values less than one, it will rapidly shrink to 0. So extremely small values will lead to a numerical underflow.
+00:01:05 - 00:02:03
+Example of Numerical Underflow in Naive Bayes
+Basically, it tends to move towards 01. This happens all class scores may look identical, so there will be many school difference between the class scores. This will lead to the problem of underflow. Take an example here. Let us say we have a probability of the likelihood of word 1 for a given class over 2 for a given class, and these are the likelihoods. If you start multiplying all of these likelihoods. If you see this is the product of P of XI given C. If you start multiplying here, this tends to become zero. So all the class, the differentiation between class probabilities, all of them is shrink to zero will not be able to differentiate between classes. In this example, if you see it can go up to 0.1 into 10 power -420 computationally it is almost equal to 0. All class probabilities will underflow to zero. That is the issue. Now how do we address this?
+00:02:04 - 00:03:10
+Using Logarithms to Prevent Underflow
+Instead of multiplying probabilities, we can take their logarithms. We can take a logarithms instead of taking probability. We fundamentally we know log products will become sum actually, and then so we use for logarithm. Instead of having probably will take log probabilities. So log avoids shrinkage and keeps computation stable. Just just logarithms are monotonic. The class with the higher log priorities still correspond to the higher true, let us say here. So we'll take instead of having probabilities if we take log P of XI given C. So if you see these are -2.66. So this when you take the logarithms, if we know that log of a number less than one, a decimal is negative number. So this becomes a negative number. And then when you do a log it becomes summation. So basically this will become instead of multiplying all of this, it becomes a sum of all of this. To give you an understanding of why this becomes a negative number, let us say log of 100 to base 10.
+00:03:12 - 00:04:21
+Understanding Logarithms and Negative Numbers
+It logarithm means it means what to what number should I raise this base to get this number. It means you can say log of 100 to base 10 is 2. Similarly, let us say we have log of 0.1 to base 10, which means it means to what number should I raise this power to get this number? This will become -1. So if you see if I go 1 by 10 to the power, 0.1 is 10 to the power -1. If I raise this 10 to the power -1 it becomes -1. So this is the intuitive understanding of why log becomes negative number when it is raised to a number less than one. So this log P of C given X is equal to log P of C plus summation of all of this as we have seen, we have seen log AB, log A+, log B and then we have also seen how a decimal number will become a negative log number. So we try to Add all of them, all of them to get this negative number. Whatever is the lesser number? Basically all of since we know it is monotonic. The number which is higher among all the class will be the class label.
+00:04:23 - 00:04:26
+
+So log squares keep a value representable and avoid under flow.
+
+
+You learnt that log-space computation converts products of small probabilities into sums of logarithms, avoiding underflow and improving precision. This practice ensures reliability even for high-dimensional data and large vocabularies. 
+
+ 
+
+Next, you will consolidate your understanding by comparing the main variants, Multinomial, Bernoulli and Gaussian Naïve Bayes, to determine when each should be used.
+

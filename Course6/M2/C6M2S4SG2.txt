@@ -1,0 +1,234 @@
+Partial Dependence Plot
+
+
+Previously, you learned about local and global interpretability methods. Now, Professor Raghavan will discuss the first explainable AI method, partial dependency plot (PDP), and how it works. 
+
+
+00:00:01 - 00:00:24
+Introduction to interpretability strategies
+So we're going to discuss three specific interpretability strategies. The first one that we look at today is called the partial dependence lot PDP.
+00:00:24 - 00:05:31
+Partial Dependence Plot (PDP) explanation and implementation
+In short, what partial dependence plot does is tries to make the dependence of the target decision on each of the features of the data points make this connection very explicit. Normally it's not explicit because you have several features, maybe hundreds of them, and there is a decision which is taken. I have no idea how these features are connected with the decision and the PDP tries to make that dependence very explicit. How does it make that explicit? It makes that explicit by doing this. So in all of these discussions we are assuming that we have a trained model. OK, so we have a model. So we are not getting into how models are trained etcetera. The model has already been trained on some training data and the model is now capable of taking decisions. What we are looking at is only the decision. So as far as the model is concerned, we just treating it as a black box. I'm not worried about what is inside the model. I'm only looking at the decisions and I'm trying to see if I can explain those decisions somehow without peeking into what exactly goes into building the model. So there is a model, and I'm sure all of you can relate to this by now, that a model can basically be thought of as a mathematical function. So given any input feature vector, it will give you a decision, right? So this the decision could be a number like in the case of a regression, or it could be a probability for classification, etcetera. OK, so this is my model. So I'm going to think of a model like this and I want to now create an explicit connection between features of the input and the model decision. OK, So how do I do that? I do this by basically saying, OK, so suppose I some particular feature, I OK that the ith feature. So there are 10 different features. Let's look at the ith feature of each data point, OK? And let me fix the value for that. And then there are all others, right? So let me write it as minus I. So these are all the other features, all other than. So this is also a vector, all other than I. And so now what I do is look at the the value of the function as I change this. OK I fixed XI. I want to look at the dependence of XI on the final decision. The final decision is what the function is going to output right? The model is going to output. Now I sum it over all possible values for this X -, I and I take an average OK and so that is for me the the proxy. So let me use a different notation here. OK, so I'm thinking of this is the the partial dependence function you could call it. OK, it takes only the ith feature value as an input and it looks at the average of the values that the original function would have given across all possible values for every other feature. OK, that gives you a sense of how the final value depends only on XI. I'm kind of averaging over all the other features. So now what you do is you plot this function for various values of XI, OK? And you will get a curve or maybe you can get a scatter or something like that. OK. So that will show you a trend of how XI alone has a has an influence on the final model decision. OK, Yeah. So this is basically the concept which is not terribly complicated. I think it's better that you will you see an implementation of this and that will make things a lot more concrete. We will look at a real data set and we will see how we can implement the partial dependence plot. OK.
+
+
+The important concepts in PDP can be summarised as given below. 
+
+A partial dependency plot is used to understand how a particular feature influences the predictions of an ML model on average. 
+
+It is a global interpretation method. 
+
+Example: to understand changes in the price with variations in the house size for a model predicting house prices. A PDP shows the average predicted price for different house sizes, keeping all other features constant. It helps answer such questions such as: 
+
+Does a larger house generally lead to a higher price?  
+
+Is the relationship linear or more complex?  
+
+Caveat: PDPs assume that the feature of interest is independent of other features; but what if house size and neighborhood are correlated. 
+
+ 
+
+How PDP Works? 
+
+ 
+
+Let’s take a simple example. Assume the dataset is as follows: 
+
+ 
+
+House Price (‘000 USD) 
+
+House Size (sqft.) 
+
+No. of Rooms 
+
+5050 
+
+1000 
+
+2 
+
+9050 
+
+2000 
+
+3 
+
+13050 
+
+3000 
+
+4 
+
+ 
+
+The steps involved in PDP are as follows: 
+
+Create the predictive model on the data set.  
+
+ 
+
+The linear regression model on the dataset is:  
+
+House Price (‘000 USD) = 50 + 3*House Size (in sqft.) + 1000*No. of Rooms 
+
+ 
+
+Select the feature of interest whose effect on predictions you want to examine. We want to study the influence of house size. 
+
+  
+
+Choose a sequence of values covering the range of the selected feature. 
+
+ 
+
+House Sizes: 1000, 2000, 3000 
+
+  
+
+For each value in this sequence:  
+
+  
+
+Replace the values of the selected feature in all instances of the data set with the fixed value from the sequence while keeping other feature values the same. The new input data will be:
+
+ 
+
+House Size (sqft.) 
+
+No. of Rooms 
+
+1000 
+
+2 
+
+1000 
+
+3 
+
+1000 
+
+4 
+
+2000 
+
+2 
+
+2000 
+
+3 
+
+2000 
+
+4 
+
+3000 
+
+2 
+
+3000 
+
+3 
+
+3000 
+
+4 
+
+ 
+
+Use the trained model to predict outcomes for this modified data set. 
+
+ 
+
+House Size (sqft.) 
+
+No. of Rooms 
+
+House Price (‘000 USD) 
+
+1000 
+
+2 
+
+5050 
+
+1000 
+
+3 
+
+6050 
+
+1000 
+
+4 
+
+7050 
+
+2000 
+
+2 
+
+8050 
+
+2000 
+
+3 
+
+9050 
+
+2000 
+
+4 
+
+10050 
+
+3000 
+
+2 
+
+11050 
+
+3000 
+
+3 
+
+12050 
+
+3000 
+
+4 
+
+13050 
+
+ 
+
+Average these predictions across all instances to get the expected prediction at that fixed feature value (for a house size of 1000 sqft., house price in ‘000 USD = (5050+6050+7050)/3 = 6050). 
+
+ 
+
+House Size (sqft.) 
+
+House Price (‘000 USD) 
+
+1000 
+
+6050 
+
+2000 
+
+9050 
+
+3000 
+
+12050 
+
+  
+
+Plot these averages (y-axis) against the feature values (x-axis). 
+
+
+
+ 
+
+In the next section, you will learn about PDP through a code demonstration. 
+

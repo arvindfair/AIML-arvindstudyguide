@@ -1,0 +1,163 @@
+Decision Tree using Class Imbalance Methods
+
+In this segment, you will build a decision tree model by applying different class imbalance techniques and analyse the results.
+
+00:00:00 - 00:02:35
+Introduction to Decision Tree Model and Initial Performance Metrics
+As we have seen earlier that we have built model on logistic regression right now we'll let's try and build model, decision tree model and we'll try to measure the performance metrics after building the trajectory. So decision tree is you might have learned through in your one of the techniques, which is typically is kind of a a node representation. And we create a, you know, branches out of it and you know, decision is taken after computing all the attributes for those branches. So, So what I'm trying to do here is I'm I'm loading from SK learn dot tree. I'm importing region tree classifier. So I'll be using this decision tree here as a one of the classifier methodology. And then I am calling this region tree classifier, creating my top region tree. And then I am fitting my region tree classifier into my X train and Y train, X train, Y train. So now recollect in the past like we did had split our data set into train and test. So this is our train and this is where we haven't done any kind of work class imbalance technique. So this is the base, the raw training set. And then I'm I'm predicting my region tree classifier in to my test data set. And then here and right now I'm just trying to understand the performance here. You can see the recall value here again is like 5.9%, which is kind of only 6 percentage of the cases. I am able to predict one the positive cases. And I get to see here in the confusion matrix, we have like a lot of false positives and we have a lot of false negative. And since we are worried about our recall, we can say that we are we are not able to predict the pulse negative classes really well, which ideally should fall in the 2 positive class. So therefore we are only able to predict 6 percentage of the cases.
+00:02:38 - 00:04:13
+Building Decision Tree Model with Resampled Data
+So now now what we will do is we will try to build same region tree classification model using all the resampled data set that we have created using under sampling, over sampling and smooth Addison and smooth domic. So here if you see, I'm running my degenerate classification model on under sampled our data set where we remember in logistics, we we created, we resampled our data set using random under under sampling. So this is the data set for train that we had created that fitting my model visionary model here for that under sampling methodology. So this will be the similar exercise that we have done in logistics. So I'll just quickly walk through all the approaches that we did on handling imbalance data set. So we'll start with random undersampling and when we see under sampling results, I could see recall value of 51%, which means that when I am using a region reclassification model on my under sampling methodology, I am having like half of the times I am able to predict my recall value which is 51%, which is kind of a decent model that we are able to predict.
+00:04:14 - 00:06:30
+Evaluating Different Sampling Techniques on Decision Tree Performance
+So then going ahead, we also worked on DOMIC links. So right now I am using X resampled Tomic which we had created the resampled data set earlier. I am passing a decision tree specification in it and then I am trying to understand the results. So when we do the Tomic links here, what we see here is again, the six percentage of the cases where we are only able to predict, which is kind of not doing a good job on our prediction. So, so let's go ahead. Let's see spear the oversampling approaches. So for oversampling, we we did a random oversample, we using random oversampling data here. And then in prediction, I could see that, OK, it's only 5 percentage is what value is. And therefore this is again not not a good model. So I'm not able to predict my actual cases. So then we'll understand this mode methodology, partition tree. So partition tree, when I run it first mode, it is again not giving us a good prediction on my positive cases, it's only 6%. Then applying that with the Addison methodology, So in Addison methodology, if you could see we could just have like .7%, I sorry, 7 percentage of the call value. And then finally when we have that the combined effect, combined methodology and smooth plastomic, we can see that this smooth plastomic for addition tree also doesn't give us a good recall metric, which is again 7 percentage of the cases we are able to predict are actual voice or actual positive cases. If you see entire division tree, we were only able to get a decent model using the random under sampling.
+
+
+Let’s summarise all our findings for decision trees in the table below:
+
+ 
+
+Decision Tree Scores
+
+ 
+
+As you saw in the video, decision trees gave a comparatively better performance with random undersampling than other techniques. In the next video, you will see how this would go for random forests.
+
+Random Forest using Class Imbalance Method
+
+
+00:00:00 - 00:01:09
+Introduction to Random Forest Classifier
+Now let us go ahead and understand random forest. Like random forest again, this is one of the ensemble methodology and you might have already gone through the concepts of random forest which we actually use for both classification and regression. And I will be using random Forest here as a classifier and therefore I am calling my random forest classifier here, importing that from a scalar ensemble and and then I'm trying to fit it again here in my X train and Y train again. We'll start building that with our base. When I say base, it means I haven't done any imbalanced class treatment and I'm using it in my data as it is. And then I predict in my X test and would like to see the performance of Random forest is able to capture does the modular prediction. So what we see here is it doesn't do a great job with respect to our recall.
+00:01:09 - 00:02:05
+Initial Performance Evaluation of Random Forest
+So it's like pretty low .01 percentage of recall is what we are getting and and therefore the precision here it does does a kind of 25 percentage. We have precision but what we are looking for is recall and here has a very bad recall value. So therefore we we see here in confusion matrix is only one case that we are able to actually predict all the actual cases of 6508 cases out of that only one unable to predict which is kind of a bad model. Now the way we did for digitally will run through all our resampling approaches for random forest as well. So this will walk through random under sampling.
+00:02:06 - 00:02:43
+Random Undersampling with Random Forest
+So in under sampling, we see OK, so here it is classified as a good job and it's close to 55 percentage of our recall value that we get from a random forest model when we do a, when we run it on a build resampling method of random undersampling. So, so we could see that the random forest also is performing better when we handle the imbalance data set. And now we will run through topic links.
+00:02:43 - 00:03:38
+Random Oversampling with Random Forest
+So point topic links as well. It goes back again without predicting the actual cases. So therefore the recall value is really really low of .01%. OK, so let's now understand oversampling, how it performs the oversampling. So far when I do a random oversampling again I don't see a good model here without unable to predict my actual cases wherein I have a equal value of .04 and we check for smooth we have again we have .1 percentage which is again not a good model for with respect to article value.
+00:03:38 - 00:03:53
+SMOTE and Random Forest Performance
+Because here the RAM forest with smooth methodology as well is not giving us a good good prediction. So it is unable to predict our actual wise and then we will see Addison.
+00:03:53 - 00:04:50
+ADASYN and Combined Sampling Methods with Random Forest
+So in Addison also I am running all my Addison resample data set here passing my random forest classifier and then again if I see Addison also it's .1 percentage on the data is able to. So as compared to my earlier models, this recall value is pretty, pretty low, which is which is not good kind of not having a good model using smooth and Addison. And here is the approach where we actually combined oversampling and under sampling which is more atomic wherein again we can see the performance metrics. Here we don't see a good good recall values. Again, this is again not so great model.
+
+
+So, let’s summarise all our findings for random forests in the table below:
+
+ 
+
+Random Forest Scores
+
+ 
+
+So, as you can see from the figures, random forest with the undersampling technique seems to be performing better as compared to other resampling techniques.
+
+ 
+
+Additional Reading:
+
+Class Imbalance--https://arxiv.org/pdf/1608.06048.pdf
+
+ 
+
+Let's conclude our findings next.
+
+
+Learnings from the Session
+
+
+So, we ran three different algorithms with various techniques for handling imbalanced classes. Let's watch the upcoming video to revise what we have done and learnt so far.
+
+00:00:00 - 00:00:45
+Introduction to model performance analysis
+So what we have seen right now as we ran through all our models in logistic regression and vision, tree and canal forest and we have tried to analyse the performance metric for all these three different models. And what we have done is all these three models we have run through all the different approaches like 6 different type of approaches on mundane sampling, atomic links, random sampling, Smart Addison and Smart Plus stomach. So, so let us now try to compare the results.
+00:00:46 - 00:04:46
+Comparison of model performance metrics
+So when we, so here it is kind of a tabular format and what I have done is created all those 4 metrics that we have been seeing throughout our case study is accuracy, precision, recall on F1 score. And during start of the modelling exercise, what we decided was on that we'll go ahead with recall as we want to see like more how many times we are actually able to predict by wise like positive cases, actual cases and considering that this hacks the false negative where I am unable to predict as a cost associated with it, which is a costly. So therefore recall is what we have picked it for our model to measure our model performance. So right now as we see here, if we just try to quickly skim through it, so OK, accuracy is 96 percent 5996. So kind of misleading again because we don't have a precision recall values also. So we're not looking for accuracy precision. Again, as we discussed, we're not looking for precision mostly. We are mostly concerned about recall right now and our for this particular case study. So we'll look for recall values and let's try to compare. So for recall, if I see for logistic regression based model based model means that I haven't done any kind of treatment for imbalance data set which is 0 when I do a random under sampling. So I reduce my majority classes. Therefore I see a precall of 3.7 percentage which is very decent. And then for atomic links, it's again 0. For random oversampling. When I try to increase size of my minority classes, I receive, I we get a recall value of close to 53 percentage, which is again pretty decent. And and then when we try to apply the SMART methodology, which is again the oversampling method where we create synthetic samples for our minority groups. So we receive 50 percentage of our recall. The in Addison as well, we have 50 and for small tetomic, we have 49. So therefore, if we try to compare here, so random under sampling or logistical education is the winner as compared to other approaches. Now if we try to quickly compare for the agentry, for the agentry again skimming through it, I can see only 51 percentage which is for random under sampling is is again having a good recall value and all the other sampling techniques we see doesn't doesn't have a recall value which is greater than 50. So therefore 51 percentage under random sampling and qualifies kind of a division tree model. And for random forest, if we see so therefore when we do under sampling, OK, well we see close to 55 percentage which is 54.5 percentage of the cases we are actually are predicting it, right. So we will we can pick up recall value of 54 percentage, 54.5 percentage of random forest, which is like pretty good with respect to all our models. So what we'll do is we'll try to go ahead and pick up random forest and apply the approach of random under sampling to build our model.
+00:04:47 - 00:06:30
+Model selection and hyperparameter tuning
+So this is how we select model with respect to running few of the iterations of the model, handling of imbalance classes and then picking up one of the model to build further for the analysis for the modeling. So what I, what I mean by built for their analysis and modeling, it means we, we do have to, you know, fine tune the model. And by fine tuning, I mean you have to kind of optimize your hyperparameters, like what kind of a tree depth we want, what kind of a, a number of trees, how many we want, what are how many iterations, how many estimators we have to pass those kind of a hyperparameter tuning is what is required. And we typically do that by using a grid search and, and there are kind of ways of doing that. Grid search is cross validation, grid search is there. So which ideally should be applied and and therefore the cross validation of say A5 fold or A10 fold. During the cross validation, we come up with you know, you know, at a stage where we have actually built a robust model using say a random forest. Few of the call outs here again would be like when we built a model this recall values that we have been discussing so far has been built on the default threshold.
+00:06:30 - 00:09:09
+Threshold optimization and ROC curve analysis
+So what I mean by default threshold is like all these models generate probabilities and when these probabilities are generated, these are these metrics are calculated based on the threshold, default threshold of .5 percentage. So. So the another way to work around with our recalling metric is also around getting the right thresholds optimal threshold. So again optimal threshold, what I mean by optimal threshold is so the case where we have you know we have optimized our position and recall to grab that particular threshold is called an optimal threshold. And once we get optimal threshold, that could be say a point 4.3, which means which means any probability over and above .3 for both qualifies for A1 which is the positive case. And in that case, we also improve our what we call value. So it's also very important to understand the thresholds as I was talking about thresholds. So for thresholds, what we do is we can also use methodology of plotting a Roc curve, which is receiver operating characteristic. And we can come up with a metric of AUC which is area under the curve. And when we do that, we also can, you know, try to optimize our area under the curve using our false positive rate and true positive rate. So, so, so the on the cut off of false positive rate and true positive rate where area under the curve is maximum, that is what we take as a threshold. And once we take that threshold, then all the calculation of the performance metric is, is is based on this threshold. And therefore we get to this metric of precision to call values as well. But those were the few call outs that I would like to highlight after selecting the model. So for example, random forest we have picked up here. So we'll go through the optimizing of the hyper parameters, we'll use make use of grid source to do that. And then we'll also do cross validation for that. And we also try to find a right threshold to get to our predictions of actual cases and get to our performance metrics.
+
+So, we have the highest recall value for the random forest with random undersampling. You can also observe that the recall values of logistic regression for both undersampling and oversampling are closer to each other. Within logistic regression, random undersampling has the highest recall.
+
+ 
+
+Hence, you can select a random forest with the undersampling method as the best-performing model.
+
+ 
+
+Now, the next step is to further fine-tune the model by optimising the hyperparameters using grid-search / random-search to improve the performance of the model. Also, you need to do a 5 or 10-fold cross-validation on the training set before finalising the model.
+
+ 
+
+Let's conclude the demonstration by revising the important points to note.
+
+Demonstration - Conclusion
+
+00:00:00 - 00:00:48
+Introduction to Methodologies for Problem Solving
+So well, so now let us try to discuss conclusion of what we have discussed. So first of the call out that I would like to highlight here is it's very important to understand that there is no single methodology which suits all the problems. So most of the methodologies are you know it's based on these two case basis, problem to problem basis and then you have to try and test few of the approaches before getting in and selecting the model. So for example, as we see in our methods in our approaches that we have used for resampling approaches in the cases we have seen under sampling approaches have worked better.
+00:00:49 - 00:01:19
+Resampling Approaches: Under Sampling vs Over Sampling
+In fact in most of the cases they have performed better. But if you I remember for logistic regression those were also decent. They didn't outperform the under sampling, but for over sampling approaches they were still were having the good recall value. Having said that, it's very important again to work around on the preprocessing of data to a lot of create innovative creative features.
+00:01:19 - 00:02:24
+Importance of Feature Engineering in Model Building
+By innovative and creative features, I mean again here business knowledge comes into play and you have to come up with some kind of features which are more informative towards your model building exercise. So you have to make sure that you have the right feature engineering that we have leveraged and also few again points to remember would be under sampling. As under sampling methods removes majority of the classes. We might also in many cases lose some kind of information, information which are like quite significant. And also in the case of over sampling methods that can be that we can you know creating features which are not features. We are creating observations where we are actually replicating our minority class and increasing its size. Therefore irrelevant kind of observations are getting created and which can also result in over fitting.
+00:02:27 - 00:03:33
+Interpreting Evaluation Metrics for Business Problems
+So therefore what we can say here is interpreting and understanding the evaluation metric is important and therefore it can also be used as a business problem in the real world, which I mean here is you have to understand the business problem. For example, in our case of insurance claims, we did understand that OK, if we have to get our right predictions for our insurance claims, the business will have easier decision making capabilities to you know price their charge premiums from their good drivers versus maybe a bad drivers. So therefore evaluation metric of recall would help us to understand how many times we are able to predict the right actual cases where they have filed the claim. And since our data set is was highly imbalanced, we try to focus more on recall because we wanted to understand how best we are able to capture all the positive cases. Yeah.
+00:03:33 - 00:04:54
+Model Evaluation Metrics for Imbalanced Data Sets
+And then on model evaluation recommendation is don't use accuracy score as a metric. And for imbalance data set, this accuracy score can be misleading and and therefore as I mentioned, we have a 96 percentage of observations which were the majority class and therefore you will most likely get a correct prediction for 96 percentage of the time. And as I mentioned consumer confusion matrix and recall are the better metrics to use. And in our case as we understand we have used recall as one of the metric, but it depends on case to case, problem to problem specific. So there are another metrics most of the metrics to you know can think about as I mentioned on AUC and area under the curve is can also be used. We can also use KS statistic with the case to understand the separation between the true events and the bad events. So similarly maybe decide on the evaluation metric based on the problem that we have. So that's all on the imbalance data set and handling of imbalance data set.
+
+ 
+
+It is important to understand that there is no single methodology that suits all problems. Let’s summarise all that you learnt from the demonstration:
+ 
+
+As you could see, there are some cases where undersampling methods perform better than oversampling methods and vice versa. However, it is important to use multiple methods for feature engineering of the data first and then compare the results to select the best possible method.
+ 
+As undersampling methods remove the majority class from the data set, it can be an issue in many cases because you might lose significant information.
+ 
+Oversampling methods generate samples from the data set, which can create irrelevant observations and also result in overfitting.
+ 
+Interpreting and understanding the evaluation metrics and how they can be used to help solve a real-world business problem is extremely important.
+ 
+Do not use the accuracy score as a metric for model evaluation. In a data set with 96% non-claim observations, you will likely make correct predictions 96% of the time. A confusion matrix and precision/recall score are better metrics for evaluating the performance of a model.
+ 
+
+ 
+
+Now, let's summarise the learnings from this session.
+
+
+ 
+
+So, in this session, you learnt how to solve an imbalanced class business problem. Class imbalance occurs when one class disproportionately dominates the other class, which leads to biased predictions and misleading accuracy.
+
+ 
+
+The different techniques for handling imbalanced classes are as follows:
+
+Random undersampling
+Random oversampling
+Synthetic minority oversampling technique (SMOTE)
+Adaptive synthetic sampling method (ADASYN)
+SMOTE Tomek (Oversampling followed by undersampling)
+
+Note that these resampling techniques should always be applied on the train set and never on the test set. If done otherwise, the purpose of true evaluation of the model on unseen data fails.
+
+ 
+
+Different models are built by applying these techniques and the one that gives the most satisfactory performance is further fine-tuned on hyperparameters, evaluated for improved performance and is finally chosen as the best model.
+
+ 
+
+Finally, you learnt that it is not always a good practice to use accuracy as the evaluation metric for such problems because it is quite misleading and you may end up with a model that is incapable of predicting the minority class. So, it is recommended that you choose the evaluation metric based on your business needs and objectives.

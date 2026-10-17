@@ -1,0 +1,1748 @@
+Session Overview
+
+Welcome to the session ‘Autoregressive Models’.
+
+ 
+
+In this session, you will bring together all prior concepts to build structured forecasting models from the autoregressive family. You will learn how different models handle trends, seasonality, and residual patterns.
+
+ 
+
+Now, Professor Ramesh will walk you through this.
+00:00:05 - 00:00:09
+Introduction to autoregressive models
+Welcome to the session on autoregressive models.
+00:00:09 - 00:00:16
+Building structured forecasting models
+In this session we bring together previous concepts to build structured forecasting models.
+00:00:16 - 00:00:28
+Exploring autoregressive and integrated models
+You will explore the family of autoregressive and integrated models, understand how they function, and learn how to select the most suitable one for your time series data.
+00:00:28 - 00:00:43
+Arkansas and moving average models
+We will revisit the Arkansas models, the autoregressive models, we will learn about the moving average models for residuals and see how Arkansas and MA models are combined in ARMA or ARMA models.
+00:00:44 - 00:00:53
+Extending to ARIMA and SARIMA models
+We will then extend this to ARIMA where differencing would be required, and further SARIMA models to account for seasonality.
+00:00:53 - 00:01:02
+Understanding autoregressive forecasting models landscape
+By the end of the session you will understand the landscape of autoregressive forecasting models and how they are applied.
+
+In this session, you will:
+
+Build Autoregressive (AR) models using past observations
+
+Understand Moving Average (MA) models and their role in modelling residuals
+
+Combine AR and MA models into ARMA
+
+Extend these models to ARIMA and SARIMA to handle non-stationarity and seasonality
+
+Learn how confidence intervals and prediction intervals quantify forecast uncertainty
+
+ 
+
+By the end of this session, you will understand how autoregressive models are constructed, extended, and applied to real-world time series data.
+
+Autoregressive Models
+
+You will now learn how to build an autoregressive (AR) model, which forms the foundation of many time series forecasting techniques. You will see how past observations of a series are used to predict future values, and why properties such as stationarity and correlation play a central role in building these models.
+
+00:00:00 - 00:00:22
+Introduction to Autoregressive Models and Stationarity
+In the class of autoregressive models, we have seen the concept of autocorrelation functions and partial autocorrelation function, and we also spoke about how to check for stationarity and make time series stationary using this. Moving forward, we will talk about how to build autoregressive models.
+00:00:22 - 00:00:38
+Building Autoregressive Models: AR to SARIMA
+This is a family of models where we use the concept of autoregressive model. We will talk about different types of models here starting from AR to SARIMA. We will discuss each of these models.
+00:00:38 - 00:01:04
+Autoregressive Model vs Linear Regression
+An autoregressive model as it's also called Arkansas model, it has a dependent variable and the prediction value. So independent variables are past observations. If you see there's a clear difference between an Arkansas model and a linear regression model, we will try to see how to compare this. In the case of linear regression, what we do is we have an equation something like this.
+00:01:05 - 00:02:04
+Formulating Autoregressive Models with Stationarity
+You have AY cap is beta naughty plus beta 1X1 plus beta 2X2 plus so on until beta PXP. So how is the different in a autoregressive model? In the case of autoregressive model the same equation becomes something like this. This this is the predicted time in the interval. So we have alpha naughty plus A1A2A P So this is the equivalent of These are the coefficients. These are the coefficients and in this case X1X2, XP are independent variable. In the case of Arkansas models, if you see these are past values, these are the past time values time t -, 1, T -2 and t -, 3 and we try to find the coefficients so that we will be able to predict the value at given time. So where alpha naughty A1 alta 2 are coefficient.
+00:02:04 - 00:03:00
+Determining Lag Order in AR Models
+So if you want to formulate this as a regressive model, we need to ensure that it is a stationary. That is the reason why we have to ensure that model is stationary before we formulate this as a autoregressive model. We try to formulate as a autoregressive model. So we say which past observation to two, we say order of P Let us say in this case we had these many variables, these many variables. So these are independent variables. We were able to say these are the coefficient of the variables. In this case, you can have Y your t -, 1 T -2 T minus P So on South how many past variables we need to look at for this prediction equation? So, so, so depends on the parameter P will see how to choose these parameters. How many past variables you can, you can go on up to t -, P basically the origin basically is equal to 0.
+00:03:00 - 00:04:17
+General Procedure for AR Model
+But how you don't have to go how, how far back we have to go to find the coefficient. So the basic AR model is opened by AARP where P represents a lag order of the model. So this is a lag. So this is lag one, lag 2, lag three. What should be the lag order? Maybe look at that in the AAR model. This is an example of a website traffic here. So we will look at a general procedure for a air model. This is a time series. Remember this is we try to apply box Cox transformation if it is required. There is variance. If the mean is not constant, we apply differencing. And then here we have a stationary time series and then we will try to do a model fit. We try to do AR model fit here and then we will try to do the predictions and then we will do the cumulative sum and then it is important for us to do inverse transform of workouts. When we do we have to reconstruct the the transformation that we have done for variance has to be, we have to use inverse transformation to to recover from the transformation that is done. And this is the final reconstructed time series. This is the flow of a general procedure for a Arkansas method.
+00:04:18 - 00:05:12
+Determining Lag Order Using Partial Autocorrelation
+Now we will look at we have seen Arkansas model given by AARP, AARP model. So this is the lag order. What is the order of the model? How do we determine the lag order in Arkansas model? In the KR model is very important. We need to look at the partial autocorrelation plot. We have to look at the partial autocorrelation plot and then we have to determine the the significant correlation, the lag at which there is significant correlation and then where it drops off suddenly. So where the earliest from lag 0, the earliest order of KK where there is significant correlation and which it drops off. In this case if you see there is partial autocorrelation, the strong or I would say significant partial autocorrelation at lag order K is equal to 2.
+00:05:12 - 00:06:02
+Example of AR-3 Model
+So we will take this as the at K is equal to 2. So we will we will take a partial autocorrelation lag 2 or P is equal to two. Basically look at the from moving from left, look at the partial autocorrelation plot. Look at the the lag at which there is significant correlation and that would be the order of the Arkansas model order regressive model. In this case, Arkansas order P is equal to two. What does it mean if it would effectively mean that we are looking at two previous samples? We are looking at two previous samples with the Y of t -, 1 alpha 2Y of t -, 2. Let us assume for that matter, at three, let us say correlation was something like this here.
+00:06:03 - 00:07:00
+Prediction Equation for AR-3 Model
+And at three, let us say it was something like this here. OK, In which case the order becomes P is equal to 3. In that case, what would have happened For AR2? This is how it is for AR-3. It would be something like Y cap T is equal to alpha naughty plus A1 Y of t -, 1 plus A2 Y of t -, 2 plus A3 Y of t - 3. So which means you would have taken the order of P3 past time stamps. Basically we would have taken order. Based on this correlation, we would have taken basically 3 past time stamps. Basic time values I would say. So we will look at the example of AR-3 model. In the following equation, YT represent transform Y value after box Cox and differencing. In this case we have. This is the time series.
+00:07:00 - 00:09:04
+Reconstructing Time Series and Model Performance
+This is why we applied box Cox here. Which means there was a variance was not constant. We apply box Cox and then we apply box Cox difference here. So this example here this becomes A1 is equal to 0.71 alpha 20.72, alpha 30.76. So basically these are the coefficients that have been derived. So this will become let us assume these are the coefficient. The equation becomes Y cap T is equal to 0.06 and then minus these are negative. These are negative portion which means What does it mean? Which means the past sample t - 1 has a negative strong negative correlation with the Y of T So this also means negative correlation, which means all of them are negatively correlated here. This is the prediction equation for an example of a Arkansas 3 model, we have t -, 1 T -2 T -3. And then if you want to do our model predictions, so we will say prediction equation would be Y cap T is equal to oh .06 minus. This is the equation that we have fit. Actually this is this is the equation. So this will give the prediction equation and this one would be t - 1. Let us say I want to look at prediction here t - 1 would be this t - 2 would be this. So this is how I got this prediction equation. And then for this prediction equation, this would be taken as a previous one T -1, T -2 and 3 -, 3, this is a model reconstruction, this is a vicap T here. And then we are trying to append a series and then we are trying to get a cumulative sum and this initial value adjustment and this is exponential. So these are the steps that we have done post the prediction actually to reconstruct the time series C and this is the AR model performance. This is Morgan train test and predictions. The RMSE is 15.11, MAP is 0.63.
+00:09:04 - 00:09:10
+
+Not a good prediction nevertheless, which means that we have to put a better model for this.
+
+
+You learnt that the autoregressive (AR) model can be viewed as a linear regression model that incorporates significant past observations as independent variables and predicts future values as the dependent variable. Mathematically, it can be represented by the equation Equation, where Equation are constant coefficients and Equation represents the significant past observations.
+
+ 
+
+The crucial question in building an AR model is determining which past observations to include. This selection is based on the lag order of the model, denoted as Equation. Estimating the appropriate value for Equation can be achieved by analysing the partial autocorrelation function (PACF) plot.
+
+ 
+
+To construct an AR model, we considered a data set of website traffic data with 20 observations. We designate each month as a timestamp (Equation) ranging from 1 to 20, and the corresponding traffic values as Equation. For our analysis, we divided the data set into a training period of 17 months and a testing period of 3 months. Following is the plot that depicts the time series of the website traffic data.
+
+ 
+
+
+
+ 
+
+As you can see, there’s a slight upward trend and a component of seasonality as well. The general procedure that is followed for the AR model is shown below.
+
+ 
+
+
+
+ 
+
+There are a few steps involved in building an AR model. Firstly, it is important to address the variation in variance present in the data. This can be accomplished by applying the Box-Cox transformation, which helps stabilise the variance. After stabilising the variance, the next step is to address any existing trends in the data. This can be achieved by differencing the time series. Once the transformed data is prepared, we can proceed to build the AR model using the selected lag order Equation. The appropriate value of Equation can be determined by analysing the partial autocorrelation function (PACF) plot. By estimating the AR model coefficients, we can make predictions for the testing period. These predictions are obtained using the transformed data. To reconstruct the original time series, we can simply apply the inverse transformations of the differencing and the Box-Cox transformations.
+
+ 
+
+The AR model is represented by Equation. To estimate the value of Equation, we use the PACF plot. The PACF helps identify lags that have a strong direct relationship with the current value of the series and serves as a guiding tool for selecting candidate AR orders.
+
+ 
+
+While PACF provides guidance rather than a strict rule for model selection, nearby lag orders are often explored in practice. For demonstration purposes, we considered an Equation model to illustrate how multiple lagged terms are incorporated into an autoregressive model.
+
+ 
+
+The AR model is therefore written as: Equation. We built an AR model using Equation.
+
+ 
+
+The model’s predictions are shown below.
+
+ 
+
+
+
+ 
+
+The performance of the AR model was not satisfactory due to the complexity of the website traffic data set and the limited training samples available for the model to learn from.
+
+ 
+
+Next, we will move into building an MA (Moving Average) model, which utilises past prediction errors to capture short-term dependencies.
+
+
+Moving Average Models
+
+
+You will now learn about another model from the autoregressive family: the moving average (MA) model. Unlike the AR model, which primarily relies on analysing past values, the MA model takes into account the historical errors or residuals from previous predictions. The MA model focuses on capturing short-term dependencies or fluctuations in the data rather than the long-term trends.
+
+00:00:00 - 00:00:15
+Introduction to Moving Average Model
+We will look at moving average model. We have to understand that this moving average model again we have to create differentiate between simple techniques where we have naive and simple average.
+00:00:15 - 00:00:26
+Understanding Prediction Errors in Moving Average
+So moving average, we have taken the average of the past three values in the moving average model. Simple model in this case this is moving average model. We take the past prediction errors.
+00:00:26 - 00:00:45
+Parameters and Lag Order in Moving Average Model
+Actually you see we will look at the past prediction errors here. So this is this is mean. Basically we are trying to look at base as a mean and then beta one. This is the prediction error. Previous time, different times, time values, basically different time lags.
+00:00:45 - 00:01:10
+Determining Lag Order Using Autocorrelation Plot
+So to say MU is a mean as time series, beta 1, beta 2 and beta Q are the constant. Which parameters to choose in case of Q? Again, how many lags should we need to choose? Basically t -, 1 T minus one t -, Q So what would be the value of Q is? We have to determine in terms of moving average model dependence on the parameter Q.
+00:01:10 - 00:02:14
+MA Model Equation and Coefficients
+So the basic moving arrangement is represented by maq where Q represents the lag order of the model. How do we determine the lag order of the model? It is through a autocorrelation plot. So if you see ma Q ARP, ARP is for you. Look at partial autocorrelation function and then maq. You look at autocorrelation plot actually. So we determine the order of Q order of lag using using the ACF plot in the sense. If you see in this case again you look at the lag for which the correlation is significant. In this case literally there is a relatively strong autocorrelation for lag one at Q is equal to this is AQ is equal to. At K is equal to 1 lag of one, there is a significant correlation beyond the confidence interval. So we will take Q is equal to 1 in which case the MA model will have Y cap T as mean plus the error. So basically this is the coefficient of the K is equal to 1,00,000.
+00:02:15 - 00:03:04
+Numerical Example of MA1 Model
+Coming back here this is again for MA method it is it is same method here. But for the fact that this the model fit in this case it would be MA model and then Q model, everything remaining the same again, this is to check the stationarity, ensure that there is stationarity here. And then yeah, we do the same steps we do we append, we do cumulative sum, we do box lock inbox to reconstruct the time theories and dual vicap T here we have seen example numerical example here if you want to do MA1 model here. So again, this MA one model will just have beta one, not beta 2 and beta 3 and so on. MU is 0.06 and then beta one is 0.99.
+00:03:04 - 00:03:49
+Prediction Equation and Model Performance
+With this we have found MU and beta one. This this is the equation. So this we have found using a MA one model. So we have found using the MA one model for coefficients are MU and beta one for this MA one model. This is a prediction equation. Once you know the mean and the important thing in fitting the model is finding the coefficients so you find the coefficient, then we can say Y cap T is 0.6 minus. These are the prediction equation. This is the prediction equation Y cap T So, Y cap T is a prediction estimation. Again, this is the complete set of steps and this is the illustration of numerical example here. And this is MA model performance. We have star, MSE and map here.
+
+
+You learnt that the MA model can be seen as a linear regression model that incorporates significant past errors as independent variables to predict future values as the dependent variable. Mathematically, it can be represented by the equation Equation, where Equation is the mean of the series and Equation are constant coefficients.
+
+ 
+
+The crucial step in building an MA model is determining which past observations to include. This selection is based on the lag order of the model, denoted as Equation. Estimating the appropriate value for q can be achieved by analysing the autocorrelation function (ACF) plot.
+
+ 
+
+The MA model is represented by Equation.To construct the MA model, we considered the same website traffic data that we used to build the AR model. The general procedure for building the MA model remains the same as the AR model.
+
+ 
+
+
+
+ 
+
+The first step is to estimate the value of Equation. To determine Equation, we analysed the autocorrelation function (ACF) plot, where we found that that there is no lag for which the autocorrelation value exceeds the blue region. However, there is a relatively stronger autocorrelation for lag 1. Therefore, we chose Equation as a suitable value for the moving average (MA) model.
+
+ 
+
+The regression equation for Equation is Equation. Using this equation with Equation, we built an MA model. The model’s predictions are shown below.
+
+ 
+
+
+
+ 
+
+The predictions obtained from the MA model reveal slightly high values for RMSE and MAPE. This can be attributed to the complexity of the website traffic data set and the limited training sample available for the model to learn from.
+
+ 
+
+Now you have learnt how to build two models from the autoregressive family, AR, and MA. Next, you will learn about the third model of the autoregressive family of models, the ARMA model. 
+
+
+Autoregressive Moving Average Models
+
+
+Previously, you learnt about the working of the AR and MA models. Now, you will learn about the third member of the autoregressive family of models: the autoregressive moving average (ARMA) model. The ARMA model is a combination of the AR and MA models, incorporating the parameters from both approaches. By merging the autoregressive and moving average components, the ARMA model aims to capture the long-term dependencies and short-term fluctuations in the data simultaneously.
+
+
+00:00:00 - 00:00:22
+Introduction to ARMA models
+So we looked at Arkansas models, we have looked at MA models, we will now look at ARMA. So how do we say whether which model to choose when there is a significant correlation In the PACF model, we have to choose AR and when there is a significant correlation in the queue, basically we will choose MA model.
+00:00:22 - 00:00:25
+Choosing between AR and MA models based on PACF and ACF
+In the autocorrelation function, we will choose MA model if there is.
+00:00:25 - 00:01:04
+Determining significant correlations in ACF and PACF for ARMA
+If you look at autocorrelation function PACF, if there is significant correlation in both ACF and PCF, we will typically choose ARMA model. In this case, if you see in this coming back here AIR model, if you have PCF and then if there's a correlation is significant, we will choose AARP model and you look at ACF model and then this is then this is MA model MAQ and you will determine the coefficient where the lag in which the coefficient is significant, you will lose MAQ model.
+00:01:04 - 00:02:09
+Generic equation for ARMA model
+And then if you there is significant strength of correlation in both ACF and PACF model, we use what we call ARMA model, ARMA model. So there is this is the AR part and this is the MA part. Then we look at the ARMA model. In this case this is a combination of AR and MA. So this is you have the ARP determined by ESCF and this is by ACF. And then we have determined P We have seen how to determine P where the autocorrelation is significant and we have seen for make Q model where the the lag at which the ACF correlation is strong. So that will determine the P&Q. So this is a generic equation. So we have alpha naughty plus A1 Y of t -, 1 Y of t -, 1 Y of t -, P P is determined by PSEF plot. Similarly this is a MEA part. So we have this is an error residual at previous lag t -, 1 T minus so on and so on and t -, Q we determine Q.
+00:02:09 - 00:02:41
+Parameters of ARMA model: P and Q determination
+So basically it is a combination of AARP and MAQ model. So obviously this parameters will be ARMA will have autoregressive moving average parameters P&Q where P is determined by the PSEF plot and Q is determined by ACF plots. Now alpha naughty serves as the constant for both parts of the model. This is sort of, this is sort of bias list any constant. So we have looked at ARMA method and then. Thus the pipeline remains the same.
+00:02:41 - 00:03:12
+ARMA model pipeline and example
+In this case, this will be ARMA model. The model fit will be different here. This will be ARMA P&Q. So we will have once the time series is stationary, we do this standard techniques here and then we try to reconstruct this is a ARMA method. So this is a general pipeline and in the only difference in ARMA model is the ARMA PQ model. So we have seen example of an ARMA 31 model here which means auto resistive order 3 and moving average order Q.
+00:03:12 - 00:04:23
+Example of ARMA(3,1) model and prediction analysis
+So in this case, if you see what happen, you have Y of t -, 3 here if you see you will have yeah. So Y cap of T would be this would be t -, 1 T -2 T -3 and then but this now you will have error t - 1. So this is the Q model. So this is order P is equal to 3 and order Q is equal to 1. This error residual coefficient are alphas here and coefficient are betas here. For a MA model, this is a combination. This is the ARP model and this is ARP. ARP is equal to 3 here and then MAQ is equal to. For a small Q is equal to 1 here. So this is a combination of ARP and MAQQ is equal to Q is equal to 1, P is equal to 3. So this is how how did we determine P is equal to 3 and Q is equal to 1. We looked at the PACF model and we determined P value, order of AR model and order of MA model. We looked at the ACF plot again. These are the predictions for RMR predictions and this is the RMSE and MAP.
+
+
+You learnt that the ARMA model is a combination of both AR and MA models. The equation of the ARMA model can be written as the combination of the equations for Equation and Equation as follows:
+
+ 
+
+
+
+ 
+
+The general representation of the ARMA model with parameters Equation and Equation is Equation.
+
+ 
+
+To construct the ARMA model, we considered the same website traffic data that we used to build AR and MA model. The general model-building procedure remains the same as it was for AR and MA.
+
+ 
+
+The method of estimating Equation and Equation remains the same as for AR and MA models as well. For the website traffic data set, we have estimated the values of Equation and Equation before as 3 and 1, respectively. So the regression equation for Equation  is Equation.
+
+ 
+
+Using this equation with Equation, we built an ARMA model, whose predictions are shown below.
+
+ 
+
+
+
+ 
+
+As you can see from the plot given above, the predicted values are following the actual values for the test period more closely as compared to AR and MA models.
+
+ 
+
+Next, you will learn to build ARIMA models, where the differencing operation is integrated into the ARIMA model itself, eliminating the need for separate differencing steps.
+
+Autoregressive Integrated Moving Average Models
+
+
+
+Previously, you learnt how to build an ARMA model, which combines both AR and MA models. Now, you will study Autoregressive Integrated Moving Average (ARIMA) model. ARIMA model is similar to ARMA model; however, the key difference lies in the integration of differencing within the model itself. This means that when constructing the ARIMA model, we can directly apply the Box-Cox transformation and train the model using the transformed data.
+
+00:00:00 - 00:00:08
+Introduction to ARIMA model
+We have looked at 3 models. Here we will look at ARIMA model basically autoregressive and then we will see what I is.
+00:00:08 - 00:00:53
+Understanding differencing in ARIMA
+Basically I is the difference in autoregressive integrated moving average model, ARIMA model. So extension. This is an extension of ARMA model, everything remaining the same. It is just that difference is integrated into the model. Everything remaining the same. We will call order of differencing can be applied. Basically if you have want to make it non stationary to stationary we will see what is the order of differencing. If you remember we had Y bar and Y double bar. Basically you take the difference. If you take the first difference it is order is equal to 1. To take the second difference, order is equal to 2. So basically we discussed that you keep on doing the differencing until the time series becomes stage study. So this is this is ARIMA model everything remaining the same.
+00:00:54 - 00:01:16
+Components of ARIMA model: P, Q, differencing
+You will find we will say that this is the order of differencing which means differencing done first once or twice or the order of differencing. So ARIMA everything remaining the same this is P, this is Q and this is differencing which means 1st order differencing which means once differencing is done once actually. So this again you see this is the this is the the Arkansas part you can call up.
+00:01:16 - 00:01:43
+Differencing and ARIMA method explanation
+This is again saying if you want to be consistent with the terminal, this can be A1 into Y of T -, 1 plus beta one into error T minus. So this is Q is equal to 1 so Z the differencing would be Y of t + 1 -, y of. If you see, the differencing would be basically different between the current and the past values. So this would be the differencing part of it.
+00:01:43 - 00:02:05
+Box-Cox transformation and predictions
+Again, this is an ARIMA method. Actually we have done the different thing here, the different thing part again, this again would be the ARIMA part. Everything remaining the same, the ARIMA part and we do a box clock transformation. We have to do the inverse transformation. We try to do the reconstruction here. So these are the predictions. This is an example of a ARIMA 311 model.
+00:02:05 - 00:02:35
+Example of ARIMA 311 model
+This is a difference Z of T is Y of t + 1 - π of T. And then instead of calling Y cap t + 1, we are calling it Z. So this is difference 1. So we we try to do a very important here we are not doing it on Y of T here we are trying to build the Arkansas and MA model on the Z basically Z of t -, 1, Z of t -, 2. This is what is Z. So this is the difference value. So this is the difference value here. So we are we are trying to do it on the difference but that is very important here.
+00:02:36 - 00:02:57
+RMSE and MAP values in ARIMA predictions
+This will be Z cap subscript is equal to Z values. Basically passed lag orders of the difference values in the case of ARIMA model. Again this is the RMSE and MAP values. This is the predictions. This is RMSE 11.21 and MP 0.44.
+
+
+You learnt that for the ARIMA model, we need to specify the order of differencing which is represented by Equation. Mathematically, the equation of ARIMA can be represented as  and Equation and Equation.
+
+ 
+
+The ARIMA model introduces an additional integrated differencing order parameter denoted as Equation. The general representation of an ARIMA model with parameters Equation, Equation, and Equation is Equation.
+
+ 
+
+To construct the ARIMA model, we considered the website traffic data that we used to build the previous models. The general procedure for building an ARIMA model is slightly different from the previous models because differencing is integrated in this model.
+
+ 
+
+
+
+ 
+
+In ARIMA, we simply apply the Box-Cox transformation to the time series and build the model on the transformed data for making predictions. When it comes to recovering the original time series, we don't need to reverse the differencing manually as the ARIMA model internally handles this process. By reversing the Box-Cox transformation, we can obtain the series in its original space.
+
+ 
+
+The method for estimating the parameters Equation and Equation remains the same as in AR and MA models. Additionally, we need to specify the value of Equation, which is typically set as 1 in most cases. However, you can experiment with different values of Equation and observe their impact on the predictions. For example, if trends are nonlinear, you can try higher differencing orders. The equation for an Equation model is Equation.
+
+ 
+
+Using this equation with Equation, we built an ARIMA model, whose predictions are shown below.
+
+ 
+
+
+
+ 
+
+As depicted in the plot above, the model is able to capture the complexities present in the data within its predicted values, but the performance is not significantly good.
+
+ 
+
+Now that you have learned how to build an ARIMA model, you have covered all the methods that utilise the ARIMA function in Python. Next, we will construct our final model from the family of autoregressive models, which incorporates seasonal components as well.
+
+Seasonal Autoregressive Integrated Moving Average Models
+
+Previously, you learnt how to build autoregressive models such as AR, MA, ARMA, and ARIMA. All of these models were constructed using the ARIMA function in Python. However, we did not consider any seasonal components in those models.
+
+ 
+
+You will now learn about seasonal autoregressive integrated moving average (SARIMA) model, which incorporates seasonality. SARIMA is an extension of the ARIMA model that includes seasonal differencing to account for the seasonal patterns in the data.
+
+00:00:00 - 00:00:12
+Introduction to autoregressive models
+We come to the the last of the Arkansas models, autoregressive models. This is seasonal autoregressive integrated moving average model we call SARIMA.
+00:00:13 - 00:00:47
+Overview of SARIMA model
+So this model captures the seasonality as well. This model captures the seasonality as well. If you see there are multiple parameters here, this is the PD and Q. This is the Arkansas and then MA and the differencing and this is there is the set of capital PDQ parameters here and this is the seasonality seasonal into period of interval. Let us say if it is as I said, if it is monthly, it is 12, if it is quarterly, if it is 4, if you are trying to take weekly, it is 7 if you take a daytime scale.
+00:00:48 - 00:01:10
+Seasonality and parameters in SARIMA
+So this is the period of seasonality. Within this period of seasonality you find a PDQ. So that is so it is a seasonal autoregressive integrate integrated moving average model. So this is an extension of ARIMA model to account for the seasonal components. If there is seasonality, then we incorporate the seasonal differencing.
+00:01:10 - 00:02:05
+Extension of ARIMA to SARIMA
+What we will do, we will try to take the PDQ within this seasonal. Let us say if we have something like this and then we have year one, year 2, year 3. So within this if the seasonality is month is equal to 12, if you have month is equal to 12. So we will look at within this month is equal to 12. Basically we will try to find out the PDQ within this season interval. This M is equal to, it is M is equal to 12 for a monthly one. We will try to find out the PDQ component within the seasonal subset. And then this is the seasonal autoregressive order, seasonal differencing order, seasonal moving average order. So this will have multiple parameters here. So we have, this is the seasonal part of, this is the seasonal part of M and then these are PDQ parameters. So this is an extension of the ARIMA model.
+00:02:06 - 00:02:58
+Parameter selection and example of SARIMA
+So PDQ are chosen in the same way as the ARIMA model optimal parameter values and then PD and Q are determined by using grid search which gives optimal parameters. So it means ARIMA model has to have six parameters, it will have in fact 6. And then we also have a matching server 7 parameters in the SARIMA model. So again this in this case this would become SARIMA model PDQ and capital PDQ and M So the model is different here, the same pipeline into the predictions append. And if you have done box of transformation, you have to do an universe and then we try to do the reconstruction here. So this is an example of SARIMA 311 and seasonality M is equal to 4 and these are capital PD key values. We computing the RMAC and MAP value for this.
+
+
+
+You learnt that in addition to the parameters Equation, Equation, and Equation found in the ARIMA model, SARIMA introduces additional seasonal parameters: Equation(representing seasonal autoregressive order), Equation(representing seasonal difference order), Equation(representing seasonal moving average order), and Equation(representing the seasonal period).
+
+ 
+
+The general representation of SARIMA is Equation.
+
+ 
+
+
+
+ 
+
+The process of selecting the values for  Equation, Equation, and Equation remains the same as in the ARIMA model. However, determining the values for  Equation, Equation, and Equationusually involves conducting a grid search to find the optimal parameter values. While we won't cover the optimal selection of seasonal parameters for SARIMA in this module, we have chosen values of 1 for Equation, Equation, and Equationfor the superstore data set. Feel free to explore different values for these parameters and observe their impact on the predictions.
+
+ 
+
+The general procedure for building a SARIMA model is similar to that of ARIMA.
+
+ 
+
+Similar to the ARIMA model, the SARIMA model also performs differencing internally, eliminating the need for separate differencing steps. The output of the SARIMA model is provided without differencing, allowing us to recover the original series by simply reversing the Box-Cox transformation.
+
+ 
+
+Next, you will see how AR, MA, ARMA, ARIMA, and SARIMA models are implemented using Python.
+
+
+Python Demonstration: Autoregressive Models
+
+
+Now that you understand how AR, MA, ARMA, ARIMA, and SARIMA model works, you will now see how these models are implemented using Python.
+
+00:00:00 - 00:00:41
+Introduction to autoregressive models and ARIMA/SARIMA
+Welcome back and let us go through the autoregressive models. So now that we have a stationary time series and have identified the non seasonal orders which we got from the Arkansas and the MA from the ACF and the PSF plots, we can finally build our ARIMA and the SARIMA models. So we will take these models sequentially starting from the Arkansas move on to the MA and then ARMA and then ARIMA and CERIMAX, right? So let us go ahead and start the auto regressive method where this model serves as a confirmation that the individual components contribute to the forecast.
+00:00:41 - 00:03:40
+Building and testing ARIMA model with autoregressive components
+So to do so, first let us import the ARIMA method from the stats model, right? So where we will build this ARIMA by testing the autoregressive components right? The general form of this ARIMA is you know it is of three tuple which have PD and Q with the default values as zeros right? For the Arkansas method, we will specify only the first value in this tuple that is the P value or the lag order that we observed or obtained from the PSF plot. Let us quickly plot the PSCF here right? And from this as we saw earlier there are lot of lag orders here. Out of this for now we are taking the 9 as AP here and the lag order 9 and we will view its optimal parameter values. Let us quickly initiate ARIMA model and then we are fitting that model and these are the how the parameters look like for the ARIMA model. So we fit the pure AR model here setting the order of 900, meaning it's like P00 which is using the optimal P value which is derived from the PACF plot, right? So basically this model uses only the past sales values to predict the current sales value. So let us obtain the predictions in the Aremo model for the testing the data indices. And then we need to append the predictions with a DF box fox difference to prepare the data for the inverse transformation. And then we are reversing the differential transformation that was done on the data previously. And then finally, we reverse the box Fox transformation that was done on the data, right? So now let us visualize how the predictions look like before we compute the error measures, right? So if I show the plot here, my predictions, if you can see this showing some variations, but you know it's generally underestimating the sharp increase seen in the actual test data, right? Suggesting that the current forecasting model may not fully capture the underlying pattern in the series, right? Let's quickly see the predictions by using the matrix like the RMSE and map value. So with this model, we achieved the RMSE around 20113. And let's see the sequential rest of the models will be this IR model or not right?
+00:03:41 - 00:05:55
+Fitting and evaluating MA model
+Now quickly go to the MA model where here will fit the MA model by setting the order of 00Q right? So the P&D values will be 0 in this MA model case where this Q value again derived from the plot and this model uses the past forecast errors to predict the current value, right? So let us repeat the same steps that we did before. Here we are plotting the ACF plot. And if you observe that here for the experiment, we are using the lag order one. And if you and let us see also see the optimal parameter values where I am initiating the Remo model with an order of 001 and then I am fitting and these are the model parameters that I have within the model. And we will repeat the same steps like obtaining the predictions, the predictions with the DF box fork difference. And we are again reversing the differencing transformation and reversing the box fork transformation. Let us quickly visualize the predictions along with the data before we compute the error measures, right? So if you carefully observe the predictions here, these again largely underestimate the actual sharp increases and the volatility of observing the test data, right. This indicates again this forecasting model may not be adequately capturing the complex patterns, particularly in the strong upward trend in this sales time series data. Right now, let us see how our metrics look like, how MY RMSE and MAP look like. So if you observe this now, my may give me a pharmacy score around 16630 where which performs better compared to the Arkansas model that we saw earlier. Right, now let us quickly go to the next one, which is autoregressive moving average, which is a Armour method, right?
+00:05:56 - 00:08:02
+Autoregressive Moving Average (ARMA) model implementation
+So here this can also be used to implement the other autoregressor models. And here we are combining both P&Q, meaning the Arkansas and the MA we are going to combine here. That's why it's an ARMA here, right? So where previously, if you remember, we picked P9 and the Q1 and let us see, let us fit the model and see what's the output of this right. So again, we'll repeat all the steps that we did earlier. So I'm initializing the RIMA and then I'm I'm fitting and here are my parameters and I'm getting the obtain the predictions, appending the predictions and reversing the difference in transformation and reversing the box box transformation that was done on the data, right? So let us quickly visualize the output the predictions along with the train and test data, right? So here if you observe the predictions here, it's capturing some of the directions here, right, But generally failing, you know short in accurately mirroring the magnitude and volatility of the actual test data here, right. So especially you know the peaks, it's not able to mirroring that. So again, this suggests that the forecasting model has a limitation in capturing the full dynamics of the sales data. Right now, let's compute the performance matrix for the model in the similar way that we are doing. So if you observe that the ARMA model, when we combine with the AR and the MA, the RMSE values, you know, the performance is reduced when compared to the MA, but it's improved when compared to the basic Arkansas model, right? Now let us go to the one more interesting model which is a ARIMA where it's nothing but auto regressive integrated moving average, right?
+00:08:03 - 00:10:23
+Exploring ARIMA model with integrated order
+So the parameters here in the for this ARIMA model, again it's a 3 tuple. But here we will use all three parameters which are PD and Q where we set this integrated order one which tells the model to internally apply the 1st order differencing. So this simplifies the input as we can now pass the box transformation data directly, right? So here we go. So the previously we used P9 and the Q9 as I told now we are going to use D equal to 1, right. Let us quickly fit the model. This model is in a structurally complete for the non seasonal general data, right. So again, let's repeat the same process here where we'll obtain the prediction and obtain the predictions with the DF box box. And then we are reversing the box box transformation that was done on the data. And let us quickly visualize how may the predictions are this time with the ARIMA model, right? So here if you see the predictions, the predictions represents the models forecast for the future. Right. So when these predictions attempt to follow the general movement, they often underestimate the sharp increases and did not fully capture the extent of the fluctuations in the actual test data, indicating that there are still a potential areas for the model to improve, right? So let us quickly compute performance metrics for this model. And if you observe that my AREMA model, it is not performing better when compared to the previous models. Right? Now let us go on to the another interesting model which is a seasonal autoregressive integrated moving average which is well known as a CERIMA for now again. So here we are importing the Cerimax and here the interesting thing is like along with the tuple that we are using here, it adds A seasonal order component which is A4 tuple of the form right?
+00:10:23 - 00:12:31
+Seasonal ARIMA (SARIMA) model and performance evaluation
+Since our data is a monthly, the seasonal periods here and can be the 12:00. So we set the seasonal parameters typically through the grid search Oregon by visual inspection of the seasonal lags in the ACF or PSF plot that we saw earlier, right. So here if you observe that we are fitting the CERIMA model using the optimal non seasonal orders with the PD and Q which are which are 91 and 1 and the seasonal orders which is a PDQ along with the seasonal months here. So this is our most complex and ideally the most accurate classical model that we need to consider, right? So again, so here we repeat the process, appending the predictions for the model, appending the prediction with the box box Odata frame, and then reversing the box force transformation that was done on the date, right? Let us quickly visualize these predictions and how the predictions are different compared to the previous ones, right? If you observe the predictions, the predictions follow the direction of the actual sales year, right? But although they follow the direction of the actual sales, they appear to lag or underestimate the peak values and rapid increases seen in the original test data, right? So again, it's better than earlier approaches. But again, it's suggesting that the forecasting model can be enhanced to better capture the dynamic nature of the sets, right? Now let us again quickly compute the performance of the matrix of the model. And if you observe that the output of the serimax or the RMSE value is very less compared to the all the other models that we saw and it implies that you know the serimax is the best model for handling this type of time series data.
+
+
+You saw the Python implementation of autoregressive family models. To do this, we use the ARIMA function from statsmodel library, which provides a unified framework for building AR, MA, ARMA, and ARIMA models.
+
+ 
+
+The ARIMA function is controlled through the order parameter, specified as a three-tuple Equation. Here,
+
+Equation denotes the autoregressive order,
+
+Equation denotes the order of differencing, and
+
+Equation denotes the moving average order.
+
+ 
+
+By choosing appropriate values of  Equation, Equation, and Equation the same function can be used to construct different models from the autoregressive family.
+
+To build an autoregressive (AR) model, we set a non-zero value for Equation and keep Equation and Equation.For the superstore data set, a moderate value of Equationis chosen to balance correlation strength and model complexity. The model is then fitted using the ARIMA function with the specified order, and predictions are generated on the testing period.
+
+The AR model captures some of the underlying structure in the data, but discrepancies remain between the predicted and actual values. This indicates that relying only on past observations may not be sufficient to explain all the patterns present in the series.
+ 
+Next, we consider the moving average (MA) model, which focuses on past forecast errors rather than past values. To construct an MA model, we set Equationand Equation, and choose a non-zero value for Equation. This model helps capture short-term dependencies driven by shocks or noise in the data.
+
+The MA model reflects the overall movement of the series reasonably well, but it struggles to account for more complex patterns. This highlights the limitations of using only past errors without incorporating past observations.
+ 
+Having explored AR and MA models separately, we then move to the ARMA model, which combines both autoregressive and moving average components. In this case, both Equation and Equation are set to non-zero values while keeping Equation. This allows the model to account for dependencies arising from both past values and past errors
+
+The ARMA model captures the structure of the data more effectively than AR or MA alone. However, performance on unseen data can still be affected when the series exhibits non-stationarity or evolving patterns.
+ 
+To address non-stationarity, we extend the model to ARIMA by introducing differencing. By setting Equation, the model accounts for trends present in the data before applying AR and MA components. While this improves the model’s ability to track changes over time, it may still fall short if seasonal patterns are present.
+ 
+Finally, we moved to seasonal ARIMA (SARIMA) models. To implement SARIMA in Python, we use the SARIMAX method from statsmodels, which allows us to specify both non-seasonal and seasonal components. In addition to the order parameter Equation, SARIMA uses a seasonal_order parameter of the form Equation, where Equation represents the seasonal period.
+
+Incorporating seasonality enables the model to capture repeating patterns that occur at regular intervals. For the superstore data set, including seasonal terms leads to noticeably improved alignment between predicted and actual values.
+ 
+
+This reinforces an important insight: explicitly modelling seasonality can significantly improve forecast accuracy. A similar observation was made earlier with exponential smoothing models, where Holt–Winters methods performed better by accounting for seasonal behaviour alongside level and trend.
+
+ 
+
+So far we built AR, MA, ARMA, ARIMA and SARIMA models. All of these are models from the autoregressive family of time series models. We saw how they performed on real-life data sets.
+
+ 
+
+We will next look at how a recurrent neural network performs on the superstore data set. But please be informed that we will not be getting into in-depth model tuning and selection in this case. You are, however, free to optimise your model.
+
+# Part 5 - Autoregressive Models
+In this part of the demonstration, we will fit autoregressive models to the data and analyse their performance using RMSE and MAPE values. We will build the following models:
+- Autoregressive (AR)
+- Moving average (MA)
+- Autoregressive moving average (ARMA)
+- Autoregressive integrated moving average (ARIMA)
+- Seasonal autoregressive integrated moving average (SARIMA)
+
+### Subpart 1 - Autoregressive (AR) Method
+
+We will begin by fitting a basic autoregressive model to the training data and analyse its performance. We will use the *ARIMA* method from *statsmodels* to build the model.
+
+**Note:** The *ARIMA* method can also be used to implement other autoregressive models.
+
+# Import 'ARIMA' from 'statsmodels' for building autoregressive models
+from statsmodels.tsa.arima.model import ARIMA
+
+The parameter of interest in the *ARIMA* method is the *order* parameter. It is a 3-tuple of the form $(p, d, q)$ with the default value as $(0, 0, 0)$.
+
+For the AR method, we will specify the first value in this tuple. This is the $p$ value or the lag order obtained from the PACF plot.
+
+# Use the 'plot_pacf' method to look at the partial autocorrelation values for the training data for various lag orders
+# Note: The 'plot_pacf' method assumes stationarity of time series, so we will use the 'df_boxcox_diff' data
+# Note: Since differencing results in a missing value at the beginning, we must exclude it
+plot_pacf(x = df_boxcox_diff[1:], color = 'blue', vlines_kwargs = {'colors': 'blue'});
+
+# Fit an AR model to the transformed training data with lag order 9 and view its optimal parameter values
+# Note: You may try other suitable lag order values as well
+# Note: ARIMA(9, 0, 0) = AR(9)
+ar_model = ARIMA(endog = df_boxcox_diff, order = (9, 0, 0))
+ar_model = ar_model.fit()
+ar_model.params
+
+
+# Obtain predictions from the AR model for the testing data indices
+ar_model_preds = ar_model.predict(start = train_len, end = len(df) - 1)
+
+# Append the predictions with 'df_boxcox_diff' to prepare the data for inverse transformation
+df_boxcox_diff_preds = pd.concat(objs = [df_boxcox_diff, ar_model_preds], axis = 0)
+
+# Reverse the differencing transformation that was done on the data
+df_boxcox_preds = df_boxcox_diff_preds.cumsum()
+df_boxcox_preds = df_boxcox_preds.add(df_boxcox[0])
+
+# Reverse the Box-Cox transformation that was done on the data
+df_preds = np.exp(df_boxcox_preds)
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_preds.index[train_len:], y = df_preds.values[train_len:], marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+# Import 'mean_squared_error' from 'sklearn' for error computations
+from sklearn.metrics import mean_squared_error
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_preds.values[train_len:]))
+mape = np.mean(np.abs(df_test['Sales'] - df_preds.values[train_len:]) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df = pd.DataFrame(index = [0],
+                              data = {'Model': 'AR', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df.set_index(keys = 'Model', inplace = True)
+
+performance_df
+
+### Subpart 2 - Moving Average (MA) Method
+
+
+We will now a fit a moving average model to the training data and analyse its performance. We will use the *ARIMA* method from *statsmodels* to build the model.
+
+**Note:** The *ARIMA* method can also be used to implement other autoregressive models.
+
+
+The parameter of interest in the *ARIMA* method is the *order* parameter. It is a 3-tuple of the form $(p, d, q)$ with the default value as $(0, 0, 0)$.
+
+For the MA method, we will specify the third value in this tuple. This is the $q$ value or the lag order obtained from the ACF plot.
+
+
+# Use the 'plot_acf' method to look at the autocorrelation values for the training data for various lag orders
+# Note: The 'plot_acf' method assumes stationarity of time series, so we will use the 'df_boxcox_diff' data
+# Note: Since differencing results in a missing value at the beginning, we must exclude it
+plot_acf(x = df_boxcox_diff[1:], color = 'blue', vlines_kwargs = {'colors': 'blue'});
+
+
+# Fit an MA model to the transformed training data with lag order 1 and view its optimal parameter values
+# Note: ARIMA(0, 0, 1) = MA(1)
+ma_model = ARIMA(endog = df_boxcox_diff, order = (0, 0, 1))
+ma_model = ma_model.fit()
+ma_model.params
+
+# Obtain predictions from the MA model for the testing data indices
+ma_model_preds = ma_model.predict(start = train_len, end = len(df) - 1)
+
+# Append the predictions with 'df_boxcox_diff' to prepare the data for inverse transformation
+df_boxcox_diff_preds = pd.concat(objs = [df_boxcox_diff, ma_model_preds], axis = 0)
+
+# Reverse the differencing transformation that was done on the data
+df_boxcox_preds = df_boxcox_diff_preds.cumsum()
+df_boxcox_preds = df_boxcox_preds.add(df_boxcox[0])
+
+# Reverse the Box-Cox transformation that was done on the data
+df_preds = np.exp(df_boxcox_preds)
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_preds.index[train_len:], y = df_preds.values[train_len:], marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_preds.values[train_len:]))
+mape = np.mean(np.abs(df_test['Sales'] - df_preds.values[train_len:]) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'MA', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+
+### Subpart 3 - Autoregressive Moving Average (ARMA) Method
+
+
+We will now a fit an autoregressive moving average model to the training data and analyse its performance. We will use the *ARIMA* method from *statsmodels* to build the model.
+
+**Note:** The *ARIMA* method can also be used to implement other autoregressive models.
+
+
+The parameter of interest in the *ARIMA* method is the *order* parameter. It is a 3-tuple of the form $(p, d, q)$ with the default value as $(0, 0, 0)$.
+
+For the ARMA method, we will specify the first and the third values in this tuple. These are the $p$ and $q$ values or the lag orders obtained from the PACF and the ACF plots respectively.
+
+
+# Fit an ARMA model to the transformed training data with 'p = 9' and 'q = 1' and view its optimal parameter values
+# Note: ARIMA(9, 0, 1) = ARMA(9, 1)
+arma_model = ARIMA(endog = df_boxcox_diff, order = (9, 0, 1))
+arma_model = arma_model.fit()
+arma_model.params
+
+# Obtain predictions from the ARMA model for the testing data indices
+arma_model_preds = arma_model.predict(start = train_len, end = len(df) - 1)
+
+# Append the predictions with 'df_boxcox_diff' to prepare the data for inverse transformation
+df_boxcox_diff_preds = pd.concat(objs = [df_boxcox_diff, arma_model_preds], axis = 0)
+
+# Reverse the differencing transformation that was done on the data
+df_boxcox_preds = df_boxcox_diff_preds.cumsum()
+df_boxcox_preds = df_boxcox_preds.add(df_boxcox[0])
+
+# Reverse the Box-Cox transformation that was done on the data
+df_preds = np.exp(df_boxcox_preds)
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_preds.index[train_len:], y = df_preds.values[train_len:], marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_preds.values[train_len:]))
+mape = np.mean(np.abs(df_test['Sales'] - df_preds.values[train_len:]) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'ARMA', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+### Subpart 4 - Autoregressive Integrated Moving Average (ARIMA) Method
+
+We will now a fit an autoregressive integrated moving average model to the training data and analyse its performance. We will use the *ARIMA* method from *statsmodels* to build the model.
+
+**Note:** The *ARIMA* method can also be used to implement other autoregressive models.
+
+The parameter of interest in the *ARIMA* method is the *order* parameter. It is a 3-tuple of the form $(p, d, q)$ with the default value as $(0, 0, 0)$.
+
+For the ARIMA method, we will specify all the values in this tuple. The first and the third values are the $p$ and $q$ values or the lag orders obtained from the PACF and the ACF plots respectively. The second value in the tuple is $d$ or the differencing order which we shall set as $1$.
+
+# Fit an ARIMA model to the transformed training data with 'p = 9', 'd = 1' and 'q = 1' and view its optimal parameter values
+# Note: Since differencing is integrated into the ARIMA method, we will use 'df_boxcox' instead of 'df_boxcox_diff'
+arima_model = ARIMA(endog = df_boxcox, order = (9, 1, 1))
+arima_model = arima_model.fit()
+arima_model.params
+
+
+
+# Obtain predictions from the ARIMA model for the testing data indices
+arima_model_preds = arima_model.predict(start = train_len, end = len(df) - 1)
+
+
+# Append the predictions with 'df_boxcox' to prepare the data for inverse transformation
+df_boxcox_preds = pd.concat(objs = [df_boxcox, arima_model_preds], axis = 0)
+
+
+# Reverse the Box-Cox transformation that was done on the data
+df_preds = np.exp(df_boxcox_preds)
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_preds.index[train_len:], y = df_preds.values[train_len:], marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_preds.values[train_len:]))
+mape = np.mean(np.abs(df_test['Sales'] - df_preds.values[train_len:]) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'ARIMA', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+### Subpart 5 - Seasonal Autoregressive Integrated Moving Average (SARIMA) Method
+
+We will now a fit a seasonal autoregressive integrated moving average model to the training data and analyse its performance. We will use the *SARIMAX* method from *statsmodels* to build the model.
+
+Let's import the *SARIMAX* method from *statsmodels*.
+
+# Import 'SARIMAX' from 'statsmodels' for building autoregressive models
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+
+The parameters of interest in the *SARIMAX* method are the *order* and the *seasonal_order* parameters. The *order* parameter is a 3-tuple of the form $(p, d, q)$ with the default value as $(0, 0, 0)$ and the *seasonal_order* parameter is a 4-tuple of the form $(P, D, Q, m)$ with the default value as $(0, 0, 0, 0)$.
+
+For the SARIMA method, we will specify all the values in the two tuples.
+
+The *seasonal_order* parameter specifies the lag and difference orders for the seasonal component of the model, along with its period.
+
+# Fit a SARIMA model to the transformed training data with 'p = 9', 'd = 1' and 'q = 1' and view its optimal parameter values
+# Note: We know that the seasonality period in the data is 'm = 12'
+# Note: We will use 'P = 1', 'D = 1' and 'Q = 1', but you are free to experiment with other values
+# Note: Since differencing is integrated into the SARIMA method, we will use 'df_boxcox' instead of 'df_boxcox_diff'
+sarima_model = SARIMAX(endog = df_boxcox, order = (9, 1, 1), seasonal_order = (1, 1, 1, 12))
+sarima_model = sarima_model.fit()
+sarima_model.params
+
+# Obtain predictions from the SARIMA model for the testing data indices
+sarima_model_preds = sarima_model.predict(start = train_len, end = len(df) - 1)
+
+# Append the predictions with 'df_boxcox' to prepare the data for inverse transformation
+df_boxcox_preds = pd.concat(objs = [df_boxcox, sarima_model_preds], axis = 0)
+
+# Reverse the Box-Cox transformation that was done on the data
+df_preds = np.exp(df_boxcox_preds)
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_preds.index[train_len:], y = df_preds.values[train_len:], marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_preds.values[train_len:]))
+mape = np.mean(np.abs(df_test['Sales'] - df_preds.values[train_len:]) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'SARIMA', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+
+Python Demonstration: RNN for Time Series
+
+
+
+You built various autoregressive models and made predictions using them. You also compared the performance of these models. Out of the models that you built previously, we can say that the SARIMA model performed better than the other models. All these autoregressive models are designed specifically for time series forecasting. Let’s now build a model with which you are already familiar, an RNN model.
+
+ 
+
+You will now understand how to set up the data to build a simple RNN model using the superstore data set.
+
+00:00:00 - 00:00:22
+Introduction to Recurrent Neural Networks (RNNs)
+So welcome back. In this session, let us shift our focus to the deep learning by building a simple recurrent neural network. This approach is highly effective for the sequential data and allows us to compare the power of neural network against our best classical models that we explore right so here.
+00:00:22 - 00:00:52
+RNNs vs Feedforward Neural Networks
+Unlike the feedforward neural networks, these RNNS have a recurrent loop that passes the information from one time step to the next, giving them a memory for the sequence patterns. For this, we import the necessary essentially Kiras components where we need the sequential container and the core simple RNN layer which is our memory unit and the final dense layer for the output and the input to define the shape, right?
+00:00:53 - 00:01:29
+Data Preparation and Scaling for RNN
+So let us quickly prepare our data for this, where here in this function we are just scaling the time series data, right? There are a lot of other scaling methods that we can use but this is one of the way to just to scale the data. And then here we are creating the data instances where we are considering the input time series data. We are iterating through each and every time series data where starting from the first element of the input time series and we will stop at the first element of the last possible window, right?
+00:01:29 - 00:01:55
+Creating Data Instances for Time Series
+And then we will also using the window stride as a step size in the loop, right? So now at each iteration, we are extracting storing the current X window data points. And similarly we are also extracting and saving the Y values associated with the current X window. Right now, let us use the helper functions to create the training and testing data set for modelling.
+00:01:56 - 00:02:33
+Building Simple RNN Model
+So here we are scaling the training and the testing data. And then we are creating the data instances by passing my time series data along with the Windows size 10 and the Windows stride of one, right. So if you check the number of training data points, if you can see here, there are total 26 data points we have. And now we need to convert the training and the testing data into the numpy arrays. And if you see the dimensions of the training and testing data, it is like we have 26 data points with windows size of 10 and the stride of one with that. This is my shape of the input.
+00:02:33 - 00:03:00
+Adding Layers and Compiling RNN Model
+And if you see the shape of the training data out, it is similar to what we have in the data input right now. We are also we also want what is the input data shape for this data To frame the initial layer with this information, let us create the simple RNN here right? Which is used for the training data and evaluated in the testing data right?
+00:03:00 - 00:04:07
+Training the Simple RNN Model
+So to create a simple RNN for the data, we need to specify few of the elements like these are the myself config and I am using tan H as an activation function. Where here I am initializing the RNN model and specifying the input layer by using the input dimension shape that we were previously right. And now here we are adding the recurrent layers to the models where basically we are adding multiple simple RNN layers using, you know return sequence 2. This is for the intermediate layers. And then after adding the multiple recurrent layers, we are adding a final dense output layer with the linear activation, right? And then this network is compiled using the robust atom optimizer here. Now I have a setup for my simple RNN model. Let us fit the model and see the output of the model here, right. So here we pass the data points, we pass the corresponding labels and then we also sending the number of epochs that we want to run.
+00:04:07 - 00:05:01
+Predicting and Visualizing RNN Output
+So if you observe the output, the loss is decreasing for each and every epoch, meaning the model is learning right? Now once I fit the model, let's see the prediction input, right? So I'm passing my data and I'm getting the predictions out of it. So here I'm getting the prediction from the simple RNN for the testing data indices that we provide. And then the important step is to reverse the scaling transformation on the predictions, right? So then we need to provide also an N index to the this predicted values, right? So once I build the model, I fit the model, I got the predictions out of the model. Let us visualize how the predictions look like. So here on the test set that we have.
+00:05:02 - 00:06:04
+Evaluating RNN Performance and Metrics
+So if you observe the predictions, so these roughly follow the direction on the actual says, they tend to understate the magnitude of the increase and the volatility observed in the test data, right? Which indicating, you know a need for model that can better capture these dynamic sales moments, right? So now let us compute our matrix, which are RMSE and MAP. And if you remember our previous model, we explode from Arkansas to SARIMA in the previous session. And if you see with the simple RNN, so we got the RMSE of around, you know 27589, right? Which is not that best model then compared to the SARIMA here, right. So to conclude this, we successfully build and evaluate a simple RNN model which is completing our comprehensive time series.
+00:06:05 - 00:06:31
+Conclusion and Future Improvements for RNN
+And we have master methods for classical statistics like the ARIMA or SARIMA to model deep learning of an RNN, providing a complete and versatile toolbox for the forecasting, right? So as these results indicate that there is a need to improve a basic RNN to the complex RNN model to get the better performance or to decrease the RMS value.
+
+
+To apply an RNN to time series forecasting, the data was first prepared in a format suitable for neural networks. The time series was scaled to ensure numerical stability, and a sliding window approach was used to create input–output pairs, where past observations were used to predict future values. The dimensions of the resulting data were verified and stored for model construction.
+
+ 
+
+A simple RNN model was then built using recurrent layers followed by a dense output layer. The recurrent layers enabled the model to capture temporal dependencies in the data. The model was trained using the mean squared error loss and the Adam optimiser.
+
+ 
+
+After training, predictions were generated using a one-shot prediction approach, where the last input window from the training data was used to predict future values. These predictions were then transformed back to the original scale for interpretation.
+
+ 
+
+The one-shot prediction strategy was used for demonstration purposes. While effective for short-horizon forecasting, more complex architectures such as LSTM or GRU can be used to capture longer-term dependencies.
+
+ 
+
+Compared to traditional autoregressive models such as AR, MA, ARMA, and ARIMA, RNNs offered greater flexibility in learning complex temporal patterns. However, they were not treated as a replacement for classical time series methods, and were most effective when used alongside traditional analysis and domain knowledge.
+
+ 
+
+With this, the construction of forecasting models using RNNs was completed.
+
+ 
+
+Next, you will learn about confidence and prediction intervals in time series.
+
+# Part 6 - Recurrent Neural Networks
+In this part of the demonstration, we will fit a simple RNN model to the data and analyse its performance using RMSE and MAPE values.
+
+# Import methods for building and training neural networks
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Dense, SimpleRNN
+from tensorflow.keras.optimizers import Adam
+
+### Subpart 1 - Data Preparation
+
+We will begin by preparing the time series data so that it is ready for modelling using neural networks. We will define some helper functions that will help in executing the data preparation.
+
+# Define a function that scales the time series variable
+# Note: Other scaling methods may be used as well
+def scale_data(time_series = None, scaling_parameter = 1):
+
+    # Scale the time series by a scalar value
+    scaled_time_series = time_series / scaling_parameter
+
+    return(scaled_time_series)
+
+# Define a function to create input and output data points from the training data
+# Note: Controllable parameters here are 'window_size' and 'window_stride'
+def create_data_instances(time_series = None,
+                          window_size = 1,
+                          window_stride = 1):
+
+    # Create lists for storing the windowed data
+    X_train_data = []
+    y_train_data = []
+
+    # Iterate through the input time series data
+    # Start from the first element of the input time series and stop at the first element of the last possible window
+    # Use 'window_stride' as the step size in the loop
+    for i in np.arange(0, len(time_series) - window_size - len(df_test), window_stride):
+
+        # Extract and store the current X window
+        data_point = time_series.iloc[(i):(i + window_size)]
+        X_train_data.append(data_point)
+
+        # Extract and store the y value(s) associated with the current X window
+        y_val = time_series.iloc[(i + window_size):(i + window_size + len(df_test))]
+        y_train_data.append(y_val)
+
+    return X_train_data, y_train_data
+
+We will now use the helper functions to create the training and testing data sets for modelling using neural networks.
+
+# Scale the training and testing data
+scale_value = 10**5
+df_train_scaled = scale_data(time_series = df_train, scaling_parameter = scale_value)
+df_test_scaled = scale_data(time_series = df_test, scaling_parameter = scale_value)
+
+# Create data instances from the training data using a window size of 10 and a window stride of 1
+window_size = 10
+window_stride = 1
+
+X_train, y_train = create_data_instances(time_series = df_train_scaled,
+                                         window_size = window_size,
+                                         window_stride = window_stride)
+
+# Check the number of data points generated
+print('Number of training data points generated = {}'.format(len(y_train)))
+
+# Convert the training and testing data into numpy arrays
+X_train = np.array(X_train)
+y_train = np.array(y_train)
+y_test = np.array(df_test_scaled)
+
+# Check the dimensions of the training and testing data
+print('Shape of training data input = {}'.format(X_train.shape))
+print('Shape of training data output = {}'.format(y_train.shape))
+
+
+# Store input data shape for RNNs, LSTM networks and GRU networks
+inputdims = (X_train.shape[1], X_train.shape[2])
+
+### Subpart 2 - Simple RNN
+
+# Create a simple RNN model for the data and specify its architecture
+cells_config = [2, 4, 8, 16, 32]
+n_rnn = len(cells_config)
+rnn_activation = 'tanh'
+
+# Initialise the RNN model and specify the input layer
+rnn = Sequential()
+rnn.add(Input(shape = inputdims))
+
+# Add recurrent layers to the model
+for i in np.arange(0, n_rnn - 1, 1):
+    rnn.add(SimpleRNN(units = cells_config[i],
+                      return_sequences = True,
+                      activation = rnn_activation))
+
+# Add the final recurrent layer
+rnn.add(SimpleRNN(units = cells_config[n_rnn - 1],
+                  return_sequences = False,
+                  activation = rnn_activation))
+
+# Add the output layer
+rnn.add(Dense(units = len(df_test),
+              activation = 'linear'))
+
+# Compile the network
+rnn.compile(loss = 'mean_squared_error',
+            optimizer = Adam(learning_rate = 0.01))
+
+# Train the model
+rnn.fit(X_train, y_train, epochs = 25)
+
+
+
+# Define the prediction input window for the simple RNN model
+pred_input = np.array(df_train_scaled[(len(df_train) - window_size):])
+pred_input = np.transpose(pred_input, (1, 0))
+
+# Obtain predictions from the simple RNN model for the testing data indices
+preds = rnn.predict(pred_input)
+
+# Reverse the scaling transformation on the predictions
+preds = preds[0] * scale_value
+
+# Provide an index to the predicted values
+df_rnn_preds = pd.Series(data = preds, index = df_preds.index[train_len:])
+
+# Plot the time series data with the train-test split and the testing data predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+sns.lineplot(x = df_rnn_preds.index, y = df_rnn_preds.values, marker = 'o', color = 'purple', label = 'Predictions')
+plt.title('Sales Data');
+
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = df_rnn_preds.values))
+mape = np.mean(np.abs(df_test['Sales'] - df_rnn_preds.values) / df_test['Sales'] * 100)
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Simple RNN', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+Confidence Interval and Prediction Interval in Time Series
+
+
+You will now learn about confidence intervals and prediction intervals in time series. These intervals help quantify uncertainty in forecasts and provide a more realistic range of possible future outcomes, especially as we forecast further into the future. Understanding these intervals is essential for interpreting model outputs correctly and for making informed, risk-aware decisions based on time series forecasts.
+
+
+
+00:00:00 - 00:02:35
+Understanding Confidence and Prediction Intervals in Time Series
+We will now come to the confidence and prediction intervals in time series. This is a confidence interval shows uncertainty in the mean behavior of the time series and reflects model parameter uncertainty. It's important a prediction interval shows the uncertainty in the actual future value of the series and include more model uncertainty and the new random shock at each step. So as we forecast ahead, uncertainty measures accumulate step by step causing Pis to expand with horizon. Let us see if you see in this case, this is the confidence interval. So this is the forecast, the forecast, which means it. What I mean to say is. So if it is, if the forecast is let us say it is, it can let us say this is at 1 is at 95% confidence interval, other one is 90% confidence, 10% and 5% confidence interval. So what it means is my prediction can have the range of values from here to here which means this is a confidence interval. This is a larger confidence. With 95% confidence I will have a strong band. It can have only these value. When I say 8090% confidence, this is this is 95% confidence interval and this is a 90% confidence which means I can have more range of values. My prediction can have more range of values when depending on the confidence interval. So it means so. So the range of values can change which means let us say this is oil in millions. It can have my I can say with 95% confidence, I can say this is my prediction. You can have these random values with 95, which means the confidence interval reduces. More set of values that you can have is very important. Another important thing is this is the forecast for year, right? The confidence will be lower. Basically my confidence on the forecast will reduce as the the time steps increase. The two things, what are the range based on confidence interval? What is the range of values I can have otherwise as my forecast? This becomes like a cone. If you see my confidence and the immediate next year is good, this is the variance. And then when I go 2 years I had, three years I had four years I had. So it means the range of values can change. Basically my confidence on my immediate next step is higher when compared to the subsequent next steps. This is an important understanding of the confidence and prediction intervals in time series.
+
+
+ 
+
+You learnt how uncertainty is quantified in time series forecasting:
+
+ 
+
+Confidence intervals (CI) capture uncertainty in the estimated mean of the process. They arise from uncertainty in model parameters such as level, trend, and seasonality.
+ 
+Prediction intervals (PI) capture uncertainty in future observations. They include:
+model uncertainty, and
+random shocks that affect future values.
+ 
+Prediction intervals are always wider than confidence intervals, since they account for more sources of variability.
+ 
+As forecasts move further ahead in time, uncertainty accumulates, causing prediction intervals to expand with the forecast horizon.
+ 
+Using intervals alongside point forecasts provides a more realistic picture of future behaviour and supports better risk-aware forecasting decisions.
+
+ 
+
+Next, we will summarise your learnings from this session.
+
+Yes. This topic is much easier if we separate **three things**:
+
+1. **Forecast** → our best single guess
+2. **Confidence Interval (CI)** → uncertainty about the **estimated mean**
+3. **Prediction Interval (PI)** → uncertainty about the **actual future observation**
+
+The lecture's main distinction is exactly this: CI reflects uncertainty in the estimated mean/model parameters, while PI also includes the random shock that can affect the actual future observation.
+
+---
+
+# 1. Start with a simple example
+
+Suppose we forecast monthly sales.
+
+Our model says:
+
+> **Next month's expected sales = ₹100 lakh**
+
+So:
+
+```text
+Point forecast = ₹100 lakh
+```
+
+But ₹100 lakh is only our **best estimate**.
+
+The actual sales could be:
+
+```text
+₹92 lakh
+₹97 lakh
+₹103 lakh
+₹110 lakh
+...
+```
+
+So we need a way to describe the uncertainty.
+
+That's where intervals come in.
+
+---
+
+# 2. Point Forecast
+
+First understand this:
+
+```text
+                 Forecast
+                    ↓
+                   ₹100L
+                    |
+                    |
+--------------------●--------------------
+```
+
+The dot is our **point forecast**.
+
+It means:
+
+> "Based on the model, ₹100 lakh is our best single estimate."
+
+But it doesn't tell us how uncertain that estimate is.
+
+---
+
+# 3. Confidence Interval — CI
+
+A **confidence interval** is concerned with uncertainty around the **estimated mean/expected value**.
+
+Suppose:
+
+```text
+Forecast = ₹100 lakh
+95% CI = ₹96 lakh to ₹104 lakh
+```
+
+Conceptually:
+
+```text
+₹96L             ₹100L             ₹104L
+ |----------------●-----------------|
+          95% Confidence
+```
+
+The interval tells us about uncertainty in the **mean forecast**.
+
+Your course describes CI as capturing uncertainty in the estimated mean of the process, arising from uncertainty in model parameters such as level, trend and seasonality.
+
+---
+
+# 4. Prediction Interval — PI
+
+Now suppose we want to know:
+
+> **"What could the actual sales next month be?"**
+
+That's different.
+
+Actual sales are affected not only by uncertainty in our model but also by **random shocks**.
+
+For example:
+
+* unexpected demand
+* supply problem
+* competitor promotion
+* weather
+* random customer behavior
+
+So our prediction interval might be:
+
+```text
+Forecast = ₹100 lakh
+
+95% PI = ₹88 lakh to ₹112 lakh
+```
+
+Visually:
+
+```text
+₹88L                       ₹100L                       ₹112L
+ |---------------------------●---------------------------|
+                  95% Prediction Interval
+```
+
+Notice that it is wider.
+
+---
+
+# 5. The BIG difference
+
+This is the most important thing to remember:
+
+### Confidence Interval
+
+> **Where is the true mean/expected value likely to be?**
+
+### Prediction Interval
+
+> **Where could the actual future observation be?**
+
+Think:
+
+```text
+CI → uncertainty about the MODEL'S MEAN
+PI → uncertainty about the ACTUAL FUTURE VALUE
+```
+
+---
+
+# 6. Why is Prediction Interval wider?
+
+This is extremely important.
+
+Suppose:
+
+```text
+Model uncertainty = ±4
+Random future variation = ±8
+```
+
+For the mean forecast, we mainly care about model uncertainty.
+
+So:
+
+```text
+CI ≈ ±4
+```
+
+But an actual future observation has:
+
+```text
+Model uncertainty
+        +
+Random shock
+```
+
+Therefore:
+
+```text
+PI > CI
+```
+
+Your course explicitly states:
+
+> **Prediction intervals are always wider than confidence intervals**, because they account for more sources of variability.
+
+So remember:
+
+```text
+CI
+ |---------|
+ 
+PI
+ |-------------------|
+```
+
+---
+
+# 7. A real-life analogy
+
+Imagine a teacher predicts the **average marks** of a class.
+
+She says:
+
+> Expected average = 70
+
+There is uncertainty around that estimated average.
+
+That's similar to a:
+
+**Confidence Interval**
+
+But now ask:
+
+> "What score will one particular student get?"
+
+That individual student's score can vary much more.
+
+That's similar to a:
+
+**Prediction Interval**
+
+So:
+
+```text
+Mean/average → CI
+Individual future observation → PI
+```
+
+---
+
+# 8. Now let's understand the "cone"
+
+Your lecture repeatedly mentions that uncertainty increases as we forecast further into the future.
+
+Suppose:
+
+```text
+Today
+  |
+  |──── Next month
+  |
+  |──── 2 months
+  |
+  |──── 3 months
+  |
+  |──── 4 months
+```
+
+The further we go, the more uncertain we become.
+
+Imagine:
+
+```text
+Sales
+ ^
+ |                         /\
+ |                       /    \
+ |                    /          \
+ |                 /                \
+ |              /                    \
+ |-----------●------------------------→ Time
+             1    2    3    4    5
+             months into future
+```
+
+This is the **forecast cone** idea.
+
+Near-term forecast:
+
+```text
+Less uncertainty
+```
+
+Long-term forecast:
+
+```text
+More uncertainty
+```
+
+---
+
+# 9. Why does uncertainty increase?
+
+Imagine predicting tomorrow's sales.
+
+You have reasonably recent information:
+
+```text
+Today → Tomorrow
+```
+
+There is some uncertainty.
+
+Now predict six months from now:
+
+```text
+Today
+ ↓
+Tomorrow
+ ↓
+Next day
+ ↓
+...
+ ↓
+6 months
+```
+
+At every step, new uncertainty can enter.
+
+The errors accumulate.
+
+Therefore:
+
+$$
+\text{Forecast horizon} \uparrow
+$$
+
+usually means:
+
+$$
+\text{Uncertainty} \uparrow
+$$
+
+and therefore:
+
+$$
+\text{Prediction Interval Width} \uparrow
+$$
+
+---
+
+# 10. Think of it like weather forecasting
+
+Suppose:
+
+### Tomorrow
+
+```text
+Temperature = 30°C
+95% PI = 27–33°C
+```
+
+Reasonably narrow.
+
+### 10 days from now
+
+```text
+Temperature = 31°C
+95% PI = 23–39°C
+```
+
+Much wider.
+
+Why?
+
+Because there are more opportunities for uncertainty to accumulate.
+
+Time-series forecasting behaves similarly.
+
+---
+
+# 11. CI also changes with forecast horizon
+
+Your lecture says confidence decreases as we go further into the future.
+
+The important practical idea is:
+
+```text
+Near future
+     ↓
+More information
+     ↓
+Narrower uncertainty
+```
+
+and:
+
+```text
+Far future
+     ↓
+More uncertainty
+     ↓
+Wider interval
+```
+
+For prediction intervals, this widening is especially important because they include future random shocks.
+
+---
+
+# 12. Let's put everything together
+
+Suppose our forecast is:
+
+```text
+Month 1 = ₹100L
+Month 2 = ₹105L
+Month 3 = ₹110L
+Month 4 = ₹115L
+```
+
+We might have:
+
+| Month | Forecast |  95% CI | 95% PI |
+| ----- | -------: | ------: | -----: |
+| 1     |    ₹100L |  96–104 | 90–110 |
+| 2     |    ₹105L | 100–110 | 93–117 |
+| 3     |    ₹110L | 104–116 | 95–125 |
+| 4     |    ₹115L | 107–123 | 97–133 |
+
+Notice two things:
+
+### First:
+
+```text
+PI wider than CI
+```
+
+### Second:
+
+As we go further:
+
+```text
+Month 1 → narrower
+Month 2 → wider
+Month 3 → wider
+Month 4 → wider
+```
+
+That's exactly the **expanding cone** described in your lecture.
+
+---
+
+# 13. One subtle point about "95% confidence"
+
+Be careful with the wording.
+
+People often say:
+
+> "There is a 95% probability that the future value will fall inside the 95% confidence interval."
+
+That's not the best way to describe a **confidence interval for a parameter/mean**.
+
+For your course level, remember:
+
+### CI
+
+Used to quantify uncertainty around the **estimated mean/process**.
+
+### PI
+
+Used to quantify uncertainty around the **actual future observation**.
+
+For forecasting, the PI is usually the interval you care about when asking:
+
+> "What range could the actual future value fall into?"
+
+---
+
+# 14. Why do we need intervals at all?
+
+Suppose two models both give:
+
+```text
+Forecast = ₹100 crore
+```
+
+If you only look at the point forecast, they look identical.
+
+But:
+
+### Model A
+
+```text
+₹98–₹102 crore
+```
+
+### Model B
+
+```text
+₹70–₹130 crore
+```
+
+These forecasts have very different uncertainty.
+
+So a point forecast alone doesn't tell the complete story.
+
+That's why your lecture says:
+
+> Using intervals alongside point forecasts gives a more realistic picture of future behaviour and supports risk-aware forecasting.
+
+---
+
+# 15. Very important exam question
+
+### Q: Which is wider — CI or PI?
+
+**Answer:**
+
+$$
+\boxed{PI > CI}
+$$
+
+because PI includes:
+
+```text
+Model uncertainty
++
+Random future shock
+```
+
+while CI focuses on uncertainty around the estimated mean.
+
+---
+
+# 16. Another exam question
+
+### Q: Why does the prediction interval become wider as forecast horizon increases?
+
+Answer:
+
+> Because uncertainty accumulates as we forecast further into the future. Each future step can introduce additional uncertainty/random shocks, causing the prediction interval to expand.
+
+---
+
+# 17. Don't confuse these three
+
+This is the easiest mental model:
+
+```text
+                  TIME SERIES FORECAST
+                          |
+                          ↓
+                  Point Forecast
+                    "Best guess"
+                          |
+             ┌────────────┴────────────┐
+             ↓                         ↓
+            CI                        PI
+             ↓                         ↓
+      Mean/expected value       Actual future value
+             ↓                         ↓
+       Model uncertainty       Model uncertainty
+                                      +
+                                Random shocks
+```
+
+Therefore:
+
+```text
+Point Forecast → What is our best estimate?
+
+Confidence Interval → How uncertain are we about the mean?
+
+Prediction Interval → How much could the actual future value vary?
+```
+
+---
+
+# 18. ⭐ Exam cheat sheet
+
+| Concept                  | Remember                                          |
+| ------------------------ | ------------------------------------------------- |
+| **Point forecast**       | Single best estimate                              |
+| **Confidence Interval**  | Uncertainty around estimated mean                 |
+| **Prediction Interval**  | Uncertainty around actual future observation      |
+| **CI width**             | Generally narrower                                |
+| **PI width**             | Generally wider                                   |
+| **Why PI wider?**        | Includes random future shocks + model uncertainty |
+| **As horizon increases** | Uncertainty increases                             |
+| **Shape**                | Intervals generally expand like a cone            |
+| **95% interval**         | Wider than 90% interval                           |
+| **90% interval**         | Narrower than 95% interval                        |
+
+### One-line memory trick:
+
+> **CI = “How uncertain is my estimated average?”**
+> **PI = “How much can the actual future value jump around?”**
+
+And the most important relationship:
+
+$$
+\boxed{\text{Confidence Interval} < \text{Prediction Interval}}
+$$
+
+in width, because **prediction intervals include both model uncertainty and future random variation**.
+
+
+Session Summary
+
+In this session, you brought together all previous concepts to build and understand autoregressive forecasting models. You learnt how Autoregressive (AR) and Moving Average (MA) models work individually and how they are combined into ARMA models.
+
+ 
+
+You extended these ideas to ARIMA models to handle non-stationarity and SARIMA models to incorporate seasonality. You also learnt how confidence intervals and prediction intervals are used to quantify uncertainty in time series forecasts.
+
+ 
+
+By the end of the session, you had a clear understanding of the autoregressive model family and how these models are applied to real-world time series data.
+
+ 
+
+Next, we will summarise your learnings from this module.
+
+
+Module Summary
+
+
+
+In this module, you explored how data that evolves over time can be analysed and modelled for forecasting. You began by understanding what makes time series data unique and why temporal order plays a crucial role in analysis.
+
+ 
+
+You learnt how time series patterns can be identified and represented using simple models. You then progressed to exponential smoothing methods, where recent observations are weighted more heavily to adapt to changes in the data.
+
+ 
+
+The module also introduced the foundations of autoregressive modelling, including stationarity, lag, and autocorrelation. You learnt how these concepts enable the construction of structured forecasting models such as AR, MA, ARMA, ARIMA, and SARIMA.
+
+ 
+
+By the end of this module, you developed a comprehensive understanding of how time series data can be prepared, smoothed, modelled, and evaluated to generate reliable forecasts, along with an appreciation of the uncertainty inherent in future predictions.
+
+ 
+
+Next, you will answer a few graded questions based on this module to assess your understanding.
+
+Comprehension
+
+In this module, you have acquired knowledge and skills in various autoregressive time series modelling techniques. Now, it's time for you to apply what you've learned to tackle a real-world problem.
+
+ 
+
+NOTE: You have been provided with the dataset and a starter notebook at the end of this page. Use the AirPassengers dataset to work through the notebook by following all the given instructions step by step. Complete the analysis as outlined, and then attempt the questions based on the results and outputs you obtain from the notebook.
+
+ 
+
+An airline company has gathered extensive historical data on passenger counts throughout the years. Their goal is to predict future passenger counts accurately. This prediction is crucial for the company's budgeting and resource management processes, allowing them to plan ahead and meet future demands effectively.
+
+ 
+
+The main objective of this exercise is to utilise the available historical data to forecast future passenger counts. By analysing these forecasts effectively, the airline company can strategically allocate resources and optimise its budgeting processes. This will ensure smooth operations and enable them to meet customer demands efficiently.
+
+ 
+
+You have been given a data set that includes monthly passenger count data for an airline company from 1949 to 1960. The dataset consists of the following attributes.
+
+ 
+
+Attributes	Description
+Month	The month for which passenger count was recorded (in yyyy-mm format)
+Passengers	Number of air passengers in a particular month
+ 
+
+To assist you in solving this problem, we have prepared an exercise notebook that will guide you through the necessary steps and processes. Here is a list of tasks you need to follow:
+
+Prepare the data for time series modelling
+
+Forecast passenger count using the following models:
+
+Linear regression
+
+Naïve 
+
+Simple average
+
+Simple moving average
+
+Simple exponential smoothing
+
+Holt Exponential
+
+Holt-Winters’ additive
+
+Holt-Winters’ multiplicative
+
+AR
+
+MA
+
+ARMA
+
+ARIMA
+
+SARIMA
+
+ 
+
+You will analyse the performance of these models using root mean squared error (RMSE) and mean absolute percentage error (MAPE).
+
+ 
+
+We have divided the exercise notebook into four parts:
+
+In the first part, you will prepare the data set and ensure that it is ready for time series modelling.
+ 
+
+In the second part, you will train and evaluate the following simple time series models:
+
+Linear regression
+
+Naïve 
+
+Simple average 
+
+Simple moving average
+ 
+
+In the third part, you will train and evaluate the following exponential smoothing models:
+
+Simple exponential smoothing
+
+Holt’s exponential smoothing
+
+Holt-Winters’ exponential smoothing
+
+Additive
+
+Multiplicative
+ 
+
+In the fourth part, you will train and evaluate the following autoregressive models:
+
+AR
+
+MA
+
+ARMA
+
+ARIMA
+
+SARIMA
+
+ 
+Please download the ZIP file provided below, which contains the dataset and the starter notebook needed to complete the upcoming graded questions.
+

@@ -1,0 +1,2134 @@
+Session Overview
+
+Welcome to the session ‘Exponential Smoothing Models’.
+
+ 
+
+In this session, you will explore a class of forecasting techniques that assign different weights to past observations, giving more importance to recent values.
+
+ 
+
+Now, Professor Ramesh will explain this.
+
+00:00:06 - 00:00:43
+Introduction to Exponential Smoothing Models
+Welcome to the session on Exponential smoothing models. In this session we will move from simple time series models to a different class of forecasting techniques, exponential smoothing. We will see how recently past and past samples impact the forecast and learn how to factor these into art model. We will begin with an introduction to exponential smoothing, understanding its main idea, assigning exponentially decreasing weights to past data.
+00:00:44 - 00:01:08
+Main Idea of Exponential Smoothing
+You will see how this makes forecasts more responsive to recent changes while still accounting for historical patterns. Then we will explore different exponential smoothing models such as Simple Exponential Smoothing, SES Halt's Exponential smoothing, and Halt Winters Exponential smoothing.
+00:01:09 - 00:01:28
+Exploring Different Exponential Smoothing Models
+These models extend the course smoothing principle by incorporating different combinations of level, trend and seasonality, with Halt Winters being specifically used for time series exhibiting periodic patterns such as monthly sales Oregon quarterly demand.
+00:01:29 - 00:01:39
+Application of Exponential Smoothing Models
+By the end of this session you will know how to select and apply the right exponential model depending on the nature of the time series.
+
+
+In this session, you will:
+
+Understand the core idea behind exponential smoothing and weighted forecasting
+
+Learn how Simple Exponential Smoothing models level in a time series
+
+Explore Holt’s method for modelling trend and Holt–Winters’ method for modelling seasonality
+
+Understand how smoothing parameters influence forecasts and how they are determined
+
+ 
+
+By the end of this session, you will know how to select and apply exponential smoothing models based on the structure of a time series.
+
+00:00:06 - 00:00:43
+Introduction to Exponential Smoothing Models
+Welcome to the session on Exponential smoothing models. In this session we will move from simple time series models to a different class of forecasting techniques, exponential smoothing. We will see how recently past and past samples impact the forecast and learn how to factor these into art model. We will begin with an introduction to exponential smoothing, understanding its main idea, assigning exponentially decreasing weights to past data.
+00:00:44 - 00:01:08
+Main Idea of Exponential Smoothing
+You will see how this makes forecasts more responsive to recent changes while still accounting for historical patterns. Then we will explore different exponential smoothing models such as Simple Exponential Smoothing, SES Halt's Exponential smoothing, and Halt Winters Exponential smoothing.
+00:01:09 - 00:01:28
+Exploring Different Exponential Smoothing Models
+These models extend the course smoothing principle by incorporating different combinations of level, trend and seasonality, with Halt Winters being specifically used for time series exhibiting periodic patterns such as monthly sales Oregon quarterly demand.
+00:01:29 - 00:01:39
+Application of Exponential Smoothing Models
+By the end of this session you will know how to select and apply the right exponential model depending on the nature of the time series.
+
+
+In this session, you will:
+
+Understand the core idea behind exponential smoothing and weighted forecasting
+
+Learn how Simple Exponential Smoothing models level in a time series
+
+Explore Holt’s method for modelling trend and Holt–Winters’ method for modelling seasonality
+
+Understand how smoothing parameters influence forecasts and how they are determined
+
+ 
+
+By the end of this session, you will know how to select and apply exponential smoothing models based on the structure of a time series.
+
+Simple Exponential Smoothing
+
+
+In the previous session, you learnt how to build simple forecasting models such as the naïve model, the simple average model, and the simple moving average model. In all these models, past values influence future forecasts, but the way this influence is handled is quite limited.
+
+ 
+
+In the naïve model, only the most recent value is used. In the simple average model, all historical values are given equal importance. In the simple moving average model, a fixed number of recent values are considered, but each value in the window still receives equal weight. This raises an important question: should all past values influence future forecasts equally?
+
+ 
+
+Let's consider monthly sales data for a company over several years. While older sales values may have some influence, more recent sales are usually more relevant for predicting future values. This pattern is common in many real-world time series datasets. To capture this behaviour, we need models that assign more weight to recent values and less weight to older ones. Exponential smoothing provides a way to do this.
+
+ 
+
+You will now learn about exponential smoothing models, and the move on to Simple Exponential Smoothing.
+
+00:00:00 - 00:00:07
+Introduction to Time Series Models
+So we will look at simple exponential smoothing before getting into this time series models.
+00:00:07 - 00:00:39
+Deterministic vs. Mathematical Models in Time Series
+We will have the intuitive understanding of the motivation between these class of models. We have simple models and then we have a smoothing models. We have and then we have autoregressive models. Why do we need all of this? So if you see time series is not determine, we cannot have a deterministic times equation for a time series. Let us say for example, if I have a straight line like this, I can say or a straight line like let us say like this, we accept 2.
+00:00:40 - 00:02:02
+Smoothing and Autoregressive Models Overview
+I can say Y is equal to two X + 3. So this would be a deterministic solution. We cannot have a deterministic solution. What do we mean? That is, I have a time series like this. I cannot write an equation which will define this curve. Actually that would have been a deterministic solution. So what is the next best that is possible? We will try to model them as some math models. We have smoothing models. These are all math models. We will try to formulate the time series as these problems. So these are very simple models. We have discussed linear regression, simple average. So since we cannot have a deterministic model for a time series, it is we have to find the math models that align closely with this type of characteristics. So in this case of smoothing model, we will try to have this models where we apply smoothing techniques where we will able to describe the nature of this time series. And then in the case of autoregressive models, again this comes from Indiana. This case we are trying to model the time series as a random process. We'll try to model the series as a random process and we'll see how we will make a problem formulation as a random process and how we will be able to do the prediction. Now we will look at exponential smoothing models.
+00:02:03 - 00:03:00
+Exponential Smoothing Model Components
+Exponential smoothing models aim to capture the following components of a time series. It will capture the level, trend and seasonality. So level is represented by L cap T Basically cap or hat means prediction one. To this, there is a smoothing parameter alpha here and the trend is P cap T Smoothing parameter is beta here and seasonality is captured by South cap T smoothing parameters is captured by gamma. So each of these components is computed as a weighted average of previous values. So we look at how these are used. Basically it gives the level. The level at time T and trend at time T is a function of the previous values under prediction. So these are the previous predictions. And all of these parameters are alpha, beta and gamma. So they are in the range of 0 to one. We will end is a seasonal.
+00:03:00 - 00:04:29
+Simple Exponential Smoothing Method Characteristics
+For example, if it is a monthly seasonality will be 12, quarterly it will be 4 and things like that. We will look about the details of this in the subsequent models. So we will now look at smoothing models. We will look at simple exponential smoothing method in in simple exponential smoothing method are used when there is no trend and there is no seasonality. And this is where I want to emphasize the fact that we should be able to characterize the time series very well because based on the characteristics of time series, we will be able to come up with the most suitable exponential smoothing model. In the case of simple exponential smoothing model, there is no trend and there is no seasonality. So if you see this would be have a constant level, this would be a constant level and there is no seasonality here. For such methods, a simple exponential smoothing method is suggested. So the data fluctuates. In the case of simple exponential smoothing, the data fluctuates randomly around a constant meaner level. The model assume the future level will be the current smooth level. Example would be a demand for a stable mature product where sales are consistent year round. So how do we model such series? We will see. We have seen in the case of Nye method we use only the most recent observation all weight on the last data point.
+00:04:30 - 00:05:45
+Weight Assignment in Exponential Smoothing
+We will consider this as a random work process and in the case of simple average uses an average of all the past values which equal weight on every observation. So this is 2 extremes. We will just pick up the last value as a predicted value and we will take average of all the samples. So these are not 2 depictions of the time series. A better method would be a simple exponential sporting where if you assign more weight to the recent observation and less weight to the order, in this case, invariably in time series, the time series will have similar to the previous samples than very past previous samples. So we use that premise to assign more weights to recent observation and less weight to older ones. So how do we do that? There is an elegant method of doing that. We will see that ACS produce forecast using a smooth value that upgrades gradually as the new data arrives. So you can see here ACS simple exponential smoothing can be written as a weighted average of all past observation where the weights are largest for most recent data points and declines smoothly and exponentially as we go back in time.
+00:05:45 - 00:06:39
+Smoothing Parameter and Forecast Responsiveness
+Which means the previous samples previous samples will have for higher value. Let us say we have alpha is equal to. Let us say point for example 0.8 or something. We look at an example. So this will be 0.8. This will be 0.8 into one minus 0.8, this is 0.8 into 0.2 and so on. So this is the power it will exponentially reduce as the we go back into the time samples. The smoothing parameter controls how responsive the model is. So larger alpha forecast respond more quickly to recent changes, which means it will respond quickly to these changes and smaller alpha forecast because smoother rely on past values. Basically, again you can choose alpha saying that only only this portion of my samples are important or you want to include all of these samples. Basically you can.
+00:06:39 - 00:07:13
+Generalized Weighted Average Expression
+This is a throttling parameter which we define how how far back the weights you need to characterize the time series. So in this case exponential smoothing. So we have alpha into Y of T this is a generic equation plus alpha into one minus alpha into Y of t -, 1 T -2 and so on. So let us look at a very small example. Let us say this is this would this sample, let us say if it is 0.8 as I mentioned, this will become 0.8, this will become alpha into basically 0.8 into one minus 0.8.
+00:07:13 - 00:08:13
+Simple Exponential Smoothing Model Equation
+This will become 0.8 into 0.2 and this will become oh .8 into 1 minus oh point 8 the whole square. So basically this is a decimal power of the decimal will diminish the value. So basically so you can see that the weights keep keeps on reducing share it keeps on reducing as we go back in time. Every pass observation contributes the forecast with decreasing influence. What do decreasing influence or other ways we saying that the value of this weights reduces as we go back in time? Then there is only one parameter alpha which can take the value zero to 1. Determines how quickly the weights decay. So alpha is equal to 1. Forecast is last observation. This is naive method. What does it mean if I substitute alpha is equal to 1 here? This becomes alpha into Y of T plus alpha into 1 -, 1 This is 0 which means all of this becomes 0 which means this is the Y of t + 1.
+00:08:14 - 00:09:19
+Forecasting vs. Prediction in Time Series
+Is alpha Y of T This is the previous sample only. OK so alpha is equal to 0 means very slow moving average long term memory. Basically if you say alpha is equal to 0, so which means this will have 1 -, 0. Basically this will also have more number of samples. Here if you take an example where is alpha is equal to, it will be very slow moving average. It has very long term memory actually. OK. So if you want to generalize the weighted average expression, this will be J is equal to 0 to t -, 1. So this is t + 1. The next sample given T so this is alpha into one minus alpha power J. So this is J this is the power. With this power front we can go from 01 to up till J. So as the this is summation, this is a generalized equation of this equation. So as we as J increases the weights keeps on reducing exponentially. This is simple exponential smoothing model. Now simple exponential smoothing we will look at.
+00:09:19 - 00:10:30
+Example Calculation of Forecast with Alpha
+We will slowly do simple exponential smoothing where level, trend and seasonality are considered. In this case, simple exponential smoothing is proposed method Y cap t + 1 subscript t + 1 is level. This is the level at that level T So how is level T level at T computed? This is alpha into Y of t + 1 minus alpha into L of t -, 1. This is the level in the previous time stamp and this is Y of T This is a previous prediction. As we mentioned, it is a function of the previous prediction and the previous level trend of seasonality. In this case, we are considering simple exponential smoothing with just the level component taken care. So this L1 will become L1 cap is equal to Y one. This is the initialized value. So this becomes Y of t + 1 becomes the smooth value of level T. Here mathematically saying Y cap subscript d + 1 is predicted value made at time T for the next period. So let us say you have this until time T so you want to do the forecast.
+00:10:30 - 00:11:02
+Recursive Forecast Building Process
+So again there is the difference between prediction and forecast. They are interchangeably used. I want to discuss about the difference between prediction and forecast. Prediction is again you need, you do in linear regression, you do prediction. Basically you try to look at prediction for an unseen sample. You try to do prediction. Forecast is basically extrapolation. So prediction. Forecast is also a prediction. But prediction is not a forecast. We have to understand that part.
+00:11:03 - 00:12:05
+Error Analysis in Forecasting
+So most appropriate word term in time series forecasting is forecast as the name itself suggests is time series forecast. It is a prediction OK, but more operative word is forecast. So we said this forecasted value predicted value of forecasted value in this case L1 cap is Y. So this is a simple exponential smoothing model. So we will take an example here with alpha is equal to 0.2 and see how to compute the forecast here. In this case, the first prediction is L1 cap is equal to Y one. This is initialized value 26 and then Y2 is equal to L1 cap is the same. So this is 26 is the initialized value. The next one would be Y-3. The prediction value Y-3 cap is L2 cap. L2 cap is again alpha into Y of two. So this is oh point 2 + y of two one minus alpha into one minus 0.1. This is this is this value here the previous value.
+00:12:05 - 00:13:07
+Limitations of Simple Exponential Smoothing
+We are trying to predict this One South, we want to predict this one. This is the previous prediction and the previous level 1 minus oh point 2 into 26. If you see the primary parameters here is alpha the previous value and the previous level. So this is 1 minus 0.2. Basically, this is 1 minus alpha into basically this is the previous level actually. So this is this is previous Y of T previous time sample. This is a previous level and alpha. So this is this is going to be 22.4. You recursively build this similarly, Y 4 is equal to L3L3 is again 22.4 here we have used 22.4 here and alpha is 0.21 minus alpha is this one and this 22.4 And then previous prediction where is the previous prediction? This is 17 here. OK, this 17 is the previous prediction. OK, we have got Y of T or L2 cap and alpha.
+00:13:07 - 00:14:54
+
+So these are three parameters that are required. You keep on building recursively and then until you come to the forecast here. So these are the forecast for the case of prediction. Since these values are not present, we will take this value itself as the predicted value for the subsequent sample. So this is the case of predictions. Now we have seen this is a, this is a train data. This is a predicted value. And if you see it is not very well representing actually this is this is the value, this is the this is the test data. This is how it is. It should, it should really look. But the predictions are like it is not a very good prediction. We will see you can compute the the error RMSE and everything visually. Also you can see this is not a very good representation. This simple exponential model is not working so well for this time series. So we will see that we can compute the error. We will. This is error computation. The root mean square error is the the actual minus predicted the square under the root. So the root mean square error is 8.40 significantly high and mean absolute percentage error. We take the mod here the 1 -, 2 three .18 by 19 and so on South. This will give absolute percentage error. So we have seen the the predicted values happen to be constant because there is no other variable contributing the prediction except the level. So actually this is not a constant level, there is a change in level. So it is not simple exponential smoothing does not work well for this type of because there is a seasonality and everything here. So this is not doing well on or simple exponential smoothing.
+
+
+Note: During 01:59 - 03:11, the equations illustrate the general smoothing and error-correction structure used to update level, trend, and seasonality in additive-error ETS models. Specific exponential smoothing models (SES, Holt, Holt–Winters) use specialised versions of these updates, which you will learn in sometime.
+
+ 
+
+You learnt that in exponential smoothing models, higher weights are assigned to the most recent values. Using the exponential method, we aim to capture the following components of a time series:
+
+Level: Represented by Equation
+
+Trend: Represented by Equation
+
+Seasonality: Represented by Equation
+
+ 
+
+We smoothen these components by assigning different weights to previous values and predictions. These weights are controlled by parameters called smoothing parameters, which are listed below:
+
+Level smoothing parameter: Equation
+
+Trend smoothing parameter: Equation
+
+Seasonality smoothing parameter: Equation
+
+ 
+
+Here, Equation.
+
+ 
+
+Next, we learnt about the Simple Exponential Smoothing Model (SESM). We already knew that the naïve method places all the weight on the most recent observation, while the simple average model assigns equal weight to all past observations. Simple Exponential Smoothing lies between these two approaches, assigning more weight to recent values and less weight to older ones.
+
+ 
+
+SESM can be viewed as a weighted average of all past observations, where the weights decrease smoothly and exponentially as we move back in time. The most recent observation has the highest influence, while older observations continue to contribute with diminishing impact.
+
+ 
+
+The rate at which these weights decrease is controlled by a single smoothing parameter, Equation, where Equation. A larger Equation makes the model more responsive to recent changes, and a smaller Equation results in smoother forecasts that rely more on historical values.
+
+ 
+
+Simple exponential smoothing model captures only the level component of the time series. It does not explicitly model trend or seasonality. Forecasts are generated using the updated level at each time step. With this understanding, we looked at the proposed equations of the Simple Exponential Smoothing Model which are given below.
+
+ 
+
+Equation
+
+Equation
+
+ 
+
+This means that the prediction for the next timestamp is equal to the predicted level of the current timestamp, and the current predicted level is a function of the actual current value and the predicted level of the previous timestamp.
+
+ 
+
+To get the first prediction value, which will be for the second timestamp in the series, we can assume Equation. Then we can then use the SESM equations iteratively to obtain the remaining predictions.
+
+ 
+
+We want to obtain the actual current value of the time series to predict the value of the next timestamp. In the website traffic data, we can apply SESM and predict the values until  Equation. To predict Equation , where Equation, we need to assume that Equation, since we do not have these actual values.
+
+ 
+
+After training SESM with Equation on the website traffic data set, we obtained the final predictions, which are given below.
+
+ 
+
+
+
+ 
+
+As seen here, SESM performs reasonably well. This time, the model could capture the level of the predicted values more accurately.
+
+ 
+
+Next, you will see the Python implementation of simple exponential smoothing model. 
+
+Absolutely. I’ll explain the **Exponential Smoothing Models** from your course material in simple language, with examples, instead of just repeating the professor’s wording. The file says the main idea is to give **more importance to recent observations and less importance to older ones**. 
+
+# 1. First understand the problem
+
+Suppose you have monthly sales:
+
+| Month | Sales |
+| ----- | ----: |
+| Jan   |   100 |
+| Feb   |   110 |
+| Mar   |   105 |
+| Apr   |   120 |
+| May   |   125 |
+
+You want to predict **June sales**.
+
+The basic question is:
+
+> **How much importance should we give to each previous month?**
+
+Different forecasting methods answer this differently.
+
+---
+
+# 2. Three methods you already know
+
+### Method 1: Naive
+
+Use **only the latest value**.
+
+May = 125
+
+So:
+
+**June forecast = 125**
+
+Here, May gets 100% importance.
+
+---
+
+### Method 2: Simple Average
+
+Take the average of everything:
+
+$$
+\frac{100+110+105+120+125}{5}=112
+$$
+
+So:
+
+**June forecast = 112**
+
+Problem?
+
+January's 100 gets exactly the same importance as May's 125.
+
+But intuitively, May may be more useful because it is recent.
+
+---
+
+### Method 3: Moving Average
+
+Suppose we use the last 3 months:
+
+$$
+\frac{105+120+125}{3}=116.67
+$$
+
+Again, all three months get **equal weight**.
+
+---
+
+# 3. Exponential Smoothing — the main idea
+
+This is the important concept.
+
+Instead of saying:
+
+> "Use only the latest value."
+
+or
+
+> "Give every value equal importance."
+
+we say:
+
+> **Recent values should matter more, and older values should matter less.**
+
+For example:
+
+| Observation |  Weight |
+| ----------- | ------: |
+| May         |    0.50 |
+| April       |    0.25 |
+| March       |   0.125 |
+| February    |  0.0625 |
+| January     | 0.03125 |
+
+Notice something?
+
+The weights keep getting smaller as we go backwards.
+
+That's why it is called **exponential smoothing**.
+
+The course specifically describes SES as assigning the largest weight to recent observations, with weights decreasing exponentially for older observations. 
+
+---
+
+# 4. What is Alpha (α)?
+
+This is probably the **most important thing to understand**.
+
+Alpha controls:
+
+> **How much should I listen to the latest data?**
+
+α is between 0 and 1.
+
+### α = 0.8
+
+Very high importance to recent data.
+
+The model says:
+
+> "I really care about what just happened."
+
+So the forecast reacts quickly to changes.
+
+### α = 0.2
+
+Low importance to recent data.
+
+The model says:
+
+> "Don't react too quickly. Look at historical information."
+
+So the forecast changes slowly.
+
+The course states that a larger α makes the forecast more responsive to recent changes, while a smaller α produces smoother forecasts that rely more on historical values. 
+
+---
+
+# 5. The easiest formula to remember
+
+Simple Exponential Smoothing can be understood as:
+
+$$
+\boxed{New\ Level = \alpha(Actual) +(1-\alpha)(Old\ Level)}
+$$
+
+Don't get scared by the formula.
+
+It simply means:
+
+> **New estimate = some portion of today's actual value + remaining portion of yesterday's estimate.**
+
+That's all.
+
+---
+
+# 6. Let's do a real example
+
+Suppose:
+
+Yesterday's level = **100**
+
+Today's actual sales = **120**
+
+And:
+
+$$
+\alpha=0.2
+$$
+
+Then:
+
+$$
+New Level = 0.2(120)+0.8(100)
+$$
+
+$$
+=24+80
+$$
+
+$$
+=104
+$$
+
+So the new smoothed level is:
+
+**104**
+
+Notice something interesting.
+
+Actual sales jumped from 100 → 120.
+
+But our forecast only moved:
+
+100 → 104
+
+Why?
+
+Because α = 0.2.
+
+We're telling the model:
+
+> "Don't react too much to one day's change."
+
+---
+
+# 7. Now change α to 0.8
+
+Same data:
+
+Actual = 120
+
+Old level = 100
+
+α = 0.8
+
+$$
+New Level=0.8(120)+0.2(100)
+$$
+
+$$
+=96+20
+$$
+
+$$
+=116
+$$
+
+Now:
+
+**100 → 116**
+
+Much bigger movement.
+
+Why?
+
+Because α is high.
+
+The model is saying:
+
+> "Recent data is very important."
+
+---
+
+# 8. So remember this relationship
+
+| Alpha            | Behavior                   |
+| ---------------- | -------------------------- |
+| **α close to 1** | Reacts quickly to new data |
+| **α close to 0** | Changes slowly             |
+| **High α**       | Less smoothing             |
+| **Low α**        | More smoothing             |
+
+### Memory trick
+
+**Alpha = Attention to recent data**
+
+High α → **High attention to recent data**
+
+Low α → **Low attention to recent data**
+
+---
+
+# 9. Why does it become "exponential"?
+
+Suppose:
+
+$$
+\alpha=0.8
+$$
+
+The latest observation gets approximately:
+
+$$
+0.8
+$$
+
+Previous one:
+
+$$
+0.8(1-0.8)=0.16
+$$
+
+Previous:
+
+$$
+0.8(1-0.8)^2=0.032
+$$
+
+Previous:
+
+$$
+0.8(1-0.8)^3=0.0064
+$$
+
+So:
+
+**0.8 → 0.16 → 0.032 → 0.0064**
+
+The weights fall very quickly.
+
+That's the **exponential decrease** mentioned in your material. 
+
+---
+
+# 10. Now the BIG concept: Level, Trend and Seasonality
+
+This is where your course starts becoming confusing.
+
+Think of a time series as potentially having **three things**:
+
+### Level
+
+> Where is the data generally sitting?
+
+### Trend
+
+> Is it going upward or downward?
+
+### Seasonality
+
+> Does a pattern repeat periodically?
+
+For example, imagine a company's sales:
+
+```text
+Sales
+ ^
+ |                 /\       /\
+ |        /\      /  \     /  \
+ |   /\  /  \    /    \   /    \
+ |__/  \/    \__/      \_/      \__
+ +----------------------------------> Time
+```
+
+There may be:
+
+* a general average → **Level**
+* an upward movement → **Trend**
+* repeating peaks → **Seasonality**
+
+Your course describes exponential smoothing models as capturing these components. 
+
+---
+
+# 11. This gives us three important models
+
+This is the part I want you to remember for your exam.
+
+### Model 1 — Simple Exponential Smoothing
+
+Handles:
+
+**Level**
+
+Does NOT explicitly handle:
+
+* Trend ❌
+* Seasonality ❌
+
+So:
+
+> **Level only → SES**
+
+---
+
+### Model 2 — Holt's Exponential Smoothing
+
+Handles:
+
+**Level + Trend**
+
+So:
+
+> **Level + Trend → Holt**
+
+---
+
+### Model 3 — Holt-Winters
+
+Handles:
+
+**Level + Trend + Seasonality**
+
+So:
+
+> **Level + Trend + Seasonality → Holt-Winters**
+
+The course explicitly introduces SES, Holt's method for trend, and Holt-Winters for seasonality. 
+
+---
+
+# 12. Very important exam table
+
+| Data pattern                | Model            |
+| --------------------------- | ---------------- |
+| Constant level              | **SES**          |
+| Level + Trend               | **Holt**         |
+| Level + Seasonality         | **Holt-Winters** |
+| Level + Trend + Seasonality | **Holt-Winters** |
+
+The key point from your material is that **SES is appropriate when there is no trend and no seasonality**. 
+
+---
+
+# 13. Why SES fails when there is a trend
+
+Suppose your sales are:
+
+```text
+100
+105
+110
+115
+120
+125
+130
+```
+
+Clearly there is an **upward trend**.
+
+But SES only understands:
+
+> "What is the current level?"
+
+It doesn't explicitly understand:
+
+> "The sales are increasing by around 5 every period."
+
+Therefore, SES can lag behind the actual data.
+
+That's why the course shows SES performing poorly when the series has additional structure such as seasonality/change in level. 
+
+---
+
+# 14. One more important concept: Forecast vs Prediction
+
+Your professor spends time on this, but the simple way to remember it is:
+
+### Prediction
+
+Predicting an unknown value.
+
+Example:
+
+> Given customer age, income, etc., predict whether they will buy.
+
+### Forecast
+
+Predicting a **future time-series value**.
+
+Example:
+
+> Given sales from January–December, forecast January next year.
+
+So:
+
+**Forecasting is a type of prediction, but prediction is not necessarily forecasting.**
+
+Your course makes exactly this distinction. 
+
+---
+
+# 15. How do we choose α?
+
+This is another common exam question.
+
+You don't normally just randomly decide:
+
+> α = 0.2
+
+Instead, different α values can be evaluated using forecasting error measures, and the value producing better forecasting performance can be selected.
+
+For example:
+
+```text
+α = 0.1 → RMSE = 12.5
+α = 0.2 → RMSE = 10.2
+α = 0.3 → RMSE = 9.1
+α = 0.4 → RMSE = 11.4
+```
+
+Then α = 0.3 gives the lowest RMSE among these tested values.
+
+The course also discusses evaluating forecasts using measures such as RMSE and MAPE. 
+
+---
+
+# 16. The entire concept in one picture
+
+Think of your decision like this:
+
+```text
+                 TIME SERIES
+                      |
+          What does the data contain?
+                      |
+          +-----------+-----------+
+          |           |           |
+        LEVEL       TREND     SEASONALITY
+          |           |           |
+          v           v           v
+         SES        HOLT     HOLT-WINTERS
+```
+
+More specifically:
+
+```text
+LEVEL ONLY
+   ↓
+Simple Exponential Smoothing
+   ↓
+α
+
+
+LEVEL + TREND
+   ↓
+Holt's Method
+   ↓
+α + β
+
+
+LEVEL + TREND + SEASONALITY
+   ↓
+Holt-Winters
+   ↓
+α + β + γ
+```
+
+Your course identifies **α for level, β for trend, and γ for seasonality**. 
+
+---
+
+# 17. The simplest way to remember the whole chapter
+
+Imagine you're forecasting **restaurant sales**.
+
+### Case A
+
+Sales fluctuate around ₹10 lakh every month.
+
+No upward/downward trend.
+
+No repeating seasonal pattern.
+
+➡️ **SES**
+
+---
+
+### Case B
+
+Sales are:
+
+₹10L → ₹11L → ₹12L → ₹13L → ₹14L
+
+There is an upward trend.
+
+➡️ **Holt**
+
+---
+
+### Case C
+
+Sales increase every year, but December is always much higher because of Christmas.
+
+There is:
+
+**Level + Trend + Seasonality**
+
+➡️ **Holt-Winters**
+
+---
+
+## ⭐ Exam cheat sheet
+
+Remember these **5 points**:
+
+1. **Exponential smoothing = recent observations get more weight.**
+2. **α controls how strongly we react to recent data.**
+3. **High α → reacts quickly; Low α → smoother/slower.**
+4. **SES = Level only.**
+5. **Holt = Level + Trend; Holt-Winters = Level + Trend + Seasonality.**
+
+And the most important intuition:
+
+> **SES is basically saying: "My best estimate of the future is the current smoothed level."** 
+
+If you understand those five points, the equations in the next part become **much easier**, because the equations are simply mathematical ways of implementing these ideas.
+
+Python Demonstration: Simple Exponential Smoothing
+
+
+# Part 4 - Exponential Time Series Models
+In this part of the demonstration, we will fit exponential smoothing models to our data. The models that we will build are:
+- Simple exponential smoothing: Captures level in the data
+- Holt's exponential smoothing: Captures level and trend in the data
+- Holt Winters' exponential smoothing: Captures level, trend, and seasonality in the data
+
+**Note:** These models work on the assumption that more recent values in a time series have more influence on future values in the series than older values in the data.
+
+### Subpart 1 -  Simple Exponential Smoothing
+
+Now, we will get into our first exponential smoothing method, the simple exponential smoothing model.
+
+**Note:** This model aims to capture the level in the time series data.
+
+To apply this method we will first import the *SimpleExpSmoothing* function from *statsmodels*. This function creates an exponentially-weighted moving average model for a time series data set, where more recent observations are given more weight than older ones. It takes as input the endogenous variable of the training data set and returns a model object that can be used to make predictions on new data.
+
+# Import 'SimpleExpSmoothing' from 'statsmodels' for simple exponential smoothing
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing
+
+# Create a model instance for the training data
+model = SimpleExpSmoothing(endog = df_train['Sales'])
+
+
+Now we will use the *fit* function to fit the model object on the training data set. A couple of parameters that should be emphasised here are:
+- *smoothing_level*: This is the same as $\alpha$. It specifies the coefficient for level smoothing.
+- *optimized*: This parameter determines whether or not to use an optimisation algorithm to estimate parameters such as *smoothing_level* (if set to *True*) or to consider user-specified values (if set to *False*).
+
+**Note:** The default value of *optimized* is *True*.
+
+# Fit the model object on the training data and obtain predictions
+model = model.fit(smoothing_level = 0.3, optimized = False)
+y_pred_ses = model.forecast(len(df_test))
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_ses, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Simple Exponential Smoothing Method');
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_ses_list = [y_pred_ses[0]] * len(df_test)
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_ses_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_ses_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Simple Exponential Smoothing', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+The above result is for an $\alpha$ value of 0.3. We can, in fact, set the *optimized* parameter to *False* and tune for $\alpha$. Let's define a couple of helper functions to do this.
+
+
+# Define a helper function that builds and evaluates a simple exponential smoothing model for the data
+# Note: The 'smoothing_level' parameter will be user-controlled
+def eval_sesm(train_data = None, test_data = None, alpha_val = 0):
+
+    sesm_model = SimpleExpSmoothing(endog = train_data['Sales'])
+    sesm_model = sesm_model.fit(smoothing_level = alpha_val, optimized = False)
+    y_pred_sesm = sesm_model.forecast(len(test_data))
+
+    y_pred_sesm_list = [y_pred_sesm[0]] * len(test_data)
+    sesm_rmse = np.sqrt(mean_squared_error(y_true = test_data['Sales'], y_pred = y_pred_sesm_list))
+    sesm_mape = np.mean(np.abs(test_data['Sales'] - y_pred_sesm_list) / test_data['Sales']) * 100
+
+    sesm_rmse = np.round(sesm_rmse, 2)
+    sesm_mape = np.round(sesm_mape, 2)
+
+    return(sesm_rmse, sesm_mape)
+
+
+# Define a helper function that evaluates the performance of a range of models and displays the results visually
+# Note: The range of alpha values will be user-controlled
+def show_sesm_performance(train_data = None, test_data = None, alpha_list = [0]):
+    rmse_list = []
+    mape_list = []
+
+    for alpha in alpha_list:
+        rmse_list.append(eval_sesm(train_data = train_data, test_data = test_data, alpha_val = alpha)[0])
+        mape_list.append(eval_sesm(train_data = train_data, test_data = test_data, alpha_val = alpha)[1])
+
+    performance_df = pd.DataFrame(index = alpha_list, data = {'RMSE': rmse_list, 'MAPE': mape_list})
+
+    plt.figure(figsize = (14, 4))
+    plt.subplot(1, 2, 1)
+    sns.lineplot(data = performance_df, x = performance_df.index, y = rmse_list)
+    plt.xlabel('alpha')
+    plt.ylabel('RMSE')
+    plt.title('RMSE as a function of smoothing level')
+    plt.subplot(1, 2, 2)
+    sns.lineplot(data = performance_df, x = performance_df.index, y = mape_list)
+    plt.xlabel('alpha')
+    plt.ylabel('MAPE')
+    plt.title('MAPE as a function of smoothing level')
+
+    return(None)
+
+
+Holt's Exponential Smoothing
+
+
+
+You will now gain an understanding of another model that is based on the exponential smoothing method - Holt’s exponential smoothing model (HESM). This model aims to capture the trend in the data along with the level.
+
+
+
+00:00:01 - 00:00:34
+Introduction to Holtz Exponential Smoothing
+We will look at the next smoothing model which is Holtz exponential smoothing. This is called single level smoothing, this is called double level smoothing and this is triple level smoothing. We will see that. We will look at Holtz exponential model and see how it is different or how is how it is better than the simple exponential smoothing model. In this case, if you see Hall's exponential smoothing method takes trend into consideration in the simple exponential smoothing model, but there was number trend.
+00:00:35 - 00:01:09
+Trend Consideration in Holtz Exponential Smoothing
+In this case, it takes trend into consideration but no seasonality. So the data follows a clear slope. If you see there is a trend here, the model tracks the level and the constant rate of change of the trend. So an example of this would be growth in total user account overtime in a stable market segment. Let us say it is index with trend, so there's a linear trend. So, this is an example of holds method where holds exponential smoothing will perform well. This for such a time series we have.
+00:01:09 - 00:02:10
+Model Equations and Intuitive Understanding
+So these are the model equations. So these are model equations are also called the smoothing equations. So in the simple exponential smoothing, we just use the level component. In this case we are factoring in the trend component also. So the level component is again alpha Y of t + 1 minus alpha. So this takes the previous level and previous trend and then what is the trend trend? We have beta into Lt. L cap subscript T -, L cap T -, 1 is 1 minus beta. So basically it is taking the trend also into consideration. These are initialized values. L1 cap is Y1T1 cap is 0. We do not have to be overtly worried about the complexity of the equations here. Intuitively you can understand here that what I mean to say you do not have to by hard these equations. We need to have the intuitive understanding here. These are these equations are available for implementation. Then we will look at holes exponential smoothing.
+00:02:10 - 00:03:04
+Application of Holtz Exponential Smoothing
+If you see there are this is the alpha is the level component and beta is the trend component. Both of them can take the value 0 to one. This is an example here of how holes exponential smoothing is applied. So these are the initial values of level and trend is taken as zero. We compute Y2Y2 is L1 plus T1. So this is Y2 cap. The next sample would be. Again we have to compute the L cap subscript 2 and T cap subscript 2. So we have the. In addition, compared to simple exponential smoothing, we have the trend component alpha into Y 2, so this is and then we have 1 minus alpha into level of the previous sample and at the time stamp and trend at the previous time stamp. So these are. We try to iteratively build.
+00:03:04 - 00:04:06
+Iterative Computation of Level and Trend
+So we compute L2 and T2 using L2 and T2. We do Y-3 and then. Then we compute L3 and T3 and then we build Y4. So iteratively we apply the same formula. So basically we apply these equations to build the level and trend component at a particular time stamp. So we see in the error computation this might be different. This has a very significant bearing on the prediction. What we do is. Typically these are what we call hyper parameters. You try to find a range of. Typically in grid search or something you try to find error for a range of alpha and beta. The the value of alpha and beta for which the these errors are less would be the prediction equations. In this case we have depicted the predictions of a simple exponential smoothing and Halt's exponential smoothing.
+00:04:06 - 00:04:44
+Prediction and Error Analysis in Holtz Exponential Smoothing
+Whether also you can see not much of A change between SCS and hold exponential smoothing method. The predicted value lie in on a straight line because the variability in the predictions comes from the level and trend values. You can see we are considering the level and trend values also, but there is very small if you see there is if you very closely observe this is this, this level is flat here and there is a small trend actually. So this taken trend into consideration if you see a very subtle difference here, this is the difference for this sample. The difference for this sample is slightly lower here, but still not there yet actually.
+
+
+You learnt that HESM can capture both level and trend. The proposed equations for the model are given below.
+
+ 
+
+Equation
+
+Equation
+
+Equation
+
+ 
+
+This means that the prediction for the next timestamp will be equal to the sum of the predicted level and the predicted trend of the current timestamp.
+
+ 
+
+To obtain our first prediction we can assume that Equation and Equation. We can then use the HESM equation iteratively to obtain the remaining predictions.
+
+ 
+
+We need to make the same assumption here as we made in SESM, which is that actual values, wherever they are missing, are equal to the corresponding predicted values.
+
+ 
+
+After training HESM on the website traffic data set with Equation and Equation, we got the final prediction, which is given below.
+
+ 
+
+
+
+ 
+
+It is not evident in the plot, but the predicted values are declining at a constant rate. Here, only seven data points are available to train the model. So we will not obtain a good estimate of the trend in the series. However, if we add more data points to our data set we will be able to train HESM better, resulting in an accurate prediction of the trend in the data.
+
+ 
+
+Next, you will see the Python implementation of Holt's exponential smoothing model. 
+
+Python Demonstration: Holt's Exponential Smoothing
+
+
+00:00:00 - 00:00:30
+Introduction to Halls method (double exponential smoothing)
+In this session, let's move from simple exponential smoothing to the Halls method, which is also known as double exponential smoothing. So if you removed it from our previous session where we talked about we discussed about the core limitation of the simple exponential smoothing was its inability to model the trend. So this Halls method solves this problem by explicitly modeling 2 components here the level alpha and the trend beta and the time series.
+00:00:32 - 00:00:42
+Components of Halls method: level and trend
+So to do so we need to import this exponential smoothing function from the stats model. It is used for both halts and more advanced halt winter methods as well.
+00:00:44 - 00:01:12
+Exponential smoothing function and key parameters
+So while using this exponential smoothing we must emphasize on few key parameters here which are in endogenous variable of the training data set. And here the trend specifies the type of a trend we want to model such as an additive or the multiplicative and the seasonal which specifies the seasonality. But here we will set the seasonality component to none for Hall's method since it does not model the seasonality.
+00:01:14 - 00:01:38
+Setting seasonality component to none in Halls method
+So now let us clean instantiate our model where if we observe that we kept seasonal to none because we are not at modeling the seasonality and we set trend to additive here because our initial decomposition suggested a nearly linear constant increase overtime if you remember correctly, right.
+00:01:39 - 00:02:44
+Fitting the model and optimizing parameters
+So and then we also set a seasonal previous to 12 as the data is monthly. Even though this parameter will be ignored by the model because we said the seasonal is None here. Now we created the model instance using the defined parameters. Now let us fit the function where you know the parameters it solves for are like you know a smoothing level which is a level smoothing quotient and the smoothing slope which is a beta which is a trend smoothing quotient. And we also set the optimize to true, which is a default behavior which allows the function to compute the optimum values of alpha and beta, minimizing the training error here, right? So now if I plot our observations here, I mean the forecast plot here, If you observe this figure, it's a major improvement, right?
+00:02:44 - 00:03:22
+Forecast plot and model evaluation
+It shows a sloped upward trending forecast line successfully extrapolating the growth here, right? If we go ahead and evaluate our model performance and if you see the output here, right? So this evaluation confirms its superiority, yielding the new best RMSE of approximately around 16861, right? This course proves the necessity of using the exponential smoothing to model the trend components right?
+00:03:23 - 00:03:44
+RMSE evaluation and model performance
+Scorecard here clearly shows that Holtz method leading the pack. I mean affirming that a model must account for the trend right. However, we know from a decomposition that a key component is still missing in this model, which is seasonality.
+
+
+To apply this method, we can use the ExponentialSmoothing function from statsmodels. This function creates a time series model based on exponential smoothing which can incorporate a trend and a seasonal component depending on the parameters specified. A few important parameters of the ExponentialSmoothing function are as follows:
+
+ 
+
+endog: The endogenous variable of the training data set
+
+seasonal_periods: The number of seasonal periods in the seasonality of the time series
+
+trend: The type of trend to be modelled (additive, multiplicative, or None)
+
+seasonal: The type of seasonality to be modelled (additive, multiplicative, or None)
+
+ 
+
+Note: For now, we can ignore the seasonality, as we are not considering the seasonal component of the data in this model. Hence, we can set the seasonal parameter as None. Consequently, the seasonal_periods parameter will also be unused.
+
+ 
+
+We first created a model instance for the training data. Then we used the fit function to fit the model object. A few parameters that should be emphasised here are as follows:
+
+ 
+
+smoothing_level: This is the same as in SimpleExpSmoothing. It specifies the coefficient for level smoothing.
+
+smoothing_slope: This is the same as Equation. It specifies the coefficient for trend smoothing.
+
+optimized: This is the same as in SimpleExpSmoothing. If this is set to True (default), the optimal values for parameters such as Equation and Equation will be computed internally.
+
+ 
+
+Note: Another parameter of the fit method is the smoothing_seasonal parameter or the Equation parameter. Though this parameter exists in the fit method and we are setting optimized to True, it will not be used because we have specified the seasonal parameter in the ExponentialSmoothing method as None.
+
+ 
+
+Now, after fitting the data by setting the optimized parameter to True, we can obtain the predictions as given below.
+
+ 
+
+
+
+ 
+
+The plot reveals that the prediction values capture the trend along with the level. The corresponding RMSE and MAPE values for the predictions are slightly better than SESM’s results as we captured the trend and level with HESM. However, the performance of these kinds of models can be further improved by modelling the seasonality as well.
+
+ 
+
+Next, we will build another model - Holt-Winters' exponential smoothing model - based on exponential smoothing, which models all three components, which are level, trend, and seasonality.
+
+
+Yes. Let’s forget the complicated equations for a moment and understand **Holt’s Exponential Smoothing (HESM)** from your course as if we are solving a real business problem.
+
+The key difference from SES is very simple: **SES understands the current level, while Holt understands both the current level and the direction in which the data is moving (trend).** Your course explicitly says Holt captures **level + trend**, but not seasonality. 
+
+## 1. First, why do we need Holt?
+
+Imagine website traffic:
+
+| Month | Visitors |
+| ----- | -------: |
+| Jan   |      100 |
+| Feb   |      110 |
+| Mar   |      120 |
+| Apr   |      130 |
+| May   |      140 |
+
+Look at the data:
+
+```text
+140 |                 ●
+130 |             ●
+120 |         ●
+110 |     ●
+100 | ●
+    +--------------------
+      Jan Feb Mar Apr May
+```
+
+What do you see?
+
+**The traffic is increasing.**
+
+There are two pieces of information here:
+
+### Level
+
+Where are we currently?
+
+Approximately **140**.
+
+### Trend
+
+Which direction are we moving?
+
+Approximately **+10 per month**.
+
+---
+
+# 2. What does SES do?
+
+Simple Exponential Smoothing basically says:
+
+> "I'll keep track of the current level."
+
+So it might understand:
+
+**Current level ≈ 140**
+
+But it doesn't explicitly keep track of:
+
+**Trend = +10 per month**
+
+That's the limitation of SES.
+
+Your course describes this as the core limitation of SES: it cannot explicitly model trend. 
+
+---
+
+# 3. Holt's big idea
+
+Holt says:
+
+> "I need to remember TWO things."
+
+### Thing 1 → Level
+
+Where am I now?
+
+### Thing 2 → Trend
+
+Where am I going?
+
+So:
+
+$$
+\boxed{\text{Holt = Level + Trend}}
+$$
+
+That's the entire concept.
+
+---
+
+# 4. Think of driving a car 🚗
+
+This is the easiest analogy.
+
+Suppose you're driving.
+
+You need to know:
+
+**Where am I?**
+
+That's **LEVEL**.
+
+But you also need to know:
+
+**Am I moving forward or backward, and how quickly?**
+
+That's **TREND**.
+
+If you only know your location but don't know your speed/direction, predicting where you'll be next is difficult.
+
+Holt keeps both pieces of information.
+
+---
+
+# 5. The two parameters
+
+Because Holt has two components, it has two smoothing parameters.
+
+### α (alpha)
+
+Controls **level**.
+
+> How much should I pay attention to the latest actual value when updating the level?
+
+### β (beta)
+
+Controls **trend**.
+
+> How much should I pay attention to the latest change in the trend?
+
+Your course states that both α and β range from 0 to 1. 
+
+So:
+
+```text
+HOLT
+ |
+ +---- Level  → α
+ |
+ +---- Trend  → β
+```
+
+---
+
+# 6. Now let's understand the forecast
+
+This is the most important Holt concept.
+
+Suppose the model has calculated:
+
+**Current level = 140**
+
+and
+
+**Current trend = +10**
+
+What should next month's forecast be?
+
+Obviously:
+
+$$
+140+10=150
+$$
+
+So:
+
+$$
+\boxed{\text{Forecast}=\text{Level}+\text{Trend}}
+$$
+
+This is exactly what your course says: the next-timestamp prediction is the sum of the predicted current level and predicted current trend. 
+
+---
+
+# 7. Let's make it slightly more realistic
+
+Suppose the data is:
+
+| Month | Actual |
+| ----- | -----: |
+| Jan   |    100 |
+| Feb   |    110 |
+| Mar   |    119 |
+| Apr   |    131 |
+| May   |    140 |
+
+The model might estimate:
+
+**Level = 140**
+
+**Trend = +10**
+
+Therefore:
+
+### June forecast
+
+$$
+140+10=150
+$$
+
+Then July:
+
+$$
+140+2(10)=160
+$$
+
+August:
+
+$$
+140+3(10)=170
+$$
+
+So Holt can **continue the trend into the future**.
+
+This is why Holt is useful for trending data.
+
+---
+
+# 8. Compare SES vs Holt
+
+This is VERY important for your exam.
+
+Suppose:
+
+```text
+100
+110
+120
+130
+140
+```
+
+### SES
+
+Only understands:
+
+> Current level ≈ 140
+
+So future forecasts tend to flatten around the current level.
+
+```text
+100
+110
+120
+130
+140
+----------------
+140
+140
+140
+140
+```
+
+### Holt
+
+Understands:
+
+> Current level ≈ 140
+> Trend ≈ +10
+
+So:
+
+```text
+100
+110
+120
+130
+140
+        150
+          160
+            170
+              180
+```
+
+That's the fundamental difference.
+
+---
+
+# 9. Now the equations will make sense
+
+Your course gives complicated-looking equations.
+
+Don't memorize them blindly.
+
+There are really only two jobs.
+
+### Job 1: Update the LEVEL
+
+The new level considers:
+
+* current actual value
+* previous level
+* previous trend
+* α
+
+Conceptually:
+
+> **New level = current information + previous level/trend information**
+
+---
+
+### Job 2: Update the TREND
+
+The new trend considers:
+
+* how the level changed
+* previous trend
+* β
+
+Conceptually:
+
+> **New trend = recent change + previous trend information**
+
+The course explicitly explains that Holt's equations recursively build **L₂, T₂, then L₃, T₃, etc.** 
+
+So don't look at the equations as something completely new.
+
+They're just doing:
+
+```text
+Actual data
+     ↓
+Update Level
+     ↓
+Update Trend
+     ↓
+Forecast
+     ↓
+New actual arrives
+     ↓
+Update Level
+     ↓
+Update Trend
+     ↓
+New Forecast
+```
+
+---
+
+# 10. Why is it called "double exponential smoothing"?
+
+You may hear:
+
+> **Holt = Double Exponential Smoothing**
+
+Why?
+
+Because we're smoothing two components:
+
+1. **Level**
+2. **Trend**
+
+Your course calls Holt's method "double exponential smoothing" in the implementation section. 
+
+And later:
+
+> Holt-Winters = level + trend + seasonality
+
+So you can think:
+
+```text
+SES
+ ↓
+Level
+ ↓
+1 component
+
+
+Holt
+ ↓
+Level + Trend
+ ↓
+2 components
+
+
+Holt-Winters
+ ↓
+Level + Trend + Seasonality
+ ↓
+3 components
+```
+
+---
+
+# 11. What about seasonality?
+
+This is another important distinction.
+
+Suppose website traffic does this:
+
+```text
+        /\          /\
+       /  \        /  \
+      /    \      /    \
+_____/      \____/      \____
+```
+
+Maybe traffic is always higher every December.
+
+That's **seasonality**.
+
+Holt does **NOT** model this.
+
+Your course explicitly says Holt considers trend **but no seasonality**. 
+
+For that, we move to:
+
+### Holt-Winters
+
+which models:
+
+**Level + Trend + Seasonality**. 
+
+---
+
+# 12. Additive vs Multiplicative — don't mix this up
+
+Your course also introduces:
+
+```text
+trend = additive / multiplicative / None
+seasonal = additive / multiplicative / None
+```
+
+For Holt, **seasonal = None** because Holt isn't modeling seasonality. 
+
+For the trend, you can have:
+
+### Additive trend
+
+The data increases by roughly the **same amount**.
+
+Example:
+
+```text
+100
+110
+120
+130
+140
+```
+
+Increase:
+
+**+10, +10, +10, +10**
+
+That's additive-like trend.
+
+### Multiplicative trend
+
+The data increases by roughly the **same percentage**.
+
+Example:
+
+```text
+100
+110
+121
+133
+146
+```
+
+Approximately:
+
+**+10%, +10%, +10%, +10%**
+
+Your course's example uses an additive trend for a nearly linear constant increase. 
+
+---
+
+# 13. What is `seasonal=None` in Python?
+
+Your course shows the `statsmodels` `ExponentialSmoothing` implementation.
+
+Conceptually:
+
+```python
+ExponentialSmoothing(
+    data,
+    trend="add",
+    seasonal=None
+)
+```
+
+means:
+
+> "I want to model the trend, but I don't want to model seasonality."
+
+So this is **Holt's method**.
+
+The course specifically explains that `seasonal=None` is used because Holt doesn't model the seasonal component. 
+
+---
+
+# 14. What does `smoothing_level` mean?
+
+This is simply **α**.
+
+It controls how quickly the **level** reacts to new information.
+
+```text
+smoothing_level = α
+```
+
+The course describes it as the coefficient for level smoothing. 
+
+---
+
+# 15. What does `smoothing_slope` mean?
+
+This is **β**.
+
+It controls the smoothing of the **trend/slope**.
+
+```text
+smoothing_slope = β
+```
+
+Your course calls it the coefficient for trend smoothing. 
+
+---
+
+# 16. What does `optimized=True` mean?
+
+This is actually very useful.
+
+Instead of you saying:
+
+```text
+α = 0.2
+β = 0.3
+```
+
+you can ask the model to find suitable values.
+
+Conceptually:
+
+```text
+Try α = 0.1, β = 0.1
+Calculate error
+
+Try α = 0.1, β = 0.2
+Calculate error
+
+Try α = 0.2, β = 0.1
+Calculate error
+
+...
+```
+
+The model searches for parameter values that minimize the training error.
+
+Your course says `optimized=True` allows the function to compute optimal values for parameters such as α and β. 
+
+---
+
+# 17. One complete example
+
+Imagine a company's users:
+
+| Year | Users |
+| ---- | ----: |
+| 2021 |   100 |
+| 2022 |   120 |
+| 2023 |   140 |
+| 2024 |   160 |
+| 2025 |   180 |
+
+What do we see?
+
+### Level
+
+Current level is around **180**.
+
+### Trend
+
+Users are increasing approximately:
+
+$$
++20/year
+$$
+
+So:
+
+```text
+Level = 180
+Trend = +20
+```
+
+Holt says:
+
+### 2026 forecast
+
+$$
+180+20=200
+$$
+
+### 2027 forecast
+
+$$
+180+2(20)=220
+$$
+
+### 2028 forecast
+
+$$
+180+3(20)=240
+$$
+
+That's the intuition behind Holt.
+
+---
+
+# ⭐ The exam memory trick
+
+If you see a question like:
+
+> **Which model should be used when the time series has a trend but no seasonality?**
+
+Answer:
+
+### **Holt's Exponential Smoothing**
+
+If they ask:
+
+> **Which components does Holt model?**
+
+Answer:
+
+### **Level + Trend**
+
+If they ask:
+
+> **Which parameters are used?**
+
+Answer:
+
+### **α for level + β for trend**
+
+If they ask:
+
+> **How is the next forecast obtained?**
+
+Think:
+
+### **Level + Trend**
+
+If they ask:
+
+> **Does Holt model seasonality?**
+
+### **No**
+
+If they ask:
+
+> **Which model handles level + trend + seasonality?**
+
+### **Holt-Winters**
+
+---
+
+## 🧠 One picture to remember everything
+
+```text
+                 TIME SERIES
+                      |
+              What patterns exist?
+                      |
+          +-----------+-----------+
+          |                       |
+       LEVEL                    TREND
+          |                       |
+          +-----------+-----------+
+                      |
+                    HOLT
+                      |
+              LEVEL + TREND
+                 α + β
+                      |
+             Does seasonality
+                 exist?
+                      |
+                     YES
+                      ↓
+               HOLT-WINTERS
+           LEVEL + TREND + SEASONALITY
+```
+
+So **don't start by memorizing Holt's equations**. First understand:
+
+> **SES asks: "Where are we?"**
+
+> **Holt asks: "Where are we, and where are we going?"**
+
+> **Holt-Winters asks: "Where are we, where are we going, and what repeating pattern do we have?"**
+
+Once this is clear, the equations become much easier to understand.
+
+### Subpart 2 - Holt's Method
+Now we will use Holt's method to fit a model on our time series data.
+
+**Note:** This model aims to capture the level and trend in the time series data.
+
+To apply this method we will first import the *ExponentialSmoothing* function from *statsmodels*. This function creates a time series model with an exponential smoothing method, which can include a trend and/or seasonal component, depending on the parameters specified.
+
+# Import 'ExponentialSmoothing' from 'statsmodels' for exponential smoothing
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+A few input parameters that should be emphasised here are:
+- *endog*: The endogenous variable of the training data set
+- *seasonal_periods*: The number of seasonal periods in the seasonality of the time series
+- *trend*: The type of trend to be modeled (additive or multiplicative)
+- *seasonal*: The type of seasonality to be modeled (additive or multiplicative)
+
+**Note:** We will use the *ExponentialSmoothing* method to implement both Holt's and Holt-Winters' methods, but for Holt's exponential smoothing technique, we will not use the *seasonal* parameter.
+
+We will first build a Holt's model that does not account for seasonality, so we will leave the *seasonal* parameter as *None*, which is the default value for that parameter. We will however set *trend* to *'additive'* instead of leaving it at the default value of *None* because we wish to capture the trend in the data.
+
+We will also set the *seasonal_periods* parameter to 12 as the data we're working with has some monthly and annual patterns. You can however choose any value of *seasonal_periods* such as 3, 6, 24, ... and see the impact on the predicted values.
+
+# Create a model instance for the training data
+model = ExponentialSmoothing(endog = df_train['Sales'], seasonal_periods = 12, trend = 'additive', seasonal = None)
+
+Now we will use the *fit* function to fit the model object created previously on the training data set. A few parameters that should be emphasised here are:
+- *smoothing_level*: This is the same $\alpha$ as in *SimpleExpSmoothing*. It specifies the coefficient for level smoothing.
+- *smoothing_slope*: This is the same as $\beta$. It specifies the coefficient for trend smoothing.
+- *optimized*: This is the same as in *SimpleExpSmoothing*. If this is set to *True* (default), then optimal values for parameters such as $\alpha$ and $\beta$ will be computed internally.
+We have set the *optimized* parameter to *True*, but you can set it to *False* and experiment with various parameters such as *smoothing_level*, *smoothing_slope*, and *smoothing_seasonal*.
+
+**Note:** Another parameter of the *fit* method here is the *smoothing_seasonal* or the $\gamma$ parameter. Though this parameter exists in the *fit* method and we're setting *optimized* to *True*, it won't be used because we've specified the *seasonal* parameter in the *ExpomnentialSmoothing* method as *None*.
+
+
+# Fit the model object on the training data and forecast the values of testing period
+model = model.fit(optimized = True)
+y_pred_hes = model.forecast(len(df_test))
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_hes, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Holt\'s Method');
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_hes_list = y_pred_hes
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_hes_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_hes_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Holt\'s', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+
+Holt-Winters' Exponential Smoothing
+
+
+
+You will now gain an understanding of another model that is based on the exponential smoothing method - Holt-Winter’s exponential smoothing model (HWESM). This model aims to capture the seasonality along with the other components, which include the level and trend.
+
+
+
+
+00:00:00 - 00:00:25
+Introduction to Holt-Winters Exponential Smoothing
+So we will look at within smoothing models, we will look at halt winter exponential smoothing. As I said, this just takes the level, this takes the level and trend and this level takes level, trend and smoothing. This is single smoothing, double smoothing and triple smoothing technique. We have halt winters exponential coating method. So we have again different class here we have additive and multiplicative seasonality.
+00:00:25 - 00:03:42
+Additive and Multiplicative Seasonality in Smoothing Models
+If you see the trend is present in both, there is a trend. There is a trend present in in both. Actually, even in this case, there is a trend present and then there is seasonality, the additive seasonality. You see the seasonality is additive here basically. And then seasonal fluctuations remain the same size even as the overall level trend of the data increases. In this case, the seasonality, there is a trend present and there is the seasonality is multiplicative here. If you see the seasonality is multiplicative here which mean in the magnitude of seasonality is increasing over a period of time actually so there is multiplicative seasonality. So seasonal fluctuation grow proportionate to datas level. The wave gets larger as a series strength. So basically it is a proportionate, it is a proportion of gist level. As a level increases, the seasonality also increases proportionally. As we mentioned its percentage change over the level. If you look at real life examples, call volumes where the hourly peak increases in is a constant number of calls not a percentage of total call. Basically call volumes increases basically hourly peak increases over 24 hour period. You can say the hourly peak increases the consistent, consistent number of calls, not a percentage of total calls. And this one quarterly retails is where queue for holiday spike account for a fixed percentage of total growing revenue. Basically your holiday sales basically you, you see seasonal increase during the time of Christmas, you see a spike account for fixed percentage. Let us say during Christmas business increases, sales increases by 20% or 30% at that particular season. So this is an example of multiplicative seasonality. So based on how we characterize as I want to reemphasize again depending on how we characterize, we can fit the appropriate technique that is the key in the Hall twinters exponential smoothing method. So we had in the in the simple exponential smoothing we had just done the level in Halls method, we had taken the trend into consideration. This is a new we are trait. We are trying to take seasonality into consideration in the case of Halt Winter's exponential method. That is the reason why this is called triple smoothing method. This is the model equations. So model equations. So in the case of additive method, this is all are additive. The level trend and seasonality are additive. In the case of multiplicative method, the seasonality is multiplicative level level and trend times the seasonality. So level it's a function of previously predicted components both in by alpha you have seen and then we also discussed about beta. So additional component here is a seasonality. So we should we should say what is seasonality? Seasonality if it is quarterly or monthly or weekly. So the seasonality also should be mentioned here. So here the variable M M Basically the variable M represents the number of time steps or time period in one season. Basically within one season, what are the number of time periods is important. This is again a numerical example of halt winters additive exponential smoothing.
+00:03:43 - 00:04:42
+Numerical Example of Holt-Winters Additive Exponential Smoothing
+So it is recommended that you take a pen and paper and try to do this computation to ingest this and to digest this. So we have done the depiction here. It is always recommended to take a pen and paper and do the computation on pen and paper to understand this concept better. In this case we have alpha is equal to. We have alpha, beta and then gamma. So we are considering for ease of competition. For illustrative example, we are considering .2 all of them as .2. They can vary and again this is where we use a grid search. This can have a range of 0 to one. This can have zero to 1, basically zero to 1, zero to one. That is a steps of .1. So basically it is a huge combination. It is a large grids. We try to use grid search and then find out the value of alpha, beta, gamma for which the error is least.
+00:04:42 - 00:05:30
+Grid Search for Optimal Parameters in Smoothing Models
+That would be the parameters of this model. Again the error should be less here and again should be this is less here. So we have added. If you see very clearly, there is in the CS method for the same web traffic example. The error was high here and error was slightly reduced. And if you see it is following the trend basically. So in this case, it is able to factor in the seasonality here. It is able to factor the seasonality here. This is obviously over multiple methods holds exponential method is performing better. The predicted values do not lie on a straight line because the variability in the prediction come to the level trend and seasonality. Also, we have taken the seasonality into consideration here.
+
+
+In HWESM, we model the seasonality along with the level and trend. We can model seasonality in these two ways:
+
+Additive
+
+Multiplicative
+
+ 
+
+The determination of whether to use an additive or multiplicative method can be approached in several ways. Some of these are given below:
+
+ 
+
+One approach is to perform a detailed analysis of the time series using decomposition methods to understand the types of relationships in the data and choose a method accordingly.
+
+Another approach is to leverage domain knowledge to make an informed decision on whether the relationship between the seasonality component and the other components is additive or multiplicative based on the characteristics of the data.
+
+A third approach would be to build a model using both additive and multiplicative methods, compare their performances, and choose the one with better prediction accuracy.
+
+ 
+
+We will use the third approach to choose a more suitable method to build HWESM.
+
+ 
+
+HWESM is designed to capture all three components of a time series: level, trend, and seasonality. The proposed equations for the model are given below.
+
+ 
+
+Equation (additive method)
+
+Equation (multiplicative method)
+
+ 
+
+The components here are as follows:
+
+Equation  Function of the previously predicted components smoothed by Equation
+
+Equation  Function of the previously predicted components smoothed by Equation
+
+Equation  Function of the previously predicted components smoothed by Equation
+
+ 
+
+Here, the variable Equation represents the number of timestamps or time periods in one season.
+
+ 
+
+Let’s consider the additive method to model the seasonality for now. After training HWESM (additive) on the website traffic data set with Equation, Equation, Equation, and Equation, we obtained the final prediction, which is given below.
+
+ 
+
+
+
+ 
+
+HWESM captured the seasonality along with the other two components, which are the level and trend. The predictions are very close to the actual values; hence, we can see that this prediction is good.
+
+ 
+
+Next, you will see the Python implementation of Holt-Winters' exponential smoothing model.
+
+Python Demonstration: Holt-Winters' Exponential Smoothing
+
+
+Now that you have understood how Holt-Winters' exponential smoothing model works, you will now learn how to build this model using Python. 
+
+
+00:00:00 - 00:00:41
+Introduction to Holt-Winters method and components
+So in this session, we are moving to the advanced method which is a Halt Winters where we will bring together all the components such as level, trend and the seasonality, right? So this will allows us to compare the additive and multiplicative forms to find the single best forecast model for our sales data, right. So to begin with, let us start with Halt Winter's additive method which this model specifies additive trend and additive seasonality assuming the seasonal magnitude is a constant, right?
+00:00:41 - 00:00:59
+Holt-Winters additive method setup and initialization
+So for this, while initializing the model here we are setting the seasonal periods to 12 and the trend and the seasonal to the additive here right now, once after initializing, I am fitting the model to get the final predictions right.
+00:00:59 - 00:01:50
+Evaluation of Holt-Winters additive method
+If I forecast the plot and see the output, have it look like right? So if you see the plot, it seems an ideal right, which is an upward trend with the clear and the constant seasonal waves here, right? If I quickly evaluate my model on the test set, let us see how my RMSE and NAPU look like here right here. If you see my Halt Winter's additive RMSE is 11552, meaning it confirms the seasonality is a vital component, right? Let's move to the another sub method which is Halt Winter's multiplicative method.
+00:01:51 - 00:02:57
+Introduction and analysis of Holt-Winters multiplicative method
+Where once we did the analysis on this, we can compare this by running the multiplicative form which assumes seasonal fluctuations which are increasing magnitude as a trend goes right. So again, here I am initializing fitting the model and getting the predictions. And if you see the plot, what is my plot shows here, right? It is showing that the seasonal fluctuations, right? They are increasing in magnitude as a trend is going here, right. So if we go ahead and similarly evaluate our model, if you can see the output, my model shows a better performance compared to the halt Winters additive method, right? So this halt Winters multiplicative method is a clear winner among all the method we tried till now, right?
+00:02:58 - 00:03:27
+Comparison of additive and multiplicative methods
+So this model is considered the best because it is most complete successfully modeling the level, trend and seasonality of the data and also the multiplicative structure provide a slightly better fit than the additive structure that we have, right? To conclude this One South, we have successfully progressed from simple averages to the sophisticated halt winters method, right?
+00:03:28 - 00:03:51
+Conclusion on Holt-Winters method effectiveness
+And the entire demonstration, it highlights that the model accuracy relies on correctly identifying and explicitly modeling all three time series component such as level, trend and seasonality, which plays a very critical role.
+
+
+To implement HWESM in Python, we can use the ExponentialSmoothing method, which we have used before for HESM. Here, we set the seasonal parameter to additive for the additive method and multiplicative for the multiplicative method in addition to the values we previously considered for the other parameters, while applying HESM.
+
+ 
+
+We have set the optimized parameter to True because this allows for the auto-computation of the values of the smoothing parameters. But you can set it to False and explore the values of the smoothing parameters manually.
+
+ 
+
+Note: Since we are specifying the seasonal parameter of the ExponentialSmoothing method as a value other than None here, the smoothing_seasonal parameter or the γ parameter will be used in the model fit. The γ parameter specifies the coefficient for seasonality smoothing.
+
+ 
+
+The predictions obtained from the two methods after fitting the data are given below.
+
+ 
+
+
+
+ 
+
+ 
+
+
+
+ 
+
+ 
+
+In the obtained plot, the predictions follow the patterns in the data quite well. This happens because in HWESM, we model all three components, which include the level, trend, and seasonality. The RMSE and MAPE values for both additive and multiplicative methods are better than those of the models that we have built previously. Hence, we can conclude that HWESMs perform better than any other model that we have built before.
+
+ 
+
+But this might not always be the case. If the complexity of the data is less, other methods might perform equally well or sometimes even better.
+
+ 
+
+Among HWESMs, we used two methods to model our data set. As the RMSE and MAPE values suggest, the additive method performs better than the multiplicative method. So, we can consider HWESM (additive) a better model for the superstore data set.
+
+ 
+
+We have now completed building all three models based on the exponential smoothing method. You learned how each of them works and how their performances have improved compared with the simple time series models.
+
+ 
+
+Next, you will learn how smoothing parameters are determined.
+
+### Subpart 3 - Holt-Winters' Additive Method
+We will now use Holt-Winters' method to fit a model to our data.
+
+**Note:** This model aims to capture level, trend and seasonality in the data.
+
+We can build Holt-Winters' models using two types of decomposition techniques:
+- Additive seasonal decomposition
+- Multiplicative seasonal decomposition
+
+Recall that we have seen the decomposition results for our time series data before.
+
+Now, we will use additive decomposition to fit a Holt-Winters' model to our data using the *ExponentialSmoothing* function. Here we have set the *seasonal* parameter to *'additive'* in addition to the values that we previously considered for the other parameters. We have also set the *optimized* parameter to *True* here.
+
+**Note:** Since we're specifying the *seasonal* parameter of the *ExponentialSmoothing* method as something other than *None* here, the *smoothing_seasonal* or the $\gamma$ parameter will be used in the model fit. The $\gamma$ parameter specifies the coefficient for seasonality smoothing.
+
+
+# Create an instance of an exponential smoothing model and fit it on the training data
+model = ExponentialSmoothing(endog = df_train['Sales'], seasonal_periods = 12, trend = 'additive', seasonal = 'additive')
+model = model.fit(optimized = True)
+y_pred_hwa = model.forecast(len(df_test))
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_hwa, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Holt Winter\'s Additive Method');
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_hwa_list = y_pred_hwa
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_hwa_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_hwa_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Holt Winter\'s Additive', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+### Subpart 4 - Holt-Winters' Multiplicative Method
+# Create an instance of an exponential smoothing model and fit it on the training data
+model = ExponentialSmoothing(endog = df_train['Sales'], seasonal_periods = 12, trend = 'additive', seasonal = 'multiplicative')
+model = model.fit(optimized = True)
+y_pred_hwm = model.forecast(len(df_test))
+
+
+# Visualise the time series data and the predictions
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', label = 'Train', marker = 'o', color = 'blue')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', label = 'Test', marker = 'o', color = 'green')
+sns.lineplot(data = df_test, x = 'Order Date', y = y_pred_hwm, label = 'Predictions', marker = 'o', color = 'purple')
+plt.legend(loc = 'best')
+plt.title('Holt-Winter\'s Multiplicative Method');
+
+# Summarise the performance of the model on the test data using RMSE and MAPE
+y_pred_hwm_list = y_pred_hwm
+
+rmse = np.sqrt(mean_squared_error(y_true = df_test['Sales'], y_pred = y_pred_hwm_list))
+mape = np.mean(np.abs(df_test['Sales'] - y_pred_hwm_list) / df_test['Sales']) * 100
+
+rmse = np.round(rmse, 2)
+mape = np.round(mape, 2)
+
+performance_df_temp = pd.DataFrame(index = [0],
+                                   data = {'Model': 'Holt Winter\'s Multiplicative', 'RMSE': rmse, 'MAPE': mape})
+
+performance_df_temp.set_index(keys = 'Model', inplace = True)
+
+performance_df = pd.concat(objs = [performance_df, performance_df_temp])
+
+performance_df
+
+
+How Parameters are Determined?
+
+
+We know that smoothing parameters affect how an exponential smoothing model behaves. But how are these parameters estimated? This is what you will learn now.
+
+
+
+00:00:00 - 00:00:42
+Importance and determination of alpha, beta, gamma parameters
+So we have discussed on the importance of value of alpha, beta and gamma and how they determine how how robust the model is and how sensitive the model is. Now we will discuss how these parameters are determined. We discuss about the importance of these parameters. We will now discuss how these parameters are determined is very important. So the parameters, the smoothing parameters alpha, beta and gamma determine how strong the model reacts to do data. These parameters are found by minimizing the measure of historical forecast error. So, so the optimization function would be either minimizing the sum of squares error or the mean square error. So root mean square error.
+00:00:42 - 00:01:03
+Optimization methods for parameter determination
+So basically minimizing one of these error metrics. So most preferred 1 is root mean square error metric. Now we will look at method one. As the smoothing equations are recursive, there is no closed form solution. This is very important. There is no closed form solution for alpha, beta and gamma. They are iteratively determined. So an iterative numerical search is.
+00:01:04 - 00:02:00
+Iterative numerical search for optimal parameters
+Eventually we will have a parameter guesses of alpha is equal to some value and compute forecast across the entire series using SES halt. This is this is in practice and then we compute the total error of these parameters, then update parameters using a nonlinear optimizer. There are techniques called Nelder made simplex or a simple gradient free method to minimize. So this is beyond scope of this discussion. We can say that there are some parameters and nonlinear optimizers to optimize the value of alpha and beta, gamma for minimizing the error. So repeat until the error cannot be reduced for this iterative method. Basically we keep on iterating to get the optimal value of alpha, beta and gamma. The final values of alpha, beta and gamma are those that minimize the models forecast error. So what do we mean Forecast error. This is the one which provides the minima of this.
+00:02:01 - 00:03:04
+ETS models and statistical foundation
+The value of alpha, beta and gamma for which the errors are minimum is the optimum value of alpha, beta and gamma. The second method is called ETS models, very popular models, so error trend season framework approach provides A statistical foundation. For exponential smithing models, this is more robust, A statistical foundation. Instead of minimizing only the squared errors, ETS assumes the error trend. Season assumes the model has an underlying probability distribution, usually Gaussian for the errors. The level transient components are treated as unobserved state that evolve over time. So basically we used this technique called maximum likelihood estimate to choose a value of alpha, beta and gamma that means observed data. These are robust statistical techniques which will mostly likely in the model. So getting into the math and proof of that would be beyond the scope of this discussion.
+00:03:04 - 00:04:39
+Taxonomy and characteristics of ETS models
+We can say that the key things for an error trend seasonal ETS model is it provides A statistical foundation and then basically it has a underlying Gaussian probability distribution of the error level trend season components. So there are typically ETS models. This is the the taxonomy of ETS models. This will have let us say Ann. So basically this can take the values basically ETS Ann basically means this is error is additive and then there is no trend and there is no seasonality. And if you see this is simple smoothing technique and the ETS AAN method. So we have Hall feeder method basically. So there is additive trend and then the error is additive trend is additive and there is no seasonality. And then if you see we had Holt matters where we had linear trend, multiplicative seasonality. Basically this is a class of models. In fact you get 30 types of models here in ETS. And there is another parameter called damping. We will not discuss about it. You can have damp model also you will have error trend and seasonality. This can be present or not present and if it is present it can be additive or it can be multiplicative. These are values it can take. So we get around 30 sets of equations here instead of looking at all the 30. If you can characterize the time series, you will be able to narrow down on which ETS model would be the appropriate model.
+00:04:39 - 00:04:43
+
+So these are also called innovative state space model.
+
+
+Exponential smoothing models use parameters such as Equation, Equation, and Equation to control how strongly the model reacts to new data. These parameters are estimated by minimising forecast error over historical observations. Common error measures include:
+
+SSE (Sum of Squared Errors),
+
+MSE (Mean Squared Error),
+
+RMSE (Root Mean Squared Error)
+
+ Session Summary
+
+In this session, you explored exponential smoothing models, which improve forecasting by assigning different weights to past observations. You learnt how these models adapt to changes by giving more importance to recent data points.
+
+ 
+
+You studied Simple Exponential Smoothing, Holt’s method, and Holt–Winters’ method, each designed to handle different combinations of level, trend, and seasonality. You also learnt how smoothing parameters influence forecasts and how they are determined.
+
+ 
+
+By the end of the session, you were able to select and apply appropriate exponential smoothing models based on the structure of a time series.
+
+ 
+
+Next, you will learn about prerequisties for autoregressive modelling.
+
+Since exponential smoothing equations are recursive, there is no closed-form solution for these parameters. Instead, an iterative numerical optimisation procedure is used, where parameter values are repeatedly updated until the forecast error cannot be reduced further.
+
+ 
+
+We also learnt about a more formal approach, which is provided by the ETS (Error–Trend–Seasonal) framework, which treats exponential smoothing models as statistical state-space models. The level, trend, and seasonal components are viewed as unobserved states, and parameters are estimated using Maximum Likelihood Estimation (MLE).
+
+ 
+
+The ETS framework also enables the construction of statistically sound prediction intervals and provides a systematic way to classify models using the ETS taxonomy, such as:
+
+ 
+
+ETS(A,N,N) for Simple Exponential Smoothing
+
+ETS(A,A,N) for Holt’s method
+
+ETS(A,A,M) for Holt–Winters with multiplicative seasonality
+
+ 
+
+where N stands for none, A stands for additive, and M stands for multiplicative, referring to the error, trend, and seasonal components, respectively.
+
+ 
+
+Next, we will summarise what you learnt in this session.

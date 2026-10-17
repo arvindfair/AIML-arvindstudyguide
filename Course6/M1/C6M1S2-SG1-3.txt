@@ -1,0 +1,347 @@
+SVM and Kernals 
+
+Session Overview
+
+
+Welcome to the session on ‘Kernels’. 
+
+ 
+
+Kernels represent one of the most innovative ideas in machine learning, born from mathematical insight and widely adopted for their ability to handle complex, nonlinear data. This session focuses on developing a strong intuition for what kernels are and why they are so powerful. 
+
+ 
+
+We will begin by examining the limitations of linear feature spaces when faced with nonlinear relationships. From there, you will explore how kernels provide an elegant solution by enabling models to operate in higher-dimensional spaces without explicitly computing those transformations, significantly reducing computational effort. The central concept you will encounter is the kernel trick, which allows SVMs to achieve nonlinear separability while preserving efficiency. We will also discuss the different types of kernels, that can be used on different types of input data.
+
+ 
+
+Finally, you will apply these ideas in practice through a demonstration on letter recognition, observing how kernel-based models extend decision boundaries far beyond the linear case. 
+
+
+Introduction to Kernels
+-------------------------
+
+So far, you have learnt about hyperplanes, the Maximal Margin Classifier, and the Support Vector Classifier. All of these are linear models (since they use linear hyperplanes to separate the classes). 
+
+ 
+
+However, many real-world data sets are not separable by linear boundaries. For instance, what if the distribution of data points looks like the figure given below?
+
+You’ll agree that it is not possible to imagine a linear hyperplane (a line in 2D) that separates the red and blue points reasonably well. Thus, you need to tweak the linear SVM model and enable it to incorporate nonlinearity in some way.
+
+ 
+
+Kernels serve this purpose. They enable the linear SVM model to separate nonlinearly separable data points. In the lectures that follow, you will learn how kernels do this.
+
+00:00:06 - 00:00:47
+Introduction to Kernel Methods
+This will be a short introductory session on kernels. Kernel methods are of course used in SVM. They in fact form the basis for much of what is done under SVM. But in general, kernel methods have their applicability across a wide range of algorithms. There are a few basic principles and tricks, if you may wish, which form the basis for most of what is broadly known as kernel methods.
+00:00:47 - 00:01:27
+Importance and Advantages of Kernels
+And you can see that by the end of this session, you will be able to appreciate why kernels are important, why they are an excellent mechanism for leveraging on the power of linear methods, the simplicity and the elegance of linear methods, and yet get models which have the power of all the nonlinearity that you can imagine. So kernels in some sense are a backdoor way of bringing in nonlinearity into the sort of models we built.
+00:01:28 - 00:02:16
+Nonlinearity in Linear Models Using Kernels
+The basic algorithmic framework that you learnt about all these algorithms, SVM and regression included, does not change with the introduction of kernels. So as I said, kernels is in some sense just a backdoor way of bringing in nonlinearity into these methods. These methods by themselves essentially remain linear methods and that is basically the the big advantage that you have with these methods. The kernels are basically a topping on top of the linear frameworks that we have learnt. And this topping basically allows you to introduce as much nonlinearity as you want into the models that you build.
+
+
+Before you move ahead and study kernels, it is important to remember that SVMs are linear models, and kernels do not change this at all. As Professor Raghavan mentioned, kernels are ‘toppings’ over the linear SVM model, which somehow enable the model to separate nonlinear data.
+
+ 
+
+
+In the next few lectures, you will understand how they make this happen.
+
+Mapping Non-Linear Data to Linear Data
+
+00:00:00 - 00:00:29
+Introduction to data points on XY plane
+To get some intuition about how this works, let us start with a simple example. Say I have data points on, say, the standard XY plane. So X&Y are the attributes of every data point in my data set and I have two kinds of data points.
+00:00:30 - 00:01:09
+Building a classifier to separate data points
+There are some which are crosses like this and there are some which are dots and they are in the middle. So this is the sort of data set that I have. Let us take SVM for instance. I want to build a classifier which will separate the dots from the crosses. We can very easily see visually that the boundary needs to be something like this, it needs to be a circle.
+00:01:10 - 00:02:19
+Motivation for using transformations in classification
+But then I do not see an obvious way to get a circular boundary from any of the linear methods that I have. We learnt that they essentially produce hyperplanes or straight lines if it is in 2D. Let us now try a simple transformation. Let us first look at the motivation behind why I would want to look at a transformation in the 1st place if I suspect that the boundary between the two classes is going to look like a circle or may be an ellipse. Let us recollect our high school analytical geometry and we know that the equation of a circle or an... is basically going to be of this kind. X ^2 by a + y ^2 by B equal to C and if A&B are equal it becomes a circle, otherwise it is an ellipse and all of that. So this is the equation of an ellipse.
+00:02:20 - 00:03:11
+Transforming data points to a new space
+If this is what we are suspecting, then we can do something neat. Everyone of these points. Let us say our data set consisted of points of this kind X1Y1 all the way up to XNYN along with a label for each of these ±1 right? So the crosses are the minus ones and the dots are the plus ones. We want to build a boundary which separates the plus ones from the minus ones. This is our data set. Now what I do is this. I create a new space, let me call that X prime, Y prime and I plot the same points again in this space, but with a little twist.
+00:03:12 - 00:04:32
+Plotting transformed data points and finding separator
+Instead of plotting X1 as X1, I am actually going to plot X1 squared versus Y 1 ^2. So that let us say this was 0.1 and 10.1 becomes this. So if this was Y1 and the X was X one, I am instead going to plot X1 squared and Y 1 ^2 and then let me take X2. Let us say this was X2 and now the two would probably have become this. So instead of X2 and Y2I plot X2 squared versus Y 2 ^2 so this is my .2 and so on. I would get something like this. Blue points here and the crosses would be here when you finish this transformation. And now if you look for the separator between these two, its is clear that the separator is actually going to be a straight line.
+00:04:34 - 00:05:10
+Explanation of transformation to linear equation
+Why did it turn out to be a straight line? The answer is simple. If X prime is X ^2 and Y prime is y ^2 in the X ^2 y ^2 coordinates, the equation X ^2 by a + y ^2 by B equal to C essentially becomes X prime by something a prime plus Y prime by B prime equal to C prime, and this is a linear equation. This is nothing but the equation of a straight line.
+00:05:11 - 00:06:15
+Using linear methods after transformation
+So with a simple transformation by simply mapping every XY to X ^2, y ^2, I have transformed A quadratic separator like an ellipse or a circle into a straight line separator. So if I had to solve a problem of this kind, what would I have done? I would have first carried out this transformation, convert every XY point to X ^2 and y ^2. And after I carry out this transformation, simply run any of your linear methods. Could be SVM, could be normal regression, logistic regression, whatever you please. Any of the linear methods will work. It will again produce a straight line separator. Once you have the separator, it is very easy to map it back to the original. It will give you X prime by a prime plus Y prime by B prime equal to C prime. And then you substitute X prime with X ^2, y prime with y ^2 and you have the equation of the separator in the original space.
+00:06:16 - 00:07:11
+Running SVM on transformed feature space
+This is the core idea behind non linear transformations. So the method that we are going to use like the non linearity is in the transformation. The method that we used was still a linear method. Whether we use a regression, whether we do any of the linear classification methods, the method that we are going to use is still linear. It is still SVM, exactly the way we studied SVM in the 1st place. It is just that I am going to run my SVM algorithm on a different transformed space. It is not in the original attribute space. I am going to run the same SVM algorithm on a transformed feature space.
+00:07:12 - 00:08:28
+Non-linear transformation to feature space for linear methods
+So this is where the notion of a feature comes in. You could imagine X ^2 and y ^2 that we created in this case to be the features that I extracted from each data point. So basically what I am doing is to find a linear separator in the feature space as opposed to the original attribute space and the transformation from the attribute space to the feature space is a non linear transformation. So I carry out a non linear transformation to a feature space and once I get the feature space I can run any of my linear methods in the feature space S Far so good. You can actually do quite a few interesting things just with this as we have seen just now that we can actually use the same linear methods that we have learnt to generate non linear boundaries like circles and... And so on and so forth.
+
+
+That was a neat trick. To summarise, you can transform nonlinear boundaries to linear boundaries by applying certain functions to the original attributes. The original space (X, Y) is called the original attribute space, and the transformed space (X’, Y’) is called the feature space.
+
+ 
+
+The following example will help you understand this better.
+
+ 
+
+Let’s say you want to classify emails into 'spam' or 'ham' on the basis of two attributes - 'word_freq_office' (Y) and 'word_freq_lottery' (X). The following plot shows the data set (figure below), which is clearly nonlinear.
+
+
+To convert this data set into a linearly separable one, a simple transformation into a new feature space (X’, Y’) can be made. For now, don’t worry about the math behind the transformation. You may almost never need to manually transform data sets. Just assume that some appropriate transformation from (X, Y) to  (X’, Y’) can make the data linearly separable.
+
+ 
+
+In this 2-D case, you could guess the nature of the transformation by visualising the data. But almost all real data sets have hundreds of features that are not possible to visualise.
+
+ 
+
+So, how would you guess the kind of transformation that should be applied to make the decision boundary linear? You'll learn how complex transformations are made in the upcoming lectures.
+
+Why is the transformation of attributes required?
+
+SVM works well if the data is linearly separable. Hence, it is advantageous to make the data linearly separable.
+
+
+Feature Transformation
+----------------------
+
+As you learnt in the previous lecture, the process of transforming the original attributes into a new feature space is called ‘feature transformation’. Let’s now learn how this is done on a general data set.
+
+00:00:00 - 00:01:57
+Introduction to transformation of circle to straight line
+Let us take the first example that we took where we transformed a circle into a straight line. Now this transformation was very neat. We had X ^2 and y ^2 as the two coordinates, the 2 features, and in the feature space it became a straight line. But then who tells us that the separating boundary between the two classes is indeed going to be a circle or an ellipse? You may not know that, and it is often very hard to guess what exactly the shape of the separator is going to be. It is not difficult to sense that the separator is not going to be linear. That much will be pretty obvious the moment you look at the data. But exactly what the form of the separator is going to be the functional form of the separator. That may not be obvious at all. So from the complexity of the way the datas distributed, for instance if you look at the first example here, we may not know that it is exactly a circle or an ellipse or something of that kind. But we can sort of guess that it is not going to be terribly complicated. It is going to be something which looks like a ball, may be an oblong thing, it may not exactly fit into the equation of an ellipse or a circle, but it is not going to be something as crazy as say this. You know that. So that is something you can guess. So from the way the data is distributed, you can probably guess that the separator is going to be a quadratic, but you do not know exactly what the form of this quadratic is going to be. So what do you do then?
+00:01:58 - 00:03:08
+Understanding the complexity of data distribution and separator form
+Here is what you can actually do. The moment you suspect that it is a quadratic, you can write the equation of a quadratic in its most general form. The earlier attempt we did, where we started with the hunch that it is going to be a circular or an ellipse. We simply transformed X to X ^2 and Y to y ^2. But a general quadratic may have all these terms, may have X ^2 terms, may have y ^2 terms, may have an XY term, may have X as a stand alone, may have Y, may also have some constant. So in general a quadratic is going to look like this plus C times XY plus d * X plus E times y + F * C All these are the constants and this is equal to 0. This is the sort of equation that you would need to consider if you want to look at the entire class of quadratics.
+00:03:09 - 00:04:03
+General quadratic equation for data separation
+Again, mapping it back to the first example, we conveniently assume there that these terms, the XYXY, all these terms are going to be 0. It is for this special case that our transformation worked and we were indeed able to find a linear separator. What if we cannot guarantee that these terms are going to be absent? We just know that it is going to be a quadratic. In that case, again, in principle the solution is simple. Instead of mapping it again to A2 dimensional space feature space where you have X ^2 and y ^2, instead of X&Y, you now create a six dimensional space where each dimension of this represents a feature.
+00:04:05 - 00:05:08
+Mapping data points to six-dimensional space
+And what are the features now? X ^2 is 1 feature, y ^2 is another feature, XY is the third feature, X itself is a feature, Y itself is a feature. So these are the sort of features that we are looking at. And if you map every point XY to a point in six dimensions. So it is almost like I have actually extracted 6. Some of them are non linear. I have extracted 6 features out of the data point XY and those 6 features are X ^2 XYY squared XY and then constant 1. So these are the features I have extracted from this and I map every point to a point in the six dimensional space. The moment I do that, I know that any quadratic can actually be written like this.
+00:05:09 - 00:06:19
+Running linear algorithms in transformed space
+And since these are the coordinates in the feature space, this should actually correspond to a linear equation in my 6 dimensional feature space South. Now the answer is exactly the same as what we did earlier. I simply convert every data point XY to this point in six dimensions and I run any of my usual linear algorithms on the transformed set of data points in the six dimensional space. I can run SVM for instance. It will give me a separator separator on these coordinates, and then it is easy for me to map it back to the sort of curve it will represent in my original attribute space South. This is what I would do in general if I did not know exactly what the functional form of the features are going to be.
+00:06:19 - 00:07:07
+Challenges of dimensionality increase in feature transformation
+I will try to accommodate every possible functional form of the features. In principle, this is fine. This is exactly how it will work. But then there is one very very big problem in this. You can see already that what started off as A2 dimensional problem, because I did the feature transformations, it became A6 dimensional problem and now you can imagine what will happen. So we already have a three fold blow up in the number of dimensions and this was when the original dimensions was just two.
+00:07:08 - 00:08:09
+Impact of high-dimensional transformations on computational feasibility
+And the degree of the transformation that we are looking at, the feature transformation is again two. We are looking only at quadratics even for such simple transformations. Just a quadratic and justice 2 attributes in the original data set, we actually have a three fold increase in the number of dimensions. Imagine trying to do this with say 100 attributes in the original data set, which is not at all uncommon in problems that you will encounter for analytics today. And say I need 5th degree polynomial transformation to take care of the sort of nonlinearity that I expect in the boundary between the classes that I am trying to separate.
+00:08:10 - 00:10:26
+Exponential growth of dimensions with polynomial transformations
+And now you can imagine the sort of blow up this is going to have. In general, the number of dimensions of the target feature space to which you will in principle have to transform the entire data will grow exponentially with the original number of attributes that you had and also with the degree of the polynomial or the complexity of the transformation that you are talking about. South more complex the transformation, more number of dimensions you will need for the target feature space. More the original number of attributes. Again, more the number of dimensions you will need in the target space. Just to get an intuition about why this blow up happens. For example, if instead of justice 2 variables, if my original data set had let us say 3 attributes and I am still looking at a quadratic, now instead of justice X ^2, y ^2, XYI will now need X ^2, y ^2, Z ^2 and then I will also need XYYZXZ and then XYZ individually. If I have 4, then you will need every pair of these attributes to be taken care of Indiana the quadratic and all of them individually. If you are looking at a polynomial of degree 3, then you will need all triplets, all pairs, then all of them individually, and so on. South you can see the sort of blow up that is now happening. So clearly, though this looks cool in principle, in practice it is not going to work computationally. This is completely infeasible if you actually have to carry out such a transformation to a feature space and then run any of your favorite linear algorithms on the feature space. And this is precisely where the notion of a kernel comes in.
+
+You saw that as the number of attributes increases, there is an exponential increase in the number of dimensions in the transformed feature space. Suppose you have four variables in your original data set, then, considering only a polynomial transformation with degree 2, you end up making 15 features in the new feature space, as shown in the figure below. 
+
+ 
+
+Note that the terms xyz, xzw, etc., do not appear here because it is a transformation of degree 2, and xyz, xzw, etc., are third-degree terms.
+
+ 
+In the next lecture, you will understand how you can use kernels to solve the problem of complex feature transformations.
+
+
+The Kernel Trick
+----------------
+
+
+In the previous lectures, you learnt how to transform a nonlinear data set into a linear one. You also saw that there is an exponential increase in the number of dimensions when you transform the attribute space to a feature space. This makes the modelling (i.e. the learning process) computationally expensive.
+
+ 
+
+Now, let's see how you can solve this problem using kernels. 
+
+ 
+
+Think of a kernel as a black box, as shown in the figure below. The original attributes are passed into the black box, and it returns the transformed attributes (in a higher-dimensional feature space). The SVM algorithm is shown only the transformed, linear feature space, where it builds the linear classifier as usual.  
+
+ 
+
+However, what makes kernels special is that they don't do this transformation explicitly (which is a computationally difficult task, as we discussed), but they use a mathematical hack to do this implicitly.
+
+Pre-reading - Inner Product
+
+ 
+
+In the coming lectures, you will need to recall the concept of the inner product (or dot product) of two vectors. Say there are two vectors A = [2, 3, 5] and B = [1, 0, 4], then the dot product (or the inner product) of A and B is the element-wise multiplication of A and B, i.e. transpose(A). B = A'B = 2.1 + 3.0 + 5.4 = 22. 
+
+ 
+
+Note that the inner product of two vectors returns a scalar number, in this case 22.
+
+ 
+
+Similarly, in any given dataset with n attributes, you can think of each data point (i.e. each row) as a vector of length n. Thus, the dot product of two rows, or observations, will return a scalar value. This concept will be helpful in the following video.
+
+00:00:00 - 00:00:41
+Introduction to kernel and feature space transformation
+The use of a kernel somehow magically allows you to do this entire thing. Carry out a non linear, possibly a very complex non linear transformation to a feature space, run your favorite linear algorithm on the feature space and map it back to the original attribute space. All this you do without actually carrying out this feature transformation explicitly. And this is basically where the kernel trick comes in.
+00:00:41 - 00:01:26
+Kernel trick and computational benefits
+And that is essentially what makes kernels such an attractive thing computationally. The idea is basically this. It actually rests on a very crucial property of almost all the linear methods. It will be hard for us to go into the precise mathematical details of why this happens, but it is a fact that almost all the linear methods, they would eventually require dot products of this kind.
+00:01:26 - 00:02:26
+Importance of dot products in linear methods
+So let us say this is the attribute vector for the I TH data point and you take the dot product with the attribute vector, say for the J TH data point. This is a pair of attribute vectors and you take their dot product. It turns out that when you are trying to find the best fit solution in whatever sense, logistic regression, SVM of the standard linear regression. In all of these, it turns out that you actually only require pair wise dot products of this kind between the attribute vectors for the different data points. You never need any of them individually. This is a fact.
+00:02:27 - 00:03:11
+Dual space in optimization theory
+And to see why this is indeed the case, you will actually have to view these problems in what in optimization theory is called the dual space. You actually convert the original problem towards dual problem, and in the dual you will find that the only terms that appear are terms of this kind. You will never see anything which has any of these points, the attribute vectors in a standalone manner. They will always appear in pairs. So here comes the kernel trick.
+00:03:11 - 00:05:24
+Application of kernel trick in SVM algorithm
+Assuming this fact is true, we can easily now extend this. If I actually need XI transpose XJ for every pair of points, I might as well replace this by the corresponding feature vectors for each of the data points. It makes no difference to me. I could actually replace each of these attribute vectors by their corresponding feature vectors. So the attribute vector as seen by the SVM algorithm is the attribute vector in the space where I am actually running the SVM algorithm. SVM algorithm is run on some space. The original attribute space was something else. The SVM algorithm does not know about it. The SVM algorithm only looks at the attribute vectors that have been given to it as part of the the problem definition specific to the SVM algorithm. If I am running the SVM algorithm in the original attribute space in which the data was given to us, then these feature vectors are actually the same as the attribute vectors. But if that is not the case, then I am essentially running the SVM algorithm on a different set of data points where the attribute vector, the transformed attribute vector for each data point is essentially the feature vector, the non linear feature vector that I have extracted from each of the original attribute vectors that I had for these data points.
+
+
+To summarise, the key fact that makes the kernel trick possible is that to find a best fit model, the learning algorithm only needs the inner products of the observations Equation. It never uses the individual data points X1, X2, etc., in silo.
+
+ 
+
+Kernel functions use this fact to bypass the explicit transformation process from the attribute space to the feature space, and do it implicitly. The benefit of implicit transformation is that now you do not need to:
+
+Manually find the mathematical transformation needed to convert a nonlinear to a linear feature space
+Perform computationally heavy transformations 
+ 
+
+In practice, you only need to know that kernels are functions which help you transform nonlinear datasets. Given a dataset, you can try various kernels and choose the one that produces the best model. The three most popular types of kernel functions are: 
+ 
+
+The linear kernel: This is the same as the support vector classifier, or the hyperplane, without any transformation at all
+ 
+The polynomial kernel: It is capable of creating nonlinear, polynomial decision boundaries 
+ 
+The radial basis function (RBF) kernel: This is the most complex one, which is capable of transforming highly nonlinear feature spaces to linear ones. It is even capable of creating elliptical (i.e. enclosed) decision boundaries
+ 
+
+The three types of kernel functions shown in the figures below represent the typical decision boundaries they are capable of creating. Notice that the linear kernel is the same as the vanilla hyperplane, the polynomial kernel can produce polynomial-shaped nonlinear boundaries, and the RBF kernel can produce highly nonlinear, ellipsoid-shaped boundaries.
+
+FIGs 
+
+The Linear Kernel
+
+
+The Polynomial Kernel
+
+
+The RBF (Radial Basis Function) Kernel
+
+
+
+Next, we will understand how this kernel trick actually works.
+
+How Kernels Work
+
+
+You know that kernels transform nonlinear datasets into linear ones without doing it explicitly. This is possible because of the fact that to find the best fit model, the learning algorithm only needs the inner products of the observations Equation.
+
+ 
+
+Let's understand this through an example. Suppose you have two nonlinearly separable attributes (A1 and A2) along with the label (Y) in your data set, as shown below. 
+
+ 
+
+Row_name	A1	A2	Y
+X1	2	4	1
+X2	2	7	0
+X3	3	1	1
+X4	5	8	0
+ 
+
+The SVM algorithm only needs the pairwise inner products of the form Equation. For example, in the above data set, the dot product of X1 = (2,4) and X2 = (2, 7) results in a scalar value of  Equation. 
+
+ 
+
+Similarly, one can easily calculate the inner products of all the pairs of data points Equation. Note that here, the vectors Equation are in the original nonlinear attribute space.
+
+ 
+
+Now, let's say that ϕ is a function which transforms the nonlinear attribute vectors into linear feature vectors, Equation. Now, you can calculate the pairwise inner products of the feature vectors Equation, using which the learning algorithm can build a model in the linear feature space.
+
+ 
+
+The problem is that you do not know what ϕ is. For instance, in the example of linear transformation from (x, y) to (x2,y2), the transformation function ϕ is Equation, but it is harder (or sometimes impossible) to figure out what ϕ is when you have a large number of attributes. 
+
+ 
+
+This is exactly where kernels come in, they bypass the whole business of finding a suitable ϕ using a clever mathematical hack! Let's see how.
+
+00:00:00 - 00:01:14
+Introduction to Feature Vectors in SVM
+The first thing I do is basically so just so that you can relate to this, if I give you a data set where the original attributes were say age and salary and may be something else. I have created a feature vector out of this which consists of say age squared, the log of the salary and so on. And I create a new data set where the actual values for the attributes are going to be not the original age and salary that I was given. It is going to be H ^2, the log of the salary and other things. So this is the data set as far as I am concerned now. And on this data set I am going to run my SVM. So the attribute vector as far as the SVM algorithm is concerned is basically this which is essentially what we called in general as some attribute vector Phi.
+00:01:15 - 00:02:46
+Understanding Attribute Vectors and Dot Products in SVM
+So the attribute vector as far as the SVM algorithm is concerned is this feature vector. And this is different from our original attribute vector. The SVM algorithm does not know that this feature vector has been extracted from somewhere else and it does not care either. So this feature vector is what we represented as the function Phi in general. So the first leap that we will make is that this the dot products that the SVM algorithm really requires are essentially dot products between the corresponding feature vectors for the data points. So imagine now running this entire SVM algorithm on some feature space, and the feature vectors in that space are the vectors that SVM cares about. And even more specifically, SVM only requires dot products between pairs of those vectors. And. Now suppose I could create a function, let me call that scale, which takes 2 vectors as input and it returns a value which is a scalar value.
+00:02:46 - 00:03:28
+Introduction to Kernel Functions and Scalar Values
+This is not a vector, it is a scalar. It is just a number and if I can show for example K could be say E power minus some alpha into XI minus XJ square. So this is an example of a function. If I plug in the values for two vectors XI and XJ here I can take their difference. Take their the Euclidean length of the difference vector and then minus alpha that E power. This will give me a number and that is basically the value written by this kernel function.
+00:03:29 - 00:05:20
+Mathematical Representation of Kernel Functions
+And now if I can show that this function can be written in a mathematical sense, this can be written as the dot product of 2 vectors which are like this. So Phi is again a vector that I generate from the original attribute vector. So this is my feature vector. So if I can show that for any XI and XJ the this value that this function evaluates to will be the same as the value of the dot product between the corresponding feature vectors for some feature transformation Phi. Please notice I do not know what exactly this feature transformation is. I do not know the explicit form of this feature transformation. Suppose like what a typical mathematician would do. I am only going to say there exists some function of this kind such that for any pair of vectors XIXJ, the value written by East power minus alpha into the mod of XI minus XJ squared is actually equal to the dot product of the feature vectors generated using the feature transformation function Phi.
+00:05:21 - 00:06:21
+Feature Transformation and Dot Product Equivalence
+I am only going to show that there exists some such feature transformation, and this feature transformation may be something terribly, terribly complex and I do not even want to worry about that. And now we have something very nice happening. I know that the SVM only cares about pair wise dot products of this kind between the feature vectors. But I also know that the dot products is actually equal to the value of this function, which is actually very easy to evaluate for me. So whenever the SVM or any of the linear algorithms asks for a dot product of this kind between the corresponding feature vectors for two, for two of the data points, I simply return the value of this function. And this function is very easy to evaluate.
+00:06:21 - 00:07:02
+Scenarios of SVM with Feature Transformation
+I know that I just have to plug in the value of XI and XJ and I will get a value. I can give that back to the function. The SVM algorithm only cares about the value of this dot product. It really does not know that I am actually cheating in the background, right? I am not really computing this feature vector, taking their dot product and giving it to the SVM algorithm. I am actually taking a shortcut and computing this function and the value written by the function is what I give to SVM. Now you can see what the behavior of the SVM algorithm will be.
+00:07:04 - 00:08:28
+Kernel Function and SVM Algorithm Behavior
+Let us take two scenarios. One scenario where I explicitly convert every data point using this feature transformation function Phi to a new feature space and I run my SVM algorithm in the feature space. That is scenario one. Scenario 2. Whenever the SVM algorithm asks for a dot product of this kind, which is the only thing it will ever ask for, that is something we are taking on faith and this is a property of the way many of these linear algorithms behaves. So whenever the SVM algorithm asks for a dot product of this kind, I am simply going to return the value of this what I call as the kernel function. So given these two scenarios, would there be any difference between the outcome of the SVM algorithm in these two scenarios? The answer is no, because the dot product after the feature transformation is exactly equal to the value returned by this function. So the outcome is going to be exactly as if I had explicitly carried out this transformation and then run SPM there.
+00:08:29 - 00:09:00
+Complexity of Feature Transformations and Kernel Functions
+However, computationally, I am not explicitly carrying out this transformation at all. I am cheating in some sense. I am actually taking a shortcut. I am computing this function. I do not even know what the actual feature transformation that this function corresponds to. I may not know that in many cases, but I know that there exists some such feature transformation and that is something very complex. It is a highly non linear feature transformation.
+00:09:01 - 00:10:02
+Choosing Appropriate Kernel Functions for SVM
+So if I have to take care of nonlinearity, I need to find a complex feature transformation. Instead of doing that, I just find an appropriate kernel function and whenever my linear algorithm asks for the dot product between pairs of feature vectors, I am going to return the value given by this function. And these functions are what are called kernel functions. You can show that there is a fairly wide class of functions for which this property actually holds that the kernel function value for any pair of vectors is actually equal to the dot product between the corresponding feature vectors for some feature transformation Phi.
+00:10:03 - 00:11:04
+RBF Kernel and Infinite Dimensional Feature Space
+So effectively now to run my SVM algorithm, for it to be also able to generate highly non linear boundaries, I just need to pick an appropriate kernel function. In fact, in principle, the corresponding feature transformations, if you had to do that explicitly say, for kernel functions of this kind. By the way, this is a very popular kernel function that is used, and this is what is called the RBF radial basis functions. And for such functions, the corresponding feature transformation will actually be for a feature space which is infinite dimension.
+00:11:05 - 00:12:32
+Kernel Trick and Computational Feasibility in SVM
+So that is how complex the corresponding feature transformation is. So you can indeed get highly non linear boundaries using this kernel trick. So the trick of substituting the dot products by the value of a common function is the key thing which makes this whole transformation with a linear algorithm business worthwhile. It becomes computationally feasible precisely because of this kernel trick. And there are many simple functions of this kind which can be shown mathematically to be kernel functions. So when you run your SVM, in the SVM call there will always be an argument which will denote the kernel that you want to use. Internally, the algorithm is precisely the same, there is no difference. The only difference is in the choice of the kernel function. And what the SVM implementation internally will do is basically return the value of that function whenever the algorithm requires the dot product between a pair of feature vectors.
+
+To summarise, kernel functions bypass the steps of finding a suitable transformation function ϕ by doing the same thing implicitly. The three most commonly used kernel functions are the linear kernel, the polynomial kernel and the RBF (radial basis function). 
+
+ 
+
+In the upcoming Python demonstration, you will learn how to experiment with each of these kernels and choose the one that gives the best results.
+
+Choosing a Kernel Function
+--------------------------
+
+In this lecture, you will learn some practical tips on choosing the right kernel given a problem. Though there are no hard and fast rules, there are some broad thumb rules. Let's have the professor explain this.
+
+
+00:00:00 - 00:00:26
+Introduction to SVM Kernel Selection
+We will now look at some thumb rules for how you would pick the kernel when you are using SVM for a particular problem. The general observation is that as the kernel becomes more and more complex, your model is also becoming complex and hence the danger of over fitting.
+00:00:26 - 00:01:16
+Trial and Error in Kernel Selection
+If your kernel is too simple then it's probably not good enough for your problem. So this trade off I guess is common to a lot of ML problems and kernels are no different. So kernel is just one tool which allows you to exploit the nonlinearity in a particular problem while you are still using linear methods. But for a given problem, I have a problem on which I want to use SVM. What kernel do I use? Now this question in general, there is no objective algorithmic way of saying look, this is precisely the kernel that you would need for this particular problem.
+00:01:18 - 00:02:26
+Intelligent Guessing and Data Analysis
+It ultimately boils down to trial and error trying to see which kernel will work best by trying a few choices. But then your choices don't have to be completely arbitrary. You can of course do some intelligent guessing, and that guessing would either come from past experience in working with problems of this kind, or precedence where you have seen others being successful at solving certain kinds of problems with certain kernels. Or when you do your routine data preparation and the exploratory data analysis that you would do, you would typically get a sense of what the classification boundary is likely to look like when you when you look at a classification problem, say with you, you plot the two classes. 1 class has a bunch of red dots, the other class is a bunch of blue dots.
+00:02:27 - 00:03:36
+Visual Judgement of Classification Boundaries
+If you find when you plot them on a graph, if you find that they are completely intermingled, you can clearly see that there is very little hope of you finding a linear separator which will cleanly separate the Reds from the Blues. On the other hand, if you find all the Reds bunched here, all the Blues bunched here, you know clearly there is going to be a linear separator. So you, you do need to visually make a judgement about how clean is the boundary going to be between the two classes. And if the boundary appears reasonably clean, if they're more or less well separated, there may be a few outliers on either side, which is OK. I mean you you really don't want to be taking care of all of them because that's precisely what leads to overfitting. But if you find by and large they are separated, you will need to use only a linear SPM in most cases. And this is precisely what happened when we did the e-mail spam detection problem.
+00:03:37 - 00:04:42
+Examples of Linear and Non-linear Separators
+On the other hand, when you see that the points are intermingled, even there, if you can visually sort of draw a separator which may not be straight anymore, but because of the intermingling, you may have to draw a line like this, a curved line. And with that curved line or maybe a circle or something of that kind, you may be able to separate the two classes of points reasonably well. Now that would typically point to a polynomial kernel. And if you see no such hope of finding any kind of a boundary curve or otherwise if they are hopelessly intermingled with each other, then I guess you will need to use a complex kernel. And the most common choice of a kernel when you can't do anything better by picking something simpler is the RBF kernel.
+00:04:43 - 00:05:13
+Choosing Between Linear, Polynomial, and RBF Kernels
+So that now gives you some idea of how you can go ahead and pick kernels. The first choice would of course be a linear kernel. If you don't see a clear linear separation, but then there is still a separation to some WAVY line of sorts, then the good choice would be a polynomial kernel. If none of these work, RBF.
+
+
+Choosing the appropriate kernel is important for building a model of optimum complexity. If the kernel is highly nonlinear, the model is likely to overfit. On the other hand, if the kernel is too simple, then it may not fit the training data well. 
+
+ 
+
+Usually, it is difficult to choose the appropriate kernel by visualising the data or using exploratory analysis. Thus, cross-validation (or hit-and-trial, if you are only choosing from 2-3 types of kernels) is often a good strategy.
+
+ 
+
+Next, we will apply our knowledge of choosing the best-fit kernels while solving a real-life problem. 
+

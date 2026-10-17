@@ -1,0 +1,198 @@
+‘Explainable AI
+Welcome to the session ‘Explainable AI’. 
+
+In this session, we take our first deep dive into the fascinating world of Explainable AI (XAI)—a critical area that bridges the gap between model performance and human understanding. 
+
+Previously, learners explored model selection techniques to choose optimal algorithms and delved into association rule mining (ARM) to uncover meaningful relationships within data. Having built strong foundations in model behaviour and data pattern discovery, the next step is to understand why models behave the way they do—enter Explainable AI. 
+
+This session introduces learners to the core principles, methodologies, and applications of XAI. They will study a range of interpretability techniques—both global and local—through theoretical explanations and live demonstrations. By the end, they will be equipped to evaluate model transparency and fidelity across various use cases. 
+
+  
+
+In this session we will cover: 
+
+Explainability and Complexity 
+
+Applications of Explainable AI 
+
+Global vs Local Model Interpretability 
+
+Partial Dependence Plot 
+
+Individual Conditional Expectation  
+
+Permutation Feature Importance  
+
+Surrogate Models 
+
+LIME 
+
+Fidelity vs Accuracy 
+
+SHAP 
+
+  
+
+By the end of this session, learners will be able to: 
+
+Distinguish between global and local interpretability techniques 
+
+Apply visualisation tools such as PDPs and ICE plots to assess feature influence 
+
+Use the Permutation Feature Importance method to quantify the contribution of each feature to model performance 
+
+Evaluate model fidelity using surrogate models like LIME 
+
+Interpret SHAP outputs to quantify feature contributions 
+
+Compare different XAI frameworks 
+
+  
+
+To begin our journey, we’ll first understand why explainability matters and how it connects to the broader goals of trustworthy AI. The lecture notes for Explainable AI can be downloaded from below.
+
+Session Overview
+
+
+https://d35ev2v1xsdze0.cloudfront.net/85f0fb38-dfcd-4eac-acf9-13b3dbef1136-Lecture-Notes-Explainable-AI.pdf
+
+Setting the Context
+
+
+In the previous section, you learnt about the topics that will be covered in this session as well as their learning outcomes. Now, let’s understand the importance of explainable AI. Professor Raghavan will discuss this in the next video. 
+
+
+00:00:05 - 00:00:41
+Introduction to Explainable AI and its Importance
+So let's start with understanding what explainable AI is and explainability. Why is this an important issue to consider at all? I'm assuming that you already know about ML models, how a typical model would look, and you have some experience with some machine learning models in the past, right? So, so let's start looking at some models to understand what is this issue about explainability in the 1st place.
+00:00:41 - 00:01:15
+Understanding Explainability in Machine Learning Models
+OK, so let's explainable AI. OK, so let's go through a series of models, just the toy examples of models. OK, so let's take an A running example of say, credit card approval.
+00:01:17 - 00:05:55
+Credit Card Approval Example and Decision Trees
+OK, so there's a credit card company and there's someone who's applying for a card and the company needs to decide whether to give a credit card to this person or not, right? So you need to assess the creditworthiness of this person with this person the able to meet the the credit liabilities that this person will incur while they're using the credit card and so on and so forth. So the credit card company needs to make a decision because obviously the credit card company is taking on some risk by giving you a credit card, right? So, so let's say the, the sort of features they would consider for deciding whether this customer is worth giving a credit card worth or not are say things like salary, the could be age, could be income and say net worth, gender, whatever, right education, qualification, There could be any number of such things. So let let's take a simple example. There are say five such attributes that I'm going to evaluate every customer with and I need to make a decision. OK, So if there was a human sitting behind the desk trying to make a decision, what would the person be thinking? Like they would say, OK, if the salary is about something and if this person is not too old and if this person has enough net worth, which means there is enough bank balance which will cover the liabilities that this person will take on with the credit card and all that, right. So you would maybe have a rule like if salary is about something whatever 5,00,000 and age is less than 75 and net worth greater than or equal to 10,00,000. Or this could even be an odd right and so on. I mean, they may not be drawing a big salary now, but this person has a huge wealth behind them, right? And so if these conditions are met, then I say OK, Otherwise I say no, OK, now, so this is the simple rule that the human is going to follow. Now, if somebody is is denied a card and this person is questioning the company, why did you not give me the card? The the reason is very simple. I would show this rule saying, look, this is our company policy. This is how we decide whether somebody gets a card or not. And you haven't met the criterion, so sorry. OK, so you and the the good thing is that here it is so transparent that the person who has denied the card can then figure out what he or she needs to do to be able to get a card because you know where you're failing and you can apply for a card if your salary goes up or if your net worth is more or whatever, right? So it is, it's something that everyone can relate to. You know exactly why your decision was taken. And it also kind of mirrors exactly the way we think about these decisions, right? As as humans, and I'm sure you would now be able to see that yes, there are actually models which work exactly like this. And I'm sure you know what that model is. It's a decision tree. And a decision tree will do precisely what this is doing, right? It would have nodes where decisions are being taken and it would say, OK, if this condition is met, go here, otherwise you go here and so on. It's a, it's a long if then else nested thing. And at the end you would say yes or no, correct. And the the kind of reasoning that it encapsulates is exactly the way we do reasoning as humans.
+00:05:55 - 00:05:57
+
+So there is no problem there.
+
+
+Here, you looked at an example of credit card approval using decision trees. The rules for approving a credit card in this case are very straightforward and easily understandable. 
+
+Next, you will look at more examples of how other ML methods are used for the same application.  
+
+Other ML Methods
+
+In the previous video, you saw how decision trees were used for a credit card approval process. The rules were very simple and easily explainable. In the next video, Professor Raghavan will discuss other ML methods that can be used for the same application in the context of explainable AI. 
+00:00:00 - 00:00:22
+Introduction to different types of models in machine learning
+Now let's move on to other kinds of models. Obviously decision tree is only one kind of model. And you would see that most of the mainstream models that we have in machine learning today or not of this kind, right? They are different. So let's see what other models are possible. So suppose I build a regression kind of model, maybe an SVM or something, right?
+00:00:23 - 00:02:25
+Regression model example and explanation
+So this is the second option. And my model would say OK, I, I after I do the training, I have huge database of, you know, customers with all those attributes for each other customers and whether the customer was given the card or not OK. And from this I train a model. And finally, my model would say OK, .25 into salary plus 3.986 into into age minus whatever, 4.7 into net worth. If it is less than .5, then don't. If it is more than .5, then yes. Here's another model, right? I could use this to take a decision. Just plug in the numbers here and we would get your decision on whether the card is going to be given or not. Fine. I mean, this is OK. This is not as transparent as the earlier one, but still it, it's OK. I mean, it is, it is something that I can kind of relate to reasonably well. And you also know the effect of each of these things in this this coefficient, because this is big. This is telling me that the age is the biggest factor here and maybe the net worth is even bigger. And which one has a positive effect on the decision? Which one has a negative effect? It will tell you all of that. And I can relate to this reasonably well. But still, these numbers are kind of unintuitive. You could ask, OK, why 3.986? Why 4.7? OK, so it's not as intuitive as the earlier one, but it's it's not too bad either right now. I could move on to the third option.
+00:02:25 - 00:04:10
+Logistic regression model and its complexity
+OK, something similar. And this is how you would, if it's a logistic regression model, for example, I would then say, OK, if it is one by one plus E power, the same thing, OK Or it could be the numbers could be different salary plus some other constant into H and yeah, plus another constant into network, etcetera, similar thing. If this is more than .5, then you say yes. Otherwise if it is less than .5, then you say more OK, now this is model things quite a bit Now the, the, all the transparency that you had in the earlier one is gone, right? You have put some exponential here. It's become very mathematical. It might be more accurate than the earlier one, mind you, right? But now the, the the effects of these individual attributes on the final decision is not as transparent anymore, OK. And it's very hard for me to judge which of these attributes will have what kind of effect on the final decision. OK, so this has become very, very, it's become mathematical and not so easy for me to relate, right? And obviously a human behind the desk taking a decision like this is not going to be using a formula of this time, OK? Very likely that person is going to be using something that I had earlier.
+00:04:10 - 00:06:07
+
+
+Neural network model and its intricacies
+And now let's look at the last one. And this will take the cake, right? So you say this is my model and I'm not actually creating something hypothetical. This is exactly how many of the modern day models will actually look, right? OK, if this is again more than say .5, then say yes. If it is less than .5, OK, I'm sure you can guess what kind of model I'm talking about. I'm basically talking about a neural network here. If you actually write out the function that the neural network represents, this is exactly how it will look, OK? And the Sigma happens to be this, the logistic function, OK. And all these things that if I'm circling here are your weights and these are the weights, and this would be the bias, OK? And this is exactly how a neural network model work. And now here there is absolutely no way I can relate to any of these numbers, right? Yeah. I mean, there is a salary here, network there, but what if I increase the salary? What if I decrease the network? What happens to the final decision? What do each of these things represent? Like here, it was very clear that this .25 is in some sense representative of how important this particular attribute is. Now, all that semantics about what these numbers, these coefficients mean is completely lost. I have no clue what these numbers are doing. But then, yeah, it will give you the correct answer, at least on your training data where you have trained. It might give much, much better accuracies than any of the earlier models. OK.
+
+
+Here, at first, you looked at a regression model where the regression coefficients can be used to easily explain which features are more influential. Then you looked at a logistic regression model where it becomes slightly more difficult to explain how much the different features influence the output. Finally, you looked at a neural network, and, in this case, it is extremely difficult to find out how the weights/biases are related to each of the features. The bottom line is, as the model complexity increases, its explainability decreases. 
+
+ 
+
+Next, we will delve more into this and see how model complexity and explainability are related to each other. 
+
+
+Explainability and Complexity
+
+
+Previously, you looked at various machine learning models to understand how an increasing model complexity leads to difficulty in explaining the models. Professor Raghavan will discuss this concept in detail in the next video. 
+
+
+00:00:00 - 00:00:22
+Introduction to Explainability in AI Models
+So now we have 4 models, and you had Model 1, model 2, model 3, model 4. On a scale of transparency, on a scale of how explainable? So what is explainability? Now explainability is somebody gives you a decision, like in this case, the model gave you a decision saying, OK, I'm not going to give you a credit card.
+00:00:22 - 00:02:23
+Importance of Explainability in Decision Making
+You would obviously ask why. OK, it's exactly like I go to a doctor and the doctor says, well, I need to perform a surgery on you. You would obviously want to know why, though I may not understand all the jargon that the doctor is going to speak. I don't understand anatomy, Physiology, nothing right? But still, I need some layman's explanation for why a surgery is needed. Some tissue is overgrown, something needs to be your that the bone needs to be repaired or whatever, right? And that the tumor is grown, it needs to be removed, otherwise it's going to spoil everything around it and so on, right? So there has to be some explanation behind the decision that somebody is going to give you. And more critical the decision, more important, the explanation is going to be right. And you would very rarely take a critical decision which effects you personally or otherwise without an explanation. OK, so the same thing here. You know somebody is going to deny a credit card to you then or you, you take your child to some school for admission. The school says, no, I'm not going to admit your child. You would want to know why, right? You would ask, you demand an explanation. Now, you would clearly put the same standards on any AI model too. And AI model gives you a decision. I'm not going to just take it lying down. I need to understand why the model said whatever it did. So on a scale of so interpretability, explainability is a very basic part of our entire decision making process. And there is no reason why AI models should be exempt from this particular condition, right? So given that explainability is an important criterion, we have these four models, possible models for the same problem right now.
+00:02:23 - 00:03:00
+Evaluating Explainability and Transparency of AI Models
+Which one of them would be the most explainable and which is not the most explainable? Which is the most transparent, which is not the, which is the least transparent? So on a scale of transparency, it would be this, right? So this is the least transparent, least explainable or transparent and this is the most explainable. Each model is inherently there is a certain degree of interpretability that it has.
+00:03:00 - 00:04:58
+Complexity and Interpretability of Neural Networks
+And the general thumb rule is that the more complex the model, less interpretable it becomes OK. As you can see, the neural networks are at the at one end of the scale where there are billions of parameters, literally. And all the big LLMS that we have these days are the the worst. I mean, they have, they have billions and billions of parameters sitting inside. And there is no way I can interpret what's going on. So it'll give you a decision, especially if you're going to use these models to take decisions for you. There is no way I can relate to why those decisions were taken. OK, yeah. So the neural networks are the worst and most of the mainstream models and most of the state-of-the-art models. By state-of-the-art, what do we mean? Models which are, which do very well in on the on the test data or the training data. And they have, they show extremely high accuracies and so on. And the general feature in most of these models is that they are, they have tons and tons of parameters sitting inside. They're very, very complex. And that's precisely why they're accurate. And that immediately makes them very opaque. And the transparency levels go down drastically as the number of parameters goes up. OK. So an unfortunate part of the AI development that has happened over the last decade or so is that all the mainstream models that we use are highly opaque. There is absolutely more transparency, and this is precisely why we need ways to get some insight into why the models are taking the decisions that they are, if at all we want to use these systems for taking decisions for us.
+
+
+Here, you first learnt about explainability using different day-to-day examples. Generally, models which show very high accuracy in the test data are very complex and difficult to explain as they use many parameters. That’s why we need to find ways to explain such complex models when we want to use them for making decisions.  
+
+ 
+
+Explainable AI is the field of AI focused on making AI systems' decisions understandable to humans. It aims to build methods that clarify how AI makes decisions and is essential for trust, fairness, and accountability. Explainability can also be referred to as ‘interpretability’ or ‘transparency’. 
+
+ 
+
+In this context, there are two types of models - 
+
+White Box Models: They are inherently interpretable because the decision-making process is clear and simple. Examples: Linear regression, logistic regression, decision trees, etc. White-box models usually run faster because they are simpler. They are preferred when trust and transparency is critical (e.g., healthcare). 
+
+ 
+
+Black Box Models: These are complex models which provide high accuracy but lack transparency. Examples: Deep neural networks, gradient boosting, LLMs, etc. Black-box AI excels in high-accuracy complex tasks such as image recognition. 
+
+ 
+
+Next, we will look at the applications of explainable AI. 
+
+
+Usefulness of Explainable AI
+
+
+Previously, you understood what explainability is and looked at white and black box models. Next, Professor Raghavan will discuss why explainable AI is useful. 
+
+00:00:01 - 00:00:38
+Importance of Model Explainability and Debugging
+Now, other than the basic need for for the explainability or interpretability of a model, there are also very serious applications why you would need this. For example, if I want to debug a model, a model gives an incorrect answer for something. There's a very well known use case. For example, say there's a neural network model that I have trained to say, distinguish between cows and polar bears.
+00:00:38 - 00:02:11
+Example: Cow vs Polar Bear Model Debugging
+OK, so I have trained the model very well. It gives me phenomenal accuracy, maybe 98 percent, 99% or whatever, right? And and then now somebody wants to play a prank on the model. OK, so the person takes an image of a cow and then very likely this image is going to have a lot of greenery around it, around the cow, right? Because I mean, you don't find a cow in places other than grasslands. So now what you do is you Photoshop this image and remove all the greenery and replace it with snow, OK? And now you give it to the model. Now you won't be surprised if the model actually tells you it's a pole up there. OK, Now, so this is a problem, OK, And I want to debug why is the model saying this? It's not supposed to, right? There are even very ridiculous cases where you you take an image and you at random, you change some pixels in the image and you give it again to the model. The model will tell you something which is completely absurd, OK? And if you want to debug these kind of things, it you, you need some understanding of why the model gave the decision that it did, right? And like, like in the cow versus polar bear example, it said it's a polar bear because it, the decision that it was taking was using the using the landscape and not the animal itself, right? So when it saw the snow landscape, it said it's a polar bear. When it's all greenery, it said it's a cow, OK?
+00:02:13 - 00:03:35
+Regulatory and Privacy Reasons for Model Interpretability
+So for for debugging models and for making the models more reliable, you do need some interpretability, OK, And you also need it for regulatory purposes. If there is some sort of a litigation, you would need to explain why the model said what it did, right? So, so for, for for regulatory reasons, for legal reasons, you also need interpretability very seriously. OK. And also, I mean, if you want adoptability of the models, interpretability is essential. I mean, nobody is going to accept a completely black boxing. You will always be suspicious of it. So if you want people to adopt AI big time, AI models better be interpretable. There are also then, you know, serious privacy regulations which have become very, very important these days, like GDPR and all that, which also mandates that whatever decisions you take, whether it's by a human or a model doesn't matter. You need to be able to explain why the decision was taken. So for for several reasons, you will need all your models to be explainable. OK.
+
+
+In the above video, you understood that explainable AI is useful for various regulatory and stakeholder needs. The following are the different stakeholder needs which explainable AI caters to. 
+
+ 
+
+Data scientists require interpretability to debug models, detect biases, and improve model robustness.  
+
+Regulatory bodies may require AI systems to be explainable, transparent, and auditable.  
+
+Project managers need explanations to monitor AI product behaviour and communicate AI decisions to stakeholders.  
+
+End users expect understandable reasons for AI decisions, especially in sensitive domains such as healthcare and finance. 
+
+ 
+
+Next, you will learn about two ways in which models are interpreted – local and global, and the differences between them. 
+
+Global vs Local Model Interpretability
+
+
+In the last section you learnt about the regulatory and stakeholder needs for explainable AI. Now, Professor Raghavan will discuss the different ways a model is interpreted. 
+
+
+00:00:00 - 00:00:27
+Introduction to Model Interpretability
+Now let's actually jump into how we can explain the behavior of a model. So are there ways? Are we simply doomed because there are a billion parameters sitting out there and and I can't make it or take the foot? Or are there some ways in which I can make sense of why the decision was taken by the model? OK, now there are two very broad approaches to interpretability.
+00:00:35 - 00:02:12
+Local Interpretability Examples
+Global versus local, global interpretability is to understand the broad contours of the model, OK. So is the model sensitive to a certain parameter? Which of these parameters, which of the features does the model treat us more important than which others? And is there a broad trend? Can I say that, OK, if the feature combination is of a certain kind, that the model is likely to give a decision like this? OK, So I'm making very broad global statements which are about the model and it cuts across all data points. OK. We'll look at specific examples as we go along, but broadly global is understanding the model without any reference to a specific instance, whereas a local thing is. So this is typically the case like the example that we took earlier about credit card, right? So I, I am denied the credit card. I want to know why now? So this question that I'm asking, I'm asking you to interpret this particular decision that was taken for me, OK? So it's not about the model in general. It's a very specific instance of a decision. And I want to explain why the decision was taken. The same thing would apply to a healthcare situation where the doctor says, OK, you need to do this or you need to undergo surgery or whatever.
+00:02:12 - 00:02:45
+Methods for Global and Local Interpretability
+You need to visit this particular hospital, You need to explain why that particular decision was recommended for this particular patient, OK? So that is a local interpretability, and you have global interpretability. You have methods for both. OK, so today we will look at a few methods which are global. There are some which are which kind of sit at the border. You can use it as a local method. You can also use it as a global method.
+
+

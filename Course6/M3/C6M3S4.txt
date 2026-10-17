@@ -1,0 +1,2406 @@
+Session Overview
+
+
+Welcome to the session ‘Prerequisites for Autoregressive Modelling’.
+
+ 
+
+Before building autoregressive models, it is important to understand the assumptions and conditions under which they work effectively. This session focuses on preparing time series data for autoregressive analysis.
+
+ 
+
+Now, Professor Ramesh will explain this.
+
+Hand Raise
+
+
+00:00:05 - 00:00:35
+Prerequisites for Autoregressive Models Overview
+Welcome to the session Prerequisites for Autoregressive Models. Before we begin building autoregressive models, it's important to understand the foundational ideas that make them work. In this session you will explore the key prerequisites for autoregressive modeling, from the logic behind Arkansas methods to the techniques that prepare non stationary data for analysis.
+00:00:35 - 00:00:58
+Introduction to Autoregressive Methods
+We will start with an introduction to autoregressive methods, discussing how the principles of linear regression are applied to time series as autoregressive models. You will also learn about the fundamental assumptions of Arkansas models, including linear dependence, stationarity, and the nature of the residuals.
+00:00:58 - 00:01:18
+Dealing with Non-Stationarity in Time Series
+Next we will focus on dealing with non stationarity, one of the biggest challenges in time series forecasting. You will learn how to test for stationarity using formal stationarity test and apply transformations like differencing and transformations to stabilize a time series.
+00:01:19 - 00:01:42
+Autocorrelation Measures and Functions
+Finally, we will explore autocorrelation measures which show how observations relate to their previous values. You will understand autocorrelation, visualize it through the autocorrelation function plot and distinguish between direct and indirect relationships using the partial autocorrelation function PACF.
+00:01:43 - 00:02:03
+Identifying Order of Arkansas Model
+We will see how these techniques help in identifying order of an Arkansas model. By the end of this session you will know how to check for stationarity, transform data where needed and interpret autocorrelation patterns, which are all essential step before fitting autoregressive models.
+
+
+In this session, you will:
+
+Understand the logic behind autoregressive models and their connection to linear regression
+
+Learn about the key assumptions of AR models, including stationarity and linear dependence
+
+Test for stationarity using formal statistical tests
+
+Apply transformations such as differencing and transformation (Box-Cox) to stabilise the series
+
+Analyse autocorrelation using ACF and PACF plots to guide model order selection
+
+ 
+By the end of this session, you will be able to prepare time series data for autoregressive modelling.
+
+Introduction to Autoregressive Models
+
+
+You will now learn about autoregressive models, a class of time series models that generate forecasts by using relationships within the series itself. These models form an important foundation for understanding more advanced time series techniques.
+
+
+00:00:00 - 00:00:21
+Introduction to Autoregressive Models
+In this section we will discuss about another family or a class of models and how we can model a time series. These are called autoregressive models. Autoregressive models assume that the past value of a data point in a time series are linearly related to the present values in the series.
+00:00:21 - 00:01:17
+Understanding Autoregressive Model Parameters
+In the words, the Y cap subscript T is simply autoregressive, which means A1 and A2. Other parameters on the coefficient of the previous time values auto because the predicted value depends on the past values of the same variable. Very important. In the case of linear regression, we have different variables, but it is the past values of the same variable that is the key difference. Regressive because the model is essentially the linear regression model. But how many past values to consider? For example, if the equation is given by Y cap T as A1 and t -, 1 and t -, 2, these are the two coefficients of the past two samples, only two past values. But in general we have an order P where Y cap T is comprises of multiple past values. How many past values to consider? So these are the topics we will discuss in the auto regressive models.
+00:01:17 - 00:02:06
+Correlation in Autoregressive Models
+Auto regressive models use correlation values to figure out the order of the model equation. Observations in a neighborhood tend to be correlated, so we will see. We will look at autoregressive models where the present values is correlated to the previous values. We will see figure out the order of the model equation. There is something called AARP model. We will discuss how the order of the model is determined based on the correlation between the past values. We will look at the mathematical treatment of that as well. And then observation in a neighborhood tend to be correlated. We we know the current value is being mostly correlated with immediate past values than the past values in time correlation in time series data. We will look at what correlation in a time series data would mean.
+00:02:06 - 00:03:13
+Assumptions in Autoregressive Models
+So values in this neighborhood seem to be decreasing and then values in this seem to be increased and then the values in this neighbor seem to be decreasing. Basically there is some correlation between the past values. In this case, this is decreasing and increasing. In this case, compared to these samples, the present value in the neighborhood, they seem to be increasing. Similarly in this neighbor they seem to be decreasing. So this is how the increasing and decreasing correlations can be visualized. So we will see how to mathematically treat this. There are some fundamental assumptions in autoregressive models. The one assumption is the time series is stationary. Again this comes from. We will look at the intuitive understanding of what a stationary time series is and there are correlations in time series data that help improve forecast. So these are primary assumptions in A autoregressive model, what does it mean to have to stationary time series? Again you see autoregressive models are modeled on the premise that time series is a random process.
+00:03:13 - 00:05:15
+Stationary Time Series Characteristics
+Then the terms of the terms stationarity comes from the concepts. In random processes, it's assumed that there's a random process which is stationary. When we consider stationary process, we look at what are the characteristics of stationary process and why it is required for us to the time series as a stationary time series in order for us to build autoregressive models. And then there are a correlation in the time series, the data that helps to improve the forecast. We will assume that the value of the time series in the current time has dependence or correlated to the previous samples. That's what we mean by auto correlations. We will now discuss what a stationary time series means and we'll talk about the characteristics of stationarity. A stationary time series means it has a constant mean and variance, which means the variance is constant. It will be centered around this mean. So it means stationary. Strictly speaking, it is a white stand stationary process, random process where the mean is constant and variant. Such a word times random process or a time series is called a white stand stationary or stationary series. In this case, there are two important characteristics. It has to have constant mean and variance. Why do we need that? If we have a constant mean and variance, we'll be able to model it as AR models. Auto regressive models better because if there is seasonality, if there is a variance, if the variance changes. Something like this, the model parameters will become very sensitive models will be erroneous. So in order to for us to formulate a time series as an auto regressive model, it is important for us to ensure that it is a stationary time series, which again means it has a constant mean and variance.
+00:05:15 - 00:06:06
+IID Assumption and Autocorrelation
+Then autoregressive models assume IID which means independent and identical distributed variables. In the in the context of time series, what does it mean? Which means is the coefficients. The past samples are independent and then they are identical distributed. They come from the same distribution. This is the IID assumption. Auto correlation correlations in the time series data can help in modeling a time series. So autocorrelation values can help deciding the right window size to consider for capturing this correlation patterns. So we would like to have find out the right windows. In other words, we have to find out what are the which are autocorrelated. We will look at that. We have to pick the right window size to consider for capturing this creating pattern. This would be the right time window size. We will look at. See how this can be done?
+00:06:08 - 00:06:09
+
+I want to see the trailer of the song.
+
+You learnt that autoregressive models are based on the assumption that the value of a data point in a time series can be expressed as a linear combination of its previous values. This can be written as Equation where Equation​ is the predicted value and the Equation's are constants.
+
+ 
+
+The term auto indicates that the prediction depends on past values of the same variable, while regressive refers to the use of a linear regression–based formulation. A key modelling decision is choosing how many past values to include, known as the order Equation. For example, an Equation model considers only the two most recent past values.
+
+ 
+
+The order of an autoregressive model is determined using correlation in time series data. Observations that are close in time tend to be more strongly correlated, while correlations usually weaken as the lag increases. By analysing these correlation patterns, we can identify how many past values are useful for prediction.
+
+ 
+
+We also learnt that autoregressive models rely on two fundamental assumptions:
+
+the time series is stationary
+
+correlations in the time series data help improve forecast accuracy
+
+ 
+
+We know that stationary time series have approximately constant mean and variance over time, making them easier to analyse and model. When the statistical properties of the series remain stable, autoregressive models can effectively capture the relationship between past and current values.
+
+ 
+
+In real-world datasets, time series are often non-stationary. In such cases, autoregressive models may perform poorly unless the data are transformed. Next, you will learn techniques used to handle non-stationarity and convert a time series into a stationary form suitable for autoregressive modelling.
+
+Stationarity Tests
+
+Previously you got a broad understanding of how autoregressive models work. You understood the assumptions on which we will build autoregressive models.
+
+ 
+
+One assumption is that the time series is stationary and the other is that there are correlations in the time series data that help make better forecasts. We will talk more about the second assumption later, but let’s focus on the first assumption now.
+
+ 
+
+Most real-world time series data are non-stationary. So to build an autoregressive model for a non-stationary data set, we need to transform our data set into a stationary data set. But before looking at methods that do these types of transformations, let us first understand stationarity in more detail.
+
+ 
+
+In previous sessions, you saw how to decide whether a time series is stationary or not. If the time series seems to have a constant mean and a constant variance, then we can confidently say that the series is stationary, and otherwise, non-stationary. This is a visual way of testing for stationarity.
+
+ 
+
+We need more concrete methods, rooted in statistics such as stationarity tests, to conclude whether a series is stationary or not, which you will learn now.
+
+00:00:00 - 00:00:09
+Introduction to Stationarity in Time Series
+We have spoken that a time series should be stationary for us to model it as a autoregressive model. What if it is not stationary?
+00:00:09 - 00:00:41
+Hypothesis Tests for Stationarity: KPSS and ADF
+What if it is there is a trend and what if there is variance where the variance is not constant. So there are typically test to hypothesis test to check if a time series is stationary. So 1 is a popular test called KPSS test and the one is augmented D key fuller test. So the null hypothesis in the case of this stationary test is the time series is stationary and alternate hypothesis it is not stationary. In the case of ADF test which means and then the P value is 0.05.
+00:00:42 - 00:01:06
+Understanding Null and Alternate Hypotheses in Stationarity Tests
+You look at examples of test here to understand it better. So in the case of KPSS test, we'll say the null hypothesis is stationary. The alternate hypothesis it is not stationary. There are Python functions here to check if the given time series is stationary or not. So the KPSS test provides whether the this is a confidence P value.
+00:01:07 - 00:01:28
+Python Functions for Stationarity Testing and P-value Interpretation
+At 99% confidence interval, the P value is less than 0.05. So the null hypothesis may be rejected. Hence the time series is not stationary. So basically we do a check on the P value P value. Here it is less than 0.05. So basically this is a hypothesis testing that we perform on this to check for stationarity.
+
+You learnt about the two methods by which we can identify the stationarity in time series are:
+
+KPSS test
+
+Null hypothesis (Equation): The time series is stationary
+
+Alternate hypothesis (Equation): The time series is not stationary
+
+Equation
+ 
+
+ADF test
+
+Null hypothesis (Equation): The time series is not stationary
+
+Alternate hypothesis (Equation): The time series is stationary
+
+Equation
+
+ 
+
+Because these tests are based on opposite null hypotheses, they are often used together. Interpreting their results jointly provides a clearer understanding of the stationarity of the series and helps decide whether transformations such as differencing or detrending are required.
+
+ 
+
+Next, you will see Python implementation of these tests for which we will be using the superstore data set that you have seen previously. The problem statement remains the same.
+
+
+Python Demonstration: Stationarity Tests
+
+
+00:00:00 - 00:00:31
+Introduction to time series analysis and problem statement
+Welcome to this session. Let's continue our discussion on the time series analysis where we are trying to demonstrate the problem statement of given historical sales rate of the company forecast its features sales. So for that we are using the same data set that we saw in the previous session where the data contains information from the period 20/21 to 20/24 with the three important key attributes. And now our focus will shift to the ARIMA models and the deep learning.
+00:00:31 - 00:00:42
+Focus on ARIMA models and deep learning
+Since the ARIMA models requires the stationary data, we first formulate test a prepaid series for the non stationary using the KPSS and the EDF test.
+00:00:43 - 00:00:53
+Data preparation and stationary analysis setup
+So let us start with our first part which is the setup and the data preparation. This part is almost similar to what we saw in the previous session.
+00:00:53 - 00:01:13
+Stationary analysis using KPSS and ADF tests
+Now let us quickly move on to the stationary analysis which is our Part 2 where we perform some tests on the time series data to understand whether the data is stationary or not. For this, we are going to use two well known tests which is KPSS and the ADF test.
+00:01:14 - 00:02:04
+KPSS test execution and results
+To do so, first let us import the KPSS from the stats model and now we are doing the null hypothesis here. So note that this null hypothesis for the KPS test is. The time series is stationary here. If I quickly execute and I got the P value for the KPSS test is 0.01, which means that the P value is less than 0.05. So the null hypothesis may be rejected here. Hence the time series is not stationary here. So now let us quickly analyze the same thing from with the ADF test.
+00:02:04 - 00:02:42
+ADF test execution and results
+So let us import the required packages and then I am doing the same analysis with the ADF test as well. So here the null hypothesis of the ADF test is the time series is not stationary and if you observe the output is the 0.2 which is greater than 0.05 means we fail to reject the null hypothesis confirming the non stationary. So both the test that we saw requires us to transform our data for the mixed analysis.
+00:02:43 - 00:03:19
+Data transformation and model preparation
+So now we have process the data and we have analyzed the time series data by using two methods. Now let us split the data into a training under testing so that we are we can go ahead and build our model. My training length is a 42 where first 42 months I will consider as a training and the last six months we have considered as a testing. Let us quickly plot the time series data with the training test split. So here if you see this initial data we are considering for the train and data we are considering for testing.
+
+To implement the KPSS and ADF tests, we use the kpss and adfuller methods in Python, respectively, available in the statsmodels.tsa.stattools module. They take as input a 1-dimensional array-like object or a Pandas series containing the time series data and return the test statistic and p-value. You can use the following links to learn more about these methods: kpss and adfuller.
+
+ 
+
+For the superstore dataset, the KPSS test returned a p-value of Equation, while the ADF test returned a p-value of Equation. Since the p-value for the KPSS test is less than Equation, we reject the null hypothesis of stationarity, indicating that the series is not stationary. Similarly, the p-value for the ADF test is greater than Equation, meaning we fail to reject the null hypothesis of non-stationarity.
+
+ 
+
+In this case, both tests suggest that the time series is non-stationary. Such outcomes are common in real-world datasets and indicate that transformations may be required before modelling.
+
+ 
+
+In general, there are certain cases where the KPSS test is preferred and certain other cases where the ADF test is preferred. We won’t go into these details as this is out of the scope of this module. In such cases, it is better to judge whether a series is stationary or not by looking at the plot of the time series.
+
+ 
+
+Let us look at the plot for the superstore data set and study its properties.
+
+ 
+
+
+
+ 
+
+By observing the above plot, it is evident that the series exhibits a clear upward trend, indicating a non-constant mean. Additionally, the variance of the series also varies with time, indicating non-constant variance. Therefore, based on these characteristics, we can conclude that this data set is non-stationary.
+
+ 
+
+Now that you have understood the ways by which you identify whether a time series is stationary or not, you will next learn how to transform a time series from non-stationary to stationary in order to build autoregressive models.
+https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.kpss.html
+https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.adfuller.html
+
+
+# Introduction
+Welcome to this Python demonstration on time series modelling.
+
+Time series modelling is a set of tools and techniques that model temporal or time series data and aim to predict or forecast future behavior of the data. It has applications in various fields such as finance, economics, weather forecasting, and more.
+
+By analysing historical data, we can identify different components in time series data such as trends, seasonality, and so on, and use these insights to make more informed business decisions.
+
+In this demonstration, we will explore a few different techniques for time series modelling. As we construct and evaluate our models, we'll gain insight into how different techniques can be used to handle common challenges in time series modelling.
+
+By the end of this demonstration, you will have a solid understanding of how to build and evaluate time series models in Python, and how to apply these techniques to real-world data sets.
+
+## Problem Statement
+In  this demonstration, we will apply time series modelling techniques to a real-world problem that involves a company and its sales. The company has historical sales data that it has captured over a period of time and wishes to forecast future sales trends so that it may optimise its inventory management processes.
+
+The problem statement for this demonstration can be summarised as follows:
+> Given historical sales data of a company, forecast its future sales.
+
+By studying the forecast, the company can effectively plan and prepare their inventory to ensure that the right amount of stock is made ready over future months.
+
+## Data Description
+You have been provided with a data set containing daily sales and profit data of the company for the period 2021 to 2024. The data set has the following three attributes:
+
+<table>
+  <tr>
+    <th> Attributes </th>
+    <th> Description <th>
+  </tr>
+  <tr>
+    <td> Order-Date </td>
+    <td> The date on which the order was placed (in dd-mm-yyyy format) </td>
+  </tr>
+  <tr>
+    <td> Sales </td>
+    <td> Total sales value of the transaction (in dollars) </td>
+  </tr>
+  <tr>
+    <td> Profit </td>
+    <td> Profit made on the transaction (in dollars) </td>
+  </tr>
+
+</table>
+
+## Outline
+In this demonstration, we will:
+- Prepare the data for time series modelling
+- Forecast sales using the following models:
+  - Autoregressive (AR)
+  - Moving average (MA)
+  - Autoregressive moving average (ARMA)
+  - Autoregressive integrated moving average (ARIMA)
+  - Seasonal autoregressive integrated moving average (SARIMA)
+  - Recurrent neural network (RNN)
+
+We will analyse the performance of these models using root mean squared error (RMSE) and mean absolute percentage error (MAPE).
+
+Please note that while we could evaluate the performance of the forecasting models using any one of RMSE or MAPE, to obtain a more comprehensive assessment of their performance, we will use both measures for each model.
+
+# Part 1 - Setup and Data Preparation
+In this section, we will:
+- Import necessary packages for executing the code
+- Load the data
+- Prepare the data for further analysis
+
+We will begin by importing all the packages that we will be using in this part of the demonstration, which are:
+- *NumPy* and *Pandas* for working with numbers and dataframes
+- *pyplot* from *matplotlib* and *seaborn* for visualisations
+- *ConvergenceWarning* from *statsmodels* and *warnings* to suppress warnings
+
+
+# Import 'numpy' and 'pandas' for working with numbers and dataframes
+import numpy as np
+import pandas as pd
+
+# Import 'pyplot' from 'matplotlib' and 'seaborn' for visualisations
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+# Import and execute method for suppressing warnings
+import warnings
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore', ConvergenceWarning)
+
+# Load the data and take a look at it
+df = pd.read_csv('Superstore_Data.csv')
+df.head()
+
+# View specifics of the data frame
+df.info()
+
+# Convert the 'Order Date' feature to the 'datetime' data type
+df['Order Date'] = pd.to_datetime(arg = df['Order Date'])
+
+# View specifics of the data frame
+df.info()
+
+# Ensure that the data are ordered chronologically
+df.sort_values(by = 'Order Date', ascending = True, inplace = True)
+
+# Set the index of the data frame to 'Order Date'
+df.set_index(keys = 'Order Date', drop = True, inplace = True)
+
+
+# Obtain the monthly total sales for each month
+df = df.groupby(by = pd.Grouper(freq = 'M')).sum()
+
+# Take a look at the data
+df.head()
+
+# Drop the 'Profit' column as we are not using it in this analysis
+df.drop(labels = 'Profit', axis = 1, inplace = True)
+
+# Take a look at the shape of the data
+df.shape
+You can see that only one date from each month is used in the index as representative of each of those months.
+
+Recall from the problem statement that we are interested in forecasting *Sales*. So, we can drop the *Profit* feature from our data set.
+
+
+# Plot the time series data
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.title('Sales Data');
+
+# Part 2 - Stationarity Analysis
+In this part of the demonstration, we will perform tests on the time series data to understand whether it is stationary or not. Recall that autoregressive modeling requires the time series data to be stationary. To test this, we will use the following tests:
+- Kwiatkowski–Phillips–Schmidt–Shin (KPSS) test
+- Augmented Dickey–Fuller (ADF) test
+
+### Subpart 1 - KPSS Test
+
+# Import the 'kpss' method from 'statsmodels' for executing the KPSS test
+from statsmodels.tsa.stattools import kpss
+
+# Use the KPSS test to check for the stationarity of the 'Sales' variable
+kpss_test_result = kpss(df['Sales'])
+print('The p-value for the KPSS test is ', np.round(kpss_test_result[1], 2))
+
+The $p$-value here is less than $0.05$, so the null hypothesis may be rejected. Hence, the time series is not stationary.
+
+### Subpart 2 - ADF Test
+
+from statsmodels.tsa.stattools import adfuller
+
+# Use the ADF test to check for the stationarity of the 'Sales' variable
+adf_test_result = adfuller(df['Sales'])
+print('The p-value for the ADF test is ', np.round(adf_test_result[1], 2))
+
+
+The $p$-value here is greater than $0.05$, so we fail to reject the null hypothesis. Hence, the time series is not stationary.
+
+# Split the data into training and testing data sets
+train_len = 42
+df_train = df[:train_len] # first 42 months as training set
+df_test = df[train_len:] # last 6 months as out-of-time test set
+
+# Plot the time series data with the train-test split
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue', label = 'Train')
+sns.lineplot(data = df_test, x = 'Order Date', y = 'Sales', marker = 'o', color = 'green', label = 'Test')
+plt.title('Sales Data');
+
+
+Differencing
+
+
+
+You will now learnt about the two methods that we will use to make a non-stationary series stationary. Consider the following flowchart that mentions these methods.
+
+
+
+Non-stationarity in a time series can arise due to either variability in mean or variability in variance, or both. In this module, we will study the method of differencing as a way to deal with variable mean, and transformation method as a way to deal with variable variance.
+
+ 
+
+We will start with the differencing technique first.
+
+00:00:00 - 00:00:13
+Introduction to stationary and non-stationary time series
+If the time series is stationary, we will go ahead with the Arkansas modeling and if the time series is not stationary, how do we go about? So there are techniques to convert a non stationary time series into a stationary time series.
+00:00:13 - 00:00:25
+Differencing technique for non-stationary mean
+Basically a non stationary as we mentioned it should have a constant mean and constant variant. If the mean is variable. Basically if the mean is not constant, there is a technique called differencing.
+00:00:25 - 00:00:37
+Transformations for non-stationary variance
+We will apply the differencing technique and if the variable variance is not not constant of the variance and we do certain transformations to make the time series have a constant variance.
+00:00:38 - 00:01:16
+Differencing method explained
+Let us look at this technique in the case of differencing. A differencing is a method used to remove non stationality in the mean of a time series. Very important. If the mean is not constant, apply differencing. If the variance is not constant, apply transformation. Differencing is basically very simple. It compute the difference between successive data points in time series and record the difference as a new time series. Basically you take the difference and the difference as a new time series and then we have order of differencing. If Y is the original time series, Y is the 1st order difference and then if different thing is applied on Y dash then the resulting series is the 2nd order differences and so on.
+00:01:17 - 00:01:22
+Order of differencing and stationary test
+What we do is we perform first level of differencing and then do a stationary test again.
+00:01:22 - 00:01:47
+Limitations of multiple differencing
+If it is still non stationary, we will try to do the second order. We do the differencing again we that is called Y double dash. So this second order differencing. But we should be aware that if you try to do multiple differencing, the original time series might be lost. It is not recommended to do more than two differencing basically. Otherwise, the very nature of the time series will be lost. This is from a practitioner perspective.
+00:01:48 - 00:03:06
+Practical example of differencing on time series
+Let us look at differencing now. So this is we have, this is the time series, this is the time stamps. This is how it looks if we apply differencing, basically what we do is 7 -, 2519 -, 731 -, 19 and so on. So this is the difference to time series. If you see it looks much more well behaved in terms of having a constant mean here. So this is the first order differencing and then this is second order difference. Basically if you see 2nd order differencing makes a mean more constant. So one thing we have to observe here, basically this is the original time series, OK. And then if you try to do the differences, it distorts the time series. We have to ensure that if you do multiple differencing with the very characteristics of the original time series will be lost. You see this is the difference one actually it does not truly represent the original time series. So it's a trade off on how much everything that you need to do. Basically we do not do more than two levels of differencing because the very nature of the time series will be distorted. Otherwise. This is an original time series with mean. And if you see what will happen if we apply differencing on that, you see this is the original time series mean. And after applying the first order difference, we can see how this mean is tend to become constant.
+
+
+You learnt that differencing reduces the variability in the mean. In differencing, we calculate the differences between consecutive data points in a time series and create a new series composed of these differences. The number of times we perform differencing determines the order of differencing. For example, if the original time series is denoted as Equation, the first-order difference series would be denoted as Equation. If we apply differencing to Equation, we obtain the second-order difference series Equation, and so on. Each level of differencing removes the trend or seasonality present in the data, making it more stationary and suitable for analysis.
+
+ 
+
+Then we considered the website traffic data of a company that has the monthly number of visits in thousands for a period starting from February 2001 to September 2002. For our convenience, we considered each month as a timestamp from 1 to 20, and the corresponding values denoted as Equation, which are: 25, 7, 19, 31, 41, 18, 22, 30, 17, 30, 36, 42, 20, 30, 42, 51, 38, 15, 46, 50. The plot of this time series below:
+
+ 
+
+
+
+ 
+
+ 
+
+We then applied differencing to the above series and plotted the obtained series.
+
+ 
+
+
+
+ 
+
+From the plot above, you can observe that the first-order difference series Equation exhibits a relatively more stable mean compared to the original series Equation. Furthermore, the second-order difference series Equation shows an even more stable mean. This indicates that applying differencing can help make the mean of the series constant and potentially improve stationarity.
+
+ 
+
+However, achieving stationarity in a time series involves not only making the mean constant but also ensuring a constant variance. To address this, we can use the transformations. By applying transformation, we aim to stabilise the variance and make it constant, which you will learn next.
+
+
+Transformation
+
+
+
+You will now learn about transformation methods, which are used to address changes in variance in time series data. These transformations help stabilise variability before applying time series models.
+
+
+
+00:00:00 - 00:00:17
+Introduction to Differencing for Non-Stationary Variables
+We have seen how to apply differencing to make a non stationary variable mean into a constant mean. We will now look at the techniques for addressing the problem of variance in the sense there is variance in the in the in a time series because of which it is non stationary.
+00:00:17 - 00:01:13
+Addressing Variance in Time Series with Transformations
+We'll see how we can apply transformation to make the time series have a constant variance. Transformations are used to stabilize variance in a time series and many forecasting models assume constant variance. We have seen multiple times on the difference between homoscedasticity and heteroscedasticity. So forecasting models, basically the AR models assume that the mean is constant, so it should demonstrate homoscedasticity. If there is variance, it is heteroscedastic, we have to make it homoscedastic and that is how where we apply transformations to make it homoscedastic. When variance increase or decrease overtime, applying A suitable transformation can make the series more stable, improve model performance and make residual behave closer to white noise. Basically we will see there are multiple techniques address the problem of variance. 1 is the log transformation, the other one is box Cox transformation and square root transformation.
+00:01:13 - 00:01:21
+Overview of Variance Stabilizing Techniques
+We look at each of the techniques now. So a simple variance stabilizing transformation used in time series model is a log transformation.
+00:01:21 - 00:01:47
+Log Transformation for Variance Stabilization
+It helps convert a series with multiplicative variance into series with approximately constant variant. The log transformation formulas basically you you take log of the time series by log represent the transform value. So this represents the transform value basically take a logarithm. So in the case of Bock Cox transformation, we apply a family of transformations controlled by Lambda, the parameter.
+00:01:47 - 00:02:39
+Box Cox Transformation and Lambda Parameter
+It helps in transforming a time series with variable variance into a series with stationary variance, in this case YF Lambda. So if Lambda is not equal to 0, this is the value and if Lambda is equal to 0, it is just the log of this. So basically you can you can have a log transformation and the transformation based on the value of Lambda. If you do not not apply Lambda, if Lambda is equal to 0, it just becomes log transformation. And then if Lambda again is a parameter between the value zero and one, you can try to apply Y of Lambda. So basically if there is a function of Lambda where you can try to apply the transformation, this is the Vox Cox transformation formal. Instead of having just a log Y, you can throttle the parameter Lambda to get time series where the variance becomes constant. This is an original time series with various boundaries.
+00:02:39 - 00:03:07
+Application and Effects of Box Cox Transformation
+We will see what happens if we apply a transformation. This is a series of box Cox transformation with Lambda is equal to 0 if you see variance is becoming constant. This is equivalent of. If you see this becomes log of Y Lambda is equal to 0. If you see there is some change in variance but not significant. So we have to look for some non 0 value of Lambda for us to achieve a better performance in making the time series variance constant.
+
+
+You learnt how transformation methods are applied to stabilise variance and make the series more suitable for analysis. When applied appropriately, transformations help make the series more stable and allow residuals to behave closer to white noise.
+
+ 
+
+We learnt about three common transformations:
+
+Log transformation: It is effective when variance grows with the level of the series. By applying Equation, larger values are compressed more than smaller ones, leading to approximately constant variance.
+ 
+Box–Cox transformation: It uses a parameter Equation to control the form of the transformation: Equation​. This formulation allows the variance of the series to be stabilised more precisely, with the log transformation appearing as a special case.
+ 
+Square-root transformation: It is a simple variance-stabilising transformation given by Equation​, and is commonly used for count data or series with moderate variance growth.
+ 
+
+In this module, we will use Box-Cox transformation as a method to achieve constant variance and enhance stationarity in the series.
+
+ 
+
+Next, you will learn how differencing and Box-Cox transformations are used in general.
+
+General Procedure for Transformation and Differencing
+
+
+You will now look at how transformation and differencing are used together to address non-stationarity in time series data. 
+
+
+00:00:00 - 00:00:29
+Introduction to Stationary Time Series and Tests
+So we will look at general procedures. We will try to generalize how to make a non stationary time series into a stationary or before that, how to check if a time series is stationary or not. We'll do a test to see if a series is stationary or not by using the hypothesis test, the KPSS and ADF test. If this time series is not stationary, then we will check whether the variance is constant or not.
+00:00:29 - 00:01:21
+Handling Non-Stationary Time Series: Variance and Mean
+If the variance is not constant, we will apply the transformation or the transformation. We will either apply log transformation or Bob Cox transformation or a square root transformation. Basically these are log transformation which will space it out and if the mean is not constant we will apply a differencing differencing meaning we have seen all the difference. Basically take the difference of the current sample in the previous sample and then separate time series. It is possible that the mean is constant and then variance is not. In that case only variance needs to be applied. It does not mean that you have to apply transformation and differencing for all the non stationary time series. If mean is not constant we will apply differencing and if the variance is not constant we will apply transformation and some cases where both mean is not constant and variance is not constant, in that case we have to apply both transformation and differencing.
+00:01:21 - 00:02:04
+Transformation and Differencing Techniques
+What we do is we apply 1 of this techniques and then repeat the stationarity test and if it is stationary if it is OK, otherwise look at the differencing and transformation that is what is done. So then we have a stationary time series. So can be done in any order. But this is generally followed is not sequential. Here you have to check whether there is mean is not constant. Apply this and check this one. It need not be serial. They are not required for every series. The transformation and different things are used only when needed. If there is a stationary time series and if you apply this transformation, if you see it will distort the original time series which is not recommended. So if only if there is issue with variance and mean, we apply those techniques.
+00:02:05 - 00:02:37
+Validation of Stationarity with Hypothesis Tests
+So now we have a stationary time series. This is the time series where a transformation is done followed by a differencing. If you see this is the original time series and after the transformation and differencing, this is how it looks. It means when compared to this time series, this tends to be more having the stationarity and constant variance. If you see you cannot make out visually. We can get a intuitive inference that it is constant variance and constant mean. But of course we need to validate this with the hypothesis test.
+
+
+
+We can apply transformation and differencing in any order but the generally followed order is:
+
+ 
+
+
+
+ 
+
+Note that these are not required for every series; the transformations and differencing are used only when needed.
+
+ 
+
+Following the procedure given above and applying them to the website traffic data set, the obtained results are as follows:
+
+ 
+
+
+
+ 
+
+Upon observing the plot, you can notice that the transformation has reduced the variability in the variance of the time series. Additionally, first-order differencing has decreased the variability in the mean. These transformations have led to increased stability in the time series and brought it closer to stationarity.
+
+ 
+
+Similarly, we can achieve a time series with a more stable mean by applying higher-order differencing. However, in practice, first-order differencing often provides satisfactory results for real-world data sets. Higher-order differencing is typically not necessary unless the series exhibits a significant trend that needs to be addressed. Therefore, for most cases, first-order differencing is sufficient to improve the stability of the mean in a time series.
+
+ 
+
+You now have an understanding of the techniques used to convert non-stationary time series into stationary ones. Next, you will see how these techniques are implemented in Python.
+
+
+Python Demonstration: Transformation and Differencing
+
+Now that you have gained an understanding of the techniques used to convert non-stationary time series into stationary ones, you will see how these techniques are implemented in Python to make a time series stationary.
+
+
+00:00:00 - 00:00:45
+Introduction to Time Series Data Transformation Techniques
+So welcome back. So in this series, let us see how to transform the time series data so that it ends up having more stationary mean and the variance. So to do so, we're going to use two transformation techniques or box, box and the differencing techniques. So box, box, box transformation, it is used to make the variance stabilized and the with the differencing method, we can achieve the mean stabilization, right? So let us quickly go ahead and start and learn about the box Cox transformation, where as I mentioned, this is used to stabilize the variance of the time series. So to do so, let's import the box box transformation from the spicy stars.
+00:00:45 - 00:02:10
+Box-Cox Transformation for Variance Stabilization
+So basically, this method finds an optimal power parameter, which is a Lambda to stabilize the variance here, right? So once we imported, we now apply this box box on the entire training set to transform the sales variable, right? So if we quickly plot the data, how it look like the original time series and what is the difference for the when after we apply the box, box transformation and note that we are using Lambda 0 here. So if you observe that the variance of this new series is now stabilized and it satisfies our first condition for the stationary right now, let us see what will be the impact on the different Lambda values. So here we can quickly try with the different Lambda values which are 0.512 and let's go through the figure here where you can see that based on the Lambda value, the variance is fluctuating, right? Let us go ahead with Lambda equal to 0 for the rest of the experiments that we do. But you know it's like you can even select the other Lambda values and see how it makes a difference.
+00:02:11 - 00:03:00
+Exploring Lambda Values in Box-Cox Transformation
+Come back to the each other right? Now let us go to the another technique which is a differencing which is used to stabilize the means of the time series. So basically what it will do is that so it involves taking the difference of the consecutive data points in the time series, right? So basically, it is also known as first order differencing. But if it is done twice, we will call as a second order differencing and so on, right? So here what we are doing is that we are applying the first order differencing to our data, right? So this calculates the change between the current sale values and the value lagged by one period, right? Which is the Y and y -, 1, right?
+00:03:00 - 00:03:44
+Differencing Technique for Mean Stabilization
+So this operation effectively removes the long term trend right? Now, once we have the, once we obtain these differences, let us quickly visualize how you know the original time series and the output of this difference data, right? So if you see the, observe the output here. So it confirms that series now it is fluctuate randomly around a mean of 0 with no obvious upward or you know, downward slope, right? So this series is now a mean stationary, right?
+00:03:44 - 00:04:12
+Visualizing Effects of Differencing on Time Series
+So prior to what we did earlier here, by the way, we are using the difference order is 1, but we can test with the multiple different orders and then you can check how the plot look likes. Right now, let us apply the box cogs and the difference in transformations on the training data so that you know the data is ready for autoregressive time series modeling, right?
+00:04:12 - 00:05:09
+Combining Box-Cox and Differencing for Time Series Modeling
+So here I am applying the box cogs, right? And on top of the output of the box cogs, I am also applying the difference in transformation. Right now. Let us quickly visualize how my output look like. Now. This is my original data and this is my transformer data with two things. One is Lambda is equal to 0 and difference order is equal to 1, right. So if we observe that now when compared to the original data, we have the variance stabilized and the mean is also stabilized in the transformer data. So now with this, I think we can conclude where you know we have successfully completed the necessary transformation that we need to do for anytime series data. So the box box method stabilize the variance and the 1st order difference in stabilize the mean.
+
+# Part 3 - Time Series Transformations
+In this part of the demonstration, we will transform the time series data so that it ends up having a more stationary mean and variance. To do this, we will use the following data transformations:
+- Box-Cox transformation
+- Differencing
+
+Box-Cox transformation is used to make the variance of a time series stationary and differencing is used to make its mean stationary. Note that although these methods can be executed in any order, differencing is done after Box-Cox transformation in general.
+
+### Subpart 1 - Box-Cox Transformation
+
+The Box-Cox transformation is used to stabilise the variance of a time series. It involves the application of a power transformation to the time series data. Let's import the *boxcox* method from *scipy* to implement this transformation.
+
+# Import the 'boxcox' method from 'scipy' to implement the Box-Cox transformation
+from scipy.stats import boxcox
+
+Note that from here on out, we will only perform data transformations on the training data to avoid data leakage.
+
+# Use the 'boxcox' method to transform the 'Sales' variable
+df_boxcox = pd.Series(boxcox(df_train['Sales'], lmbda = 0), index = df_train.index)
+
+# Plot the original time series data and its Box-Cox transformed version
+plt.figure(figsize = (14, 6))
+
+plt.subplot(1, 2, 1)
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Original Data')
+
+plt.subplot(1, 2, 2)
+sns.lineplot(x = df_boxcox.index, y = df_boxcox.values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Box-Cox Transformed Data [lambda = 0]')
+
+plt.suptitle('Sales Data');
+
+Note that the value of $\lambda$ controls the effect of the transformation on the data. We can analyse the impact of different values of $\lambda$ on the resulting transformed version of the time series.
+
+# Look at the effect of 'lambda' on the transformed version of the time series data
+lambda_vals = [0, 0.5, 2]
+df_boxcox_vals = [None] * len(lambda_vals)
+
+i = -1
+for lambda_val in lambda_vals:
+    i = i + 1
+    df_boxcox_vals[i] = pd.Series(boxcox(df_train['Sales'], lmbda = lambda_val), index = df_train.index)
+
+plt.figure(figsize = (12, 8))
+
+plt.subplot(2, 2, 1)
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Original Data')
+
+plt.subplot(2, 2, 2)
+sns.lineplot(x = df_boxcox_vals[0].index, y = df_boxcox_vals[0].values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Box-Cox Transformed Data [lambda = 0]')
+
+plt.subplot(2, 2, 3)
+sns.lineplot(x = df_boxcox_vals[1].index, y = df_boxcox_vals[1].values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Box-Cox Transformed Data [lambda = 0.5]')
+
+plt.subplot(2, 2, 4)
+sns.lineplot(x = df_boxcox_vals[2].index, y = df_boxcox_vals[2].values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Box-Cox Transformed Data [lambda = 2]')
+
+plt.suptitle('Sales Data')
+
+plt.tight_layout();
+
+We will continue with $\lambda = 0$ for the remainder of the demonstration. However, you are free to analyse the impact of other $\lambda$ values on the variance of the time series data.
+
+### Subpart 2 - Differencing
+
+# Obtain the first-order differenced version of the time series data
+df_differenced = df['Sales'] - df['Sales'].shift()
+
+
+# Plot the original time series data and its first-order differenced version
+plt.figure(figsize = (14, 6))
+
+plt.subplot(1, 2, 1)
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Original Data')
+
+plt.subplot(1, 2, 2)
+sns.lineplot(x = df_differenced.index, y = df_differenced.values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Differenced Data [Order = 1]')
+
+plt.suptitle('Sales Data');
+
+We will continue with difference order $=1$ for the remainder of the demonstration. However, you are free to analyse the impact of other order values on the mean of the time series data.
+
+### Subpart 3 - Transformed Time Series Data
+
+We will now apply the Box-Cox and the differencing transformations on the training data so that the data is ready for autoregressive time series modelling.
+
+# Apply the Box-Cox and differencing transformations on the training data
+df_boxcox = pd.Series(boxcox(df_train['Sales'], lmbda = 0), index = df_train.index)
+df_boxcox_diff = df_boxcox - df_boxcox.shift()
+
+# Plot the original time series data and its transformed version
+plt.figure(figsize = (14, 6))
+
+plt.subplot(1, 2, 1)
+sns.lineplot(data = df_train, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Original Data')
+
+plt.subplot(1, 2, 2)
+sns.lineplot(x = df_boxcox_diff.index, y = df_boxcox_diff.values, marker = 'o', color = 'blue')
+plt.xticks(rotation = 90)
+plt.title('Transformed Data [lambda = 0 and differencing order = 1]')
+
+plt.suptitle('Sales Data');
+
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html
+
+Autocorrelation Measures
+
+We will now focus on the second assumption behind time series modelling and introduce the concept of autocorrelation. Autocorrelation refers to the correlation between a time series and its lagged versions. In other words, it measures the degree of dependence between observations at different time points within the same series.
+
+ 
+
+To estimate the lag order for a given time series, we use statistical measures such as the autocorrelation function (ACF) and the partial autocorrelation function (PACF). These measures provide insight into the strength and significance of relationships between observations at different lags. You will now explore these concepts in detail.
+
+
+00:00:00 - 00:09:38
+Understanding Autocorrelation and Autocorrelation Function
+So we had spoken about autocorrelation. Now we will discuss in detail about what autocorrelation is and we will discuss what an autocorrelation function Autocorrelation of the series tells us how the values in the series influence each other over time. Basically if I have a time series like this, if I say if I take a sample at Y of T is equal to some value, it says How is this time sample related with the previous time samples? It is a very important measure to see how they are related with the past samples. An autocorrelation function ACF is obtained by computing autocorrelation values at the different lags. So basically we have a different lags. Lag is equal to 1. Let us say I have a timestamp T here I can look at auto production. Lag is equal to Ki can look at the previous sample only. I can look at all previous samples or when I say K is equal to 2, I can look at autocorrelation with respect to lag. K is equal to 2 which means I can look at two previous samples. Say let us say this is previous sample number. This K is equal to 1. I look at the previous sample K is equal to two. I look at these two previous sample basically writing it better. Let us say if you have a sample like this. Let us say if I have Y of T at this particular sample. Let us say these are the previous samples. Then when K is equal to 1. When I say K is equal to 1, I will look at this sample with the previous sample. So this K is equal to 1. Now I want to check if there is autocorrelation between the previous sample when K is equal to 2 which means this K is equal to two. I look at the previous two samples here. Basically I want to check whether there is any autocorrection between just immediate sample or the previous two samples and so on. This the number of lags is given by K So you have seen K is equal to 1. Let us say this is K is equal to 1K is equal to K is equal. I am looking at previous sample in the case of K is equal to two. We look at previous two samples in the case of K is equal to 2. So how does it perform? What is the correlation? When you look at this immediate sample and previous two samples given by K go autocorrelation coefficient. This is the coefficient. The autocorrelation coefficient K is given. Rho of K is given by auto covariance at lag K and variance of the series. So this is the normalization thing. So we have to take this sample correlation. Basically you take current sample and then take the mean of the sample, take the previous sample and mean of that and then sum all the YT minus these samples minus the mean. This is the mean OK and this is let us say Y of T. Let us say Y of T is equal to 5 giving an example here illustration here I have Y of T is equal to 5. So this is at time stamp five. OK. This is at time stamp. Y of T is equal to 5, Y of T is equal to 5. The value is let us say some value. Look at your illustration. So this is Y of T is equal to 5 and then minus Y of t -, K is equal to 1, which means effectively what it means. Then Y of T is equal to 5 minus this mean and then Y is t -, K Basically you what t -, K is K is equal to 1π -, 1 is 4. Basically Y of T is equal to 4. What it means is. Let me draw again to get a clear understanding. That is I have time series here. So at time stamp this is 5, this is at 4. Basically this is 4, this is time stamp four. OK, let us say I will say this value minus the mean and then this value minus the mean, you keep on doing it for multiple. I iteratively keep on doing this. OK, so when you say rho of K is equal to 1, strong positive correlation relationship with the past which means if if it is one, which means it has got a very strong correlation between the past value. Row of K is -1 means it has a strong negative relationship and then row of K is there is no relationship at all. They are independent of each other. This gives us very good insight. We will see how to measure this. So now we will take a numerical example. Here we will take autocorrelation with lag is equal to 0. Very interesting if you see what does it mean. Lag is equal to 0 which means Y of t -, y bar Y of T minus this is 0. What does it mean? This is Y of T is equal to Phi. Example this Y of T is equal to Phi. Minus mean into Y of T is equal to Phi only it is the same. Basically what does it mean? It is auto correlation with the same value. Lag is equal to 0. It means Y of T is equal to Phi and this is also Y of T is equal to 5. What does it mean? It becomes almost the square basically to see in this case we will take an example. Lag is equal to 0. So which mean Mean of this time series is 30.5, The variance is 148.95. How do we compute variance? We know your computation variance. So we we have to look at auto Cori variance for lag is equal to 0 which means lag is equal to 0 which means no lag with the same values. What does it mean? This is 25 -, 3 oh .5 into 25 - 3 oh .5 as I said is the same value so the same value here. So which means. What does it mean? It will obviously be highly correlated. This will be correlated which means if I take a time series and with respect to itself it will be a highly auto correlation. Will be is equal to 1. Let us take an example or lag is equal to 1. What is happening here? You are taking this one. Lag is equal to 1. This is 7. This time stamp minus mean and in 25 previous K is equal to 1. In the previous sample this is 25 -, 3 OH .5 plus again 19 -, 3 OH .5 and so on until it becomes until here actually. So these are the number of samples here and now autocorrelation for lag one is 0.22. If you see in this case it was self correlated. This is correlation is very 1 is very highly correlated. For the lag K is equal to 1, the correlation is 0.2. Similarly we take another example where lag is equal to two. What does it mean here? Basically this is the first value K is equal to 2 means this is the first value. We say 19 -, 3 oh .5 the average remains the same and then 25 this is K is equal to 2. If you remember K is equal to 2. This is second lag. Earlier we took the K. This is K is equal to 1. This is K is equal to two. I'm taking the second pass sample similarly 31 - 30.5 into 7 second lag is seven 7 - 30.5 and then then so on until 15 - 30 into 50. So you you keep on continuing until the last value. If you see autocorrelation for lag 2 is -0.2, we see correlation can be positive and negative. Basically what does it mean here? It means there is a .2 correlation. The lag is equal to 1 has a correlation of positive correlation of .2. In this case we have negative correlation. Correlation can be positive or negative. You look at that in the ACF plot further. So now we have seen correlations for K is equal to 1 and K is equal to 2. Is there a way we can see for a series of lags K is equal to 12345 onwards? We want to see at what lag and what is the correlation. That will help us identify the correlation at different lags. In this case, if you see this is an ACF plot and the examples we have seen autocorrelation coefficients. This is the strength of the coefficients at K is equal to 01 and two. This is a plot with correlation coefficients computed at. So at multiple Lacs, this is the lag. So we have seen the example for lag 01 and two. Similarly, if you try to compute the coefficients at different lags and plot them, this is how it will look. And as we have seen for auto correlation coefficient at lag 0 is correlation with the same values. So it is 1. So what lag zero, it's always one. And then these are the coefficients at different lags. And basically this is lag K K is equal to 0 to integer numbers, zero to 8 in this case or 8 or 9 here. So if you look at this ACF plot, it shows this at K is equal to 1. It means that there is a negative correlation of 0.4 or something. And this is a confidence interval. What does it mean? It means that any at 95. Let us say that 95% confidence interval, any correlation within this band is considered not so significant, not so significant. So if the if the correlation was something like .6 or so, this would have been a very significant correlation. In this case, there is no significant correlation between the previous lags here. At the best, there is some negative correlation at K is equal to 1. Although this is not significant, this is within the confidence band. It gives correlation at 0 point three or four or something which is negative correlation at K is equal to 1. There is some autocorrelation for lag one. OK now so from your ACF plots we have seen how the correlation is 1 for zero lag.
+00:09:38 - 00:10:56
+Exploring Partial Autocorrelation Function
+We have seen the confidence interval and we have seen that how they can be positive and negative correlations at different lags. We will look at what a partial autocorrelation function is and we'll see how to computing autocorrelation for a series for different lag values but skip short term dependencies. This is important. We will skip the short term dependencies and look at the previous lag only. So basically skip over other value. So less possible lag values, values less than 50% of sample size only. Now let us look at what a partial autocorrelation function looks like. So in this case the reading is the same. This is a confidence interval. And if you see. Again, even partial autocorrelation is significant at lag zero in this case when compared to ACF. If you see there is significant partial autocorrelation, negative autocorrelation at lag K is equal to 6. Because this is beyond this confidence interval band, we can say that there is significant partial autocorrelation. Lag K is equal to 6 and also there is correlation at lag K is equal to 8. Negative correlation at these two lags of six and eight. But the highest correlation is at K is equal to 6, which is negative partial autocorrelation. I'd like to go.
+
+
+
+Note: In the above video, at 00:00 - 07:41, Equation and Equation both refer to the mean of the original time series.
+
+ 
+
+We learnt that an autocorrelation function (ACF) can be derived for the time series using autocorrelation values with different lags. The autocorrelation at lag Equation, denoted by Equation​, is defined as the ratio of the autocovariance at lag Equation to the variance of the time series:
+
+ 
+
+Equation
+
+where:
+
+Equation​: Value of the time series at time Equation
+
+Equation​: Value of the time series at lag Equation
+
+Equation: Mean of the original time series
+
+Equation: Total number of observations in the time series
+
+ 
+
+The numerator measures the autocovariance between the series and its lagged version, while the denominator normalises this value by the variance of the series, ensuring that Equation​ lies between −1 and 1.
+
+ 
+
+By using the above formulae, we obtained autocorrelation values for various lags. The plot of the lag vs autocorrelation is called the ACF plot. Below is the obtained ACF plot for the website traffic data.
+
+ 
+
+
+
+ 
+
+In the plot, the blue-shaded region represents the 95% confidence interval, indicating the range within which the correlation values are considered statistically insignificant. Here, we observe that for lag 1, the autocorrelation appears relatively strong compared to other lags. However, since the correlation value falls within the blue region (confidence interval), we may not consider it statistically significant at this level.
+
+ 
+
+In ACF, we consider both direct and indirect correlations. But there’s a way by which we can find the direct correlation between a time series and its lagged values, known as partial autocorrelation function (PACF).
+
+ 
+
+The PACF focuses on the direct correlation between a time series and its lagged values while controlling for the influence of intermediate lags. It helps identify the specific lags that have a significant direct impact on the current observation, independent of other lags. Below is the PACF plot for the website traffic data set.
+
+ 
+
+
+
+ 
+
+Based on the PACF plot given above, we can say that there’s strong partial autocorrelation for lag 6.
+
+ 
+
+Next, you will see how ACF and PACF plots are plotted in Python for superstore data set.
+
+This topic looks complicated because the lecture mixes **ACF, autocovariance, lags, confidence intervals, and PACF** all at once. Let’s build it from zero.
+
+# 1. First: What is autocorrelation?
+
+Suppose your daily website traffic is:
+
+```text
+Monday     100
+Tuesday    110
+Wednesday  105
+Thursday   120
+Friday     125
+Saturday   130
+```
+
+In normal correlation, we might ask:
+
+> Are **X and Y** related?
+
+In **autocorrelation**, there is only **one variable**, but we compare it with **its own past values**.
+
+For example:
+
+```text
+Today's traffic  ↔ Yesterday's traffic
+```
+
+or
+
+```text
+Today's traffic  ↔ Traffic 2 days ago
+```
+
+That's why it is called:
+
+> **AUTO-correlation = correlation with yourself at different time points.**
+
+---
+
+# 2. What is a lag?
+
+This is the MOST important concept.
+
+Suppose:
+
+```text
+Time:       1    2    3    4    5
+Sales:     10   20   30   40   50
+```
+
+### Lag 1
+
+Compare each value with the value **one time step before it**:
+
+```text
+Current       Previous
+  20    ↔       10
+  30    ↔       20
+  40    ↔       30
+  50    ↔       40
+```
+
+So:
+
+> **Lag 1 = compare today's value with yesterday's value.**
+
+---
+
+### Lag 2
+
+Compare each value with the value **two time steps before**:
+
+```text
+Current       2 steps before
+
+  30    ↔       10
+  40    ↔       20
+  50    ↔       30
+```
+
+So:
+
+> **Lag 2 = compare today's value with the value from 2 periods ago.**
+
+---
+
+### Lag 3
+
+```text
+  40 ↔ 10
+  50 ↔ 20
+```
+
+Therefore:
+
+```text
+Lag 1 → previous observation
+Lag 2 → 2 observations back
+Lag 3 → 3 observations back
+...
+```
+
+The lecture uses **K** to represent the lag.
+
+So:
+
+$$
+K=1
+$$
+
+means one period back.
+
+---
+
+# 3. What does autocorrelation actually tell us?
+
+Suppose:
+
+```text
+Yesterday's sales = 100
+Today's sales = 105
+```
+
+And suppose this happens repeatedly:
+
+```text
+Yesterday high → Today high
+Yesterday low  → Today low
+```
+
+Then there is **positive autocorrelation**.
+
+It means:
+
+> Past values and current values tend to move in the same direction.
+
+---
+
+### Positive autocorrelation
+
+```text
+Past high → Current high
+Past low  → Current low
+```
+
+Correlation is positive.
+
+For example:
+
+$$
+\rho_1 = 0.8
+$$
+
+means strong positive autocorrelation at lag 1.
+
+---
+
+### Negative autocorrelation
+
+Suppose:
+
+```text
+Yesterday high → Today low
+Yesterday low  → Today high
+```
+
+Then:
+
+$$
+\rho_1 < 0
+$$
+
+For example:
+
+$$
+\rho_1=-0.7
+$$
+
+means strong negative autocorrelation.
+
+---
+
+### No autocorrelation
+
+If knowing yesterday's value doesn't tell us anything useful about today's value:
+
+$$
+\rho_1 \approx 0
+$$
+
+there is little/no linear autocorrelation at that lag.
+
+---
+
+# 4. Why do we care about autocorrelation?
+
+Because **time-series observations are often not independent**.
+
+For example:
+
+```text
+Today's sales
+      ↑
+Yesterday's sales
+      ↑
+Day before yesterday
+```
+
+Past observations may contain information about future observations.
+
+That's exactly what time-series models try to exploit.
+
+So autocorrelation helps us answer:
+
+> **"How much does the past tell us about the present?"**
+
+---
+
+# 5. What is ACF?
+
+ACF stands for:
+
+> **Autocorrelation Function**
+
+It calculates autocorrelation at **different lags**.
+
+For example:
+
+| Lag | Autocorrelation |
+| --: | --------------: |
+|   0 |            1.00 |
+|   1 |            0.72 |
+|   2 |            0.51 |
+|   3 |            0.30 |
+|   4 |            0.10 |
+|   5 |           -0.02 |
+
+The ACF plot simply puts this information on a graph:
+
+```text
+Autocorrelation
+     |
+ 1.0 | ●
+     |
+ 0.7 |     ●
+     |
+ 0.5 |         ●
+     |
+ 0.3 |             ●
+     |
+ 0.0 |-------------------------
+     |  0   1   2   3   4   5
+                 Lag
+```
+
+So remember:
+
+> **ACF = correlation at different lags.**
+
+---
+
+# 6. Why is lag 0 always 1?
+
+This is extremely important for exams.
+
+At lag 0:
+
+```text
+Today's value ↔ Today's value
+```
+
+You are correlating the series with **itself**.
+
+Anything compared with itself has correlation:
+
+$$
+1
+$$
+
+Therefore:
+
+$$
+ACF(0)=1
+$$
+
+Always.
+
+---
+
+# 7. Understanding the ACF formula
+
+Your lecture gives the basic idea:
+
+$$
+\rho_k =
+\frac{\text{Autocovariance at lag }k}
+{\text{Variance}}
+$$
+
+Don't worry about memorizing the complicated formula immediately.
+
+Understand the structure:
+
+```text
+                 Relationship
+ACF =   ----------------------------
+                 Variability
+```
+
+The numerator asks:
+
+> Do the current values and lagged values move together?
+
+The denominator normalizes it.
+
+That's why ACF is between:
+
+$$
+-1 \leq \rho_k \leq 1
+$$
+
+---
+
+# 8. Let's understand the formula intuitively
+
+Suppose the mean is:
+
+$$
+\bar Y=30
+$$
+
+At some time:
+
+```text
+Current value = 40
+Previous value = 35
+```
+
+We look at their deviations from the mean:
+
+```text
+Current:
+40 - 30 = +10
+
+Previous:
+35 - 30 = +5
+```
+
+Both are positive.
+
+So:
+
+```text
+(+10)(+5) = positive
+```
+
+This contributes to **positive autocorrelation**.
+
+Now suppose:
+
+```text
+Current = 40
+Previous = 20
+```
+
+Then:
+
+```text
+40 - 30 = +10
+20 - 30 = -10
+```
+
+Therefore:
+
+```text
+(+10)(-10) = negative
+```
+
+This contributes to **negative autocorrelation**.
+
+That's the intuition behind the numerator.
+
+---
+
+# 9. ACF example
+
+Imagine:
+
+```text
+Lag 0 → 1.00
+Lag 1 → 0.70
+Lag 2 → 0.45
+Lag 3 → 0.20
+Lag 4 → 0.05
+```
+
+What does this tell us?
+
+Lag 1:
+
+$$
+0.70
+$$
+
+means the current observation has a fairly strong positive relationship with the immediately previous observation.
+
+Lag 2:
+
+$$
+0.45
+$$
+
+means there is still some relationship with two periods ago.
+
+Lag 3:
+
+$$
+0.20
+$$
+
+weaker.
+
+Lag 4:
+
+$$
+0.05
+$$
+
+almost no relationship.
+
+So the ACF is showing us **how dependence decreases as we go further into the past**.
+
+---
+
+# 10. But there is one BIG problem with ACF
+
+Suppose:
+
+```text
+Today's value
+     ↑
+Yesterday's value
+     ↑
+Day before yesterday
+```
+
+You might find:
+
+```text
+Today's value ↔ 2-days-ago value
+```
+
+is correlated.
+
+But maybe that happens **only because yesterday's value connects them**.
+
+For example:
+
+```text
+Y(t-2) → Y(t-1) → Y(t)
+```
+
+There may not be a direct relationship:
+
+```text
+Y(t-2) → Y(t)
+```
+
+ACF does not completely separate these direct and indirect relationships.
+
+This is where **PACF** comes in.
+
+---
+
+# 11. PACF = Partial Autocorrelation Function
+
+PACF asks:
+
+> **"What is the direct relationship between the current value and a particular lag after removing the influence of the intermediate lags?"**
+
+That's the key difference.
+
+### ACF
+
+Includes:
+
+> **Direct + indirect relationships**
+
+### PACF
+
+Focuses on:
+
+> **Direct relationship**
+
+Your source explicitly describes PACF as controlling for the influence of intermediate lags.
+
+---
+
+# 12. Very simple example
+
+Imagine:
+
+```text
+Monday → Tuesday → Wednesday
+```
+
+Suppose:
+
+```text
+Monday sales = 100
+Tuesday sales = 110
+Wednesday sales = 120
+```
+
+ACF may find:
+
+```text
+Wednesday ↔ Monday
+```
+
+correlated.
+
+But maybe Wednesday is related to Monday only because:
+
+```text
+Monday → Tuesday → Wednesday
+```
+
+PACF asks:
+
+> After accounting for Tuesday, is Monday still directly related to Wednesday?
+
+That's the intuition.
+
+---
+
+# 13. ACF vs PACF
+
+This is one table I would memorize.
+
+| ACF                                    | PACF                                             |
+| -------------------------------------- | ------------------------------------------------ |
+| Autocorrelation Function               | Partial Autocorrelation Function                 |
+| Measures correlation at different lags | Measures direct correlation at a lag             |
+| Includes direct + indirect effects     | Controls for intermediate lags                   |
+| Helps identify dependence across lags  | Helps identify specific/direct lag relationships |
+| Uses lagged versions of the series     | Removes influence of shorter/intermediate lags   |
+
+---
+
+# 14. What is the confidence interval on an ACF/PACF plot?
+
+This part of your lecture is very important.
+
+You will usually see something like:
+
+```text
+Correlation
+    |
+ 1  |        |
+    |        |
+    |--------|--------  upper confidence boundary
+    |        |
+ 0  |----------------
+    |        |
+    |--------|--------  lower confidence boundary
+    |        |
+ -1 |
+       1  2  3  4  5
+             Lag
+```
+
+The shaded region is typically a **95% confidence interval** in the example discussed in your source.
+
+The basic interpretation is:
+
+> If a spike falls outside the confidence band, the autocorrelation is considered statistically significant at that level.
+
+If it falls inside:
+
+> We generally don't consider it statistically significant at that level.
+
+Your source gives exactly this interpretation for the ACF example: lag 1 looked relatively strong, but because it remained inside the confidence region, it was not considered statistically significant at the stated confidence level.
+
+---
+
+# 15. Don't make this mistake
+
+Suppose:
+
+```text
+Lag 1 = 0.30
+```
+
+and:
+
+```text
+Lag 2 = 0.10
+```
+
+You might say:
+
+> "0.30 is bigger, therefore lag 1 is important."
+
+Not necessarily.
+
+You must also look at the **confidence interval**.
+
+For example:
+
+```text
+Lag 1 = 0.30
+        ↓
+inside confidence band
+```
+
+Then it may **not be statistically significant**.
+
+But:
+
+```text
+Lag 6 = -0.45
+          ↓
+outside confidence band
+```
+
+Then lag 6 may be statistically significant.
+
+This is why you should look at **both the height of the spike and the confidence band**.
+
+---
+
+# 16. Your lecture's PACF example
+
+The source says the PACF plot showed:
+
+> strong partial autocorrelation at **lag 6**.
+
+So the interpretation is:
+
+```text
+PACF lag 6
+     ↓
+strong direct relationship
+     ↓
+after accounting for intermediate lags
+```
+
+That's different from simply saying:
+
+> "Lag 6 has correlation."
+
+It means lag 6 has a relatively strong **partial/direct relationship** according to the PACF plot.
+
+---
+
+# 17. Why ACF and PACF help us choose lag order
+
+Suppose you're building a time-series model and you don't know:
+
+```text
+Should I use lag 1?
+lag 2?
+lag 3?
+...
+lag 10?
+```
+
+ACF/PACF plots give clues.
+
+For example:
+
+```text
+Lag:       1    2    3    4    5    6
+ACF:      .8   .6   .4   .2   .1   .0
+```
+
+This tells us there is dependence that gradually decreases.
+
+PACF might show:
+
+```text
+Lag:       1    2    3    4    5    6
+PACF:     .8   .1   .0   .0   .0   .0
+```
+
+This suggests the strongest direct relationship is at lag 1.
+
+So ACF/PACF are useful for understanding **which lags may matter** when constructing time-series models.
+
+---
+
+# 18. One VERY important distinction
+
+Don't think:
+
+> "ACF tells me the exact lag order automatically."
+
+Instead:
+
+> **ACF and PACF provide evidence/clues about which lags have meaningful relationships.**
+
+Then the model and validation process can be used to determine what actually works well.
+
+---
+
+# 19. The easiest way to remember everything
+
+Imagine you're asking today's sales:
+
+### Question 1 — ACF
+
+> "How related am I to my past?"
+
+```text
+Today ↔ Yesterday
+Today ↔ 2 days ago
+Today ↔ 3 days ago
+Today ↔ 4 days ago
+...
+```
+
+That's **ACF**.
+
+### Question 2 — PACF
+
+> "After removing the influence of the intervening days, which past day has a direct relationship with me?"
+
+That's **PACF**.
+
+---
+
+# 20. Exam cheat sheet ⭐
+
+### Autocorrelation
+
+> Correlation between a time series and its own lagged values.
+
+### Lag
+
+> Number of time steps by which the series is shifted.
+
+```text
+Lag 1 → previous period
+Lag 2 → two periods ago
+Lag 3 → three periods ago
+```
+
+### ACF
+
+> Measures autocorrelation at different lags, including both direct and indirect relationships.
+
+### PACF
+
+> Measures the direct relationship between the series and a lag after controlling for intermediate lags.
+
+### Lag 0
+
+$$
+ACF(0)=1
+$$
+
+because the series is correlated with itself.
+
+### Positive autocorrelation
+
+```text
+High → High
+Low  → Low
+```
+
+### Negative autocorrelation
+
+```text
+High → Low
+Low  → High
+```
+
+### Confidence interval
+
+> Helps determine whether an observed autocorrelation is statistically significant.
+
+### Most important difference
+
+```text
+             ACF                 PACF
+              ↓                    ↓
+       Direct + indirect       Direct effect
+              ↓                    ↓
+      "Are they related?"   "Are they directly related?"
+```
+
+### Memory trick
+
+> **ACF = All Connections**
+> **PACF = Pure/Partial direct Connection**
+
+And the single sentence I'd memorize for your exam:
+
+> **ACF measures the correlation of a time series with its lagged values, while PACF measures the direct correlation with a particular lag after removing the effects of intermediate lags.**
+
+Absolutely. **PACF is one of those topics that sounds difficult because the phrase “controlling for intermediate lags” is confusing.** Let's understand it slowly with a concrete example.
+
+## 1. First, forget the formula
+
+The most important question PACF answers is:
+
+> **“Is lag \(k\) directly related to the current value, after removing the effect of the lags in between?”**
+
+That is the entire idea.
+
+Your lecture describes PACF as focusing on the **direct correlation** between a time series and its lagged values while controlling for intermediate lags. 
+
+---
+
+# 2. Start with a simple time series
+
+Suppose our daily sales are:
+
+| Day | Sales |
+| --- | ----: |
+| 1   |   100 |
+| 2   |   110 |
+| 3   |   120 |
+| 4   |   130 |
+| 5   |   140 |
+| 6   |   150 |
+
+Suppose today is Day 6.
+
+We can look backward:
+
+```text
+Today
+  ↓
+Day 6 = 150
+
+Lag 1 → Day 5 = 140
+Lag 2 → Day 4 = 130
+Lag 3 → Day 3 = 120
+Lag 4 → Day 2 = 110
+Lag 5 → Day 1 = 100
+```
+
+---
+
+# 3. What does ACF do?
+
+ACF asks:
+
+### Lag 1
+
+```text
+Day 6 ↔ Day 5
+```
+
+### Lag 2
+
+```text
+Day 6 ↔ Day 4
+```
+
+### Lag 3
+
+```text
+Day 6 ↔ Day 3
+```
+
+and so on.
+
+So ACF essentially asks:
+
+> **“How correlated is today's value with each previous value?”**
+
+But there is a problem.
+
+Suppose:
+
+```text
+Day 6 ← Day 5 ← Day 4
+```
+
+If Day 6 is correlated with Day 4, perhaps that relationship exists because Day 4 influences Day 5 and Day 5 influences Day 6.
+
+So ACF can contain **indirect relationships**.
+
+---
+
+# 4. This is where PACF becomes useful
+
+PACF says:
+
+> "Okay, let's look at the relationship between Day 6 and Day 4, but let's first account for Day 5."
+
+So:
+
+```text
+ACF:
+
+Day 4 ───────────────→ Day 6
+       direct + indirect
+
+
+PACF:
+
+Day 4 ───────────────→ Day 6
+          ↓
+      remove effect
+      of Day 5
+```
+
+Then we ask:
+
+> **Does Day 4 still have a relationship with Day 6?**
+
+If yes → there is a direct relationship at lag 2.
+
+If no → the relationship was mainly explained by the intermediate lag.
+
+---
+
+# 5. Let's make it even easier
+
+Imagine you have:
+
+```text
+A → B → C
+```
+
+You observe:
+
+```text
+A and C are correlated.
+```
+
+Can you immediately say:
+
+> A directly affects C?
+
+No.
+
+Maybe:
+
+```text
+A → B → C
+```
+
+The relationship between A and C may simply be transmitted through B.
+
+PACF tries to answer:
+
+> **After accounting for B, is A still directly related to C?**
+
+That's exactly the intuition.
+
+---
+
+# 6. Now map this to time series
+
+Suppose:
+
+```text
+Y(t)     = Today
+Y(t-1)   = Yesterday
+Y(t-2)   = 2 days ago
+```
+
+For **lag 2**, PACF asks approximately:
+
+> What is the relationship between \(Y_t\) and \(Y_{t-2}\), after accounting for \(Y_{t-1}\)?
+
+So:
+
+```text
+Y(t-2) → Y(t-1) → Y(t)
+
+        remove this
+             ↓
+Y(t-2) ─────────→ Y(t)
+         ?
+```
+
+The remaining relationship is what PACF is interested in.
+
+---
+
+# 7. ACF vs PACF using Lag 2
+
+This is extremely important.
+
+### ACF at lag 2
+
+ACF asks:
+
+> How correlated are \(Y_t\) and \(Y_{t-2}\)?
+
+It doesn't remove the influence of \(Y_{t-1}\).
+
+```text
+Y(t-2) ─────────→ Y(t)
+       ↑
+       │
+     through
+       │
+Y(t-1)
+```
+
+Therefore, the correlation can include:
+
+```text
+Direct effect
++
+Indirect effect through lag 1
+```
+
+---
+
+### PACF at lag 2
+
+PACF asks:
+
+> How correlated are \(Y_t\) and \(Y_{t-2}\) **after accounting for \(Y_{t-1}\)**?
+
+So it tries to isolate:
+
+```text
+Direct relationship
+```
+
+---
+
+# 8. What happens at different PACF lags?
+
+This is where students often get confused.
+
+### PACF at lag 1
+
+There are **no intermediate lags**.
+
+```text
+Y(t-1) → Y(t)
+```
+
+So PACF lag 1 is essentially the same basic correlation relationship as lag-1 autocorrelation.
+
+---
+
+### PACF at lag 2
+
+Control for lag 1:
+
+```text
+Y(t-2) → Y(t-1) → Y(t)
+
+Remove/control Y(t-1)
+```
+
+Then measure the remaining relationship between:
+
+```text
+Y(t-2) ↔ Y(t)
+```
+
+---
+
+### PACF at lag 3
+
+Now control for:
+
+```text
+Lag 1
+Lag 2
+```
+
+Conceptually:
+
+```text
+Y(t-3)
+   ↓
+Y(t-2)
+   ↓
+Y(t-1)
+   ↓
+Y(t)
+```
+
+PACF asks:
+
+> After accounting for lags 1 and 2, is lag 3 still directly related to the current value?
+
+---
+
+### PACF at lag 4
+
+Control for:
+
+```text
+Lag 1
+Lag 2
+Lag 3
+```
+
+Then measure the remaining relationship with lag 4.
+
+---
+
+# 9. So the pattern is
+
+| PACF lag | Controls for intermediate lags |
+| -------: | ------------------------------ |
+|        1 | None                           |
+|        2 | Lag 1                          |
+|        3 | Lag 1, Lag 2                   |
+|        4 | Lag 1, Lag 2, Lag 3            |
+|        5 | Lag 1–4                        |
+
+This is an excellent table to remember.
+
+---
+
+# 10. Now let's understand the actual calculation idea
+
+You don't need the complicated mathematics initially.
+
+Suppose we're calculating **PACF at lag 2**.
+
+We have:
+
+```text
+Current value = Y(t)
+
+Lag 1 = Y(t-1)
+
+Lag 2 = Y(t-2)
+```
+
+First, we model the current value using lag 1:
+
+$$
+Y_t = c + \phi_1Y_{t-1} + error
+$$
+
+This captures the part of today's value that can be explained by yesterday.
+
+Then we ask:
+
+> After accounting for lag 1, does lag 2 explain anything additional?
+
+Conceptually, we are looking at:
+
+```text
+What lag 1 explains
+        +
+What lag 2 additionally explains
+```
+
+The coefficient associated with lag 2 represents the partial relationship at lag 2.
+
+That is why PACF is sometimes explained using regression.
+
+---
+
+# 11. An intuitive numerical example
+
+Suppose we discover:
+
+```text
+Today's sales
+```
+
+are strongly related to:
+
+```text
+Yesterday's sales
+```
+
+Suppose:
+
+$$
+ACF(1)=0.8
+$$
+
+Now we check lag 2:
+
+$$
+ACF(2)=0.7
+$$
+
+At first glance, 0.7 looks strong.
+
+You might say:
+
+> "Two days ago is strongly related to today."
+
+But wait.
+
+Yesterday is already strongly related to today.
+
+Maybe:
+
+```text
+2 days ago
+     ↓
+Yesterday
+     ↓
+Today
+```
+
+is causing the relationship.
+
+So we calculate PACF.
+
+Suppose:
+
+$$
+PACF(2)=0.05
+$$
+
+Now the interpretation changes:
+
+> Although lag 2 has a strong overall autocorrelation, after accounting for lag 1, its **direct/partial relationship is very small**.
+
+That's the power of PACF.
+
+---
+
+# 12. Another example
+
+Suppose:
+
+```text
+ACF:
+
+Lag 1 = 0.80
+Lag 2 = 0.65
+Lag 3 = 0.50
+Lag 4 = 0.35
+```
+
+This looks like many lags are correlated.
+
+But PACF might be:
+
+```text
+PACF:
+
+Lag 1 = 0.80
+Lag 2 = 0.05
+Lag 3 = 0.02
+Lag 4 = 0.01
+```
+
+This suggests:
+
+```text
+Lag 1 → strong direct relationship
+
+Lag 2 → little additional direct relationship
+Lag 3 → little additional direct relationship
+Lag 4 → little additional direct relationship
+```
+
+The high ACF values at lags 2, 3, 4 can largely arise from the dependence propagating through earlier lags.
+
+---
+
+# 13. Now the opposite example
+
+Suppose:
+
+```text
+ACF:
+
+Lag 1 = 0.70
+Lag 2 = 0.55
+Lag 3 = 0.40
+```
+
+And PACF:
+
+```text
+Lag 1 = 0.70
+Lag 2 = 0.50
+Lag 3 = 0.03
+```
+
+Now lag 2 remains strong **even after controlling for lag 1**.
+
+That gives evidence that lag 2 has an important direct relationship with the current value.
+
+---
+
+# 14. Understanding the PACF plot
+
+A PACF plot looks something like:
+
+```text
+Partial
+Autocorrelation
+
+  1.0 | █
+      |
+  0.5 | █
+      |
+  0.0 |------------------------------
+      |
+ -0.5 |
+      |
+ -1.0 |
+
+       1   2   3   4   5   6   7
+                 Lag
+```
+
+Each vertical bar represents:
+
+> **PACF at that lag**
+
+For example:
+
+```text
+Lag 1 → 0.75
+Lag 2 → 0.10
+Lag 3 → 0.02
+Lag 4 → -0.05
+Lag 5 → 0.01
+```
+
+---
+
+# 15. Confidence interval is VERY important
+
+The PACF plot normally has upper and lower confidence boundaries.
+
+Think:
+
+```text
+             Upper boundary
+        -----------------------
+             |       |
+             | █     |
+             | █     |
+-----------  | ----------------
+             |       |
+             |       |
+        -----------------------
+             Lower boundary
+```
+
+If a PACF spike goes **outside the confidence band**, it is considered statistically significant at the stated confidence level.
+
+If it stays inside:
+
+> We generally don't treat that PACF value as statistically significant at that level.
+
+---
+
+# 16. Example of interpreting a PACF plot
+
+Suppose:
+
+```text
+Lag 1    ███████████       outside
+Lag 2    ██                inside
+Lag 3    █                 inside
+Lag 4    █                 inside
+Lag 5    ██                inside
+Lag 6    █████████         outside
+```
+
+Then we might say:
+
+```text
+Lag 1 → significant
+Lag 2 → not significant
+Lag 3 → not significant
+Lag 4 → not significant
+Lag 5 → not significant
+Lag 6 → significant
+```
+
+Your lecture's PACF example specifically says the strongest partial autocorrelation was at **lag 6**, with another negative correlation at lag 8, and identifies lag 6 as the strongest partial autocorrelation.
+
+---
+
+# 17. Why is PACF useful in AR models?
+
+This is where PACF becomes especially useful.
+
+Suppose you are considering an autoregressive model:
+
+$$
+Y_t = c+\phi_1Y_{t-1}+\phi_2Y_{t-2}+\cdots+\epsilon_t
+$$
+
+You have to decide:
+
+> How many past values should I use?
+
+Should it be:
+
+```text
+AR(1)
+AR(2)
+AR(3)
+AR(4)
+...
+```
+
+PACF can provide useful evidence about this.
+
+For example, suppose PACF looks like:
+
+```text
+Lag 1 → significant
+Lag 2 → significant
+Lag 3 → significant
+Lag 4 → insignificant
+Lag 5 → insignificant
+```
+
+This suggests that the first three lags have meaningful direct relationships.
+
+That can be a clue toward considering:
+
+$$
+AR(3)
+$$
+
+But **don't interpret the PACF alone as an automatic command to use AR(3)**. Model selection should also consider validation/error and the broader time-series structure.
+
+---
+
+# 18. The famous ACF/PACF intuition
+
+For introductory ARIMA identification, you'll often hear:
+
+### AR-type behavior
+
+PACF tends to show a **cutoff** after a certain lag, while ACF often tails off.
+
+### MA-type behavior
+
+ACF tends to show a **cutoff**, while PACF often tails off.
+
+This is a common diagnostic pattern, but real-world data can be messier, so you shouldn't treat it as an absolute rule.
+
+---
+
+# 19. One analogy that makes PACF very easy
+
+Imagine you're investigating:
+
+> **Who is directly responsible for today's sales?**
+
+You have:
+
+```text
+Monday → Tuesday → Wednesday → Thursday
+```
+
+ACF asks:
+
+> "Is Monday related to Thursday?"
+
+PACF asks:
+
+> "After accounting for Tuesday and Wednesday, does Monday still have a direct relationship with Thursday?"
+
+So:
+
+### ACF
+
+```text
+"Are they connected somehow?"
+```
+
+### PACF
+
+```text
+"Are they directly connected?"
+```
+
+That's the intuition you should carry into the exam.
+
+---
+
+# 20. ACF vs PACF — final understanding
+
+|                   | **ACF**                                        | **PACF**                                              |
+| ----------------- | ---------------------------------------------- | ----------------------------------------------------- |
+| Full name         | Autocorrelation Function                       | Partial Autocorrelation Function                      |
+| Question          | Is current value correlated with a past value? | Is current value directly related to that past value? |
+| Intermediate lags | Not removed                                    | Controlled for                                        |
+| Direct effect     | Not isolated                                   | Focused on                                            |
+| Lag 1             | Current ↔ previous                             | Same basic relationship                               |
+| Lag 2             | Current ↔ 2-back                               | Current ↔ 2-back after accounting for lag 1           |
+| Lag 3             | Current ↔ 3-back                               | Current ↔ 3-back after accounting for lags 1 & 2      |
+| Main use          | Understand overall lag dependence              | Identify potentially important direct lags            |
+
+---
+
+## ⭐ The one sentence I want you to remember
+
+> **PACF at lag \(k\) tells us how strongly the current observation is directly related to the observation \(k\) periods ago, after accounting for the effects of the lags between them.**
+
+And visualize it like this:
+
+```text
+             PACF at lag 3
+
+Y(t-3) ─────────────────────→ Y(t)
+   │                            ↑
+   │                            │
+   └── effect of Y(t-2) ────────┤
+        and Y(t-1)              │
+        are controlled          │
+                                ↓
+                         Remaining direct
+                            relationship
+```
+
+**ACF:** “How related are they?”
+
+**PACF:** “After removing the relationships through the intermediate lags, how directly related are they?”
+
+Python Demonstration: Autocorrelation Measures
+
+Now that you understand the autocorrelation function, the partial autocorrelation function, and their plots, you will see how ACF and PACF are plotted and analysed in Python.
+
+
+00:00:00 - 00:01:01
+Introduction to autocorrelation plots and stationary time series data
+Hello everyone, so in this session let's look into the autocorrelation plots where now that we have the stationary time series data. Our goal is to identify the relationship between the current observation and its past values. So to do that we will compute and visualize 2 crucial parts. 1 is an ACF and there is a partial ACF, right? So let us quickly start with an ACF. You know shows the correlation values of a time series for the different lag lag orders. So further let us import the plot_ACF from the stacks model where you know this function handles the heavy lifting of calculating the correlations and you know, drawing the confidence intervals for this. Right now after importing, we are passing, you know required information to the plot ACF where here we are passing the DF box forks difference meaning. So here we are passing the box forks transformed and the difference data that we that we got before.
+00:01:03 - 00:02:17
+ACF plot explanation and interpretation
+And if you see the output of the plot here, the X axis is the lag and Y axis is the correlation coefficient. And the blue shaded part represents the 95% components interval, right? So lag 0 if we observe it is always 1.0, which is the perfect correlation with itself. So we can ignore this one. And lag one we see a very strong negative spike. This suggests a strong relationship with the immediate pass. Similarly, if you observe the lag 8 and the lag 12, these are the spikes note right at the edge of the significance, right? A quick take away here is, you know, the sharp cut off after lag one suggests that might be moving average process which help us determine the Q parameter in the arena, right? So now let us move on to the another plot which is the PSEF. While ACF looks at the correlation indicating the indirect effects, this PACF isolates the direct correlation between a time step and a lag by removing any influence from the steps in between.
+00:02:17 - 00:03:23
+PACF plot explanation and ARMA model parameters
+So as we did before, we will also similarly do the same thing where we are importing plot_PACF FROM the stats model and passing the same getup name to the plot PACF SO. Now if you analyze this results here like as we saw lag one we, see a significant negative spike here and. If you go to the lag 11 there, is another significant spike which is further down at at this lag 11 point right, so? This PCF YOU know usually help us identifying the auto regressive terms meaning the P parameter in the ARMA, RIGHT? By looking at both plots, we see strong activity at the lag one in both ACF and the PSCF, right? So this gives us a stronger hint that our Aremo model will likely need terms at a lag one, right? So the significant spike at a lag level in the PSCF might indicates you know the seasonality or a long term dependency. Need to investigate.
+We use plot_acf method to obtain the ACF plot and plot_pacf to obtain the PACF plot from statsmodels. The obtained ACF and PACF plots for the superstore data set is given below.
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+The values that lie outside the blue shaded region suggest strong autocorrelation and partial autocorrelation for their respective lags.
+
+ 
+
+Now you are equipped with all the prerequisites required to build autoregressive models. Next, we will summarise the learning of this session.
+# Part 4 - Autocorrelation Plots
+In this part of the demonstration, we will compute and visualise the autocorrelation function (ACF) and the partial autocorrelation function (PACF) plots for the time series data.
+
+### Subpart 1 - Autocorrelation Function (ACF) Plot
+
+The autocorrelation function (ACF) plot shows the autocorrelation values of a time series for different lag orders. Let's import the *plot_acf* method from *statsmodels* to implement this.
+
+# Import 'plot_acf' from 'statsmodels' to compute and visualise the autocorrelation function (ACF) for the time series
+from statsmodels.graphics.tsaplots import plot_acf
+
+# Use the 'plot_acf' method to look at the autocorrelation values for the training data for various lag orders
+# Note: The 'plot_acf' method assumes stationarity of time series, so we will use the 'df_boxcox_diff' data
+# Note: Since differencing results in a missing value at the beginning, we must exclude it
+plot_acf(x = df_boxcox_diff[1:], color = 'blue', vlines_kwargs = {'colors': 'blue'});
+
+### Subpart 2 - Partial Autocorrelation Function (PACF) Plot
+
+The partial autocorrelation function (PACF) plot shows the partial autocorrelation values of a time series for different lag orders. Partial autocorrelation is computed such that it ignores short-term correlations in the data. Let's import the *plot_pacf* method from *statsmodels* to implement this.
+
+# Import 'plot_pacf' from 'statsmodels' to compute and visualise the partial autocorrelation function (ACF) for the time series
+from statsmodels.graphics.tsaplots import plot_pacf
+
+# Use the 'plot_pacf' method to look at the partial autocorrelation values for the training data for various lag orders
+# Note: The 'plot_pacf' method assumes stationarity of time series, so we will use the 'df_boxcox_diff' data
+# Note: Since differencing results in a missing value at the beginning, we must exclude it
+plot_pacf(x = df_boxcox_diff[1:], color = 'blue', vlines_kwargs = {'colors': 'blue'});
+
+Session Summary
+
+
+In this session, you focused on the key prerequisites required before building autoregressive models. You learnt about the assumptions underlying AR models, including stationarity and linear dependence.
+
+ 
+
+You explored methods to handle non-stationary data, such as stationarity tests, differencing, and transformation. You also learnt how autocorrelation is analysed using ACF and PACF plots and how these tools help guide the selection of model order.
+
+ 
+
+This session equipped you with the necessary tools to prepare time series data for autoregressive modelling.
+
+ 
+
+Next, you will learn about autoregressive models. But before that, you will answer a few questions based on this session to assess your understanding.
+
+Which of the following is/are key assumption(s) required to build autoregressive models? (Note: More than one option may be correct)
+
+
+The time series is stationary.
+
+There are correlations in the time series data that help improve forecasts.
+
+The time series is non-stationary.
+
+There are no correlations in the time series data that help improve forecasts.
+
+Suppose a time series gives a p-value of 0.02 for the ADF test. What can we conclude about the stationarity of the time series?
+
+Correct! A p-value of 0.02 for the KPSS test indicates that we can reject the null hypothesis of non-stationarity. Therefore, we can conclude that the time series is stationary.
+
+What is the purpose of differencing in time series analysis?
+
+
+To introduce autocorrelation in the time series.
+
+To remove trend components in order to stabilise the mean of the time series.
+
+To directly determine the order of an autoregressive model.
+
+What is the main purpose of applying the transformation to a time series?
+
+To remove outliers and anomalies from the time series.
+
+To standardise the time series data.
+
+To achieve a constant variance in the time series.
+
+Consider the ACF plot given below.
+
+Based on the above ACF plot mark the option(s) that is/are correct. (Note: More than one option may be correct.)
+
+

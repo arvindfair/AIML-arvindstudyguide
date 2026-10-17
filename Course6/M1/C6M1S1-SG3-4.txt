@@ -1,0 +1,304 @@
+Motivation for SVM
+
+Support Vector Machines, or SVMs, are a class of extremely popular classification models. Besides their ability to solve complex machine learning problems, they have numerous other advantages over other classification problems, such as the ability to deal with high-dimensional feature spaces, classifying nonlinearly separable data, etc. We will discuss some of these problems in detail in the upcoming lectures.
+
+ 
+
+ 
+
+Let's start with learning the motivation for learning SVMs.
+
+00:00:05 - 00:01:59
+Introduction to Support Vector Machines (SVMs) and their importance in machine learning
+Hi in this module we're going to discuss support vector machines. Support vector machines are one of the very popular machine learning models for several reasons. They have they're computationally very, very efficient. These are known to be very accurate models, and these models can be extended to all kinds of messy nonlinear boundaries of separation between classes. And SVMS also enjoy several interesting theoretical properties like generalizability and all that. And so SVMS are a very, very important class of machine learning models. It is important for any machine learning practitioner to be familiar with this class of models and the ideas that go into SVMS, primarily the notions of kernels and the way the SVM formulation exploits the theory of optimization. These are some themes that that are applicable across wide range of ML techniques, not just SVMS, but SVMS is probably where most of the use of these sort of techniques actually started. So that's that's the motivation for why we are learning SVMS.
+
+
+It is important to remember that SVMs belong to the class of linear machine learning models (logistic regression is also a linear model). This concept will be very important in the upcoming lectures.
+
+
+
+A linear model uses a linear function (i.e. of the form y = ax + b) to model the relationship between the input x and output y. For example, in logistic regression, the log(odds) of an outcome (say, defaulting on a credit card) is linearly related to the attributes x1, x2, etc.
+
+
+
+Similarly, SVMs are also linear models. In the upcoming lectures, you will learn to use SVMs for classification problems.
+
+VMs need attributes in a numeric form.
+
+ 
+
+Let's discuss the case of classifying emails as spam or ham. You will see, in our (somewhat simplified) example of email classification, that the features are the ‘frequency of words’ in an email. Word frequency is a very common type of feature in text classification, and reasonably so.
+
+ 
+
+For example, words such as ‘Hurry’, ‘FREE’ and ‘Discount’ are likely to be more frequent in spam emails than ‘meeting’, ‘PPT’, ‘weekly report’, and others that are characteristic of office emails. To get a sense of how the data set looks, find the dataset below.
+
+Linear Classification using Numeric Features
+
+
+SVMs need attributes in a numeric form.
+
+ 
+
+Let's discuss the case of classifying emails as spam or ham. You will see, in our (somewhat simplified) example of email classification, that the features are the ‘frequency of words’ in an email. Word frequency is a very common type of feature in text classification, and reasonably so.
+
+ 
+
+For example, words such as ‘Hurry’, ‘FREE’ and ‘Discount’ are likely to be more frequent in spam emails than ‘meeting’, ‘PPT’, ‘weekly report’, and others that are characteristic of office emails. To get a sense of how the data set looks, find the dataset below.
+
+00:00:00 - 00:00:47
+Geometric View of Machine Learning Problems
+In a lot of machine learning formulations, and particularly so for SVMS, we take a geometric view of a machine learning problem. What does that mean? So you're given a data set which consists of of a collection of data points. Each data point has some attributes which describe what the data point is about some features of that particular entity or data point. And there is also a special column or an attribute which we call as the label.
+00:00:48 - 00:03:15
+Attributes and Labels in Data Sets
+And the label signifies what we want to know or predict about any given entity. We are going to make an assumption about the attributes that these attributes can be represented as numbers, as real numbers. So these are not categories like male, female or some some menu of items kind of things, right. So even if you have these kind of categorical attributes, as far as the use of SVM is concerned, we assume that these columns are also numeric. So if necessary we may have to convert some of these categorical attributes to numeric attributes. So now for the discussion going forward, we will assume that all the attributes are numeric, that they are numbers like here there are two attributes, let's say money and say technology. So there are two attributes. We we will, we will talk about this in little more detail later, but just for the purpose of illustration, you have two attributes, both of which are numbers. That means you can then represent every object as a pair of attributes. So it is like giving the coordinates of a point XY. So you have plus here, you have minus here, and you have the blue points and the red point. So the the blue points are of one kind and the red points are of the other kind. And what we want to do is to have an algorithm or a way to figure out whether a new data point is of the blue kind or is it of the red kind. Now to take a concrete example, suppose I want to separate the spam emails from the good ones, the ham ones. OK, so I am just to translate some of these terms that we introduced here into the specific problem. Now we are going to talk about which is e-mail spam detection.
+00:03:16 - 00:06:03
+Email Spam Detection Using Word Counts
+Every entity here the object is an e-mail, right? So you have each e-mail is one data point or object, right? And then we need some attributes to describe an e-mail. So and and these are. You could also refer to the attributes as features. So these features will allow you to describe an e-mail in as much detail as possible. So you we assume that the collection of features we have is enough for us to be able to say whether the e-mail is a spam e-mail or not. OK, now So what sort of features would you think of? We could. So 1 simplistic view of of classifying an e-mail as spam is to say that typically a spam e-mail is likely to contain certain kinds of words or probably some words are likely to occur more often in spams than in the normal emails. So essentially it goes by the the sort of vocabulary that spam emails use as opposed to the normal ones. So what we do is think of features consisting of, let's say the word counts in every e-mail. So we say word 1 occurred so many times, word 2 occurred so many times, word 3 occurred so many times. So we have a Dictionary of words and we think of a representation of an e-mail as the counts of each of these words in the e-mail. OK, let's assume we just want to deal with the word counts in the emails. OK. So now obviously the word counts are numbers. So what we have effectively done now is to represent every e-mail as a vector of numbers, right? And this vector of numbers is going to represent an e-mail. So every e-mail can now be thought of as a point in some D dimensional space, where D happens to be the number of features that we have extracted, number of word level features that we've extracted.
+
+To summarise, SVMs are linear models that require numeric attributes. In case the attributes are non-numeric, you need to convert them to a numeric form in the data preparation stage.
+
+ 
+
+Next, you will learn about the linear boundaries which can be used for the classification of labels.
+
+Concept of Hyperplane in 2D
+
+
+Before you move on to support vector machines, you need to understand the concept of hyperplanes. Essentially, it is a boundary which 'separates' the data set into its classes (in this case, separates spam emails from the ham ones). It could be lines, 2D planes, or even n-dimensional planes that are beyond our imagination.
+
+ 
+
+Now, let’s try to imagine how a spam or ham classifies in 2D for the email spam data set.
+
+00:00:00 - 00:00:14
+Introduction to spam and ham email classification
+So now we have the spam emails, let's say represented as the plus points here, and the the ham emails as the minus points here, the red and the blue points.
+00:00:16 - 00:02:23
+Geometric view of model as a line for classification
+Now what do I want to do with these? I want to find a model which will allow me to discriminate between the two kinds of emails. OK, So what does it mean to produce a model and what does this model look like? OK now since we are taking a geometric view, I think of the model as a line. OK, so if I can draw a line here which sits between the blue points and the red points. So all the blue points are on one side of the line, all the red points are on the other side of the line. And if I can find such a line and if I have a way of figuring out if any arbitrary point beside of this line in which this arbitrary point lies. So I need two things. I need to find one such line which is such that all the blue points lie on one side, all the red points lie on the other side. The second thing which I said, deciding which side of the line does a given point lie in, that is basically what you do when you do prediction. So if I give you a new e-mail, I will have those two numbers which which describe that e-mail, those two features. And I'm going to plot those two features as numbers here. I plot them as a point in this graph, and if I can computationally figure out which side of this line is that point on, and if it lies on the blue side, then I would say this is a spam. If it lies on the red side, I would say it is not a spam. So these are the two things I would need. And that's precisely what I mean by a model. OK, so now that we have decided what the model is going to look like, the shape of the model, how do we actually do this computationally?
+00:02:24 - 00:04:03
+Algebraic characterization of the line model
+So to be able to do this computationally, I need an algebraic characterization of this line. And I'm sure all of you will recollect from your high school geometry that the equation of any such line, if you have the X and the Y coordinates, then equation of any such line is going to be of the form AX plus BY C equal to 0, right? So you have the three coefficients ABC and any point on this line will satisfy this equation. And the other nice thing is that for all the points on one side, it will be true that AX. So let me call this as plus. So when I denote it by plus, I mean all the points. The X + y plus point is on the plus side of this line. It is on the blue side. And for all such points, this AX plus B, y + C will be strictly greater than 0. And for all the points on the other side plus C will actually be strictly less than 0. And for points that lie exactly on this line, it will be 0. So now we have a way of representing such a model, a line which is.
+00:04:04 - 00:05:24
+Determining coefficients for the line model
+So I just need to specify the three coefficients. The moment I tell you these three, that tells me what the line is and that is my model. Given any new data point with coordinates XY, how do I decide whether it corresponds to a spam e-mail or a normal e-mail? Just plug that into this expression. AX plus B, y + C Put the value for X, value for Y and compute AX plus B, y + C If it turns out to be greater than 0, I say it is spam. If it is less than 0, I say it is not a spam. And this is precisely how this separator model is going to work, right? So the our job is now to find this model AX plus B, y + C which essentially amounts to determining the values of ABC and which has these all these properties. So what properties are we talking about? ABC must be such that the line represented by AX plus B, y + C equal to 0 is such that all the blue points lie on one side of the line. All the red points lie on the other side of the line.
+
+
+A line that is used to classify one class from another is also called a hyperplane. In fact, it is the model you're trying to build, as shown below
+
+
+The standard equation of a line is given by ax+by+c = 0. You could generalise it as Equation, where x1 and x2 are the features such as 'word_freq_technology' and 'word_freq_money', and W1 and W2 are the coefficients.
+
+ 
+
+For any line with W coefficients, substituting the value of features x1 and x2 in the equation of the line determined by its W coefficients, will return a value. 
+
+ 
+
+A positive value (blue points in the plot above) would mean that the set of values of the features is in one class; however, a negative value (red points in the plot above) would imply it belongs to the other class. A value of zero would imply that the point lies on the line (hyperplane) because any point on the line will satisfy the equation: 
+
+Equation
+
+ 
+
+This is what a 2-dimensional hyperplane looks like. Now, what do you think a hyperplane will look like in 3 dimensions? We will discuss this in the next lecture.
+
+If the equation of the optimal hyperplane is represented by Equation, then (Hint: Equation is the slope of the line and Equation is the intercept, i.e. the point where it cuts the Equation axis) imagine the hyperplane and say whether the slope and intercept will be positive or negative.
+
+
+‘W1’ is the slope of the line and ‘W0’ is the intercept (the point where it cuts the X2 axis). The slope will be positive since the hyperplane or line is tilted towards the right. The constant 'W0' is where it cuts the X2 axis, which is a point below X2 = 0.
+
+
+The Y labels for classes 1 and 2 are 1 and -1 respectively. If the optimal separating hyperplane is represented by X2= W1X1+W0**, then the classification rule to classify a general point (p, q) is given by:** 1. ​(W1.p−q+W0).Y>0 2. ​(W1.p−q+W0).Y>=0 3. ​(W1.q−p+W0).Y<=0 4. ​(W1.q−p+W0).Y<0 which is correct and how ?
+
+
+Correct.The equation of the hyperplane is given as ​W1X1−X2+W0=0​.If any new point lies below the line, the value of Y will be -1, and the value of the expression ​W1X1−X2+W0​ is less than zero; this means the product will be positive. Similarly, if the point lies above the line, the value of Y will be +1, and the expression W1X1 - X2 + W0 is greater than zero. Thus, the product is positive. Also, in the case of the point on the line, the value of the expression ​W1X1−X2+W0​ is equal to zero. Thus, the expression ​(W1.p−q+W0).Y​ gives a positive value or zero.
+
+Yes — **your reasoning is correct**, and based on the explanation you provided, the answer should be:
+
+$$
+\boxed{(W_1p-q+W_0)Y \ge 0}
+$$
+
+So **Option 2 is correct** if the question/answer key allows points **on the hyperplane** to be classified as valid.
+
+### Why `≥ 0`?
+
+The expression is:
+
+$$
+(W_1p-q+W_0)Y
+$$
+
+There are three cases:
+
+| Position    |  \(Y\) | \(W_1p-q+W_0\) |    Product |
+| ----------- | -----: | -------------: | ---------: |
+| Below line  | \(-1\) |         \(<0\) |     \(>0\) |
+| Above line  | \(+1\) |         \(>0\) |     \(>0\) |
+| **On line** | either |         \(=0\) | **\(=0\)** |
+
+Therefore, including the points lying exactly on the hyperplane:
+
+$$
+\boxed{(W_1p-q+W_0)Y\geq0}
+$$
+
+### Important distinction
+
+My previous answer used the **strict classification condition**:
+
+$$
+Yf(x)>0
+$$
+
+which excludes points exactly on the decision boundary.
+
+But **the explanation you supplied explicitly includes the point on the line**, where the expression equals zero. Therefore, for **this particular question**, the intended answer is:
+
+$$
+\boxed{\text{Option 2: }(W_1p-q+W_0)Y\geq0}
+$$
+
+✅ **Exam answer: Option 2**
+
+**Memory trick:**
+
+* If boundary points are **excluded** → \(>0\)
+* If boundary points are **included** → \(\geq0\)
+
+
+Let's say that a straight line, L, as shown in the plot below, is given by x2= w1x1+w0, and divides the points belonging to two classes, C1  and C2, in a 2D space. If the points (a,b) and (p,q) belong to C1 and C2 respectively, then: 1. ​(b−w1a−w0)∗(q−w1p−w0)>0 2. (b−w1a−w0)∗(q−w1p−w0)<0 3.(a−w1b−w0)∗(p−w1q−w0)>0 4.​(a−w1b−w0)∗(p−w1q−w0)<0
+
+Since the two points belong to different classes, the terms (b−w1a−w0)​ ​and (q−w1p−w0) will have different signs for instance, if you observe the red points which lies below the line(hyperplane), give the negative value of expression x2−w1x1−w0. On the other hand, blue points which lies above the line(hyperplane), give the positive value of same expression x2−w1x1−w0. Thus, if you multiply both the expression's value, you will get a negative value.
+​(b−w1a−w0)∗(q−w1p−w0)<0
+
+
+5.
+
+In the vector space shown in the plot below, if there are various hyperplanes plotted, which hyperplane do you think is the right classifier?   
+
+Multi hyper plan for Spam and ham
+
+Concept of Hyperplane in 3D
+------------------------
+As you learnt in the last lecture, a 2D hyperplane can be represented by a line, and the equation of this hyperplane will be expressed as ax+by+c = 0. But if you have 3 attributes, what will the hyperplane look like, and what will the expression of such a hyperplane be? Let’s discuss this.
+
+
+
+00:00:00 - 00:00:28
+Geometric interpretation of classification in 2D
+So we have seen how we take a geometric interpretation of the classification problem in machine learning, and we also saw what it means at least for 2 dimensions. We saw what it means to find a classification model and how we would use that model to classify any new data point.
+00:00:28 - 00:01:11
+Generalizing classification to higher dimensions
+And this geometric interpretation is indeed the reason why we refer to each entity, like in this case an e-mail, as a data point, because the point is the geometry counterpart of the objects that we are trying to discriminate. So, so far it's fine. We have two attributes and we know what it means to find a separator. Let's quickly look at what it means to generalize these two higher dimensions. It's clearly unrealistic to assume that any real life problem will have only two attributes.
+00:01:11 - 00:02:03
+Attributes as dimensions in geometric representation
+Like even in the e-mail data set that we saw just a while ago, the, there were several 10s of different attributes that an e-mail had. I'd say it's, it's very, very unrealistic to assume that you will be able to describe the, the nature of an e-mail, which is enough to classify it into a spam or not by just looking at 2 numbers. Very, very unlikely, right? So I would need a whole collection of features about that e-mail and that could run into 10s, hundreds, even millions, right? And so that's the number of attributes that we're talking about. And each attribute forms one dimension of the geometric representation that you have in mind for each of these data points.
+00:02:04 - 00:03:27
+Transforming data points into dimensional space
+In other words, each column in your data set becomes one coordinate when you think of it as a problem in geometry, right? So every number represents the value along one of the coordinates, and that transforms every data point or every row in your data set into a point in the appropriate dimensional space. The number of dimensions of the space in which you imagine this point to be is exactly equal to the number of features and attributes that you have. OK, so for 3D it will look like this. You have these points. Each data point is described by three numbers. So you have 3 axis. You plot each number along one of those axis and you get a point right now in this case, so if you move away from 2 dimensions to three, and may be more, what does it mean to find a model, A discriminating model, which separates one kind of points from the other kind of points? So we need basically one criterion for the model must essentially split the space into two halves.
+00:03:27 - 00:04:11
+Finding a model to split space in 3D
+Like if you take the two-dimensional space the moment I draw a line and you extend the line on both sides as far as you can, this line essentially separates the the entire plane into two halves, right? So we now need to find the counterpart of a line in 3D. So we need to find an an object which will split three-dimensional space into two halves. So what's the counterpart of a line in three dimensions?
+00:04:11 - 00:05:05
+Separating points with planes in 3D
+It's basically a plane. So it will be something like this. So if you extend it in all directions, it will end up splitting space into two halves. So this is the sort of separator that we are we are looking at. So what the in three dimensions. It then boils down to finding a separator which corresponds to a plane such that all the blue points are on one side and all the red points are on the other side. So that's for three dimensions. What happens in 4 dimensions? 100 dimensions, 1,000,000 dimensions? Well, I don't think it's possible for any of us to really imagine how it will be. I can't give you a demonstration like this in 100 dimensions.
+00:05:06 - 00:05:58
+Algebraic approach to high-dimensional problems
+But then thankfully if you think of this algebraically, then it's a straightforward extension. So the the trick in dealing with high dimensional problems, to put it very simplistically, is to think algebraically as opposed to geometrically. You you do get a lot of geometric intuition by imagining how it will be in three dimensions or two dimensions. But when you actually work with hundreds or millions of attributes, there is no way you can directly visualize how these things will appear in in a space which has that many dimensions. You will need to think of it algebraically.
+
+In general, you can conclude that the hyperplane in 2D can be represented by a line, whereas a hyperplane in 3D can be represented by a plane.
+
+ 
+
+Next, we will see how we can express an n-dimensional hyperplane algebraically.
+
+What will the dimension of a hyperplane in a 3D space be?
+
+
+The dimension of the hyperplane is 2. It can be calculated as [number of features - 1]. If you look at the 3D plot as well, you will see that the data can be easily separated by a plane.
+
+Hyperplane in d-Dimensions
+
+
+Now, let’s see how you can extend the 2D expression for 3D and for a d-dimensional space. 
+
+
+00:00:00 - 00:00:22
+Introduction to 2D Separator Equation
+Let's now go back to the equation of D separator that we had in 2 dimensions. You had X&Y as the coordinates and we said the separator is going to be of this form AX plus B y + C equal to 0.
+00:00:23 - 00:01:05
+Equation of a Plane in 3D
+And it turns out that the equation of a plane in three dimensions is not going to look very different from this algebraically. All I need to do is to add one more term which corresponds to the third dimension. You have X&Y and you add AX plus BYI have 1/3 dimension Z. So you have acz plus a constant D equal to 0. And this is the equation of a plane in 3 dimensions and exactly like it was in 2 dimensions.
+00:01:06 - 00:02:03
+Discriminating Property of Planes
+For any point which is on one side of the line, this will be greater than 0. So if you put a plus here, it will be greater than 0. On the other hand, AX minus plus BY minus plus CZ minus plus D will be less than 0. So again, you have the same discriminating property. Every point on one side will have one sign another. All the points on the other side will have the opposite sign. OK, and this directly extends to any number of dimensions. It's just that you don't have to write this many terms here anymore, so there is a quick way to write it. So imagine a point in some D dimensions as a collection of coordinates X1 all the way up to XD.
+00:02:04 - 00:03:06
+Generalization to D Dimensions and Hyperplanes
+So there are D dimensions, and the moment I specify these D numbers, that represents a point in D dimensions. And now think of D coefficients, which are again numbers along with one special coefficient called W naughty. OK, so this represents your model just the way in 2 dimensions, ABC represented a model. In three dimensions, ABCD represented a model. Now in general and D dimensions, I'm going to have W 1 to WD here you had two, you had three. Instead, you'll have D here plus a constant W not and yeah. Now given these, there is a special term that we use to refer to the generalization of a line or a plane to any number of dimensions.
+00:03:07 - 00:04:54
+Properties of Hyperplanes in D Dimensions
+And we the term used is a hyper plane, and the equation of a hyper plane is. You multiply each coordinate by the corresponding coefficient and Add all of them together, and then finally add the constant number and that equal to 0 is the equation of a hyperplane in D dimensions. So how do you write that? Sigma refers to the addition, the summation, the index going from one to DWI, the ith coefficient into the ith coordinate plus W naughty, which is the constant equal to 0. So this is how the equation of a plane, a hyperplane in D dimensions will look. So as I said earlier, we are not going to even try imagining how this will look. But algebraically, it's fairly straightforward to extend what we saw in 2D to any number of dimensions. And D can be anything. It can be 100,000 million, right? Yeah. And this hyperplane has precisely the same properties that we talked about in 2D and 3D. For all the points which lie exactly on the hyperplane, it will be equal to 0. For every point on one side of the hyperplane, if you plug in the corresponding coordinates for the excise, then this summation will be greater than 0, and for all the points on the other side the summation will be less than 0.
+
+
+In 3 dimensions (refer to figure 1 below), the hyperplane (light orange) will be a plane with an expression of ax+by+cz+d = 0. The plane divides the data set into two halves. Data points above the plane represent one class (red), while data points below the plane represent the other class (blue).
+
+In general, if you derive the d-dimensional hyperplane from d attributes, you can write the expression as follows:
+
+Equation
+
+ Sigma i=1 to d wi.xi + w0
+
+The model denoted by the expression given above is called a linear discriminator. We will learn more about it next.
+
+Linear Discriminator
+-----------------------
+We saw that a linear discriminator is the model denoted by any hyperplane
+
+Equation
+
+
+ Sigma i=1 to d wi.xi + w0
+
+Let's learn more about linear discriminator expression next.
+
+
+
+We saw that a linear discriminator is the model denoted by any hyperplane
+
+
+00:00:00 - 00:02:35
+Understanding Linear Discrimination Problem Formulation
+Let's first understand what it means to find a linear discriminator. So here is the linear discrimination problem formulation. So what we need to do is given N which is the number of data points and D which is the number of attributes, we need to find coefficients W 1 to WD along with a constant W naughty such that this following condition holds for every one of the N data points and what is that condition? So we need to find coefficients W1 to WD along with a constant W naughty such that this condition is satisfied for everyone of the north data points. And what is that condition? We need to ensure that the hyper plane defined by these coefficients is such that all the data points belonging to one category or on one side of the hyper plane and all the other points are in the other side. And how do we express that mathematically? We say that if Li is 1, which means if it's been classified as blue, then the then the summation of the pair wise products of these coefficients with the corresponding coordinates. You sum over all the coordinates one to D and then you add the West naughty. This sum should be greater than 0 because it is on the blue side of the hyperplane and for all the points which are on the other side the red side of the hyperplane the the same sum. If you compute, you should see that this summation is strictly negative. So the linear discrimination problem is, given a set of N data points with their corresponding coordinates XIJ, we need to find W 1 to WD along with the W not such that this condition holds for everyone of the data points.
+00:02:36 - 00:03:18
+Using Linear Discriminator for Classification
+Having found this, how do you then go ahead and use it for classification? Given any new data point with the coordinates, just plug it into this and if you find that this summation turns out to be positive, then you say yes, it is spam. If it turns out to be negative, you say it is not spam. So here is the problem. We have now taken a geometric view, and then we have been able to precisely mathematically characterize what it means to find a discriminator between the two classes of objects that we want to discriminate.
+
+
+ 
+
+Similar to the 2D and 3D expressions, an n-dimensional hyperplane also follows the general rule: all points above the plane will yield a value greater than 0, and those below it will yield a value less than 0 when plugged into the expression of the hyperplane.
+
+ 
+
+Let’s focus our discussion on the 2-dimensional case again. Consider the hyperplanes (lines) drawn below. You can have multiple such lines correctly performing the classification task. But don't you think it would be a better idea to see which one is best suited?
+
+In the next lecture, you will learn how to choose the best-fit hyperplane.
+
+In an n-dimensional setting, with n features and p data points, what will the equation of the hyperplane be?
+
+
+​W0+W1x1+W2x2+...+Wn−1xn−1+Wnxn=0
+
+Correct. If there are n features, the equation of the hyperplane will be the additive sum of xn features multiplied by Wn coefficients. The number of data points does not affect the hyperplane equation. For example, with two features, say x1 and x2 , the equation of the hyperplane will be a straight line — i.e. W0+W1x1+W2x2=0, where W0 is the intercept.
+
+​W0+W1x1+W2x2+...+Wp−1xp−1+Wpxp=0 -- Incorrect. Remember that w’s are the weights associated with each feature x. Now identify how to form the equation of the hyperplane.
+
+
+In a 5-dimensional setting, if the point X = (X1, X2, X3, X4, X5) lies exactly on the hyperplane, then
+
+W0 + W1X1 + W2X2 + W3X3 + W4X4 + W5X5 = 0Correct. The equation of the hyperplane is given by W0 + W1X1 + W2X2 + . . . + WnXn in an n-dimensional space. If a point is exactly on the hyperplane, it will be equal to zero.
+
+

@@ -1,0 +1,818 @@
+Demonstration: Data Splitting and Cross-Validation
+
+So far, we have discussed why model evaluation and hyperparameter search must rely on carefully designed validation. Now, it is time to learn how all of this comes together in practice.  
+
+ 
+
+In the following demonstration, we will start with a simple data split and gradually build a cleaner and more reliable evaluation workflow that supports model selection. 
+
+ 00:00:00 - 00:00:47
+Introduction to machine learning model building and data splitting
+Welcome to the session where today we will deep dive into the crucial steps for building the robust machine learning models which are nothing but data splitting on the cross validation. So here our goal is to accurately predict the customer churn using the telco churn data set where we will explore various validation strategies like holdout task which on the cross validation. So understanding these methods help us you know to build the model that generalized well to new Oregon unseen data set and manage the imbalanced data sets effectively. So the Teleco chain data set includes whether they churned last month, that's a thorough variable.
+00:00:47 - 00:01:17
+Overview of Telco churn dataset and its features
+And this services they subscribe to like phone or multiple lines or Internet. And then the account details like regarding the contract, the payment method or the paperless billing, so etcetera. And along with this, we also have the demographic information which we have information related to the gender, age range. So first is let us quickly install all the specific packages that are required here.
+00:01:18 - 00:01:42
+Installing necessary packages and loading dataset
+So along with the other important packages, we will also import, import the pipeline and the quorum transformer, which are, you know, key for building and organized and leakage free workflow here, right? So, so first, let us quickly load our data set here, right? So this is a quick for you the first few rows.
+00:01:42 - 00:02:13
+Exploring dataset columns and target variable
+So basically, if you notice the columns here like the gender and the senior city, gender, partner tenure. So various service types. And we have lot of all the information along with we also have the last column as a churn which is no Rs, which is our target variable here, right? So once we saw this information, so let us quickly see the df.info on the related columns here.
+00:02:13 - 00:03:11
+Data types and encoding for machine learning
+So this df.info provides A concise summary of the data frame here. So basically it tells us that there are a number of 7043 customers where we have you know 21 columns here and the count of non null values for each columns. And also we have the data types right? So this is crucial for identifying the missing data and understanding you know how Python is interpreting each column. For example, if you see the object here update means the strings and integers and the flow piece of decimals, right? So here we have seen the many columns are object type which typically means they contain strings and will need encoding data, right? So if you see importantly the total charges is currently object but it logically represents a numerical value right?
+00:03:11 - 00:04:08
+Handling missing values and data type conversion
+So we need to address this before we pass the data into the model. Right now these are all the columns that we have that are present in the data set. And if we have used this DF dot describe T where this gives a disc to statistics for our numerical columns which are transport for better tradability here. So for example, like for senior citizen tenure and the monthly charges, we see counts means under standard deviations and the quartiles are like 255070 5th percentiles as well as the min and the maximum values here. So basically this help us understand the distribution and range of our numeric features. For example, the average tenure or how long customers have stayed is you know this is around 32 months, right?
+00:04:08 - 00:05:09
+Optimizing memory usage and defining features
+So once we got this understanding now as we saw earlier that the total charges is an objective but it should be numeric right? So we need to convert that into the float right? So here we are converting our total charges into the float and then we are using this PD Tau 2 numeric function and crucially we have this error squares meaning if there are any non numeric values this will convert them into Nan instead of throwing an error. So basically this allows us to handle the missing values gracefully rather than getting the error. So after this we are checking if the total charges is null to see how many null values are created. So in this case, if you see the output, we have 11 nands in total in the for this particular column, right?
+00:05:09 - 00:06:05
+Preprocessing pipeline setup with column transformer
+Now we need to handle the null values, right? So basically what we are doing is that we are just dropping this rows from our data frame using this DF dot drop now, right? So dropping these rows is a simple strategy for handling the small number of missing values right? And then we are again rechecking if there are any null values. And now if you see the count is 0 here. Now after removing 11 rows out of the total rows, we have around now from 03 to sample 0. Now to optimize the memory usage and the signal to pandas that certain columns are indeed categorical, we convert their data type to the category here. So for this we will select all the columns with AD type object right?
+00:06:05 - 00:07:21
+Building machine learning pipeline with logistic regression
+And then we want to exclude the customer ID from this conversion as its unique identifier. It is not a categorical feature for Morley. Finally we are applying this as dot as type category to these columns. And now if we are rechecked again the df.info after cleaning the type, if you observe the type conversion step, it is a you know all the D types which are object previously, now it is convert into category type and the total charges is a flow type here, right? So this change in the data type is important for efficient processing and for cyclic learns column transformer to correctly identify and process these features. Right now, once we have cleaned our data, let us quickly define our features here. So we are explicitly separating our data set into X&Y features on the target variable, where our target Y is the churn column which we convert to an integer 0 for no churn and one for the churn.
+00:07:22 - 00:08:11
+Pipeline benefits: preventing data leakage and workflow consistency
+And similarly for features, we are including all other columns except churn and the customer ID here. So if you observe this output, we can't see the churn column here and as well as the customer ID here, right? So now to build our preprocessing pipeline, we need to know which features are numerical and which are the categorical, right? So to do so first here we are using this select D type to automatically pick out the columns based on their data types, right? We are including the int and flow for numerical and category for the categorical. So this ensures our preprocessing structs are applied correctly to the right types of the data right?
+00:08:12 - 00:09:25
+Holdout validation method and model training
+And then we are now we are calling this column transformer function which allows us to apply different prepressing steps to different subset of our columns. Let us say for our numerical features we are using the standard scalar to scale them. This is crucial for many machine learning algorithms that are sensitive to the feature scales. And for our categorical features, we are using the one hot encoder. Why 1 hot encoding here? Basically, it converts the categorical variables into numerical format that you know. Basically the machine learning models can understand right in creating the new binary whether it's a zero or one for each unique category that is present in the data, right? And here the handy unknown equal to ignore. This is very important here because if our model encounters a category it hasn't seen before during training, it will simply ignore it rather than raising an error. And here this column transformer one gives the specific transformations for the respective columns that are present in the data set.
+00:09:26 - 00:10:14
+Evaluating model performance with accuracy and recall
+And now finally we combine the our preprocessing steps and our machine learning models into this pipeline where this starts with our preprocess column transformer. Then it feeds the process data into our classifier which is we are using the largest regression model in this case, right? What is the importance of this pipeline, right? So basically it will prevent the data leakage because this is most critical benefit when we perform the cross validation or the spread data. The pipeline ensures that preprocessing is fitted only on the training data of each fold and then applied to both training and the test data here, right?
+00:10:15 - 00:11:16
+Challenges with imbalanced datasets and holdout method limitations
+So basically this prevents information from the validation set from leaking into the training process, right? And also it will create a single sequential workflow, making our code cleaner and easier to reproduce. And then next important point why we need this pipeline is that it guarantees consistent application of steps across all stages of model development and the evaluation. So now our pipeline is ready, so we will move on to the next step which is a validation steps, right? So in any cross validation scenario where data is put into multiple folds, the pipeline ensures that each fold receives an independent precursing. Meaning, when a fold is designated as a training set, the standard scalar and the one hot encoder that we saw above are fitted only on that training data.
+00:11:16 - 00:12:25
+Introduction to cross-validation for model assessment
+Then when the model make predictions on the validation or test fold, the same transformations are applied on the test set. This prevents any information from the validation or the test set from influencing the preprocessing steps, thus avoiding the data leakage here. Right now, let's explore our first validation strategy, which is nothing but the holdout method here. So basically, this method involves splitting our data into two distinct sets, which are the training set and the test set, right? So basically the model is trained exclusively on the training set and then its performance is evaluated only once on the unseen test set, right. So for this what we are doing, so we are calling this cycle and trained split where we are passing the features as well as a label with a test size of 8020 split here and the random state is 1 to you know to make sure the reproducibility right.
+00:12:26 - 00:13:28
+K-fold cross-validation setup and class distribution analysis
+So once we split the data. So here if you see the output, these are roughly around 73% nonchon and the 20 7% chain. So now once we have the split ready, now we need to fit the model. So basically we are training our model here. After training we are using the model to predict on the test set to get the predicted class labels which are zero or one for one saying F. And then we are also getting the probabilities using the predictor which gives us the probability of the positive churn where here as we mentioned here one right. So if you quickly see the output where you know we are getting the accuracy, recall and Roc sorry Roc AUC where this Roc AUC measures the models ability to distinguish between the classes across various probability thresholds, right?
+00:13:28 - 00:14:23
+Stratified K-fold cross-validation for imbalanced datasets
+So the higher Roc AUC indicates the better separability. So if you quickly see the output here, the accuracy is around the seven 9.6% and recall is about 53.3% and ROCA you see of 84.7%, right, The recall is not as high as an accuracy highlighting that while the model is generally correct, it struggles more with identifying all channels, right. So this is common challenge, you know that we will face with the imbalanced type datasets, right? So the accuracy of 80% sounds good, but again the recall is 53% is less impressive, especially if identifying channels is our primary business objective, right.
+00:14:23 - 00:15:44
+Using cross_val_score for convenient cross-validation
+So this outcome immediately brings up the question like what if you change the random state in train test plate, would our metrics change significantly, right? So try a few variants in values and you know, get the observations and get the insights on would our metrics change significantly based on these changes, right? So if you remember, because our data set is in balance, a single holdout split can sometimes, you know, give an optimistic or specific view depending on the specific random split here. This motivates us to explore more robust validation methods, right? Let's move on to the another technique, which is a cross validation for a more reliable assessments here. So now moving on to the cross validation where this is a technique to assess how the results of the statistical analysis will generalize to an independent data set here. So basically it is useful for estimating the skill of a model on the unseen data when we have the limited data like instead of single train or test fit, now we are going to perform multiple splits and average all the results here.
+00:15:46 - 00:17:05
+Cross-validation for model selection and hyperparameter tuning
+So here let us explore two different types of K fold cross validation, right? First, let us start with the K fold cross validation where we are initializing the K fold with five splits and we are shuffling the data. Ensure the data is randomly mixed before splitting and we are having the random state one again to ensure the reproducibility of the shuffling, right. So in cross validation, we we use only the training set right on the training label from our initial holdout split to create the Cove folds right here the fur loop. Basically, you know it iterating through each of the five hold generated by this KF dot split here from the training data and for each hole we are printing its numbers and then display the class distribution. So if you quickly analyze the output here, you can see the class distribution for each of the five folds, right? Notice that while they are generally similar to the overall training distribution, there might be a slight variation between the folds. For example. So here if you observe for one fold we have 1-6 point 1% and another is one 6.4 and so on.
+00:17:05 - 00:18:11
+Cross-validation results and selecting best model
+Right, the slight, the slight variability can be problematic for especially for imbalanced data sets here, right? To address this potential variability in the class distribution, here we are passing the parameters. Basically the parameters are the same as the K fold, but the key difference is how the splits are made here. Meaning stratified K fold ensures that each hole maintains the same portion of a target classes as the original data set. So this is critical for imbalanced classification problems as it guarantees that each fold is representative. Similar to Co fold. We also again going through the same loop the flights and when the class distribution everything is same here. So if we quickly analyze the stratified K fold output, the distributions for each fold likely, you know, see that the percentage of the churn 1 is much more consistent across like 2425.
+00:18:12 - 00:19:30
+Predicting with best cross-validation model on holdout set
+This is much more consistent across all 5 folds compared to the regular K fold results type. So this consistency is highly desirable type. So if a data set were more severely imbalanced, difference would be even more pronounced. Here, like for churn prediction, the stratified K fold is generally preferable rather than the K fold, right? So here instead of manually looping over the for loop, here we can also use the cross valve score which provides a convenient way to calculate the cross validation scores. So basically here we are passing our model and then here we are passing the training features, the target variable and the CV is either KF or the SKF which tells us to use a whether it is AK4 or the stratified K4, right. So and then here we gave the scoring as a recall here where if we see the scores. So this force give us a distribution of recall performance, you know, not just a single performance here like for all the for each fold we are getting the one recall which is more informative about the module stability, right?
+00:19:31 - 00:20:09
+Summary of validation techniques and model performance
+So now these are the multiple things right? Now we might have a confusion like when to use a cross validation, right? So there are two primary ways you know cross valid event, cross validation use like for the model selection or hyperparameter tuning, applying CV only on the training portion of the data like what we did here right? This way this helps us choose the best model or set of hyperparameters without ever touching our final independent test set right?
+00:20:10 - 00:24:01
+
+So we train the actual model on the entertaining data once we have selected the best approach right? The second is training the final model using cross validate, right? With written estimate 2, it can give us the models from each fold. Here while theoretically these estimators are trained on different fractions in the data and could be averaged or even it could be ensemble as well like in practice for final deployable model we often retrain a single model on the entertaining set using the best parameters which are found through the cross validation setup right now. So we can use this cross validate as we saw earlier. So we are passing all this information and to get the output right. This CV results in this dictionary which will contain array of scores which basically it's an array of the fitted estimated pipelines for each fold here. Now want to pick the best performing model from these five folds, right? So here we are taking the argmax and the fold that achieved the highest accuracy and then we are retrieving the actual pipeline object here. So basically, if you see the image here, it clearly illustrate the sequence of step within our chosen pipeline like the column transformer which includes the standard scalar for numerical features and one hot encoder for the categorical features followed by the logistic regression classifier that we have right now. We want to predict with the best cross validation model, right? So now I took our best CV model right that is selected after cross validating on the trend date and use it to make the predictions on our completely unseen hold out the asset. So this is X is our holdout asset which is completely answer to the model till now. So now if you see the accuracy here and the recall, the accuracy is around 70.2 and recall is around 5, two point 1%. So these metrics are very similar to what we obtained from our initial single holdout split type. This indicates that for this data set and model cross validation helped confirm the stability of the model's performance rather than drastically changing our estimated metrics, right? So with this little bit summarize like we use the pipelines to prevent data leakage and explore different validation techniques for logistic regression, right? And the K fold CV is a good validation method and stratified K fold CV is more useful especially for the imbalance data set. So the performance of our final model, I think it remained comparatively or similar both before and after using the cross validation. So which shows that this cross validation is not, you know, it is not just a magical solution that always drastically improves your model, right? Instead of that, the cross validation primarily helps us achieve more reliable generalization estimates and serve as an early warning for over fitting or instability.
+
+ 
+
+In the demonstration, we divided the data set into training and validation sets to get an initial check on performance.  
+
+ 
+
+Next, we defined a ColumnTransformer to apply appropriate preprocessing: scaling for numerical data and one-hot encoding for categorical attributes.  
+
+ 
+
+Finally, we combined the preprocessor and our model into a Pipeline, ensuring that feature transformation occurs only within each training fold, avoiding any leakage. 
+
+ 
+
+Using cross_val_score(), we evaluated the entire pipeline through cross-validation, allowing every step, such as preprocessing and modelling, to be validated properly.  
+
+ 
+
+As highlighted in the video, cross-validation supports model selection in two ways: 
+
+It helps decide which model or configuration generalises best 
+
+When data is limited, it can also be used to train the final model more effectively by exposing it to most of the data across folds 
+
+ 
+
+However, cross-validation does not improve the model’s capability on its own. Its purpose is to assess how well a model will generalise and prevent overfitting and underfitting, guiding us towards choices that will hold up when deployed. 
+
+ 
+
+Next, we will focus on regularisation and model complexity control, which offer further tools to keep models robust while selecting the best candidate. 
+
+
+Understand what need to be removed in X and what datatype conversion need to be done have a cheat sheet 
+
+# Data Splitting and Cross Validation
+This notebook will demonstrate dataset preparation and splitting strategies for performing validation methods such as holdout or cross-validation. We will work with the Telco Churn dataset. 
+
+We will then examine different validation strategies: a holdout split and cross-validation. Our aim is to understand why multiple, well-constructed validation splits provide a more trustworthy picture of model performance, and how preserving class balance helps ensure fair evaluation when classes are imbalanced.
+
+The data set includes information about:
+
+- Customers who left within the last month – the column is called `Churn`
+- Services that each customer has signed up for – phone, multiple lines, internet, online security, online backup, device protection, tech support, and streaming TV and movies
+- Customer account information – how long they’ve been a customer, contract, payment method, paperless billing, monthly charges, and total charges
+- Demographic info about customers – gender, age range, and if they have partners and dependents
+# install the libraries to be used:
+import pandas as pd, numpy as np
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold, KFold, cross_val_score, cross_validate
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, recall_score, roc_auc_score
+
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer   # pipelining modulesdf = pd.read_csv("./datasets/telco_churn.csv")
+df.head()
+
+df.info(), df.columns
+df.describe().T
+# numeric columns
+df['MonthlyCharges'] = df['MonthlyCharges'].astype('float')
+
+# if you observe this column, you will find it contains some blank strings ' '
+df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')     # this will convert ' ' to NaN
+df['TotalCharges'].isna().sum()
+# let's drop the nan values now
+df = df.dropna(subset=['TotalCharges'])
+df['TotalCharges'].isna().sum()
+
+# categorical columns
+cat_cols = df.select_dtypes(include='object').columns.tolist()
+cat_cols.remove('customerID')
+df[cat_cols] = df[cat_cols].astype('category')
+
+# the TotalCharges columns contains some blank strings ' '
+df.info()
+
+y = (df["Churn"] == "Yes").astype(int)
+X = df.drop(columns=["Churn", "customerID"])
+X.head()
+
+
+### Basic Transformation and Splitting Pipeline
+
+Since our dataset has both numerical and categorical features, we will use a `ColumnTransformer` to apply scaling and encoding only where needed
+
+This is wrapped inside a `Pipeline`, which ensures that all preprocessing steps are correctly applied inside each validation split, preventing leakage. While we could manually scale features before splitting, this would risk exposing information from the validation set to the model. 
+
+By using a pipeline, we keep preprocessing tidy, reproducible, and evaluation-safe, then move on to comparing different validation strategies
+
+numeric_features = X.select_dtypes(include=["int", "float"]).columns
+categorical_features = X.select_dtypes(include=["category"]).columns
+
+# ColumnTransformer allows us to apply different preprocessing to different column types
+preprocess = ColumnTransformer(
+    transformers=[("num", StandardScaler(), numeric_features),("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)]
+)
+
+# Pipeline joins preprocessing and modelling into a single estimator
+model = Pipeline([("preprocess", preprocess), ("clf", LogisticRegression(max_iter=1000))])
+
+The pipeline ensures that every fold in cross-validation receives its own independent preprocessing:
+- When a fold is designated as training, the scaler and encoder are fitted only on that fold
+- When the model predicts on the validation fold, transformation is applied using only what was learned from its training fold
+
+### Using Validation Splits
+
+#### Holdout
+
+We split the data before preprocessing to avoid leaking patterns and stratify to preserve class proportions in both sets
+
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=1)
+
+y_tr.value_counts(normalize=True), y_te.value_counts(normalize=True)    # class distribution
+
+
+model.fit(X_tr, y_tr)
+
+# predictions and probabilities on the hold-out set
+preds = model.predict(X_te)
+preds_proba = model.predict_proba(X_te)[:, 1]
+
+# evaluation metrics
+print("Accuracy :", accuracy_score(y_te, preds))
+print("Recall   :", recall_score(y_te, preds))
+print("ROC AUC  :", roc_auc_score(y_te, preds_proba))
+
+Accuracy comes at around 80% but the recall is not that great. Recall is an important metric in churn prediction (why?). What will happen if we change the `random_state` during `train_test_split`? Try a few varying seed values. Obviously, due to the very high class imbalance, the recall is modest despite a decent accuracy. We can probably handle this by using some resampling techniques (as this is not the objective here, the learner is encouraged to try this as an exercise).
+
+Note that we are treating the test set as a validation set here
+
+Let's try cross-validation next
+
+#### Cross-Validation
+
+Let's try KFold CV and Stratified KFold CV to see if the final distributions differ
+
+kf = KFold(n_splits=5, shuffle=True, random_state=1)    
+# shuffle argument shuffles the data before split to ensure the sample gets mixed up
+# this is good if the distribution of classes in the data is not uniform across the rows and some classes are more concentrated in a small group of rows
+
+
+# in CV, we are using only the training set to create validation folds, and the test set is kept separate for final evaluation
+for fold, (_, test_idx) in enumerate(kf.split(X_tr)):
+    print(f"Fold {fold + 1}")
+    print(y.iloc[test_idx].value_counts(normalize=True))
+
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
+
+for fold, (_, test_idx) in enumerate(skf.split(X_tr, y_tr)):
+    print(f"Fold {fold + 1}")
+    print(y.iloc[test_idx].value_counts(normalize=True))
+
+
+# cross_val_score calls fit() and predict() inside each fold.
+# the pipeline ensures preprocessing happens correctly within each fold's boundaries.
+scores = cross_val_score(model, X_tr, y_tr, cv=kf, scoring="recall")    # since we are trying to maximise recall
+scores
+
+
+An important point to note here is that there are two ways we can use cross-validation
+
+- First, to decide whether to choose a model. We apply cross-validation folds only on the training portion of the data. Once we know the model is suited for the task, we train the actual model on the whole training data normally. This is preferable when we have a sufficient amount of data.
+
+- Second, to train the final model itself using cross-validation. Here, we use the `return_estimator` argument in the `cross_validate()` function, which returns the estimators as well from each fold. We can directly use the best estimator from these and perform a final evaluation using the test set. However, these estimators are each trained on only a fraction of the training data, and not guaranteed to be actually the best model. Although not recommended, this might prove useful in cases where we have access to only a small amount of data.
+
+As we will see, this is not the case with `GridSearchCV`, which automatically refits the best model on the full training set, so the returned best_estimator_ is already ready for final testing.
+
+cv_results = cross_validate(model, X_tr, y_tr, cv=kf, scoring="accuracy", return_estimator=True)  # this gives models from each fold
+
+best_idx = scores.argmax()
+best_cv_model = cv_results["estimator"][best_idx]
+best_cv_model
+
+
+# let's try predicting using the final model
+y_pred = best_cv_model.predict(X_te)
+
+# evaluation
+print("Accuracy :", accuracy_score(y_te, y_pred))
+print("Recall   :", recall_score(y_te, y_pred))
+
+
+To summarise, we applied preprocessing using a pipeline to avoid leakage, and used different validation techniques for logistic regression. K-fold CV is a good validation method, but in case of imbalanced and skewed data, stratified K-fold CV may also prove useful.
+
+Note that the performance of our final model remained comparatively similar before and after using cross-validation. This shows that cross-validation is not some magical technique that will improve your model by a lot. It just helps our model generalise better and serve as an early warning for overfitting or underfitting.
+
+
+Absolutely. **Stratified K-Fold** is basically a smarter version of normal **K-Fold**, especially when your target is a **classification problem**.
+
+## 1. First: Normal K-Fold
+
+Suppose you have **10 observations** and 2 classes:
+
+| Observation | Class (Y) |
+| ----------- | --------: |
+| N1          |         0 |
+| N2          |         0 |
+| N3          |         0 |
+| N4          |         0 |
+| N5          |         0 |
+| N6          |         1 |
+| N7          |         1 |
+| N8          |         1 |
+| N9          |         1 |
+| N10         |         1 |
+
+So:
+
+```text
+Class 0 → 5 observations
+Class 1 → 5 observations
+```
+
+Let's use **K = 5**.
+
+Normal K-Fold divides the data into 5 folds, usually after shuffling:
+
+```text
+Fold 1 → N3, N7
+Fold 2 → N1, N9
+Fold 3 → N5, N6
+Fold 4 → N2, N10
+Fold 5 → N4, N8
+```
+
+Then we do 5 rounds:
+
+```text
+Round 1:
+Training → Fold 2 + 3 + 4 + 5
+Validation → Fold 1
+
+Round 2:
+Training → Fold 1 + 3 + 4 + 5
+Validation → Fold 2
+
+...
+
+Round 5:
+Training → Fold 1 + 2 + 3 + 4
+Validation → Fold 5
+```
+
+Every observation gets used:
+
+* **4 times for training**
+* **1 time for validation**
+
+---
+
+# 2. What's the problem with normal K-Fold?
+
+The problem occurs when classes are **imbalanced**.
+
+Suppose you have:
+
+```text
+100 observations
+
+Class 0 → 90
+Class 1 → 10
+```
+
+If you randomly divide into 5 folds, you might get:
+
+```text
+Fold 1 → 20 observations → 20 class 0, 0 class 1
+Fold 2 → 20 observations → 18 class 0, 2 class 1
+Fold 3 → 20 observations → 19 class 0, 1 class 1
+Fold 4 → 20 observations → 17 class 0, 3 class 1
+Fold 5 → 20 observations → 16 class 0, 4 class 1
+```
+
+Fold 1 has **ZERO class-1 observations**.
+
+That's not good for classification.
+
+---
+
+# 3. Stratified K-Fold solves this
+
+**Stratified K-Fold tries to maintain the same class proportion in every fold.**
+
+Suppose:
+
+```text
+100 observations
+
+Class 0 = 90%
+Class 1 = 10%
+```
+
+With **5 folds**, each fold should approximately contain:
+
+```text
+18 Class 0
+ 2 Class 1
+----------------
+20 observations
+```
+
+So:
+
+| Fold      | Class 0 | Class 1 |   Total |
+| --------- | ------: | ------: | ------: |
+| Fold 1    |      18 |       2 |      20 |
+| Fold 2    |      18 |       2 |      20 |
+| Fold 3    |      18 |       2 |      20 |
+| Fold 4    |      18 |       2 |      20 |
+| Fold 5    |      18 |       2 |      20 |
+| **Total** |  **90** |  **10** | **100** |
+
+That's **stratification**.
+
+It preserves the **class distribution**.
+
+---
+
+# 4. Simple real-world example
+
+Imagine you're detecting fraud.
+
+You have:
+
+```text
+1000 transactions
+
+Non-fraud = 950
+Fraud     = 50
+```
+
+So:
+
+```text
+95% Non-fraud
+5% Fraud
+```
+
+Using **5-fold Stratified K-Fold**:
+
+Each fold gets approximately:
+
+```text
+190 Non-fraud
+10 Fraud
+```
+
+Then:
+
+### Fold 1
+
+```text
+Training:
+760 Non-fraud
+40 Fraud
+
+Validation:
+190 Non-fraud
+10 Fraud
+```
+
+### Fold 2
+
+```text
+Training:
+760 Non-fraud
+40 Fraud
+
+Validation:
+190 Non-fraud
+10 Fraud
+```
+
+And so on.
+
+Therefore, every validation set has roughly the **same 95:5 class ratio**.
+
+---
+
+# 5. Normal K-Fold vs Stratified K-Fold
+
+| Feature                                       | K-Fold           | Stratified K-Fold |
+| --------------------------------------------- | ---------------- | ----------------- |
+| Splits data into K folds                      | ✅                | ✅                 |
+| Every observation used for validation once    | ✅                | ✅                 |
+| Every observation used for training K-1 times | ✅                | ✅                 |
+| Maintains class proportions                   | ❌ Not guaranteed | ✅                 |
+| Mainly useful for classification              | Sometimes        | **Yes**           |
+| Useful for imbalanced classes                 | Less reliable    | **Very useful**   |
+
+---
+
+# 6. Python example
+
+### Normal K-Fold
+
+```python
+from sklearn.model_selection import KFold
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+for train_index, val_index in kf.split(X):
+    X_train = X.iloc[train_index]
+    X_val = X.iloc[val_index]
+
+    y_train = y.iloc[train_index]
+    y_val = y.iloc[val_index]
+```
+
+### Stratified K-Fold
+
+```python
+from sklearn.model_selection import StratifiedKFold
+
+skf = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+
+for train_index, val_index in skf.split(X, y):
+    X_train = X.iloc[train_index]
+    X_val = X.iloc[val_index]
+
+    y_train = y.iloc[train_index]
+    y_val = y.iloc[val_index]
+```
+
+Notice one important difference:
+
+```python
+kf.split(X)
+```
+
+versus
+
+```python
+skf.split(X, y)
+```
+
+**StratifiedKFold needs `y` because it looks at the class labels to preserve their proportions.**
+
+---
+
+# 7. What happens in each fold?
+
+Suppose:
+
+```text
+Class 0 = 80%
+Class 1 = 20%
+```
+
+With 5-fold Stratified K-Fold:
+
+```text
+             100 observations
+                    ↓
+        ┌───────────┴───────────┐
+        ↓                       ↓
+    Class 0 (80)             Class 1 (20)
+        ↓                       ↓
+     distribute               distribute
+     across folds             across folds
+        ↓                       ↓
+   ┌────┬────┬────┬────┬────┐
+   F1   F2   F3   F4   F5
+   16   16   16   16   16  → Class 0
+    4    4    4    4    4  → Class 1
+```
+
+Each fold has:
+
+```text
+16 Class 0
+ 4 Class 1
+```
+
+So every fold maintains approximately:
+
+```text
+80% Class 0
+20% Class 1
+```
+
+---
+
+# 8. Very important: Stratified K-Fold does NOT mean training separately on each class
+
+This is a common misunderstanding.
+
+It does **not** do:
+
+```text
+Fold 1 → only Class 0
+Fold 2 → only Class 1
+```
+
+Instead, **every fold contains both classes**, maintaining approximately the same proportion.
+
+---
+
+# 9. Why is this important for your ML exam?
+
+Imagine a disease dataset:
+
+```text
+1000 patients
+
+Healthy = 950
+Disease = 50
+```
+
+If normal K-Fold accidentally creates a validation fold with very few or zero disease cases, your model evaluation can become misleading.
+
+Stratified K-Fold ensures:
+
+```text
+Every fold ≈ 95% Healthy
+Every fold ≈ 5% Disease
+```
+
+Therefore, performance such as **accuracy, precision, recall, F1-score, ROC-AUC** can be evaluated more consistently across folds.
+
+---
+
+## 🧠 Exam shortcut
+
+Remember:
+
+> **K-Fold:** Divide data into K folds randomly.
+
+> **Stratified K-Fold:** Divide data into K folds while **preserving the class distribution in each fold**.
+
+### One-line example:
+
+```text
+Dataset = 90% Class 0 + 10% Class 1
+K = 5
+
+Stratified K-Fold → each fold ≈ 90% Class 0 + 10% Class 1
+```
+
+### ⭐ Most important distinction
+
+**Normal K-Fold → doesn't guarantee class proportions.**
+
+**Stratified K-Fold → preserves class proportions.**
+
+For a **classification problem, especially an imbalanced one, Stratified K-Fold is usually preferred.**
+
+
+Demonstration: Cross-Validation Model Evaluation
+------------------------------------------------
+Validation scores provide an estimate of how well a model may perform in deployment. However, an estimate always carries uncertainty.  
+
+ 
+
+Confidence intervals allow us to express not only the average performance across folds, but also the level of confidence we have in that estimate. By combining cross-validation with confidence intervals, we build a more dependable harness for selecting models and avoiding decisions based on random fluctuations in the data. 
+
+ 
+
+In the next demonstration, we will compute cross-validation scores and then calculate a confidence interval around the mean. 
+
+00:00:00 - 00:00:33
+Introduction to cross validation and model generalization
+Let's continue our discussion on cross validation, where instead of justice reporting a single score from 1 split or even an average from the cross validation, we want a more robust way to quantify this model generalization, right? So let us focus on building a reusable evaluation workflow that provide the condense intervals for our performance matrix that we are going to use, right? But why condense intervals, right?
+00:00:33 - 00:01:17
+Importance of condense intervals in model evaluation
+So these condense intervals help us understand the range within which our models true performance likely lies, adding more statistical rigor to our evaluation. Let us quickly import our data set where we processed and saved in the previous session where you know all the all the objects are transformed to the category and here we are having the the total charges is converted into flow, right. So again we are taking our XY data where if you see that I have around sum 032 training samples with 19 features and this is in the shape of my target variable, right?
+00:01:17 - 00:01:41
+Data set import and feature transformation
+Yeah. So here again we are doing similar exercise that we did earlier like we are taking the numerical categorical features mean we are setting up the pipeline here by calling the column transformer here right now. The next important step as we discussed initially is Y confidence intervals right?
+00:01:41 - 00:02:15
+Confidence intervals in cross validation
+So when we perform the cross validation, we get a set of performance scores, right? If you remember in the previous session, we got the five recall scores for the five folds right? Reporting just the mean of this scores. You know, while useful, it doesn't tell us about the variability or uncertainty in that mean estimate. Rather than that, a confidence interval provides a plausible range for the models 2 generalization performance.
+00:02:16 - 00:03:12
+Building the evaluate CV function for model performance
+A narrow confidence interval indicates that high confidence in our mean score, suggesting good stability, and a wide interval suggests, you know, it's a more variability. So basically here these are the standard formulas like the mean, standard deviation and the condense interval. So let us quickly go to building the evaluate CV function where we are defining A reusable function here which is evaluate function where we are passing the model and we are passing the XY features. And here we are using the metric as an accuracy and we are passing the cross folds which are Phi right. So here what we are doing is that we are calling the cross valve score function.
+00:03:12 - 00:06:00
+Comparison of logistic regression and random forest models
+So for calculating the cross validation scores for the given model in the metric and then we are calculating the mean which calculates the average scores across all folds and then we are calculating the sample standard deviation of the scores, right? And then here we used DDOF equal to 1 meaning this is used for unbiased estimate, right? And then we are calculating the T critical value for a 95% confidence interval with CV E 1° of freedom here and 0.975 corresponds to the upper tail for A2 tail 95% CI, right. And then what we are doing. So the lower and the upper bounds of the convex intervals are calculated using the formulas, the convex intervals. And then finally we are returning all the scores here. So this function is our evaluation harness, which is a standardized way to get a comprehensive performance matrix for any model that you are going to build. So now we will use our evaluate CV function to compare two different models, which is a simple logistic regression model and a more complex random forest classifier. This helps this understand if the added complexity of the random forest is a significantly better or more stable performance. So what we are doing here, so basically we have two models and we are using a pipeline to run and evaluate our functions on both the models. And if you quickly see the results here, for large regression, the mean accuracy is around 803, I mean 80 point 3% with a standard deviation of 0.008 and a CI of roughly 0.796 and 0.810. Similarly for the random forest, the mean accuracy is 78.8% with the standard deviation of 0.012 and the condense intervals are from range of 0.773 to 0.803. Then this one remains again and the potential class in biology shows and the encouragement to try the resampling strategies as the scores are still accuracy based and might not fully reflect the performance on the minority classes.
+00:06:03 - 00:07:30
+Visualization of model performance and stability
+Now let us quickly visualize the performance and the stability across folds here. So here the lowest regression this is random forest and this is the accuracy here. So here to do this we are extracting the means and the standard deviations here. So I have standard deviation and means for both the model and here if you see the error bars, these are represent the standard deviations across the folds giving us the visual indications, indications of the model stability. So this shows that logistic regression with a slightly higher mean accuracy and a smaller error bar compared to the random forest here. Although the random forest bar in the generated image appears in a significantly lower based on the text output for a mean accuracy, it should be closer to the logistic regression value which is 0.788 versus oh point 08/03, right? So with this, let us quickly conclude this session where the two models show very similar mean cross validation accuracy values and crucially, the error bars are significantly overlapping here.
+00:07:30 - 00:08:26
+Conclusion on model comparison and generalization performance
+This which is a key indicator that the apparent small difference in the average performance is not statistically meaningful based on our cross validation evidence, right? These are only the CV scores which were derived from the training data. We have not done a final proper train test split evaluation with the unseen data for this particular comparison yet, right? So we did earlier for, you know, the single best model, but we did not completely done yet, right. So given that the more complex random forest model does not provide a really better generalization performance or stability than large stabilization, we could you know we would typically favor the simpler model as well rather than taking the complex model here.
+
+
+ 
+
+Note: The following equation is not being displayed correctly in the video at timestamp 1:20.
+
+Equation and  Equation
+
+ 
+
+Confidence intervals reflect how much the performance might vary if the model were trained on different samples from the same population. A narrower interval indicates more stable behaviour, while a wider one signals uncertainty and potential sensitivity to training data. 
+
+ 
+
+By comparing both mean performance and confidence bounds across different models or hyperparameter settings, we gain a stronger foundation for selection. A model with slightly lower average performance but tighter confidence may be preferable to one with a higher mean but large variability. 
+
+ 
+
+This evaluation harness helps us avoid overinterpreting chance fluctuations and encourages robustness as a priority in the selection pipeline. 
+
+ 
+
+Next, we will move into a demonstration of grid search and random search, where we use cross-validation to explore hyperparameter configurations systematically. 
+
+# Cross-Validation - Model Evaluation
+
+Now, let's construct a reusable evaluation workflow. Rather than reporting a single score from one split, we quantify variation across folds - using confidence intervals. This helps estimate how a model may generalise to unseen data.
+
+# imports
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+df = pd.read_parquet('./datasets/telco_churn_cleaned.parquet')
+df.info()
+
+
+# define features and target
+y = (df["Churn"] == "Yes").astype(int)
+X = df.drop(columns=["Churn", "customerID"])
+X.shape, y.shape
+
+
+numeric_features = X.select_dtypes(include=["int", "float"]).columns
+categorical_features = X.select_dtypes(include=["category"]).columns
+
+# setting up pipeline 
+preprocess = ColumnTransformer(
+    transformers=[("num", StandardScaler(), numeric_features),("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)]
+)
+
+
+#### Why Confidence Intervals?
+
+We saw that cross-validation produces a set of performance scores, not a single value. Let $(s_1, s_2, \ldots, s_k)$ denote the evaluation metrics obtained from $k$ folds.
+
+We can estimate the mean performance and the variability across folds:
+
+$$
+\bar{s} = \frac{1}{k}\sum_{i=1}^{k}s_i
+$$
+$$
+\sigma = \sqrt{\frac{1}{k-1}\sum_{i=1}^{k}(s_i - \bar{s})^2}
+$$
+
+To quantify uncertainty in the mean estimate, we form an approximate 95% confidence interval:
+
+$$
+\text{CI}_{95} = \bar{s} \pm t_{0.975,\space k-1}\cdot \frac{\sigma}{\sqrt{k}}
+$$
+
+(*For larger $k$, $t_{0.975,\space k-1} \approx 1.96$*)
+
+
+
+This interval provides a plausible range for the model’s true generalisation performance based on the observed variability in cross-validation. A higher average score is meaningful only when accompanied by a narrow interval indicating low uncertainty.
+
+Thus, we will use confidence intervals here to compare models more responsibly by considering both performance and stability.
+
+
+#### Cross-Validation Evaluation Pipeline
+
+Let's build a function to perform cross-validation and return:
+- Mean performance
+- Standard deviation across folds
+- 95% Confidence Interval for the mean
+
+
+def evaluate_cv(model, X, y, metric="accuracy", cv=5):
+    scores = cross_val_score(model, X, y, scoring=metric, cv=cv)    # will take in the model, scoring criteria, and CV folds
+    k = len(scores)
+    mean = np.mean(scores)          # mean
+    std = np.std(scores, ddof=1)    # std dev (ddof=1 as we are using the sample, not whole population)
+    
+    t_crit = t.ppf(0.975, df=k-1)   # t critical value
+    
+    # confidence interval bounds
+    ci_low = mean - t_crit * (std / np.sqrt(k))
+    ci_high = mean + t_crit * (std / np.sqrt(k))
+    
+    return {"Scores": scores.astype(float), "Mean": float(mean), "std": float(std), "CI": (float(ci_low), float(ci_high))}
+
+We will be using the evaluation harness to test the models that we are going to build
+
+### Baseline Model Comparison
+
+Let's start by comparing a linear model with a more flexible one
+
+models = {"Logistic Regression": LogisticRegression(max_iter=1000),
+          "Random Forest": RandomForestClassifier(random_state=1)}
+
+# use a pipeline to run the evaluate_cv function on both models
+results = {name: evaluate_cv(Pipeline([("preprocess", preprocess), ("clf", model)]), X, y) for name, model in models.items()}
+results
+
+
+{'Logistic Regression': {'Scores': array([0.80170576, 0.81236674, 0.79231863, 0.80796586, 0.8029872 ]),
+  'Mean': 0.8034688374829774,
+  'std': 0.007534309922403663,
+  'CI': (0.7941137561010193, 0.8128239188649354)},
+ 'Random Forest': {'Scores': array([0.7960199 , 0.78749112, 0.76742532, 0.79445235, 0.79516358]),
+  'Mean': 0.7881104536249863,
+  'std': 0.012049729764192342,
+  'CI': (0.7731487379887043, 0.8030721692612683)}}
+
+
+*(Again, the recall here will not match the accuracy due to class imbalance issues. You are encouraged to try out resampling strategies)*
+
+To interpret these results more effectively, it is helpful to consider the distribution of performance across folds visually. Let's try plotting the mean accuracy for each model together with error bars that reflect the variation observed during cross-validation.
+
+This allows us to assess both how well each model performs on average and how consistently that performance is achieved across different subsets of the data.
+
+names = list(results.keys())
+means = [results[m]["Mean"] for m in names]
+stds = [results[m]["std"] for m in names]
+
+plt.bar(names, means, yerr=stds)
+plt.ylabel("Accuracy (CV)")
+plt.title("Performance and Stability Across Folds")
+plt.show()
+
+
+The two models show very similar mean CV accuracy values, and the error bars (representing the variability across folds) are. This overlap suggests that the apparent difference in average performance is not statistically meaningful based on the evidence from cross-validation. Note that these scores are only the CV scores; we have not performed a proper train-test split for evaluation.
+
+Thus, the increased model complexity of the Random Forest does not provide a reliably better generalisation performance compared to Logistic Regression on this dataset. At this stage, selecting the simpler model would be equally justified from a performance and stability standpoint - recall Occam's razor.

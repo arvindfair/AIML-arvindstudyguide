@@ -1,0 +1,167 @@
+Minority Class Problem
+
+
+A machine learning algorithm works efficiently when there is an equal representation of each of the classes. However, if the data set contains a disproportionate number of records belonging to a particular class, then the prediction will be heavily biased. This is known as ‘class imbalance’ or a minority class problem.
+
+
+There is a disparity between the two class labels in the data set with which we are working. The records of one class label are highly imbalanced with respect to those of the other class. In the upcoming video, you will get a better understanding of this problem and learn about the challenges imposed by an imbalanced class.
+
+00:00:00 - 00:00:52
+Introduction to Imbalance Data Set and Feature Engineering
+Welcome back. So far we have understood the problem statement around imbalance data set. We also went through to understand how data looks like. We also did some kind of a correlations to check how my features behave. And then we also did a feature engineering where we tried to encode our categorical variable. We learned label encoding, frequency encoding and one hot encoding before our exercise. We went ahead with using one hearted coding because we wanted to run both tree based as well as non tree based model to check our performance model performance on imbalance data set. So let's go ahead and understand how do we handle the imbalance data set.
+00:00:53 - 00:04:23
+Understanding Imbalance Data Set and Class Distribution
+So right now as we see what do we mean by imbalance data set? So it means like the classes, the target variable that I have is not evenly distributed. So it is like presence of minority class is very, very high in my data set. So let's go ahead and check how what is the distribution of the target variable. So here what I'm trying to do is I'm just taking a print of my target variable and I'm just taking the value counts. Value counts will give me the value for my zeros and my ones where zeros means no claim and one means claim and and then I am also taking to take. I am taking a percentage of my value counts as well where I do a normalize which will help give me the percentage and then I do a reset index which actually resets the index like it doesn't create a new index it just uses the integer values to create the the index for the data set. So here as we see we have values of close to 573 K thousand and then we have ones which are like 21.6000 pieces and it's easier to understand that in a percentage. So we can see wow, it's 96.3 percentage of my no claims and then I have 3.6 percentage of the that claims have been filed. So let's see a visual presentation just just a time to plot the zeros and ones. And So what I have used here is I have used the colors and in AC4 there is a colors palette that you can select and you will get option of selecting few of the colours. These are the list one few of the colours that I have picked up from that list which is which will give me a colour closer to like the blue and also the red. I picked up these colours and creating a see **** count plot chart where on my target variable and I pass my data set TF. And here if you see the palette palette is actually the colours palette that you have selected. So I've selected my palette colours here and then I'm plotting my class distribution and I'm calling it as zeros as no claim and one as claim. And this is the font size of 14 that I have passed. So here if you see the plot of my target variable where I see like very, very heavy no claims is mentioned. It's there in the data set. And we see very few like only 3.6 percentage of ones which are like only these many of the policyholders have filed the claim. So this is how my data set looks like. And after visualizing the data, it's very, very easy to call this as very highly imbalanced data set.
+00:04:25 - 00:06:17
+Challenges of Imbalance Data: Biased Predictions and Misleading Accuracies
+So why, why is it important to handle imbalance? So the question comes here is what happens? Like what is the real problem with this kind of a data set? The problem here are the challenges that we faces around biased predictions, biased predictions and also it leads us to misleading accuracies. So let me explain what a biased prediction is. As we understand in a real life data set classification, we find this kind of imbalanced problems. So what happens if you see here zeros are kind of dominating my data set and but which we call it majority and once which are my claims. This is kind of minority. So when zeros are so dominant in the model, machine learning tries to identify the zeros and it actually performs very, you know, terrible when it is try to perform once. So let us take example in our case. So we have as we see like 96 percentage of cases in majority cases. So whatever inputs or whatever features that we were working in that will pass in the model is kind of not that intuitive for the model to pick up because the algorithm itself tries to, you know, start predicting the majority classes. So therefore it becomes very, very important to balance our data set so that we do have similar amount of zeros and ones in the data set.
+00:06:17 - 00:08:19
+Methods to Handle Imbalance Data: Sampling Techniques
+And so that algorithm will also try to figure out, try to build the model for the claims as well for the minorities as well. So therefore it becomes very biased and it actually hampers our model building process and therefore misleading accuracy. Misleading accuracy is where we will also talk about in our during our model build where we will see a problem of accuracy paradox. So even if you try to build a model and be try to the model gives us a lot of majorities and it has predicted the majority classes really well. Therefore, when I try to measure my accuracy, I see a very, very high accuracy because of course, if I am able to predict my 96 percentage of my majority, therefore I am having a 96% of accuracy here. So therefore the accuracy metric becomes really misleading in our case. So, So what do we do? What do we do with this imbalance data set? So, so we have we have a lot of methods, some of the traditional methods to solve this problem are around like random under sampling, random over sampling. And then we also have a little sophisticated method of smooth which is synthetic minority oversampling technique and we have Addison which is like adaptive synthetic sampling method. And then we have a smart term which is again oversampling followed by under sampling. So Smartomic is kind of a combination of under sampling and oversampling.
+00:08:21 - 00:10:52
+Importance of Resampling Only Training Data
+We will go through these techniques in little detail. We will try to understand what these methods are. But before that, it's very critical to understand when to when to use resampling methods. And what I mean here is when to users like always, always try to resample only a training data set and not on your test data set. So use resampling methods on your training set and never on your test set. So now what we will do is we will try to create our split that we also learned during during the exercise of getting the feature importance through a random forest algorithm. Right now we create again a train test split so that we will work on creating our models. So here again I have created the training and test set. And so right now what we also have to see that we use stratify as Y here the stratify why here what it denotes is like what I'm trying to do is I'm trying to create my test set which should be have. It should have a similar distribution as my train set with respect to my target variable. So, So what stratify will do is like it will evenly distribute the YS in the train as well as my test. So the target variable. So, So this is to avoid the case where as my minority classes are really small. So all those minority classes shouldn't move to the majority, sorry, the train test, the train set. So therefore I want them as well in my Y, the test set as well. So therefore, therefore I am using a sampling method of stratification where is like stratify and I'm calling this like stratify on my target variable Y here and we'll just quickly check how our split looks like.
+00:10:53 - 00:12:54
+Stratified Sampling for Train-Test Split
+If you see here, I'm trying to see the value counts of my white ring. So why train is again the training part. So we see that OK, it it, it is same as by original overall data set. So 96.3 percentage of my majority and 3.6 percentage of my minority. Now similar tests I'm doing for my test here. And in test, if you remember, we have created a 30 percentage for my test group. So I have test values here and I just check the percentage distribution here. So I do see 96.3 percentage of my majority and 3.6 percentage of my minority. So that helps in just training and test play and we feel comfortable, OK, we have a good stratified sample. So therefore we are good to go ahead. So right now again here I'm passing, I'm importing warnings. So typically for some of the call them or the libraries that you load, you will get some kind of warnings like you have an upgraded version of the package that you should load. And similarly you have some other kind of warning that keep coming as a advice or as a warnings during when I do work on the Python data set. So here I'm just trying to ignore those warnings. So I'm importing the library warnings and then I'm passing filter warnings and filter warning for it as like I'm calling it as ignore. So I don't want these warnings during my code old building exercise.
+
+
+So, as you saw in the video, the data set shows a high level of class imbalance. Around 96% of the observations are mapped to 0, and hardly 4% of the cases are mapped to 1. In this case, no matter which model you build, the underlying algorithm will learn more about the cases where no claims were filed than the cases where claims were filed. Therefore, the loss function optimisation will be heavily biased to the former type of data.
+
+ 
+
+An imbalanced class leads to biased predictions and misleading accuracies. When the majority class dominates over the minority class, the machine learning algorithm tries to learn the majority class better and fails to predict the minority class. The algorithm becomes incapable of identifying the minority class while making predictions. This results in misleading accuracy. As the model is predicting the majority class well, naturally, the accuracy score will be higher, and it will not capture the inefficiency of the model in predicting the minority class.
+
+ 
+
+So, there are different techniques of handling class imbalance, which are as follows:
+
+Random undersampling
+Random oversampling
+Synthetic minority oversampling technique (SMOTE)
+Adaptive synthetic sampling method (ADASYN)
+SMOTETomek (Oversampling followed by undersampling)
+ 
+
+In the upcoming videos, you will learn about each of these techniques in detail.
+
+ 
+
+One key point to remember here is that always apply these resampling techniques on the train set, not on the test set. Applying them to the test set will lead to data leakage, and the model will remember the instances of the test set. Note that the true test is always on the unseen data. Hence, there will not be any unseen data left to test the model performance on. So, always remember to do the train-test split before applying class imbalance techniques.
+
+ 
+
+Next, let's discuss accuracy as a metric for an imbalanced dataset.
+
+Evaluation Metrics for Imbalanced Data
+
+
+In the next video, you will understand the concept of the accuracy paradox and learn some of the evaluation metrics that should be considered while dealing with a class imbalance problem.
+
+00:00:00 - 00:03:01
+Understanding the Accuracy Paradox in Imbalanced Datasets
+So, OK, so right now let's go ahead and discuss a little bit more, discuss more on accuracy paradox. So I have been consistently talking about accuracy issue during imbalance data set. So, so here again I'll reiterate the paradox is like whenever we try to build model, classification model. And as I mentioned that you have, we have got accuracy of close to 96%. So what does this mean? And and as I have rightly, I mean, I have mentioned like our majority classes is 96 percentage that we have. And therefore, if my algorithm starts to build model on that 96%, it becomes really, you know, harder to understand, like whether 96 percentage is a true representative of my model performance. So let's try to analyze it in the fashion of creating a confusion matrix. And I'll drill more into confusion matrix to understand our evaluation metric. But right now just to understand on accuracy. So accuracy is where I'm trying to predict my true negative and two positive cases on overall cases. So, so that gives me an accuracy. So here if you see what happens is like even if we don't try to build any model, we just try to create a kind of A4 squares and plotted actual versus predicted. And in the predicted side you just have a mentioned mentioned zeros there add zeros to your predictive classes. So what it means is like even if I build model and I get a result where I'm unable to predict my zeros and ones. So therefore we are left with the actual numbers. What actual numbers are are is again whatever zeros and one I have. So, so if you try to create a metric, accuracy metric out of it, we still see that we get a accuracy of 96%. So, so, so this is what I what we mean by accuracy paradox that for this kind of cases on imbalance data set, accuracy is kind of misleading.
+00:03:01 - 00:06:14
+Introduction to Evaluation Metrics: Accuracy, Precision, Recall, and F1 Score
+So having said that, let's go ahead and understand what evaluation metrics we have and what exactly we should look for during this exercise. So let's drill more into evaluation metric. So right now as we see here this this is a kind of confusion matrix where I have predictive negative and positive and then I have actual, negative and positive. So therefore if my actual is negative and I am predicting a negative which means that I am rightly predicting my negative class which is true negative and similarly my actual is negative and I am predicting is positive which is kind of false positive. Similarly, my actual is positive and my predicted is negative, then it's false negative and therefore my actual is positive. My predicted is positive so it is true positive. So might have already gone through. So this is false negative which is like type 2 error and if we get false positive it's a type 1 error. So let's drill into the matrix. So we typically follow we have metrics around accuracy, precision, recall and then F1 score. So accuracy is where where I am trying to understand what is the actual prediction that I am trying to do. How my model is trying to predict my true negative as well as my true positive class. Therefore if you see it's true negative plus true positive divided by all the class, all the cases like true negative, true false positive, false negative and true positive. So therefore I get a accuracy metric. Precision is where I am trying to understand what is the percentage of my correct predictions. So my correct prediction is like true positive and I am trying to understand that why my prediction behaviors like true positive divided by true positive by false positive. And similarly if we now try to understand recall, recall is where I'm trying to understand how good is I am predicting the actual yeses or actual positives. So here if you see recall is true positive divided by true positive plus false negative. Therefore what it means is like out of the actual positive cases, how what is the percentage? How many times I am predicting my actual positive cases correctly so that what we get as a recall measure and then we have F1 score. So F1 score is a harmonic mean of my precision and recall.
+00:06:15 - 00:09:59
+Choosing Evaluation Metrics Based on Cost and Benefit Analysis
+So it's like to where we consider both precision and recall to get to a score. So it's like we multiply a precision and recall and then divided by the summation of precision plus recall and then yeah, multiply it by two to get to AF1 score. The F1 score gives us overall how my model is again forming when we compare precisioning equal as a combined metric. So, so again, the question arises most of the times we encounter that OK, which is the how do we choose during our model build exercise on this evaluation metric. So there are certain cost and benefit analysis which typically depends on the kind of problem that we are trying to solve. So let me try to understand based on cost and benefit, when I'll use accuracies, accuracy is used where my cost of false positive and my false negative are roughly equal. So kind of I'm still OK if I'm having my false positive and my false negative I am getting. So that does not cost me much. So therefore I am good. And if we just try to understand the positive side benefit. So benefit is where if the benefit of my true positive and benefit of my true negative are roughly equal. So in this case I will use accuracy. Now this similarly let me help you understand with the example. Just take an example where I am trying to predict an image and the images whether this is a cat or not. So now here the false positive and false negative has kind of roughly same cost. And therefore we we are not kind of we do not see any kind of heavy penalty or additional cost when when we are trying to predict for like cat images. And now if we try to understand precision, precision is where the cost of false positive is much higher than a false negative. What it means is like if actual is negative and I am predicting it as positive with this particular cost, false positive cost is like really high as compared to false negative. The factual is positive and then I predicted that as negative. Similarly, if we just try to see on a benefit side, so benefit of a true positive is much higher than the benefit of true negative. So now let us try to understand with an example. So let us take an example, classic example of a classification where we are trying to predict an e-mail whether it says spam. Now what will happen? So if if if a mail is classified as spam so it will move it to a junk folder and it will not be seen in the the usual folder. And if we so that will be the case of say false positive.
+00:10:00 - 00:12:23
+Precision and Recall in Real-World Examples: Spam Detection and COVID-19 Testing
+And on the other side if a false negative, if I get a false negative which is actually it was a spam and I predict it is as negative, it will stay in my inbox. It will not get moved to the junk folder. So therefore this has a problem where I can miss out on my like important mail where it was not a spam but it predicted as a spam mail and then pushed it to a folder. So therefore here in this case, I will look for precision recall is where the cost of false negative is really, really high than a false positive. And of course and on the benefit side, the true negative is much higher than a true positive. So again, let me take an example here. So say, for example, right now, if, if we have a patient who comes in for the test, say for their COVID-19 test and, and the actual actually the patient was like positive, but we predicted that the patient is negative. So that cost is like really high, false negative cost is really high, which means that we have like the patient is still again ideally the patient should be quarantined or stayed in a isolation. But right now as the results were negative, he was predicted negative, he is like roaming around freely. So this kind of a case where the costs are really high. So this case we will be focusing on taking the recall of as a metric.
+00:12:24 - 00:14:21
+Focus on Recall for Imbalanced Datasets: Predicting Minority Classes
+So yeah. And and when we try to see where we trying to optimize both our precision and recall. Therefore, we will then go with F1 score which will give us a the harmonic meaning of my precision. So now let us talk about the intuition about our problem statement. And in our problem statement, what we see here is we have a case where we have a lot of classes which are majority kind of the imbalanced classes. So therefore our task is to predict the minority classes really well. So my minority minority classes here would be actual positive and for actual positive how many times I am able to predict my actual positives here. So in this case the metric here would be recall where I am trying to predict the true positive so actually give it positive and then I am trying to my model is able to capture the amount of the positive actual classes. So in a typical imbalance data set, we have the actual positive classes which are really low, very, very less. So therefore the model should be that efficient that it should capture the positive, actual positive correctly. So on that case, we should be looking for recall as one of the metric and we should try to check like how many times we are able to capture the performance wherein we are rightly predicting the actual positive cases.
+
+
+ 
+
+As you learnt in the video, a high value of accuracy in the case of a class imbalance problem makes it difficult to understand whether or not it is the true representation of the predictive power of a model. This means that you need to look out for other metrics that can handle the minority class predictions in a better manner. 
+
+ 
+
+ 
+
+Recall that Accuracy is given by:
+
+Equation
+
+
+It gives equal importance to both false positives and false negatives. However, this may not be the case in most business problems. Accuracy is preferred in cases where the cost of predicting false positives and false negatives is roughly the same.
+
+ 
+
+For example, suppose you want to predict whether an image is a cat or not. In this case, both the cost of false positives and the cost of false negatives do not exceed one another, and you will not be charged any penalty or additional costs if any kind of misclassification occurs in this case.
+
+ 
+
+
+Precision is given by:
+
+Equation
+
+ 
+
+Precision is preferred in cases where the cost of false positives is much higher than that of false negatives.
+
+ 
+
+For example, suppose you are trying to predict whether an email is spam or ham. If an email is classified as spam, then it will be moved into the trash folder; this is the case of a false positive. On the other hand, in case of false negatives, the spam email stays in the inbox.
+
+So, the potential problem, in this case, is that an email that was incorrectly classified as spam would have contained some important information, and the cost of missing that information is much higher than having a spam email in your inbox.
+
+ 
+
+
+Recall is given by:
+
+Equation
+
+ 
+
+Recall is preferred in cases where the cost of false negatives is higher than that of false positives.
+
+ 
+
+For example, suppose you are trying to predict whether a person has COVID-19 or not. If an actual Covid-19 positive patient is predicted to be negative, and this is the case of a false-negative, for which the cost is quite high, as they are a potential carrier of the virus, then whoever comes in contact with the patient would get infected.
+
+ 
+
+ 
+
+In cases where both the precision and the recall need to be optimised, the F1 score would be the best option. It is calculated as the harmonic mean of both the precision and the recall. In some cases, there will be a trade-off between precision and recall. In such cases, the F-measure will drop. It will be high when both the precision and the recall are high. 
+
+ 
+
+
+Depending on the business case at hand and the goal of data analysis, you need to select an appropriate metric. In our case, the task is to identify the minority class really well, which is the case of actual positives. You need to track how many times the minority class is being predicted correctly. In this case, a recall would be the most appropriate metric to use because the actual positives are quite few in number. So, the true test is whether or not the model is able to capture these actual positive cases correctly.
+
+ 
+
+
+Now that you have a good understanding of the evaluation metrics to be considered as per business requirements, let’s go ahead with the model-building process.
+
+
+Class Imbalance - Recall Quiz
+
+
+Why is it recommended to apply resampling techniques on the train set?
+
+To avoid model learning from the test data--Correct! Applying resampling technique to the entire data leads to data leakage and violates the model evaluation criteria on unseen data.
+
+For convenience
+
+Because the train set possesses a major proportion of the data
+
+Because the model is built on the train data
+
+
+Suppose an imbalanced data set has a class ratio of 1:3, and you want to run a cross-validation scheme to evaluate a model’s performance. If you apply a stratified k-fold to generate the train-test folds, what will be the distribution of the classes in the test split?
+
+1:3
+
+Suppose you want to predict whether the ventilators installed in a hospital would fail or not while being used. You want to evaluate the performance of a model that you built. Which of the following is an appropriate measure for the same?
+
+Correct! Recall is preferred in cases where the cost of false negatives is higher than that of false positives. One cannot compromise on the life of a person by predicting that the ventilator would not fail and work efficiently even when there are chances of it failing. The cost of predicting that a good ventilator may fail is quite less as compared to the cost of predicting that a bad ventilator would not fail and work efficiently in case of recall.
+

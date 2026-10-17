@@ -1,0 +1,678 @@
+Time Series Analysis Module Overview
+
+
+Welcome to the module ‘Time Series Analysis’.
+
+ 
+
+In this module, you will learn how to analyse and model data that evolves over time. You will explore how past observations influence future values and how this dependency can be used to make reliable forecasts across a wide range of real-world applications.
+
+ 
+
+Now, Professor Ramesh will elaborate on this.
+
+00:00:05 - 00:00:28
+Introduction to Predictive Modeling with Time Series
+Imagine if you could predict tomorrow's stock price, next month electricity demand, or next year's rainfall pattern. Yes, that's possible by building models on data that changes over time. In this module, you will learn how to model such data mathematically and make reliable predictions using time series techniques.
+00:00:29 - 00:00:38
+Mathematical Modeling and Time Series Techniques
+A time series is a sequence of observations recorded overtime, such as daily sales, hourly temperatures, or monthly website traffic.
+00:00:39 - 00:00:51
+Understanding Time Series and Dependency on Past Values
+The key idea is that each value depends in some way on its previous values. Our goal is to uncover the dependency on the past samples and use it to forecast the future.
+00:00:53 - 00:01:11
+Simple Time Series Models: Trend and Seasonality
+We'll begin with simple time series models, where patterns like trend and seasonality are identified and represented directly. You will learn how averaging past values or decomposing the series helps reduce randomness and highlight the underlying signal.
+00:01:12 - 00:01:28
+Averaging and Decomposing Time Series
+Next, we introduce exponential smoothing models, a powerful family that assigns more weight to recent data points. These models adapt quickly to changes, making them ideal when recent observations better reflect the future.
+00:01:29 - 00:01:39
+Introduction to Exponential Smoothing Models
+Before we move into advanced models, you will explore key prerequisites for autoregressive modeling, understanding lag, stationarity, and autocorrelation.
+00:01:40 - 00:01:45
+Prerequisites for Autoregressive Modeling
+These concepts ensure our models are both stable and interpretable.
+00:01:45 - 00:02:03
+Autoregressive Models and Future Value Prediction
+Finally, you will learn about autoregressive models where future values are expressed as a linear combination of the past values. This form the foundation for more complex forecasting methods you will encounter later like ARIMA and beyond.
+00:02:03 - 00:02:13
+Foundation for Complex Forecasting Methods
+By the end of this module you will have a good understanding of how time based data can be analysed smooth and modelled for prediction.
+00:02:14 - 00:02:21
+Understanding Time Series Data and Forecasting Challenges
+Let us begin by understanding what makes time series data unique and why forecasting it is both challenging and anxiety.
+
+
+In this module, you will:
+
+Understand what time series data is and why temporal order plays a critical role in analysis and forecasting
+
+Learn how patterns are identified and represented using simple time series models
+
+Explore exponential smoothing models that assign greater importance to recent observations and adapt to change
+
+Build a strong foundation for autoregressive modelling by studying concepts such as stationarity, lag, and autocorrelation
+
+Learn how future values can be modelled as functions of past observations using autoregressive and integrated models
+
+ 
+
+By the end of this module, you will have a solid understanding of how time-based data can be analysed, smoothed, and modelled to generate meaningful forecasts.
+
+
+Session Overview
+
+Welcome to the session ‘Introduction to Time Series’.
+
+ 
+
+In this session, you will begin your journey into time series analysis by understanding what makes time-based data unique. You will learn how patterns emerge over time and how recognising these patterns forms the basis of forecasting.
+
+ 
+
+Now, Professor Ramesh will explain this.
+00:00:00 - 00:00:30
+Introduction to Time Series Analysis
+Welcome to the session Introduction to Time Series. In this session, we'll begin our journey into time series analysis, the study of data that changes overtime. You will learn how to uncover patterns, detect trends, and prepare data for reliable forecasting. We'll start by understanding what a time series is, how it differs from regular data, and why time order matters.
+00:00:31 - 00:00:49
+Understanding Time Series and Time Order Importance
+You will explore examples such as sales figures or daily stock prices to see how the past observations influences the future. Next, we will break a time series into its key components trend, seasonality, and random noise.
+00:00:50 - 00:01:06
+Key Components of Time Series: Trend, Seasonality, Noise
+You will learn how a time series is characterized and how these characteristics help us explain and perform forecasting. Then we will discuss stationarity and essential property of time series data.
+00:01:07 - 00:01:40
+Stationarity in Time Series Data
+You will understand what it means for data to have a constant mean and variance overtime and the need for transforming non stationary time series to stationary time series. Finally, to learn about additive and multiplicative relationships, the two ways represent how trend, seasonality and noise combine in a time series, and the additive and multiplicative ways of combining the components of a time series.
+00:01:42 - 00:01:48
+Additive and Multiplicative Relationships in Time Series
+By the end of this session, you will be able to describe, visualize, and prepare time series data.
+00:01:49 - 00:01:53
+Describing, Visualizing, and Preparing Time Series Data
+Ready to move towards building your first forecasting model?
+
+
+In this session, you will:
+
+Understand what constitutes a time series and how it differs from regular datasets and explore real-world examples 
+
+Learn how a time series is decomposed into different components
+
+Understand the concept of stationarity and why constant mean and variance are important for modelling
+
+Learn about additive and multiplicative relationships and how time series components combine mathematically
+
+ 
+
+By the end of this session, you will be able to describe, visualise, and prepare time series data for forecasting.
+
+Introduction to Time Series
+
+
+Let's now explore what time series data represent and why they are important for analysis. You will understand how observations collected sequentially over time form patterns that reveal how a process behaves and evolves.
+
+00:00:00 - 00:01:38
+Introduction to Time Series Data and Examples
+Time series data. We look at what is a time series. A time series data is observations or measurements collected overtime. It's ordering sequence of observations is important and forms a basis for analysis. So what does it mean? It means if you have one variable, let us say it's an example of website traffic. So it is one variable observed over a period of time if the number of visits in thousands over a period of time. So this is an example of a time series data. Another example is ambient temperature. You see temperature in degree Celsius over a period of time from 2000 to 2008. This is observation of 1 variable temperature over a period of time. Another example is the sensor air quality readings. If you see this is we want to talk about the X axis here. It can be in the resolution of years and in the case of if you see in the sensor air quality data, we are measuring almost at a resolution of a 2nd. So this so the time can be anything. The time time window can be anything. So it can be as low as one second and it can be as high as a year or so. So the the interval in which we observe this data is important in time series data. So this is time series air quality observations over a period of time. Basically this is all of this whole graph is observation of air quality in 10 seconds. So we will look at what is time series forecasting.
+00:01:39 - 00:02:10
+Time Series Forecasting Concepts
+Time series forecasting is analyzing and model time series data. So based on observations over a period of time, can we forecast the next samples? That is the objective of time series forecasting. Example would be stock price forecasting. Basically can we look at the movement of stock over a period of time and can say can we predict what would be the stock price in the subsequent days. This is a forecast horizon. Basically the subsequent days can we do the prediction is the objective of time series forecasting.
+00:02:10 - 00:02:54
+Applications of Time Series Data
+You have several use cases of time series data. A lot of data that we observe in nature is time series data. Classical examples are stock price analysis, sales prediction and weather forecasting. Nowadays you have time series data. In Internet of Things lot of sensor data is available where the sensor the sense is the value of the parameters. Let us say for example in environment sensing you have temperature, pressure, moisture, etcetera, which you sample at the level of second or sub second. There is so much of data available in practice which are time series data.
+
+You learnt that time series data refers to a set of observations or measurements recorded and organised in a sequential and temporal manner over a specific period. Let’s take a look at the plot below to better understand time series data.
+
+fig
+
+
+
+Note that the blue dots in the plot represent the actual observations, whereas the blue lines connecting them are visual connectors with no specific meaning.
+
+ 
+
+The key characteristics of time series data are its temporal nature and the inherent chronology in the observations. The ordering of these observations plays a crucial role in conducting meaningful analysis and forms the fundamental basis for exploring and interpreting the data.
+
+ 
+
+All time series data exhibit certain recurring patterns. By recognising and leveraging these patterns, we can develop a deeper understanding of time series behaviour. This, in turn, supports forecasting, improves planning efficiency, and enables more informed decision-making.
+
+ 
+
+In practice, we analyse time series data to identify these underlying patterns and use them as a basis for prediction. Such forecasts help organisations make better business decisions. For example, by anticipating future sales, businesses can plan inventory levels more efficiently and reduce operational uncertainty.
+
+ 
+
+Some real-life use cases of time series forecasting are as follows:
+
+Stock price analysis: To understand and predict patterns in historical stock prices, helping investors make informed decisions about buying or selling stocks
+ 
+Sales predictions: To identify patterns and trends in historical sales data, enabling businesses to make informed decisions about inventory management, marketing strategies, and forecasting future sales
+ 
+Weather forecasting: To analyse historical weather data and identify patterns and trends, enabling meteorologists to make predictions about future weather conditions and provide accurate forecasts to the public
+ 
+
+Next, we will study these patterns in more detail and understand the different components of time series data.
+
+
+Components of Time Series Data
+
+
+You will now learn how a time series can be broken down into its core components. These elements explain the different forms of variation within the data and provide a clearer structure for interpretation and modelling. 
+
+
+
+00:00:00 - 00:00:17
+Introduction to Time Series Components
+We shall now look at the components of a time series. We can decompose the time series into several of its Component 1 is level, trend, seasonality, cyclicity and noise. We look at each one of these components.
+00:00:17 - 00:00:35
+Understanding Level in Time Series
+Level is the mean value of the time series. What is the mean value of the level of this time series? In this case, if you see number of visits in 1000, this is around 30 plus. This is the mean value of the number of visits over the entire duration of this time series. Next one is trend.
+00:00:35 - 00:01:11
+Exploring Trend in Time Series
+Trend is a long term increasing or decreasing pattern in a time series. It can be flat and then it can also be increasing or decreasing in pattern. Let us say for example this is website traffic over a period of time. As in when the website gains popularity, the number of visitors might be increasing over a period of time. And other example would be revenue of a company over a period of time, they might have cycles of different quarters and over many years they can increase the revenue. So this examples of trend. So this represents the trend of the time series.
+00:01:12 - 00:02:02
+Seasonality in Time Series
+The other in component of time series is a seasonality. Let us say if you what is the seasonality here? If you see there is seasonality happening and at these intervals basically at these intervals there is seasonality happening. So other way of looking at this, let us say if you say sales of a company, if you see there might be sales more sales in summer and during Christmas time only, you might see seasonality over quarters over monthly or anytime sample. If you see in this case there is seasonality over 11 particular time of the year over multiple months. Here in this case, this is over different months and there is seasonality within the month, basically middle of the month if you see there is some seasonality for website traffic for whatever reason. So this is the type of insight that the data provides.
+00:02:03 - 00:02:31
+Cyclicity in Time SeriesYou have learnt that time series data can be decomposed into five fundamental components, each highlighting a specific pattern in the data: 
+
+ 
+
+Level: Level is the mean value of a time series. Let’s take a look at the plot below to compare the levels of the two series.
+
+fig
+
+And then cyclicity, so the periodic long term more than year patterns in the time series, let us say we have seen seasonality in terms of days, quarters, etcetera. But the cyclicity is over a long time horizon. In an example would be in an economy where there are cycles of recession and growth and things like that over many, many, many years basically. So that would be an example of cyclicity.
+00:02:32 - 00:03:47
+Noise and Decomposition of Time Series
+Even that can be irregular or irregular. So we have seen the different components of the time series. And then we have noise. Basically anything that is left, left out of level trend is noise. We will look at noise or residual. If you see this is 1 depiction of the time series. If you see there is the trend here. This is the original time series. The original time series, this is the trend here. It is the over a period of time. This is passenger data. The airline passenger data over from 1950 onwards, the number of passengers have increased over a period of time and then there is seasonality also here. So this is seasonality part. So if you can, you can decompose a time series into its components, the trend part and this is a seasonality. You see, although there is a trend and there is also seasonality. So these are the seasonal component, there is so there these are the there is a trend and there also the seasonal component. And anything that is left outside of trend and seasonality is the residual basically. So if this this time series is a combination of the residuals plus the seasonality plus the trend, this is how we decompose a time series.
+
+
+As you can see, the level of Series 1 is higher than that of Series 2 because Series 1 lies above Series 2.
+ 
+Trend: A trend is a long-term increasing or decreasing pattern in a time series. Let’s take a look at the plot below to compare the trends in two different series.
+
+fig
+
+As you can see, Series 1 is trending upwards, while Series 2 has almost no trend.
+ 
+Seasonality: Seasonality is a periodic short-term (period less than a year or so) pattern in a time series. Let's compare the seasonal periods of the two examples below. In the first plot, we observe the website traffic of Company A, which shows more rapid fluctuations (15 days) compared to the second plot depicting the website traffic of Company B (30 days).
+
+fig
+
+
+Here Equation and Equation are seasonal periods in the respective time series. They refer to the lengths or durations of one season in the time series. As you can see in the plot above, Equation, meaning the seasonal period in Series 1 is shorter than that in Series 2.
+ 
+
+Cyclicity: Cyclicity is a periodic long-term (period of more than a year) pattern in a time series, which can be regular or irregular. Let’s take a look at the plot below to understand cyclicity better.
+
+fig 
+
+As you can see in the plot above, the cycle is irregular. From March 2015 to October 2017, the cycle seems to be of 2 years, while from March 2018 to April 2019, the cycle seems to be reduced to 1.5 years. This shows that the plot has cyclicity with an irregular cyclic period.
+ 
+Noise: Noise refers to the random, patternless fluctuations in a time series, also known as residuals. Let's take a look at the plot below. The website traffic data is plotted in blue, and the remaining noise is shown in green after removing all the known components.
+
+fig 
+
+
+ 
+
+Noise is generally expected to be:
+
+Additive 
+
+Normally distributed
+
+ 
+
+Now that we have observed several time series, it is natural to reflect on the nature of the patterns present in the data. Do these patterns persist in a consistent manner, or do they change over time through fluctuations in behaviour?
+
+ 
+
+So far, our discussion has focused on identifying broad movements such as levels, trends, seasonality, etc. While these features offer a high-level view of how the series evolves, they do not fully describe how the values themselves behave over time. To develop a deeper understanding, we need to examine whether the underlying behaviour of the series remains stable or varies as time progresses.
+
+ 
+
+Next, we will explore the concept of stationarity in time series to gain a more comprehensive understanding of the variability in the properties of a time series.
+
+
+Stationarity
+
+You will now learn about stationarity, a fundamental property that influences how time series data can be modelled. Stationarity categorises a time series as stationary or non-stationary. In simpler terms, stationarity refers to the stability and consistency of statistical properties over time within a time series.
+
+
+00:00:00 - 00:00:07
+Introduction to time series characteristics
+We will discuss one important characteristics of a time series. It is stationarity.
+00:00:07 - 00:01:12
+Understanding stationarity in time series
+We will discuss what is stationarity and we will also discuss the need for a time series to be having the characteristics of stationarity. Stationarity is it comes from how we model a random process. In this case, time series is modeled as a random process case. A random process with a constant mean and variance is called a stationary random process, in this case a stationary time series. A stationary time series has a constant mean and variance. So why is it required? We will see. So why is stationarity required if If there is no stationarity and if the mean and variance changes overtime, it will be difficult to model such a time series and it might lead to erroneous predictions. It is required for the time series to be stationaries. If the time series is not stationary, there are some techniques to make the time series stationary.
+00:01:12 - 00:01:18
+Techniques to achieve stationarity
+We will look at that in the subsequent sections. So let us take an example.
+00:01:18 - 00:02:32
+Examples of stationary and non-stationary time series
+This is an example of a stationary time series where the mean is constant overtime and the variance is also constant overtime here. So variance is constant. This is a stationary time series. This is very amenable for analysis. Another example is where the variance is not constant. Variance is varying overtime but the mean remains the same over a period of time. An example of a constant mean and non constant variance. Another example here is time series where the mean is changing and the variance is constant but the mean is changing. The mean is different here, the mean is different here. So the example of a non constant mean and constant variance. Another example is non constant mean and non constant variance. In this case both the mean and variance are changing. The variance is changing here overtime. When I say it is changing, it is changing overtime or mean and variance should be constant. Such a time series would be hard to model or it will give an erroneous prediction. And there are some techniques to make the time series stationary.
+
+
+You have learnt that stationarity refers to a time series whose statistical properties remain unchanged over time. A stationary series is more predictable and easier to model. Key characteristics include: 
+ 
+
+A constant mean, indicating no systematic upward or downward shift, 
+
+A constant variance, reflecting stable dispersion around the mean. 
+
+ 
+
+Let's examine the image provided below to better understand the concept of stationarity. The image consists of three plots representing the profit generated from the sales of different items at a supermarket from February 01, 2020, to September 01, 2021:
+ 
+
+Plot A: Profit from the sales of toothpaste
+
+Plot B: Profit from the sales of a recently launched shampoo
+
+Plot C: Profit from the sales of face masks
+
+FIG 
+
+Based on the image given above, we can draw the following conclusions:
+
+Plot A: The profit from the toothpaste sales exhibits a constant mean and constant variance
+
+Plot B: The profit from the sales of the recently launched shampoo has a constant mean but a non-constant variance
+
+Plot C: The profit from the sales of face masks displays both a non-constant mean and a non-constant variance
+
+ 
+
+So far, you have learnt about the different components of a time series and the concept of stationarity. A natural next question is how these components come together to form the observed time series. In other words, how are level, trend, and seasonality mathematically combined to generate the data we see?
+
+ 
+
+To address this, you will study the additive and multiplicative relationships between the components of a time series next, and understand how these structures are used to represent and work with time series data.
+
+Additive and Multiplicative Time Series
+
+
+In the industry, people typically follow two common approaches when analysing time series data: additive and multiplicative. These approaches are named quite literally, with "additive" referring to the addition of components and "multiplicative" referring to the multiplication of components.
+
+ 
+
+Let’s now see how additive and multiplicative modelling of components are done in a time series.
+
+00:00:00 - 00:01:00
+Additive vs. Multiplicative Time Series
+We will discuss additive and multiplicative time series and additive time series is when each component changes the seize by a fixed absolute value the size of the seasonal pattern. The size of the random fluctuation remains independent of the overall level of the data. An example would be the salary increase by $5000 every year regardless of the current salary. In the case of multiplicative time series, components change the series by a percentage or factor of the current level. Components become larger when the data level is higher and smaller when the data level is low. And analogy would be and increase by 5% every year causing the race to grow as the salary grows. This is the This is the key difference. You add an absolute value no matter what the previous values is. In the case of multiplicative time series, you add a percentage to the previous value.
+00:01:01 - 00:01:58
+Additive Error in Time Series
+Let us look at additive error. In the additive error setting, the error represents how far the observation deviates from the model. In absolute unit, overall observation is. Let us see Y of T is equal to MU of T plus this error term. This is a sum. Basically in the error equation, error term is the Y of T minus the mean of the time series. Basically so error is it is this is additive. That is the reason why it is called an additive time series. The interpretation is the deviation measured in units such as 50 units above forecast. In this case variance remains constant across time. It is homoscedastic homoscedasticity, mean variance being constant and having the error residuals within a constant band. This is suitable for series where the magnitude of the error does not increase as the data level rises. This is the typical applications of an additive time series.
+00:01:58 - 00:03:04
+Multiplicative Error in Time Series
+Let us now look at multiplicative error. In the case of multiplicative error setting, the error is measured relative to the level of the series. It is related to the level of the series expressed as a percentage deviation. In this case, this will be MU of MU of T into one plus error term at T. So this is this is Y of T minus MU of T divided by MU of T This becomes a percentage difference. The deviation is expressed in percentage term such as 5% above. Forecast variance increases with level. In this case it is going to be heteroscedastic. If you see the the error term would be something like this for an increasing percentage, you have let us say this is the error term, this is the error term, and these are the error residue. If you brought the error residuals, you will have heteroscedastic characteristics. This is suitable when the size of the error naturally grows with the size of the data. We will look at decomposing time series into additive and multiplicative components.
+00:03:04 - 00:04:06
+Decomposing Time Series Components
+So we have 3 components here. 1 is seasonality and trend error residual here if you see this is constant trend and non seasonal. So this is not there is no seasonality here and the trend there is no trend here. There is no trend here which means it is constant. In this case, this trend is constant but there is additional seasonality here. There is seasonality which is additional here. This is additional. Basically the seasonality, the magnitude remains the same that the reason why we call it additional seasonality. Look at this closely. It has a constant trend with multiplicative seasonality. In this case, the the seasonality amplitude was the same if you In this case, the seasonality is increasing over. This is an example of constant trend with multiplicative seasonal trend remains the same but seasonality is multiplicative. This is very important for us to characterize because based on these characteristics we will we will define the type of model to choose.
+00:04:07 - 00:06:13
+Characterizing Trends and Seasonality
+It's very important to understand here this is non seasonal. Let me put it this way. This is no trend and this is upward linear trend and this is exponential trend. Here in this Y in the columns we have non seasonal and this is additive seasonality and this is multiplicative seasonality. You see, let us say for example, this is no trend meaning constant trend with multiplicative seasonality. This is an example of upward linear trend with there is no seasonality in this this there is a. Here the trend is constant. Basically trend is this dark black line. There is a constant linear trend here and there is no seasonality. So here there is a trend but there is seasonality here. This is seasonality, which is additive seasonality. In this case, there is upward linear trend with multiplicative seasonality. What is multiplicative seasonality? We have seen it is a percentage of past values. If you see the seasonality, the magnitude changes overtime. Next one is upward exponential trend. Here you see this dark line. This is a trend line. This is there is an exponential increase. Basically this is an exponential increase and upward exponential trend with no seasonality. In this case it is exponential trend with additive seasonality, the additive seasonality and in this cell it is upward exponential trend with multiplicative seasonality.
+00:06:14 - 00:07:53
+Additive and Multiplicative Modeling Decomposition
+We have to differentiate 1 is no trend or a constant trend, linear trend and exponential trend. Other one is no seasonality, additive seasonality and multiplicative seasonality. So these are the important factors that we need to consider for characterizing because based on this characteristics we have to build different model in exponential smoothing. We will look at that. So let us see the decomposition of an additive and multiplicative modeling. So you this is additive time series decomposition. This is the level, this is the trend and this is seasonality. So when you have additive component whether when they add up together of course in place you have the error term here. This is how additive time series will look when the decomposed parts are put together. This is how additive time series would look. If you see this is a level and trend and seasonality is added here, this is a case of multiplicative seasonality where you have level into trend into seasonality plus error term here. Then also the error term. If you see the seasonality is multiplicative here using 3D and yeah, so this is a multiplicative seasonality and this is a additive seasonality. So this is how decomposing additive and multiplicative modeling is done. By this we add up the component or an additive time series or a multiplicative time series. We multiply this level 10 season components.
+
+
+You learnt how time series data can follow different structural patterns depending on how its components interact with the overall level of the series. Two commonly used structures are additive and multiplicative, and this distinction determines how variation and seasonality behave over time.
+ 
+
+In an additive structure, components contribute fixed absolute changes to the series. Seasonal effects and random fluctuations maintain a similar magnitude throughout time, even as the level or trend changes. This behaviour is typically observed in series where the distance between peaks and troughs remains roughly constant.
+ 
+In a multiplicative structure, components scale with the level of the series. When the level increases, seasonal effects and fluctuations grow proportionally; when the level is low, these effects appear smaller. This results in widening seasonal patterns as the series grows.
+ 
+
+These structural assumptions can be expressed through component-based equations that include random variation:
+ 
+
+Additive model: Level + Trend+ Sensistivity + Error = timeseries 
+Here, the error represents an absolute deviation from the series level, and variability is assumed to remain roughly constant over time.
+ 
+
+Multiplicative model:  Level * Trend * Sensistivity * Error = timeseries 
+In this case, the error represents a proportional deviation, and variability increases with the level of the series.
+
+ 
+
+These formulations explain the decomposition patterns seen in practice. Additive seasonality produces stable seasonal amplitudes across time, while multiplicative seasonality leads to seasonal effects that expand as the trend increases. The assumed error behaviour follows the same logic and directly influences how time series data are decomposed and modelled.
+
+ 
+
+Next, you will work through a Python demonstration that introduces the problem statement and dataset, along with their time series decomposition. This same problem statement will be used consistently across Python demonstrations throughout the module.
+
+
+
+
+Python Demonstration: Superstore Data
+
+
+You will now go through a Python demonstration where we will explore a practical problem concerning a company's sales data and examine how time series modelling techniques can be applied in this case.
+
+ 
+
+The company sells its products through multiple superstores. Now the company aims to analyse and in turn increase the sales of a specific superstore. The company possesses a historical data set encompassing sales data collected over a specific period. The objective is to predict future sales trends accurately.
+
+ 
+
+By studying the forecast, the company can optimise its inventory management processes, ensuring it maintains an appropriate stock level for the upcoming months. For this, we will be utilising the superstore data set, which contains information related to the company’s daily sales and profit. 
+
+00:00:00 - 00:01:04
+Introduction to Time Series Modelling
+Hello everyone, welcome to the session on time series modelling. So let's begin with by understanding the foundational concepts. So time series modelling is a powerful set of tools and the techniques which are specifically designed to analyze and forecast the data that is ordered overtime, right? So this field has vast applications across industries from finance and economics to weather forecasting. So by analyzing the data's past behavior, we can identify the crucial components that are present in a data like the trends and the seasonality, which allows us to make more informed business decisions, right. So over the course of this demonstration, we will explore various modeling techniques, gaining a solid understanding on how to build and evaluate the robust time series models in Python environment. So let's quickly look into what is a problem statement, right?
+00:01:04 - 00:02:11
+Problem Statement: Forecasting Future Sales
+So our specific task here involves a real world business challenge, which is a company needs to forecast its future sales based on historical data, right. So the ultimate goal here is to optimize the inventory management. We can do that by accurately predicting the future sales trends. The company can effectively plan and prepare the right amount of stock over future months. Thus by avoiding the costly overstocking or missing out on sales due to the shortages, right? So core objective is pretty simple, but it's critical as well, right? Just given historical sales date of a company forecast its future sales. So let's quickly go the data set description where we have the data set which contains the daily sales and the profit date of the company for the period from 2021 to 2024.
+00:02:12 - 00:03:08
+Data Set Description and Attributes
+Where it contains 3 key attributes in which the first one is order date, which talks about the date on which the order was placed. And then it's in a specified format. And the second is the sales where I talk about the total sales value of the transaction, which is represented in dollars. And the third important attribute is a profit where the entire profit made on the transaction in dollars. Let us quickly see the outline of this series. So here first we will prepare the data for time series modelling, which involves, you know, cleaning and resampling and will then proceed to forecast sales using a series of the models, moving from simple benchmarks to the advanced methods here, right. And then finally, we will rigorously analyze the performance of every single model using two essential evaluation metrics.
+00:03:09 - 00:04:02
+Data Preparation: Setup and Preprocessing
+One is RMSE which provides an absolute measure of prediction error. And then another one is MAP, which is a mean absolute percentage error, which offers a relative easily interpretable percentage error, right. So let us just started with the first part of our series, which is nothing but setting up and the data preparation, right? So here, so let's start with our Part 1 in our series, which is nothing but the setup and the data preparation. So before we build any models, what we usually do, we will import the necessary things and we will do the data preprocessing right. So here also we will transform our raw data into clean time indexed monthly series, right?
+00:04:03 - 00:05:55
+Data Cleaning and Indexing for Time Series
+So to do so, let us start importing our necessary Python packages, where just pandas is for data manipulation, Numpy is for numerical work, Matlotlibor C Bond for the visualizations, and crucially, we want to import our modeling tools from the stats models. And then we just have a couple of lines of code to suppress the warning, ensuring a clean demonstration, right? So now once I imported all the necessary packages and tools, my next step is loading the data set, right? So here I am loading the data set and I want to see how my data look like. So if you run this DF dot head, this output shows our sales data, but the order data is in a text format. I will tell you what I mean. So here we have order date, we have a sales and we have a profit. Right? Now if I run df.info, what it actually showing me is that it confirms that order date is an object type while also reassuring us that we have no null values to clean right? We are good to go right? So then once we have that required information, what is the next step here? So we are converting our order date column into the proper date time type using PD 2_date time right? If I run this gf.info again, you can observe that my D type of order date is now changed to date time right?
+00:05:56 - 00:07:13
+Resampling and Visualization of Sales Data
+Once I did this, my next two I want to sort the entire data frame chronologically, which is a non negotiable step for any time series model that you're going to build, right? Once I have this, what I'll do. Finally, I'll make the data frame here, which is a true time series object by using DF dot set index to set this order date as a primary index. So now once I did this, my next step or the final preparation step is resampling. So here we use the PD dot grouper with a frequency of a month combined with the dot sum aggregation to consolidate the daily figures into monthly totals for both sales and the profit that are there in our data set, right? If I run this DF dot head now, it confirms our clean monthly data, which is indexed by the month end and we are good to go or to do any analysis on this particular data, right? What are the next steps here?
+00:07:13 - 00:08:00
+Introduction to Time Series Decomposition
+Once I did this? So here I don't want the profit column as we are not using in this analysis. I am simply dropping it. And then if we look into the shape, it's just I have only one, one column here, the order date as well as the sales. I have only have the sales, I don't have the profit that we saw earlier, right? Let us quickly visualize how our data looks like, right? So if you see here, there is a clear upward trend in a sales over the period of a time. So we are done with setting up and the data preparation. Let's move on to the next part which is an interesting one which is decomposition of time series.
+00:08:01 - 00:09:05
+Additive Decomposition of Time Series
+So basically this process, this is a key to understand what is underlying structure of our data. So we can visualize separately the sales series into it can be trend, its seasonality and the residual. So we can visualize in three different dimensions, which will help us to guide a choice between the additive and multiple K2 forecast models. So let me introduce seasonal decompose function, right, which we get from the stats model, right. So this function it will takes a time series and a model parameter. It can be additive or multiplicative to perform the structural breakdown, Yeah. So now let us see what is an additive decomposition, right? So this model assumes the components simply sum up. So what are the components here?
+00:09:05 - 00:10:24
+Multiplicative Decomposition of Time Series
+It is a trend, seasonality and the residuals we can simply sum up, which is suggesting that the seasonal magnitude, it is constant overtime. So if we observe this output, the trend is clearly upward sloping and the seasonality components appear to have a stable amplitude here. Similarly, if you look into the multiplicative decomposition. So this multiplicative decomposition model, it assumes the components multiply, where you know we will multiply trends, seasonality, and the residuals all together, suggesting that seasonal magnitude grows as a increases. So if we visually compare this plot to the additive one, particularly focusing on the residuals here the model whose residuals look most random and close to white noise is the one that best fits our data, giving us a strong hint for our modeling approach, right.
+00:10:24 - 00:10:48
+Conclusion: Clean Monthly Time Series and Decomposition
+With this, I would like to conclude this session where we have successfully created a clean monthly time series of the sales data. And then we also link into the decomposition which has provided A vital visual evidence that our data has a strong trend and clear 12 month seasonality.
+
+
+
+# Introduction
+Welcome to this Python demonstration on time series modelling.
+
+Time series modelling is a set of tools and techniques that model temporal or time series data and aim to predict or forecast future behavior of the data. It has applications in various fields such as finance, economics, weather forecasting, and more.
+
+By analysing historical data, we can identify different components in time series data such as trends, seasonality, and so on, and use these insights to make more informed business decisions.
+
+In this demonstration, we will explore a few different techniques for time series modelling. As we construct and evaluate our models, we'll gain insight into how different techniques can be used to handle common challenges in time series modelling.
+
+By the end of this demonstration, you will have a solid understanding of how to build and evaluate time series models in Python, and how to apply these techniques to real-world data sets.
+
+## Problem Statement
+In  this demonstration, we will apply time series modelling techniques to a real-world problem that involves a company and its sales. The company has historical sales data that it has captured over a period of time and wishes to forecast future sales trends so that it may optimise its inventory management processes.
+
+The problem statement for this demonstration can be summarised as follows:
+> Given historical sales data of a company, forecast its future sales.
+
+By studying the forecast, the company can effectively plan and prepare their inventory to ensure that the right amount of stock is made ready over future months.
+
+## Data Description
+You have been provided with a data set containing daily sales and profit data of the company for the period 2021 to 2024. The data set has the following three attributes:
+
+<table>
+  <tr>
+    <th> Attributes </th>
+    <th> Description <th>
+  </tr>
+  <tr>
+    <td> Order-Date </td>
+    <td> The date on which the order was placed (in dd-mm-yyyy format) </td>
+  </tr>
+  <tr>
+    <td> Sales </td>
+    <td> Total sales value of the transaction (in dollars) </td>
+  </tr>
+  <tr>
+    <td> Profit </td>
+    <td> Profit made on the transaction (in dollars) </td>
+  </tr>
+
+</table>
+
+## Outline
+In this demonstration, we will:
+- Prepare the data for time series modelling
+- Forecast sales using the following models:
+  - Linear regression
+  - Naive
+  - Simple average
+  - Simple moving average
+  - Simple exponential smoothing
+  - Holt's
+  - Holt-Winters' additive
+  - Holt-Winters' multiplicative
+
+We will analyse the performance of these models using root mean squared error (RMSE) and mean absolute percentage error (MAPE).
+
+Please note that while we could evaluate the performance of the forecasting models using any one of RMSE or MAPE, to obtain a more comprehensive assessment of their performance, we will use both measures for each model.
+
+# Part 1 - Setup and Data Preparation
+In this section, we will:
+- Import necessary packages for executing the code
+- Load the data
+- Prepare the data for further analysis
+
+
+We will begin by importing all the packages that we will be using in this part of the demonstration, which are:
+- *NumPy* and *Pandas* for working with numbers and dataframes
+- *pyplot* from *matplotlib* and *seaborn* for visualisations
+- *ConvergenceWarning* from *statsmodels* and *warnings* to suppress warnings
+
+# Import 'numpy' and 'pandas' for working with numbers and dataframes
+import numpy as np
+import pandas as pd
+
+# Import 'pyplot' from 'matplotlib' and 'seaborn' for visualisations
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+# Import and execute method for suppressing warnings
+import warnings
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore', ConvergenceWarning)
+
+Let's begin by loading the data and building familiarity with it.
+
+# Load the data and take a look at it
+df = pd.read_csv('Superstore_Data.csv')
+df.head()
+
+# View specifics of the data frame
+df.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5699 entries, 0 to 5698
+Data columns (total 3 columns):
+ #   Column      Non-Null Count  Dtype  
+---  ------      --------------  -----  
+ 0   Order Date  5699 non-null   object 
+ 1   Sales       5699 non-null   float64
+ 2   Profit      5699 non-null   float64
+dtypes: float64(2), object(1)
+memory usage: 133.7+ KB
+
+As you can see, the data type of the *Order Date* column is *object*. But to further conduct analyses on the data, such as grouping by month or year, we have to convert the data type of the *Order Date* column to *datetime*.
+
+# Convert the 'Order Date' feature to the 'datetime' data type
+df['Order Date'] = pd.to_datetime(arg = df['Order Date'])
+
+
+# View specifics of the data frame
+df.info()
+
+
+# Ensure that the data are ordered chronologically
+df.sort_values(by = 'Order Date', ascending = True, inplace = True)
+
+
+# Set the index of the data frame to 'Order Date'
+df.set_index(keys = 'Order Date', drop = True, inplace = True)
+
+To study monthly sales, we need to group the rows of *df* by month and sum up the values in each group. We will use the *Grouper* function in conjunction with the *groupby* operation for grouping. *Grouper* is a function in the *pandas* library that allow us to group time series data based on a specific frequency (*freq*) which in our case is monthly (*M*).
+
+# Obtain the monthly total sales for each month
+df = df.groupby(by = pd.Grouper(freq = 'M')).sum()
+
+# Take a look at the data
+df.head()
+
+You can see that only one date from each month is used in the index as representative of each of those months.
+
+Recall from the problem statement that we are interested in forecasting *Sales*. So, we can drop the *Profit* feature from our data set.
+
+# Drop the 'Profit' column as we are not using it in this analysis
+df.drop(labels = 'Profit', axis = 1, inplace = True)
+
+# Take a look at the shape of the data
+df.shape
+
+# Take a look at the data
+df.head()
+
+
+# Plot the time series data
+plt.figure(figsize = (14, 6))
+sns.lineplot(data = df, x = 'Order Date', y = 'Sales', marker = 'o', color = 'blue')
+plt.title('Sales Data');
+
+
+# Part 2 - Decomposition of Time Series
+In this section, we will decompose the time series data using additive and multiplicative seasonal decomposition methods and analyse the resultant components of the time series.
+
+To implement decomposition methods we will use the *seasonal_decompose* method from the *statsmodels* library. This function decomposes a time series into its components, which include trend, seasonality, and residual (or error) terms. A couple of parameters that should be emphasised here are:
+- *x*: The input time series that we want to decompose
+- *model*: The type of decomposition model to use (*'additive'* or *'multiplicative'*)
+
+# Import 'seasonal_decompose' from 'statsmodels' for seasonal decomposition of time series
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+
+
+### Subpart 1 - Additive Seasonal Decomposition
+
+
+For additive decomposition we will set the *model* parameter to *'additive'*. Note that this is also its default value.
+
+
+# Perform additive decomposition on the data and plot the resultant components
+result_additive = seasonal_decompose(x = df['Sales'], model = 'additive')
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (12, 6))
+result_additive.trend.plot(ax = ax1, marker = 'o')
+ax1.set_title('Trend in Sales Data')
+result_additive.seasonal.plot(ax = ax2, marker = 'o')
+ax2.set_title('Seasonality in Sales Data')
+result_additive.resid.plot(ax = ax3, marker = 'o')
+ax3.set_title('Residual in Sales Data')
+plt.tight_layout();
+
+### Subpart 2 - Multiplicative Seasonal Decomposition
+
+Let's now implement multiplicative seasonal decomposition. For this, we will set the *model* parameter to *'multiplicative'*.
+
+
+# Perform multiplicative decomposition on the data and plot the resultant components
+result_multiplicative = seasonal_decompose(df['Sales'], model = 'multiplicative')
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (12, 6))
+result_multiplicative.trend.plot(ax = ax1, marker = 'o')
+ax1.set_title('Trend in Sales Data')
+result_multiplicative.seasonal.plot(ax = ax2, marker = 'o')
+ax2.set_title('Seasonality in Sales Data')
+result_multiplicative.resid.plot(ax = ax3, marker = 'o')
+ax3.set_title('Residual in Sales Data')
+plt.tight_layout();
+
+Note that the *seasonal_decompose* method does not make any predictions. The method is generally used to study and analyse time series data before going into prediction models.
+
+
+
+ 
+
+We started by understanding the problem statement and analysing the dataset, and then prepared the data by performing tasks such as sorting the dates in ascending order, removing the Profit column since the focus is on sales, and grouping the data by month, as the objective is to forecast monthly sales.
+
+ 
+
+After completing the setup and data preparation steps, we obtained the following time series plot.
+
+ 
+
+Next, to analyse the different components of the time series, we decomposed the series using both additive and multiplicative approaches.
+
+ 
+
+To implement decomposition methods, we used the seasonal_decompose function from the statsmodels library. The documentation for the seasonal_decompose function can be found here. This function allows us to break down a time series into its components: trend, seasonality, and residual (or error) terms. Note that there are two significant parameters in this context:
+
+x: This parameter represents the input time series we wish to decompose.
+
+model: This parameter determines the type of decomposition model to apply, with either 'additive' or 'multiplicative' options.
+
+ 
+
+The resultant plot of both methods of decomposition are given below.
+
+https://www.statsmodels.org/dev/generated/statsmodels.tsa.seasonal.seasonal_decompose.html
+
+
+By observing these plots, we can notice the following:
+
+An upward trend
+
+Seasonality with a period of 12 months
+
+Some random noise component
+
+ 
+
+Both plots appear to be similar because they represent the components of the same time series. However, if we examine the Y-axis values, we can notice a distinction.
+
+ 
+
+The decomposition technique assumes an additive relationship in the case of additive decomposition and a multiplicative relationship in the case of multiplicative relationship.
+
+ 
+
+To determine whether the relationship between the components of a time series is additive or multiplicative can be approached in several ways, some of which are as follows:
+ 
+
+One approach is to perform a detailed analysis of the time series, including decomposition methods, to gain insights into the underlying patterns. However, this requires a deeper understanding of time series analysis techniques, which is beyond the scope of this module.
+ 
+
+Another approach is to leverage domain knowledge. By having a strong understanding of the data and its characteristics, you can make an informed decision on which decomposition method is more suitable.
+ 
+
+A third approach involves building models using additive and multiplicative decomposition methods, comparing their performances, and finally considering the one that performs better.
+
+ 
+
+We will focus on the third approach in this module.
+
+ 
+
+Next, we will summarise what you learnt in this session.
+
+Session Summary
+
+
+In this session, you were introduced to the fundamentals of time series analysis. You learnt what constitutes a time series and why the ordering of observations over time is essential.
+
+ 
+
+You explored how a time series can be decomposed into trend, seasonality, and random components, and how these characteristics help describe the behaviour of the data. You also learnt about stationarity and why having a constant mean and variance is important for modelling.
+
+ 
+
+The session concluded with an understanding of additive and multiplicative relationships, which describe how different components combine to form a time series.
+
+ 
+
+Next, you will learn about simple time series models. But before that, you will answer a few questions based on this session to assess your understanding.

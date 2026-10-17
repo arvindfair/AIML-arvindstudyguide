@@ -1,0 +1,205 @@
+Non-Linear SVM for Email Classification
+
+
+
+In this demonstration, we return to the email spam–ham dataset and apply a nonlinear SVM using the RBF kernel. We will begin with the default configuration and then tune both C and gamma using grid search. 
+
+00:00:00 - 00:00:34
+Introduction to Nonlinear Kernels in Spam Classifier
+Welcome to this session. And in this session, let's continue our e-mail spam classifier, where the primary goal is to apply the nonlinear kernels, specifically the RBF kernel to the spam data set and compare its performance against the linear SVM that we built and the last session, right? So we will build a nonlinear model which requires tuning 3 hyper parameters, which is the choice of kernel regularization parameter C and the kernel quotient gamma here, right?
+00:00:34 - 00:01:22
+Building Nonlinear Model with Hyperparameter Tuning
+So let us first import our required libraries, the pandas, numpy and the different modules that are required from the skiff learn and then let us load our data set here. And once we load our data set, the features and the target variables let us split into the training on the testing set. So as we did before, so we will split into 7030 split and then we will do the standardization where you know this step is mandatory for nonlinear SVMS especially when using this RBF kernel. The features are standardized using standard scalar to ensure all dimensions contribute equally to the distance calculations in the high dimensional feature space, right?
+00:01:23 - 00:02:21
+Standardization and Model Training
+And if you quickly print the distribution of the spam and ham emails across the training and the testing. So if feel that you can see the distribution is similar, right? So then let us quickly build a simple model where you know we are using the C equal to 1 kernel is equal to RBF. We are fitting the model on the training data with the gold tooth labels and we are predicting output on the test data set, right? Let us quickly see the confusion matrix where which shows that all the 2 positives, 2 negatives and false positives and the false negatives and we quickly print the accuracy, precision and recall. So we got the accuracy around 92% where the precision is 93.6%. And now let us move on to our interesting one which is hyperparameter tuning.
+00:02:21 - 00:03:31
+Hyperparameter Tuning and Kernel Trick Explanation
+So here this section will focus mostly on the kernel trick, which is a magic behind non linear SVM's. So the kernel trick kernel. It allows us to implicitly map our data into extremely high dimensional feature space where a linear separation is possible without ever explicitly calculating the coordinates in that space. So we use RBF kernel here for that. And here we are having the new parameter which is a gamma. This parameter defines the influence of the single training example, right? A small gamma means it has a large influence leading to a smooth decision boundary. It is nothing but the low variance. And the large gamma means a small influence leading to a boundary that can fit the training data more closely increasing the risk of over fitting which is nothing but the higher variance. So let us first use the RBF kernel to find the optimal C and gamma right?
+00:03:32 - 00:05:04
+Grid Search for Optimal C and Gamma
+So for this we are creating the K fold object with the five splits and the shuffle is true and the random state to get the reproducibility right. And now these are my parameters where I used for the gamma I used different different parameters and for C also we are using in the range of you know one to 1000 here right? So now my model is SVC here and now I am passing all the parameters to the my grid search. So let us fit our model here by passing our train data as well as two labels associated with the each sample that is present in the train data. So now we are fitting the model here. And once we fit the model, if you quickly see the results of the data frame, so we will get the all the splits across different parameters that we select and now for C and the gamma combinations, right? So we have the split the test scores and the mean test scores, standard deviations, everything. So we prepare the data frame with all the results across all the combinations of C and gamma here, right? Let us plot these results and see what is the effect of C and the gamma value, right? So if we quickly see the results, visualize the results here by passing the data frame that we saw earlier, right? This is how my graph look likes.
+00:05:05 - 00:07:35
+Visualizing Results and Observations on C and Gamma
+So basically this figure displays the influence of both C which is the regularization parameter and the gamma which is the kernel quotient for the non linear decision boundaries on modal accuracy across 3 subplots with different gamma values right? So in all subplots, if you see that as C is increasing, the training accuracy consistently rises right in all the three, while test accuracy generally peaks and then either plateaus, there are significantly or slightly decreases indicating over fitting at higher C values right. The critically comparing across the gamma values, right? So we can did like by comparing all these three, we can make a few observation like let us say when the gamma is 0.01, the test accuracy, you know it peaks earliest at the lower C itself and then drops. You know more significantly suggests the model is prone to over fitting with this higher gamma right now when we have the less gamma right compared to the previous one, the test accuracy peaks later and maintains a higher level over a broader range of the sea showing a more robust before model is getting over fitting right now. If you observe the last one, where the model initially under fit at low sea, but then test accuracy rises steadily, converging more closely with the train accuracy at higher C values, right, it is indicating A smoother, less aggressive fate, potentially less prone to immediate overfitting than when gamma is equal to 0.01, but might require higher C to reach peak performance, right? So overall, gamma 0.001 appears to offer the best balance achieving, you know, high test accuracy across a reasonable range of C values before showing signs of overfitting.
+00:07:36 - 00:09:09
+Evaluating Final Model and Comparing with Linear SVM
+So let us print the optimal accuracy score and the hyperparameters. So here the best score is nine 3.9%, which is corresponding to hyperparameters at C equal to 10 and when gamma is equal to 0.01 here. Now let us deal and evaluate the final model here. So here are my parameters when my the best model which we saw in the previous figure is C equal to 100, gamma equal to 0.001 and the kernel is RBF right. So I am taking these are the best parameters right? And I am passing the same to the model and then I am fitting and I am getting the predictions. And finally if you observe the results right, this is how my confusion matrix and the accuracy, precision and recall varies when compared to the previous result. So to quickly conclude this, the non linear RBF SVM was successfully trained and also optimized right? So compared to the linear SVM, if you remember from the previous version in the linear SVM we got an optimal values at C equal to one with around accuracy of approximately I think some around 93% right. The recall is an 89%.
+00:09:10 - 00:10:01
+Conclusion: Linear vs Nonlinear SVM Performance
+So with non linear SVM we got the optimal values equal to 100. If you take gamma is 0.001, we got an accuracy of 91% and you know recall is around 84% here, right? So surprisingly here for this specific data set on the features, the optimized linear SVM performed better than the nonlinear RPF form kernel that we used. This highlights that in high dimensional feature spaces a simple linear boundary can often be sufficient or even, you know, superior to a complex non linear boundary, especially when considering the increased complexity and tuning the required for the non linear kernel.
+
+You have now seen how gamma controls model complexity: a low gamma yields smooth boundaries that may miss important structure, while a high gamma allows excessive curvature that reacts too strongly to noise. When tuning gamma alongside C, the search space expands significantly, and the effects of overfitting and underfitting become far more pronounced. 
+
+ 
+
+A key takeaway from this experiment is that increased flexibility does not automatically translate to better performance. Despite exploring multiple hyperparameter combinations, the nonlinear SVM did not substantially outperform the linear model on this dataset. The model selection should be driven by evidence rather than an assumption that more complexity is always beneficial. 
+
+ 
+
+You can also try training the model with a polynomial kernel. This will allow you to compare yet another nonlinear transformation and evaluate whether it captures the underlying patterns more effectively or whether the linear decision boundary remains the most appropriate choice for this problem. 
+
+ 
+
+Next, we will see another demonstration, using the RBF kernel for the task of letter identification. 
+
+The image below shows how the training and test accuracies vary with C and gamma. Answer whether true or false - increasingly complex (non-linear) models result in a higher training accuracy, though the test accuracy does not increase significantly with increasing model complexity.
+
+
+Yes, this is correct - as you increase gamma (i.e. make a more complex model), the training accuracy goes up, though the test accuracy does not improve with an equal amount.
+
+
+Building Non Linear Models - Recall Quiz 2
+
+
+Instructions
+
+Comprehension for Non-Graded Questions
+
+ 
+
+In nonlinear kernels such as the RBF, you use the parameter gamma to control the amount of nonlinearity in the model. The higher the value of gamma, the more the nonlinearity introduced; the lower the value of gamma, the lesser is the nonlinearity. It is also denoted as sigma in some texts and packages.
+
+ 
+
+Apart from gamma, you also have the hyperparameter C, or the cost (with all types of kernels).
+What happens if the value of gamma is very high?
+
+Nonlinearity increases in the decision surface
+
+The model is highly biased
+
+All the training points are classified correctly with no data point misclassified. 
+
+All of above ans is 
+
+Nonlinearity increases in the decision surface- Gamma is used to increase the nonlinearity in the decision surface.
+
+Overfitting can be controlled by
+
+C
+
+Gamma
+Kernels such as RBF, linear kernels, etc.
+
+
+All of the above
+
+'C', gamma, and the types of kernels, all have an effect on constructing the decision boundary.
+
+
+Which of the following cases are likely to overfit the model? More than one options may be correct. Also, the C here implies the C in the SVC() implementation in sklearn.
+
+Low value of C
+
+Low value of gamma
+
+High value of C
+
+High value of gamma
+
+A higher value of 'C' ( tuning parameter i.e used in SVC() in Python lab) will not allow any points to be misclassified. The SVM model will be overfitting when there is no misclassification.
+
+A higher value of gamma will add more nonlinearity to the decision surface. The SVM model will be overfitting when no points are misclassified, and the nonlinearity is highly introduced than required.
+
+
+
+Letter Recognition Dataset Overview
+
+
+It's now time to get your hands dirty and solve an interesting letter recognition problem using SVMs. It contains the 26 English alphabet as classes, so it's a multiclass classification problem with 26 classes.
+
+ 
+
+The data set is taken from the UCI repository. You can access the data dictionary of the letter recognition data set here. The dataset is provided along with the other resources for this module in the module overview section.
+
+ 
+
+Each row in the data set represents an image of a handwritten alphabet, as shown in figure (A). Using some basic image processing, the images are converted into m X n pixels (figure (B)), where m and n depend on the size and resolution of the original image. Each pixel contains numeric values, with higher values denoting the presence of dense 'ink'. In the pixels where nothing is written, the pixel value is 0.
+
+here-?https://archive.ics.uci.edu/dataset/59/letter+recognition
+
+ 
+
+A pixel is called 'on' if it contains a positive numeric value; else it is called 'off'.
+
+ 
+
+Using the pixelated images, 16 features are derived for each image, such as the width of the box, the ratio of the mean variance of x divided by the width of the box, etc. Also, note that the distribution of the pixels varies across the images, even for the same alphabet. For instance, A, B and C can be written in many ways, as shown in the figure below.
+
+ 
+
+This is how the 16 attributes are derived from each image. 
+
+
+Let's move on to building the SVM models next.
+
+
+SVM for Letter Identification
+
+
+Having understood the data set, let us now start with modelling. In the following video, we will build a linear and a non-linear model for the multiclass classification task and compare the performance of the linear and the RBF kernel. We will also perform hyperparameter tuning for C and gamma using grid search.
+
+
+
+00:00:00 - 00:00:23
+Introduction to letter recognition using SVM
+Welcome to this session. So in this session, our focus is going to be on the letter recognition where we will solve. Our goal is to use SVM like both linear and nonlinear to classify the images of the letters A-Z that are present in the data set. So for this we are going to follow the same standard process like data exploration, preprocessing and model tuning.
+00:00:23 - 00:01:09
+Data exploration and preprocessing overview
+So for this, let us quickly import all the RSRA libraries that we are like we did in the previous session. And then we are importing the letter classification data set. And then let us quickly see how our dimensions and you know data types and the header look like. So if you quickly go over the dimensions, we have around 20000 rows with a total of 17 columns here right out of which there are 16 numerical features like Xbox Y box etc. Which are derived from the image analysis and the first column here which is a letter which is our target variable here, right?
+00:01:09 - 00:02:00
+Data set characteristics and column renaming
+And if you observe the data types, all 16 features are numerical and there are no missing values. And the target column letter is an object object type which are the string letters varies from A-Z. And if you quickly observe the head of this one there, this is my letter and this is not my corresponding features here, right? So now let's take a closer look at the column names here. All the column names that we have, I click on that, OK, I have letter, which is my target variable, and I have Xbox Y box. These are all the column names that are available. So here, if we see that the column names have an extra space and you know, error when indexing. So let's quickly rename the column names here.
+00:02:00 - 00:03:13
+Basic data analysis and feature distribution
+Now we don't have an extra space that we have present here, right? And then if you quickly see the letter column unique values, so there are total 26 letters, right? So our data, it seems like we have all the 26 letters as a target variable, right? So now let us do some basic data analysis here where if we quickly go over this plot. So this bar plot displays the distribution of a feature labeled Xbox across all the letter categories from A through Z type. So this slightly representing some characteristic or measurement, this is associated with the each and every letter type. So the height of the bar here indicates the mean Xbox value for the letter, while the this black error bar represents the variability or you know the standard deviation around that mean, right. So we can observe that the mean Xbox value generally hovers between 3:00 to 5:00 right across most of the letters.
+00:03:13 - 00:05:25
+Heat map visualization of feature importance
+Like for some letters it is obviously it is a different thing, so the varying length of this error bar suggesting there are differences in the consistency of the Xbox feature for each letter, with some letter showing more variability than the others. Right? Like this, you can also observe for the other features and get the insides of top out of it. Right now, let us quickly see the average values of the attributes for the each letter. So these are my letters and these are how my average values for each and every feature that is present in the data set. Now, if I quickly plot the heat map, this is how it look like where this illustrates the distribution of the various features that are present across all letters that are present in the data set, right? So the intensity of the color here ranging from, you know like different ranges like if you see this bar S, the brighter color here represents the higher values, right? We can observe this distinct patterns like some features like if you observe here this xedgy and this yedgy, this generally have higher values across many letters here these have higher values for most of the letters that are present here right? While if you observe this, this Onpix which tends to have the lower values right, so meaning the setter letters you know this also stand out the unique feature profiles, so it varies from the letter to letter. This visualization effectively highlights feature importance and differentiation among the letters, which could be crucial for the task such as optical, you know, or the letter recognition where the specific features help distinguish one letter from the another file.
+00:05:27 - 00:06:10
+Data preparation and feature rescaling
+Now let us quickly prepare our data here. Let's conduct some data preparation steps before we do the modeling. So first, let's see if it is important to rescale the features like since you know, as we saw that these values may vary in ranges here, right? So for example, if you see here for the different features we have the, these are the different average values and they are in a different range, right. So in this case, we have the average values in a different range, but they are not varying a lot, right. So nevertheless, it is better to rescale them. So first let's split the data set.
+00:06:11 - 00:07:00
+Building and evaluating linear SVM model
+We are splitting the data into X&Y and with the same path 37 split that we did previously and now we are doing. We are scaling the features in the similar way that we did in the previous session. Once we did this. So now let's move on to building basic SVM model. So we will build 2 models which is the linear and the non linear with a default hyper parameters and let's compare the accuracies and get the insights. So first let us start with the linear SVM where here we are fitting. So we are initializing the model with the linear kernel and we are fitting the data with the X train and the Y train and we are predicting the model on the given test set here.
+00:07:01 - 00:08:27
+Building and evaluating non-linear SVM model
+So once my model is ready, so let us quickly see the how my confusion matrix and the accuracy look like, right? So if we closely observe this now we got an accuracy of around 85% here. And this is how my confusion matrix look like for all the 26 classes here, right? So this linear model gives approximately 85% accuracy right? Now let us see how non linear SVM will generate the results. So here we are doing the similar thing but instead of the linear kernel here we are giving the RBF and let's quickly see the accuracy where now my accuracy here is 0.92 and the confusion matrix for all the 26 classes looks like this. But here the non linear model gives approximately 93% accuracy whereas with the linear model if you remember we got an accuracy of 85%. Let us quickly perform the grid search and hyper parameter tuning with different gamma values and different C value with a fivefold cross validation right?
+00:08:27 - 00:10:02
+Grid search and hyperparameter tuning
+So basically here again I am setting up my 5 fold and I am having my setting up my parameters and we are specifying the model with the RBF kernel here and then we are passing all the parameters through the grid search and finally we are fitting the model by passing the features on the corresponding target variables right. Once my model is fit here, we can look into the data frame that we have saw the earlier like for each gamma and C combinations. We will, we are preparing the data frame with the test data, the main, the standard deviation and all the required scores for us to compare against the all the combinations of the gamma and C. So here is the final data frame that we prepare with all the combinations of the C and gamma and let us plot the variation of the scores with the chosen value of the C and gamma, right. So now if you observe the results here carefully, in all cases as the C increases drain accuracy generally improves and the test accuracy typically raises peaks and then it started declining so indicating it's over fitting at the higher C values.
+00:10:04 - 00:11:04
+Analysis of C and gamma values impact on accuracy
+So a lower gamma which is results in a smoother decision boundary. Specifically when let us say gamma is equal to 0.01, it shows high initial accuracy right, but quicker over fitting as C getting increases here right? Similarly at the gamma 0.01, it provides a better balance like with you know, both the accuracy rising steadily and the test accuracy reaching a good peak before showing the signs of over fitting. And the last one which is a gamma 0.0001, it exhibits a slower rise in accuracy for the both the train and test sets suggesting a more generalizable model you know which is less known to over fitting, but it is potentially under fitting with the lower C values.
+00:11:04 - 00:12:01
+Choosing best hyperparameters and final model evaluation
+So overall, as I saw earlier, the gamma 0.01 seems to strike the best balance achieving the robust test accuracy across the sensible range of the C values here, right? So now let us choose the best hyper parameters, right? The best test score is around 96.3 percent, which are corresponding to the hyper parameters of C1000 and gamma 0.01 here, right? So now if you build the and evaluate the final model here with the highest test accuracy, let us quickly see the results of that. If we observe the results now, we got an accuracy of 97%, which is far better than what we already have in the previous experiments.
+00:12:03 - 00:12:26
+Conclusion on optimal SVM model for letter recognition
+So with this we can conclude the session where you know the non linear SVM with the RBF kernel with the optimal hyper parameters which are around C1000 and the gamma 0.01 achieved a highly accurate solution for the complex 26 class letter recognition problem.
+
+
+For this task, we found that the accuracy achieved using a non-linear model (~0.95) is much higher than that of a linear one (~0.85). We also found the optimal values of hyperparameters C and gamma using GridSearchCV(). 
+
+ 
+
+Thus, we can conclude that this problem is highly non-linear in nature.
+
+ 
+
+Next, let's summarise the learnings from this session.
+
+In this session, you learnt various tricks and tips related to the transformation of an attribute space to a feature space.
+
+ 
+
+In 2D and 3D, it is very useful to visualise independent variables graphically; this can help you apply best-fit transformations that classify labels (remember the spam and ham example) correctly.
+
+ 
+
+But the graphical representation of independent variables is not so easy for more than three attributes. Even the manual transformation of an attribute space to a feature space is a cumbersome process. To overcome this challenge, you use the kernel trick for transformation, which bypasses the process of converting an attribute space to a feature space explicitly. This means that now, you don't explicitly need to convert each attribute to a feature space. Instead, you need to find a function(∅) that achieves all the manual steps in one go.
+
+ 
+
+Essentially, it helps you identify the best-fit linear separable boundaries by trying out various transformations within the function in the higher dimension.

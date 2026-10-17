@@ -1,0 +1,285 @@
+
+
+Support Vectors
+
+
+We saw that although the Maximal Margin Classifier (i.e hyperplane) perfectly separates the two classes, it has a rather limited applicability: it cannot classify data points if they are partially intermingled, as shown below: 
+
+ 
+
+Now, you will learn about another separator which performs considerably well on somewhat intermingled data. You will also learn what support vectors are and how the new formulation overcomes the drawbacks of the Maximal Margin Classifier.
+
+00:00:05 - 00:00:22
+Introduction to 2D data set and separator
+Let's go back to our data set again. We're going to assume it is 2 dimensional for now. So you have, say, data points like this plus on one side, and then you have minus on the other side.
+00:00:26 - 00:00:59
+Concept of separator and parallel lines in multiple dimensions
+And imagine that we have solved our optimization problem and we have got a separator which lies right in the middle of these two which is equidistant from both of these. Having got this, now we can draw these lines which are parallel to the separator line.
+00:01:02 - 00:01:27
+Extending separator concept to 3D and marking data points
+Please remember that all of these notions are not specific to 2D. They are all notions that can be extended to any number of dimensions. Like for example, if I since I'm saying I'm going to draw a line parallel to this, I can say the same thing for a plane in 3D.
+00:01:27 - 00:02:02
+Special data points and their significance
+If I have a plane here, I can always draw another plane which is parallel to this and I can draw any number of planes that are parallel to this. So if I have a set of points on one side, I can always move this plane parallel to itself up till it hits one of the data points. And similarly I can move it on the other side till it hits one of the data points. And let's now mark these data points, the ones that get hit when I move the separating hyperplane on either side.
+00:02:02 - 00:02:56
+Intuition behind distance from separator and discrimination
+So there's suppose something here. And so these four points to on either side, let's say are special. Why are they special? So let's try to get some insight about the the way this line actually carries out the discrimination. If there is a point here, let's take this point. This point is something which is very far away from this line. What does that actually mean intuitively? What does it mean for a point to lie very far away from the separator? So let's let's give an example.
+00:02:56 - 00:04:02
+Example of height-based discrimination using SVM
+So we're trying to discriminate between two categories of people, one who have a Caucasian origin, another who have say, an Indian origin. And I'm assuming for the sake of this example that people who are from the Caucasian region are generally much taller than the Indians, right? So I do this SVM and I find a discriminator and I figure out that 5.8 I mean 5 feet 8 inches is where the discriminating line is going to be. Anything above this would mean this person is a Caucasian. Anything below this would mean it's an Indian, right? So I've got this line. Now, if I take a person who is, say, 6 feet 9 inches tall, would you have any problem at all?
+00:04:05 - 00:05:15
+Understanding discrimination difficulty based on distance from separator
+Assuming this is my discriminator, would you have any problem at all telling me where this person belongs to? No, not at all. I mean, in fact, I I probably assuming that this is my model, I do not even need to tell you where my discriminator is. Very likely you are going to say, look this person 6 feet 8 inches. This person must be hypothesis. The same way if I take an example on the other extreme, say someone who is 5 foot tall. Again I do not have a problem saying which category this person belongs to. But then if I tell you this person is 5 feet 7 1/2 inches tall, then I'm in a fix. My discriminator says 5 feet 8 inches, but I'm giving you a person who whose height is 5 feet 7 1/2. Now it's not. I'm not so sure which side this person belongs to, and I actually have to do a lot of work to figure out which category this person actually belongs to. So the message is simple.
+00:05:16 - 00:06:19
+Importance of points close to the separator
+The farther data pointers from the discriminator, easier it is to discriminate or figure out what the class is for that data point. The closer it is to the discriminator, that much harder it is going to be to tell which class this point actually belongs to. So the the real problematic, the tricky data points are the ones which lie close to the separator. The ones that are farther away are the no brainers. You really don't have to worry about those because those are almost obviously belonging to one class or the other. The ones which are close to the discriminator are the ones that require some analysis, debating, whatever, right? And it so you can see that these points that that the ones that lie closest to the discriminator are clearly the trickiest ones, trickiest ones or the hardest ones to discriminate. It it turns out that there is something even more interesting about these.
+00:06:21 - 00:07:08
+Significance of closest data points in SVM
+It it is possible to show that in fact these data points are the only ones that really matter. What do I mean by that? If I had created a new data set in which only these points which were closest to the separator remained. So what I mean is this, you take the original data set, it had thousands of data points, and then I go and build a hyperplane separator using the SVM formulation that we did just now.
+00:07:09 - 00:08:39
+Support vectors and their role in hyperplane separation
+It found the maximum margin separator. And then among these data points that I built the separator from, I pick the ones that are closest to the separator and then I throw away the rest. OK, so I truncate my data set to only those that are closest to the separator that I had built from the original data set. And now let me repeat the exercise again. Take this truncated data set consisting of only these data points and filled the SVM separator. Low and behold, you will get exactly the same separator that you got earlier, meaning the separator is in fact completely determined by these data points which lie closest to the separator. So in other words, every data point which is not one of these is in fact a redundant data point, Redundant as far as trying to find a separator is concerned. And these data points, the ones that lie closest to the separator, are precisely the ones that are called the support vectors. So the support vectors are the data points, which are the only ones that matter as far as finding a hyperplane separator is concerned.
+
+
+ 
+
+To summarise, support vectors are the points that lie close to the hyperplane. In fact, they are the only points that are used in constructing the hyperplane.
+
+ 
+
+Let's see an example next. 
+
+Support Vector Classifier
+-------------------------
+
+Now let’s understand how support vectors are used in constructing the hyperplane that separates intermingled data, through an example.
+
+
+00:00:00 - 00:00:08
+Introduction to data set separation problem
+You take, say, a data set of this kind where the pluses and minuses are intermingled with each other.
+00:00:09 - 00:01:04
+Challenges with finding a hyperplane for intermingled data
+How do you find a hyperplane which has all the pluses on one side and all the minuses on the other side? Now you cannot. There simply doesn't exist any such hyperplane. So clearly the earlier formulation that we had was a little unrealistic because almost always you will not see a clean data set where you have all the points of one category cleanly separated lying on one side and all the points of the other kind lying on the other side. And then you can go ahead and build a hyperplane which lies in between. So realistically you will need to deal with cases and and those are the ones that you will encounter more often.
+00:01:06 - 00:02:10
+Alternative separators and introduction to kernels
+You will need to deal with cases where the two categories of data points are intermingled with each other and they are not cleanly separable. Let me give you a more intuitive examples. So suppose I had data set like this. Then the separator that I'm talking about is something like this. Here is my separator which cleanly separates the pluses from the minuses. But then this is not a hyperplane at all, right? So I would need to look for a separator, which is of a different kind. It's not a hyperplane anymore. So if you have a data set like this, then I should be looking for a separator which is not necessarily a hyperplane. We will look at how we will do that a little later. That's when we would need the notion of a kernel.
+00:02:11 - 00:03:17
+Handling nearly separable data with hyperplanes
+So if you look at this data set, there is a distinct difference between this and the other extreme example that I gave earlier. In the earlier example, there was no hope that you can even think of hyperplane separator between the two classes. But here it's fairly evident that the two classes are almost separated. There is a bit of intermingling, but it's not a whole lot. You do find a scattering of a few points here. There. Some minuses seem to be on the plus side, and some pluses seem to be on the minus side, but overall, by and large they seem reasonably well separated. But but but still, if you're looking for a strict separator that clearly separates one class from the other, you're not going to find it. But it is not such a bad, hopeless situation.
+00:03:17 - 00:04:47
+Modified formulation for maximizing margin with misclassifications
+So these are the kind of cases that we would actually like to handle using hyperplanes though, but not with the strict assumption that the two classes are completely separable from each other. So how do we tweak our earlier strict formulation into something that will accommodate a data set of this kind? So intuitively, if I had to find a separator for this, I would probably find something of this kind. So why did I pick on a line like this? Because this seems to be the one that minimizes the the cross classification. By enlarge, all the points on this side are plus, all the points on this side are minus, and this is the line that seems to minimize the number of incorrect classifications, the pluses lying on the minus side and the minuses lying on the plus side. So our modified formulation without the strict separability assumption will be just to find the separator which tries to maximize the margin while keeping the number of misclassifications as low as it possibly can. So I am not going to assume 0 misclassifications.
+00:04:48 - 00:05:11
+Introduction of slack variables for flexibility
+So to be able to do this, I introduce the notion of a slack variable. With every data point I introduce a slack which is which I denote as epsilon I.
+
+
+The hyperplane that allows certain points to be deliberately misclassified is also called the Support Vector Classifier. 
+
+
+ 
+
+The support vector classifier works well when the data is partially intermingled (i.e. most of the data can be classified correctly with some misclassifications).
+
+ 
+
+Similar to the Maximal Margin Classifier, the Support Vector Classifier also maximises the margin, but it will also allow some points to be misclassified, as shown in figure (A & B) below.
+
+How do you differentiate between soft margin and hard margin?
+
+The soft margin is used in constructing the Soft Margin Classifier( Support Vector Classifier) which allows some points to be misclassified, whereas the hard margin ensures no points are misclassified.
+
+The Slack Variable
+--------------------
+
+As you learnt, the Support Vector Classifier allows certain points to be deliberately misclassified, but the Maximal Margin Classifier strictly separates the data into two halves (recall the spam-ham example).
+
+ 
+
+Remember how you formulated the Maximal Margin Classifier equation in our earlier discussions (i.e. Equation. Similar to that, let's learn how to formulate an equation for the Support Vector Classifier.
+
+00:00:00 - 00:00:40
+Introduction to margin maximization in SVM
+If you recollect in the earlier formulation, the key criterion that we had was that for every data point I we had. To satisfy this criterion. We had to ensure that Li into the dot product of West with Yi is greater than or equal to the margin M and we were trying to maximize this margin. Now I am going to rewrite this slightly differently.
+00:00:41 - 00:01:16
+Introduction of slack variable epsilon in SVM
+I am going to include a slack and say this must be greater than or equal to M into one minus epsilon I. What does this mean? Intuitively I am allowing the this which is the distance of this data point from the hyperplane.
+00:01:17 - 00:02:08
+Understanding epsilon values and their implications
+In the strict formulation I had to make it more than M, but I am willing now to make it less than M because if I make epsilon I non 0 something positive it will actually become less than M So I am allowing the data points to come closer to the hyperplane. I can actually do even worse by making epsilon I more than one and even allowing this to become negative. When this becomes negative is when you are allowing the data point to fall on the other side. So any of those trade data points which fall on the wrong side of the hyperplane, you would see that their epsilon values would be greater than one.
+00:02:08 - 00:03:05
+Controlling cumulative error with constraints
+The ones which are being classified correctly but which are uncomfortably close to the hyperplane would have their epsilon values between zero and one, and the ones which are clearly correctly classified will have an epsilon of 0. So epsilon I is in some sense the tolerance that we allow with every data point to either come uncomfortably close to the hyperplane or even stray on the wrong side. But we want to ensure that the cumulative error that we commit with these epsilon i's is something that we can control that we don't want that to go out of hand.
+00:03:05 - 00:04:39
+Role of cost parameter C in SVM
+So what we do is we put an additional constraint along with the other. So this was 1 constraint we had that the other constraint which ensured that the the coefficient vector forms a unit vector. So these were the two kinds of constraints we had earlier. Now we are going to put one more constraint. We want to ensure that the total error that we commit to make everything positive is less than some C or it could just be epsilon. So this is the total tolerance I have to the amount of error that I can commit across all the data points. And this is the total error that I am willing to accept. So I set a cost parameter. Please note that the epsilon that we are introducing are variables. These are not quantities that you are going to directly control. So when we solve the SVM problem, we are not going to say upfront what the epsilons are going to be. We are going to let the the optimization routine figure out what the epsilons must be.
+00:04:40 - 00:05:02
+Optimization routine and its outputs
+What we control though is the the limit on the total cost that we are willing to incur and that is my C So I control the way the SVM behaves and the eventual model where it is going to produce by controlling the value of C.
+00:05:02 - 00:06:12
+Trade-offs in setting the value of C
+The Epsilons and the WS are what will come out of the optimization solution that one of the standard routines will do for us. So this clearly introduces some trade-offs. We need to understand how the solution might get affected if you change your C, and those trade-offs are not very difficult to see. If you make the value of C very small, if you make it very, very tight, something very close to 0, what you are telling is that, look, I am not willing to accept too much error. My tolerance for error is going to be very, very small. So you are actually pushing the optimization routine towards trying to find a strict separator. Just remember that for a strict separator, all the epsilons are going to be 0.
+00:06:13 - 00:07:28
+Implications of C on bias and variance
+So if I make my C very small something close to 0, you are forcing all the epsilons to be 0 or very close to 0. Which is a different way of saying that I am not willing to accept anything other than a strict separator. On the other hand, if you make your C value very large, then you are letting your model very loose and you're signaling that you are willing to accommodate a lot of errors. So a lot of points here there will also be acceptable by the model. So this also has implications in terms of the the bias and the variance that the moment you make your C very, very loose huge, right. So you will you will hardly have any any variance in the model because I mean anything is acceptable. So it will basically produce 1 generic model. But that will make a lot of error. So the bias is going to be high.
+00:07:29 - 00:08:13
+Empirical determination of optimal C using cross-validation
+On the other hand, when you try to force the model to find a strict separator by making the value of C very very small, then if you find such a separator, it's going to be pretty accurate. But then for any small change in the in the data set, your model will become wildly different, which means the model variances are. So that's the trade off that you need to be aware of. And the actual value of C, which is just right for your data set, is typically something that we would figure out empirically using cross validation.
+
+We looked at the concept of the slack variable (ϵ). A slack variable is used to control misclassifications. It tells you where an observation is located relative to the margin and hyperplane.
+
+
+ 
+
+For points which are at a distance of more than M, i.e. at a safe distance from the hyperplane, the value of the slack variable is 0. 
+
+ 
+On the other hand, if a data point is correctly classified but falls inside the margin (or violates the margin), then the value of its slack ϵ is between 0 and 1. In the plot given below, the blue and the red points, which fall inside the margin, are examples of such points.
+Finally, if a data point is incorrectly classified (i.e. it violates the hyperplane), the value of epsilon (ϵ) > 1. The incorrectly classified blue and red points are such examples. 
+
+ 
+So you can see that
+
+Each data point has a slack value associated with it, according to where the point is located.
+The value of slack lies between 0 and +infinity.
+Lower values of slack are better than higher values (slack = 0 implies a correct classification, but slack > 1 implies an incorrect classification, whereas slack within 0 and 1 classifies correctly but violates the margin).
+ 
+
+Once you understand the notion of the slack variable, you can easily compare any two Support Vector Classifiers. You can measure the summation of all the epsilons(ϵ) of both the hyperplanes and choose the best one that gives you the least sum of epsilons(ϵ). The summation of all the epsilons of each data point is denoted by cost or 'C', i.e.
+
+Equation
+
+ 
+
+When C is large, the slack variables can be large, i.e. you allow a larger number of data points to be misclassified or to violate the margin. So you get a hyperplane where the margin is wide and misclassifications are allowed. In this case, the model is flexible, more generalisable, and less likely to overfit. In other words, it has a high bias. 
+
+ 
+
+On the other hand, when C is small, you force the individual slack variables to be small, i.e. you do not allow many data points to fall on the wrong side of the margin or the hyperplane. So the margin is narrow and there are few misclassifications. In this case, the model is less flexible, less generalisable, and more likely to overfit. In other words, it has a high variance. 
+
+ 
+
+In the next lecture, you will understand the importance of C and the intuition behind C graphically.
+
+Which of the following steps should be taken when the SVM is overfitting?
+
+
+Yes, adding more training points and increasing value of C will reduce model overfitting problem. Because if you train the model on a large number of data, it will try to learn from the data rather fitting to the each data points. and if you increase the value of C, ultimately you are allowing your model to misclassify some data points. And, hence, the model will not be overfitted in these two cases.
+
+Comprehension - Notion of Slack Variables
+
+
+As you have already learnt, the mathematical formulation for the Maximal Margin Classifier can be expressed as
+
+
+ 
+
+Equation
+
+ 
+
+where
+
+Equation represents the label of the ith observation (such as spam(+1) and ham(-1));
+W represents the vector of the coefficients (or weights) of each attribute (for example, if you have 3 attributes, Equation).
+Equation represents the vector of the attribute values for the ith row, e.g. Equation for 3 attributes.
+ 
+
+Thus, the dot product Equation is simply the value of the expression obtained by putting the ith data point in the hyperplane equation, i.e. Equation.
+
+ 
+
+Thus, Equation is less than, equal to or greater than 0, depending on the location of the i-th data point with respect to the hyperplane. Also, note that the value of Equation gives you the distance of the ith data point from the hyperplane.
+
+ 
+
+M represents the margin, i.e. the distance of the closest data point from the hyperplane. 
+
+ 
+
+If you impose the condition Equation on the model, then you are implying that you want each point to be at least a distance M away from the hyperplane. But unfortunately, few real datasets will be so easily, perfectly separable. Thus, to relax the constraint, you include a ‘slack variable’ Equation for each data point i.
+
+ 
+
+Thus, you modify the formulation to Equation,
+
+ 
+
+Where the slack variable (Equation) takes a value between 0 to infinity.
+
+ 
+
+Depending on the value of Equation, the ith data point can now take any position - it can fall on the correct side of the margin (and a safe distance away), or inside the margin (but still correctly classified), or even stray on the wrong side of the hyperplane itself.
+
+ 
+
+Now, attempt the following questions.
+
+epsilon i >1 is valid for:
+
+
+If you increase the value of epsilon(​ε​) from 0 to 1 the right side i.e ​M(1−ei)​ of the equation ​liX(Wi.Yi)>M(1−ei)​ will be always positive or equal to zero. It means that the data point is correctly classified by the given hyperplane. But if the value of epsilon(​ε​) is greater than 1, that means M(1−ei) has a negative value, in which case the data point falls on the wrong side of the hyperplane.
+
+If the ith data point has epsilon(ei) = 0, then:
+
+Yes, In this case, the value of ​liX(Y.Wi)>=M​, which is exactly same as the maximal margin classifier. In this case, the data point falls on the correct side of the hyperplane.
+
+3.
+
+As you learnt, the summation of all the epsilon is equal to cost “C” So, what happens when C is large, say 100, and what happens when C is small, say 5?
+
+Compare the two cases on the basis of:
+
+In which case would a higher number of points be misclassified?
+
+In which case is the model more likely to overfit?
+
+Select the correct option
+
+If C is large, then the slack variables ​εi​ can take higher values. And you know that when slack(​εi​) > 1, the point is misclassified, between 0 and 1, it falls inside the margin, and when slack(​εi​) = 0, it is correctly classified. Thus, for a higher C, more points will be allowed to get misclassified or fall inside the margin (compared to a lower C). 
+
+ 
+
+On the other hand, a lower C implies that each slack(εi​) will have to take a lower value, and thus not be allowed to stray on the other side of the margin or the hyperplane. This is a stricter condition. In other words, a lower C does not give the model freedom to misclassify even a few points, and thus the model tries to overfit the data.
+
+
+Cost of Misclassification
+------------------------
+As explained in the previous lecture, C is the sum of all the values of slack variables. The parameter cost of misclassification (C) represents the cost of violations to the margin and the hyperplane. Thus, the parameter C is called the tuning parameter, one of the hyperparameters in SVM.
+
+
+ 
+
+Let’s now focus on understanding how C affects the model fit. Prof. Raghavan will now tell you how the value of C affects the decision surface and misclassifications.
+
+00:00:00 - 00:00:43
+Introduction to SPM solution and role of C
+So here's a simple example for you to get some intuition about what role the choice of C could play in the SPM solution, and it'll also highlight the kind of trade-offs that it implies. So let's take a simple imaginary data set. So there are some crosses and minus. As you can see these are very well separated. And then let me add a plus here. So this is your data set.
+00:00:45 - 00:02:41
+Example of data set and outlier identification
+Now when you look at this, its is fairly obvious that this plus is actually an outlier. Is it it? It doesn't really belong to this, though it has been classified as a plus. It doesn't seem to be part of this gang, it seems to be more a part of this gang. So because it is actually closer to all these points than it is to these points. However, if you're going to try finding a strict separator, you would have actually found a separator like this. Because you want to be correct for every one of these data points, and because this has been classified as a plus, you would put your separator here. But then this is really not what it is supposed to be like because you, you, you know that from the way these points are separated in future, if you get a new, say, minus point, it's very likely that that minus point is here. And you, you're actually going to find a number of them sitting here. So for future data points, this separator that you found from this data set is actually incorrect. It's it's going to make a whole lot of mistakes later on though. You are making 0 error on the training data set. And all this happened because you believed your original data set and you were trying to overfit and make sure that the model that you come up with is absolutely correct on everyone of the data points.
+00:02:41 - 00:03:08
+Impact of small C value on model overfitting
+And this is exactly where the role of C will come in. If I keep my C to be very, very small, so something close to 0, that means I'm not going to accept any error. So I'm actually forcing the model to overfit. And this is precisely the sort of model that my SVM would have come up with.
+00:03:08 - 00:04:09
+Effect of larger C value on model accuracy
+On the other hand, if I I'm willing to make some mistakes, suppose I say C is 10 or 100 or whatever. So this means I am willing to make mistakes so it will find the model that best that is best provided the cumulative error does not exceed 10. And if you use this value of 10 as an illustration, very likely it would have actually found this as a model. So effectively what you're doing is you're willing to treat this as a mistake and live with it. And you're actually doing more justice to the bulk of the data points, which are clearly well separated. And I'm finding a cyberplane which is in the middle of these two.
+00:04:09 - 00:04:57
+Trade-offs in choosing C for model generalization
+So by accepting certain mistakes and by tolerating a certain amount of error, error, you will actually do much better in the long run than trying to be very, very strict and setting your C value to be extremely close to 0. So this highlights the trade off. So in a, when you're faced with the real problem like this, for instance, this would actually be a better choice, for instance than this, because this choice makes the model more generalizable. It makes it far more accurate in the long run than a model which enforces strict separability between the data points.
+
+
+So to summarise, misclassification can be controlled by the value of cost or C. If C is large, the slack variables (epsilons( ϵ)) can be large, i.e. you allow a larger number of data points to be misclassified or violate the margin; and if C is small, you force the individual slack variables to be small, i.e. you do not allow many data points to fall on the wrong side of the margin or the hyperplane.
+
+ 
+
+So this is how the cost 'C' influences your decision of a best-fit hyperplane. In the next lecture, you will apply the concepts you have learnt to solve a real-life problem - classifying an email as spam or ham.
+
+Yes. Even though hyperplane 1 allows a few misclassifications, it maximises the margin so the test points are classified correctly and the model is not biased.
+
+
+
+
+
+

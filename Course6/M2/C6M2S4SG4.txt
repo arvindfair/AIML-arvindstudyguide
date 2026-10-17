@@ -1,0 +1,1203 @@
+Introduction to SHAP and its Types
+
+
+00:00:00 - 00:00:12
+Introduction to SHAP Method
+So let us understand sharp method. Sharp basically is a short form sharp. Leave additive explanation to understand sharp method.
+00:00:12 - 00:00:36
+Cricket Analogy for SHAP Method
+Let us take a very simple cricket analogy. If we are saying like let's take a cricket Indian team example, OK, so I'm a selector of an Indian cricket team and now I want to understand if we win the match, why did our team win this particular match?
+00:00:37 - 00:02:01
+Understanding SHAP in Machine Learning Models
+Or I can also able to understand how much did each player contribute to the win. So basically the model, whatever we build is let's say is the cricket team. So machine learning model work like a team, right? Where each player we have like 11 players with batsman, bowler, all rounder has certain features like you know, we can say that each player has eight runs. You know, how is the form, all those things. So what we can do, we can have a better understanding of like predicting India will win that is a simple predictive or a simple prediction algorithm, right? But in Shapley, what we can do, we can understand who helped us winning that match. Let's say I can ask whether Rohit, Virat, Mumba or Jadeja, right? So now what happens here is which particular feature play in an mill model instead of a players, there are no players, right? There are features so sharp can help us. Which feature helped us with this prediction?
+00:02:03 - 00:02:42
+Cooperative Game Theory and SHAP
+OK, so you can come to that particular feature and you can say, OK, this particular has helped me make the better prediction like in a cricket analogy again, if I go back, whichever player help US win the match, we give them player of the match award, right? Same thing here, we can give that particular feature as a player of the match award, OK, so it is coming with that simplistic analogy. OK, so it is coming from a cooperative game theory.
+00:02:42 - 00:03:57
+Credit Allocation in Cooperative Game Theory
+I'll just explain it in a little bit. So it uses shapely values where each feature will be acting as a player. OK, it is not a surrogate model. So let us understand briefly what is cooperative game theory. A group of players cooperate to achieve a common goal, right? In a cricket team, all the team members, the common goal is to win that particular match. So each player contribute differently to the outcome. So the challenge is to allocate credit or pay off fairly, right? Basically, we have 11 players and all the 11 players are helping us to win the match. Somebody might be contributing in fielding, some people are contributing in, you know, scoring run, some people are taking good wickets. A wicket keeper is doing excellent job. Now our job is to identify how each player is contributing and how we can give them the credit. How I can choose the player of the match.
+00:03:59 - 00:05:14
+Types of SHAP Methods
+So in the mill context, right features is player model, prediction is payoff. So what are the shapely values? It measures each player's contribution by its average marginal impact across all possible correlations. Like. Similarly shaft compute each features contribution by averaging its marginal impact across all possible feature subset. What are the different types of shafts? There is a kernel shaft which is model agnostic, but it is computationally expensive. Basically any type of mill algorithm you are building will work but it will become computationally. You might require lot of resources here. Tree shaft which will be used for tree based models like Xebost light, GBM boosting or random forest. Linear shaft used for linear models like linear equation. Then there is a deep shaft which we will use for deep neural networks. Permutation shaft. Again, model agnostic, but little bit slow.
+
+
+Example of Theoretical SHAP
+
+
+00:00:05 - 00:00:17
+Introduction to predictive modeling with dataset features
+Let us understand how theoretical shaft works. So here we have a data set which has two particular features one is size, the second one is bedroom and third one is price.
+00:00:17 - 00:00:28
+Developing a simple linear regression model
+Now for this particular simple data set we can develop a predictive model. So I am using a simple linear regression model and I have developed a predictive model.
+00:00:28 - 00:01:04
+Understanding feature importance in predictive models
+So my predictive model says my price which I can calculate based on this data set is 20 OH .04 size 5 petrums. Now I want to understand how my each feature is important or influencing the outcome right? So to do that what I need to do I need to study all the possible instances and their impact on the outcome or the predicted value.
+00:01:05 - 00:02:06
+Identifying feature subsets for analysis
+So we have to do that three times. But for better understanding and to make it concise we can take one particular instance. So here I am taking a instance which has size 1000 and number of bedroom is 2 and the price is 70,00,000. So now I want to understand for this particular instance the impact of size bedroom on the Tri cell. So how I am going to do that. So for that I need to 1st identify my number of features which we did. So number of features here is 2 and with this particular number of features we need to find out all possible subsets. So the first possible subset is null set means this particular subset does not have the information of size or bedroom.
+00:02:07 - 00:03:00
+Calculating baseline prediction for null set
+And then we have a subset called as size, we have a subset which is bedroom and then we can have the availability or the information that is size and bedroom. So 2 features. So if you use all the possible combinations right So it is 4 which we got it OK now what we have to do, we have to calculate first of all baseline prediction. When I don't know any value I am going to calculate for my null set. A baseline prediction is the average value of the outcomes for the output. So what I am going to do, I have the three outcome values that is seventy 95120.
+00:03:00 - 00:04:06
+Calculating prediction values for individual features
+So if I take the average value of that that will be 95. So which we have calculated here. Now we got the baseline value right now we need to calculate the value for both of the feature. So basically our end goal is to get the shaft value right, the size and the sharp value for bedrooms for that particular instance. What is our instance? The instance is the size is 1000 and the number of bedroom is 2. So for that first we calculated for null value or a baseline prediction. OK so we need to now calculate only for size. How I am going to get it So for only for size I know the size that it is 1000 but I don't know the value for the bedroom. So what I can do I can take the average value of the bedroom.
+00:04:06 - 00:05:00
+Predicting values with known and unknown features
+We have taken bedroom mean is 2343. So we substituted here that will become 200.041000 five. So we got the value for size. So we calculated the value when we know the instance size but we did not know the bedroom. OK, Now we will calculate for bedroom. So we know the value of bedroom which is 2 for that particular instance and size we don't know. So we will take a average prediction. So we have taken average prediction 1000 one 502,000 by three and substitute it. We get the prediction value when we know only the bedroom. Now we got we predicted value only when we know this bedroom.
+00:05:00 - 00:06:19
+Calculating weights for feature subsets
+We got it when we only know the size. We got the value when we don't have both the values which is a null set. Now we can calculate when we know both the values with that also we know when we have substituted the instance. So next thing is to calculate weight. So how we are going to calculate weight. So this is the formula. So here number of features are OK but when for this size so we have the all possible 4 combination right We had null, we had size, we had bedroom and we had size and bedroom. So we had this four possible combination. So when we are studying for feature size we can remove these two possible combinations. So what is left is null and bedroom. So null and bedroom subsets. So for null and bedroom what will be the weight. So wait for null when S is equal to 0 and F is 2 we can substitute into this particular equation. So for this particular thing we got 0.5 and for bedroom we just need to substitute S is equal to 1F is 02 we can substitute in this for equation we get 0.5.
+00:06:19 - 00:07:02
+Weight calculation for bedroom feature subsets
+So for both possible subset when we are studying size right out of four two eliminated 2 remain so the weight came for the null and 0.5 for the bedroom. So if I want to study for the bedroom right what will be my subset come it will be null set and size right? Why so all my possible 4 subset 5 size bedroom and size and bedroom. So these are the four possible values. So I am studying for bedroom I can remove these two. So these two will remain. So these are the two one.
+00:07:02 - 00:08:13
+Calculating marginal contribution of features
+Now again I need to calculate weight, weight for this particular thing right? When SU0F will remain this particular instance we are getting everything as same. So for this one also S is 1 and F is 2. So wait for bedroom also we will get it as 0.5 M 0.5 for bedroom feature as well. OK now we need to calculate marginal contribution. OK so the marginal contribution is when it is empty. So we need to calculate 75 that is the size -95 empty value right? And when we are calculating for bedroom, for bedroom it is 79 so we got the marginal contribution 20 and 20. We know the weights so we can calculate multiply weights into marginal contribution. So we got the Shapley value for size is 20.
+00:08:14 - 00:09:13
+Calculating Shapley values for features
+In a similar way I can calculate the Shapley value for bedroom which will become 9095, right For bedroom multiplied by weight, 7075 multiplied by weight which is 5. Now we got the shapely value as 20 and five. So what exactly this is telling us how we are going to infer. So 20 means for this particular instance the contribution of size is bigger and for contribution of bedroom is small and the values will have 20 impact on the prediction value for that particular instance. Now I want to understand from a whole data set what I am going to do in that case.
+00:09:13 - 00:09:30
+Inferring feature contributions from Shapley values
+I need to calculate for all possible instances. We had three rows so we can calculate for three instances. Then we can take the average value. OK, once we take the average value that will become for complete data set.
+
+
+Kernel and Tree SHAP
+
+00:00:00 - 00:01:03
+Introduction to Kernel SHAP and binary encoding of subsets
+So now let us understand kernel shop. So kernel shop, what we do here is subsets are binary encoded to create new data points. So if you have two subsets or three subsets for example here if the feature is available, if it is not then it will become one or zero. Let's say we have 3 features here ABC. So if I'm taking a subset A then how I'm binary encoded it will be 100. OK, so new data points are used to fit weighted linear regression. Because the the data will be keep on coming we will follow weighted linear regression. Weights are calculated using Shapley formula. The formula is given here. We use this formula to calculate the weights and then intercept denotes the baseline prediction and then coefficient denotes the Shapley value for that particular feature. So that's how we do the kernel shaft and now the tree shaft.
+00:01:04 - 00:02:01
+Tree SHAP method and baseline prediction calculation
+So tree shaft, let's say we have a simple tree, define 2 features A&B and then it has this particular conditions is a is less than five? Yes, if B is greater than three. If no, if a is greater than 5, then pretend and based on this condition, it will predict 62 or 10. So these are the three possible values we have. So let us say we have taken a scenario where A is equal to 4B is equal to two. Then the prediction will become two. Why a is less than five? Yes, B is greater than three No. Then predict two. It has predicted 2. So what we do here we calculate again the baseline prediction. So how to do baseline prediction? The output values for each possible scenario that is 2 + 6 + 10 divided by three we got the baseline prediction. If the symbol was not uniformly distributed then weighted average needs to be calculated.
+00:02:01 - 00:03:00
+Marginal contribution and SHAP value calculation for features
+So once we calculate the baseline prediction, we calculate marginal contribution for each feature. So how we do it, If A is unknown then the expected prediction is 6. If A is known A is equal to 4 then the expected prediction is 4. Contribution of feature A is -2 that is shape of A. Like this we can do it for B. So B is contribution if B is known minus if B is unknown. Why we are taking 4 here if B is unknown because it is 2 + 6 / 2 so it is 8 by two that's why we are getting 4. So we calculate the shaft value of B. So we can say that both the features have the same shaft values. In cases more present weighted average can be taken. So that's how we can use tree based shaft method. So how we actually implement this thing in the real life.
+00:03:00 - 00:03:22
+Implementation challenges and computational considerations in SHAP methods
+So first thing is enumerating all subset is like you know getting everything and becomes computationally expensive when we are talking about a bigger data set or a large feature data set. So kernel sharp helps us using sampling so we can take the smaller samples and then work 3 sharp users optimized algorithms.
+
+
+Features of SHAP
+
+
+00:00:00 - 00:00:18
+Introduction to SHAP and Additivity
+Features of sharp is basically it ensures additivity. What does it mean? It means that all the sum of sharp values of all features plus base is equal to model prediction. So guarantees consistency.
+00:00:19 - 00:00:32
+Consistency in SHAP Values
+It what does it mean? If a feature contribution increases in another model, its sharp value cannot decrease, that also increases. So advantages theoretically very sound.
+00:00:33 - 00:00:54
+Advantages of SHAP for Explanation
+We can really understand who is influencing what and how we are coming to this particular values and works both for local and global explanation. Only limitation of Sharp is it is computationally expensive for large feature sets and in some cases require careful interpretation in correlated feature scenario.
+00:00:55 - 00:01:03
+Limitations of SHAP in Large Feature Sets
+If there are two features which are correlated and we have not done proper data preprocessing, then we need to be more careful.
+
+
+
+
+
+SHAP Demo-Numerical Data 1
+
+00:00:00 - 00:00:57
+Introduction to SHAP and its application to bike sharing data
+So we can now look at an implementation and a demo for how SHOP works. So we will do two things. We will use SHOP for one example that we have used earlier. We used that in the case of PDP, the bike sharing example where you have different conditions, the temperature, humidity, wind speed and the day, is it a weekday or a weekend and so on. Is it winter, summer, all those things, right. And so each combination of these factors, we had a number which said how many times bike rentals happened on that particular day, OK. So we were using a random forest model to predict the number of bike shares that will happen on that particular day given these conditions. And we are trying to explain these, right. And our PDP model, if you remember, actually showed that temperature was the most influential, humidity came next and wind speed came last, right? Yeah.
+00:00:57 - 00:01:11
+SHAP analysis on bike sharing data and image dataset
+So if we do a sharp kind of analysis on the same data set, what will you see is what we would look at in the demo and we will also see how we can apply SHAP to an image data set, right?
+00:01:12 - 00:01:58
+Using random forest and gradient boosting regressors for prediction
+If I give you an image and use a pre trained model that will give you a classification of the image, can you identify parts of the image which were the most influential in the model saying whatever it did? OK? So this image is will be a new application that we have not looked at in the earlier demos online in PTPIC. This is the bike sharing data set. It's exactly the same data set, OK. And we are again using pretty much the same model for predicting the count. So we used random forest and gradient boosting regressors. Those are the two things that we are going to use again for this. And the features are exactly the same, OK? Yeah.
+00:01:58 - 00:02:58
+Implementation of SHAP estimates using Numpy
+Now what you do is to do the shop estimates for each of the features. This is basically how we will do. OK. So again, the implementation is entirely based on Numpy. It is a vectorized implementation of the whole thing. OK? So the bulk of the work is done by this particular function called shop OK, where you give the explanation data points, OK, So I give you say 1 or maybe a few in this case to show I'm using five data points. So these are the explanation samples. These are the ones for which you're trying to generate an explanation. And the first thing I do is create a mean reference data as we discussed, OK? And that is what this is doing. And so I have the reference data, which is basically the entire training data set. And I'm doing a mean over all of those. And that's what gives me the mean reference data, OK?
+00:02:58 - 00:04:05
+Generating mean reference data and coalition samples
+OK, here I'm using the term coalition, which is what was used in original Shapely's paper. A coalition is the subset, OK, which players are working together towards the output, OK, So coalition is any subset of the overall set of features that you have. And yeah, so the first thing you do is generate the coalition samples, OK? So there are two kinds of samples that I generate. 1 is inclusive sample. The other is the exclusive sample, the INCL&EXCL. You can see that, right? So the inclusive samples are the ones that include explanation. Yeah, The feature for which you're trying to generate the shaft value, right? And exclusion is without that feature, OK, as we discussed. So it will generate all subsets without that feature. And then we do 2 evaluations, 1 is by including that feature from the original data point and the other by excluding that feature from the original data point.
+00:04:05 - 00:05:25
+Inclusive and exclusive samples in SHAP analysis
+So we have two samples, 2 sets of samples, inclusive and exclusive. Yeah. You can also add some weights to those samples if you want. That's an additional thing. So what you would intuitively expect is that say, suppose there is a large subset sitting already, right? Take the same example, right? Say there are five students participating, working together towards a project, OK? And they got 8, let's say. OK, in terms of marks now. So let's take two scenarios. Let's just go back to the board so it will be clearer. Delta of no, let's say 3 union 1 minus D3 is something say D1 and say D345 union 2 minus D345 was D2, OK.
+00:05:25 - 00:06:56
+Importance of incremental contributions in SHAP analysis
+So basically what I'm saying is there was only three OK. And I'm looking at the incremental contribution of one on top of three, OK. And in the other scenario, I already have 345 working on it, on the project, and I'm looking at the incremental contribution of two on top of what 345 could have done. OK, So what changed after two joined the team here? What changed after one joined this team? OK, yeah. Now so I have these incremental contributions because of one and two. Which of these would you give more importance to? I would clearly give more importance to this than this. And the reason is I'm not saying D2 is greater than D1. I'm saying I would give more importance to this. Why? Because 2 has been able to contribute something on top of an already large team. If you already have 10 people sitting there and just by me going there, I'm able to make a significant contribution, that is clearly far more valuable than contributing when there is nobody else, right? So if you are the only one who is joining, then obviously you will show a big contribution. But if there are already 10 people sitting there, your additional contribution will be significant only if you are really bringing something very, very valuable to the table which the other 10 did not have. Got it.
+00:06:56 - 00:07:52
+Weight attribution in SHAP analysis
+So the weight that you would attribute to each of these things would depend on the size of the original subset that you were looking at, right? So that is the weight. The actual formulation does not use the weights, but you put if you want to take care of the weights, you can add them. And this code actually makes provision for that. And yeah, once you have the inclusive and exclusive samples, then it is straightforward. Just make the predictions on the inclusive samples, exclusive samples, yes. And then just take the DD is the inclusive predictions minus the exclusive predictions and that's it. OK, so this part is just the the sanity check. If you remember at the beginning we said that shapely values for each of the different features, when you add them up, it should actually give you the total contribution for that particular data point, right?
+00:07:53 - 00:08:19
+Sanity check for SHAP values and plotting results
+I'm basically doing the check here. I have got the shapely values for each of the features and if you add them all up, does that give you the total thing at all? This is just a sanity check. The actual sharp values are just the mean across all the permutations that you had taken. OK, and that's it. The rest is just plotting it and showing the things. OK. So the bulk of the work is being done by the Generate Coalition samples?
+
+
+import os
+import numpy as np
+import pandas as pd
+from pandas import DataFrame as DF
+from numpy import ndarray as Array
+from typing import Any, Dict, List, Tuple
+from matplotlib import pyplot as plt
+DATASETS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Datasets'))
+pd.options.display.float_format = '{:.5f}'.format
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
+pd.set_option('display.max_colwidth', None)
+
+from sklearn.model_selection import train_test_split
+
+class ShapData:
+    """Data class for images where xp-space is the superpixel space for the images"""
+    def __init__(self,
+                 dataset_name:str,
+                 drop_cols:List[str]=None,
+                 feature_labels:List[str]=None,
+                 target_label:str=None,
+                 test_size:float=0.2):
+
+        dataset_file = os.path.join(DATASETS_PATH, f'{dataset_name}.csv')
+        dataset = pd.read_csv(dataset_file)
+        print('Sample of the Raw Dataset')
+        print(dataset.head())
+        if drop_cols is not None:
+            dataset.drop(columns=drop_cols, axis=1, inplace=True)
+        print()
+        print('Sample of the Cleaned Dataset')
+        print(dataset.head())
+
+        self.ref_data, self.test_data = self.split_dataset(dataset,
+                                                           test_size=test_size)
+        print()
+        print(f'N Train Datapoints: {len(self.ref_data)}, '
+              f'N Test Datapoints: {len(self.test_data)}, '
+              f'N Features: {len(self.ref_data.columns) - 1}')
+        self.n_train, self.n_test = len(self.ref_data), len(self.test_data)
+        self.features = list(dataset.columns)[:-1]
+        self.target = list(dataset.columns)[-1]
+        self.n_features = len(self.features)
+        self.feature_labels = self.features if feature_labels is None else feature_labels
+        self.target_label = self.target if target_label is None else target_label
+
+    @property
+    def dim(self):
+        return self.n_features
+
+    def split_dataset(self,
+                      dataset:DF,
+                      test_size:float=0.2) -> Tuple[DF, DF]:
+        return train_test_split(dataset, test_size=test_size)
+
+    def get_data_sample(self,
+                        subset:str,
+                        sample_size:int=None) -> DF:
+
+        data = self.ref_data if subset == 'ref' else self.test_data
+        samples, targets = data[self.features].to_numpy(), data[self.target].to_numpy()
+        if sample_size is not None:
+            n = samples.shape[0]
+            samples_idxs = np.random.choice(np.arange(n), size=sample_size, replace=False)
+            samples, targets = samples[samples_idxs], targets[samples_idxs]
+        return samples, targets
+
+from math import prod
+
+class ShapModel:
+    def __init__(self,
+                 model):
+        self.model = model
+
+    def predict(self,
+                datapoints:Array) -> Array:
+        # Flatten the feature array into 2d array --- the feature dimension remains as is
+        flat_size = prod(datapoints.shape[:-1])
+        return self.model.predict(datapoints.reshape(flat_size, -1)).reshape(*datapoints.shape[:-1])
+    
+    def train_and_test(self,
+                       train_data:Array,
+                       train_target:Array,
+                       test_data:Array,
+                       test_target:Array):
+
+        self.model.fit(train_data, train_target)
+        return self.model.score(test_data, test_target)
+
+import math
+
+class Shap:
+    def __init__(self,
+                 ref_data:Array,
+                 model:ShapModel,
+                 n_perms:int=10):
+        self.ref_data = ref_data
+        self.model = model
+        self.n_perms = n_perms
+        self.n_perms2 = (2 * self.n_perms)
+        self.n_features = self.ref_data.shape[1]
+        self.n_ref = self.ref_data.shape[0]
+
+    def n_samples(self, n_examples:int): return (n_examples * self.n_perms)
+
+    def generate_coalition_masks(self, n_examples:int):
+        """Generate the masks used to apply permutations to the features
+        - n_perms permutations for each sample and the masks correspond to 
+        both the l2r and r2l coalitions for every feature"""
+        nsamples = self.n_samples(n_examples)
+        def restore_perm_and_reshape(a:Array):
+            a = np.take_along_axis(a, revs, axis=1)
+            return np.reshape(a, (n_examples, self.n_perms,
+                                  self.n_features, self.n_features))
+
+        # Generate 'n_sample' permutations of the features
+        idxs = np.tile(np.array([[i for i in np.arange(self.n_features)]]), 
+                       (nsamples, 1))
+        rng = np.random.default_rng()
+        perms = rng.permuted(idxs, axis=1)
+
+        # Get the inverses of the permutations and  expand it in the feature dimension (dim 2)
+        # so the same position permutations are applied to each sample-feature pair
+        rev = np.argsort(perms, axis=1)
+        assert np.all(idxs == np.take_along_axis(perms, rev, axis=1))
+        revs = np.tile(rev[:,:,np.newaxis], (1, 1, self.n_features))
+
+        # perm_mask[i,j,k] will be 1 iff in the i-th permutation (sample),
+        # feature k appears in position j. It's a 0-1 array
+        # dim 1 of size self.n_features represents features
+        # dim 2 of size self.n_features represents a coalition in which the feature can appear
+        perm_mask = np.eye(self.n_features)[perms]
+        assert perm_mask.shape == (nsamples, self.n_features, self.n_features), \
+                f'{perm_mask.shape} != {(nsamples, self.n_features, self.n_features)}'
+
+        # The 1's in each of the 4 arrays below represent possible coalitions for each 
+        # sample-feature pair
+        # incl - including the feature in the coalition; excl - excluding the feature
+        # l2r - the coalition of features following any given feature in the permutation
+        # r2l - the coalition of features preceding the feature
+        l2r_incl = np.cumsum(perm_mask, axis=1)
+        # Subtract perm_mask to set the perm_mask locations back to zero
+        l2r_excl = l2r_incl - perm_mask
+        # Revert back to the original order of the features and reshape them
+        l2r_incl = restore_perm_and_reshape(l2r_incl)
+        l2r_excl = restore_perm_and_reshape(l2r_excl)
+        # Create the r2l coalitions
+        r2l_incl, r2l_excl = (1 - l2r_excl), (1 - l2r_incl)
+
+        # The r2l and l2r coalitions together gives us double the number of samples
+        # for each datapoint-feature pair
+        incl_mask = np.concatenate([l2r_incl, r2l_incl], axis=1)
+        excl_mask = np.concatenate([l2r_excl, r2l_excl], axis=1)
+        assert (incl_mask.shape == excl_mask.shape ==
+                (n_examples, self.n_perms2,
+                 self.n_features, self.n_features))
+
+        # Finding the shap weights --- depending on the coalition size (count)
+        # Higher the coalition size the higher the weight
+        weights = 1.0 / (self.n_features - np.sum(excl_mask, axis=3, dtype=int))
+        assert (weights.shape == (n_examples, self.n_perms2, self.n_features))
+        return incl_mask, excl_mask, weights
+
+    def generate_coalition_samples(self, expl_data:Array, mean_ref_data:Array):
+        """Generate coalitions of features and random 'reference' samples
+        for each datapoint in 'expl_data'. Use the coalition mask to fill
+        values of features not in the coalition with values from the mean_ref_data.
+        For each feature, we need samples that include the original feature value
+        and samples that exclude the original feature value (replaced by the reference value).
+        The coalitions are generated using the permutation method
+        """
+        n_examples = expl_data.shape[0]
+        x = np.expand_dims(expl_data, axis=(1, 2))
+ 
+        # Generate the coalition masks
+        incl_mask, excl_mask, weights = self.generate_coalition_masks(n_examples)
+        # Apply the coalition masks (of the features) to x and the random samples
+        # The 'reference' values for the features outside the coalition come from the 
+        # random samples and for those in the coalition come from xx
+        mean_ref_data = np.expand_dims(mean_ref_data, axis=(1, 2))
+        shap_samples_incl = np.where(incl_mask == 1, x, mean_ref_data)
+        shap_samples_excl = np.where(excl_mask == 1, x, mean_ref_data)
+        return shap_samples_incl, shap_samples_excl, weights
+
+    def shap(self,
+             explanation_samples:Array,
+             sort_for_each_datapoint:bool):
+        """Core Shap algorithm --- will return the shapley values of the features 
+        for each datapoint in 'explanation_samples'"""
+        n_examples = explanation_samples.shape[0]
+        # Reference data is the mean of the training data --- used for 'reference'
+        mean_ref_data = np.mean(self.ref_data, axis=0, keepdims=True)
+        samples_incl, samples_excl, weights = \
+            self.generate_coalition_samples(explanation_samples, mean_ref_data)
+
+        # Carry out the predictions
+        incl_preds = self.model.predict(samples_incl)
+        excl_preds = self.model.predict(samples_excl)
+        sample_preds = self.model.predict(explanation_samples)
+        ref_pred = self.model.predict(mean_ref_data)
+
+        deltas = (incl_preds - excl_preds)
+        assert deltas.shape == (n_examples, self.n_perms2, self.n_features), \
+            f'Expected shape: {(n_examples, self.n_perms2, self.n_features)}, got: {deltas.shape}'
+
+        # Consistency Check --- for 'Local accuracy' or the Shapely efficiency property
+        total_contributions = np.sum(np.mean(deltas, axis=1), axis=1)
+        contribution_mse = np.mean((total_contributions - sample_preds + ref_pred)**2)
+        print(f'Total Contribution vs Prediction MSE: {contribution_mse:0.3f}')
+
+        # Compute the Shapley values --- one can do this with or without the weights
+        shap_values = np.mean(deltas, axis=1)
+        # shap_values = np.mean(deltas * weights, axis=1)
+
+        if sort_for_each_datapoint:
+            # Sort features by Shapley value for each datapoint
+            sorted_feature_indices = np.argsort(shap_values, axis=1)
+            sorted_shap_values = np.take_along_axis(shap_values, 
+                                                    sorted_feature_indices, axis=1)
+            return sorted_feature_indices.tolist(), sorted_shap_values.tolist()
+        else:
+            return shap_values
+
+    def local_shap(self,
+                   expl_data:Array,
+                   expl_targets:Array,
+                   feature_labels:List[str],
+                   all_features:List[str]):
+        feature_idxs, shap_values = self.shap(expl_data,
+                                              sort_for_each_datapoint=True)
+        features = [[feature_labels[i] for i in l] for l in feature_idxs]
+        for i in range(len(features)):
+            print()
+            datapoint = pd.DataFrame(np.concatenate([expl_data[i].reshape(1, -1),
+                                                    expl_targets[i].reshape(1, -1)],
+                                                    axis=1),
+                                    columns=(all_features + ['Count']))
+            self.local_plot(datapoint, features[i], shap_values[i])
+
+    def shap_dependence_plots(self,
+                              dataset:Array,
+                              shap_values:Array,
+                              importance_idxs:List[int],
+                              feature_labels:List[str],):
+        fig, ax = plt.subplots(2, 2, figsize=(20, 6))
+        for i, idx in enumerate(importance_idxs[-4:]):
+            x, y = dataset[:, idx], shap_values[:, idx]
+            ax[i//2, i%2].scatter(x, y, s=5)
+            ax[i//2, i%2].set_xlabel(f'{feature_labels[idx]} Value')
+            ax[i//2, i%2].set_ylabel(f'Shapley Value for {feature_labels[idx]}')
+
+        plt.show()
+
+        
+    def global_shap(self,
+                    dataset:Array,
+                    feature_labels:List[str],
+                    bucket_size:float):
+        vspread_delta, gap_between_features = 0.05, 10
+        """Compute the global Shapley values for the features in 'dataset'"""
+        def y_coord(feature_indx:int, datapoint_idx:int, feature_val:float):
+            n_in_bucket = len(buckets[feature_val])
+            pos_in_bucket = buckets[feature_val].index(datapoint_idx)
+            return ((gap_between_features * (feature_indx + 1)) - 
+                    (n_in_bucket/2)*vspread_delta + 
+                    (pos_in_bucket*vspread_delta))
+
+        def color(val:float, Mx:float, mn:float):
+            mid = (Mx + mn)/2
+            r = 0 if val < mid else (val - mid)/(Mx - mid)
+            b = 0 if val > mid else (mid - val)/(mid - mn)
+            return (r, 0, b)
+
+        shap_values = self.shap(dataset, sort_for_each_datapoint=False)
+        print(shap_values.shape)
+        print()
+        for i, label in enumerate(feature_labels):
+            print(f'Feature: {label} ----- '\
+                  f'Shap Values Max: {np.max(shap_values[:, i])}, '\
+                  f'Min: {np.min(shap_values[:,i])}')
+        mean_feature_shap = np.mean(np.abs(shap_values), axis=0)
+        importance_idxs = np.argsort(mean_feature_shap).tolist()
+        labels = [feature_labels[i] for i in importance_idxs]
+        plot_points = []
+        for j, idx in enumerate(importance_idxs):
+            M, m = np.max(dataset[:, idx]), np.min(dataset[:, idx])
+            feature_values = dataset[:, idx]
+            feature_shap_values = [(math.floor(v/bucket_size)*bucket_size)
+                                    for v in shap_values[:, idx].tolist()]
+            buckets = {}
+            for i, v in enumerate(feature_shap_values):
+                if v not in buckets:
+                    buckets[v] = []
+                buckets[v].append(i)
+            plot_points.extend([(v, y_coord(j, i, v),
+                                 color(feature_values[i], M, m))
+                                for i, v in enumerate(feature_shap_values)])
+        x, y, c = zip(*plot_points)
+        fig, ax = plt.subplots(figsize=(20, 6))
+        ax.tick_params(axis='y', pad=10)
+        plt.subplots_adjust(left=0.3)
+        ax.scatter(x, y, s=5, c=c)
+        for spine in ['top', 'right', 'left']:
+            ax.spines[spine].set_visible(False)
+        ax.set_yticks([(gap_between_features * (i + 1)) for i in range(len(labels))])
+        ax.set_yticklabels(labels, ha='left')
+        ax.tick_params(axis='y', labelsize='small')
+        ax.set_xlabel('Shap Value')
+        plt.show()
+
+        self.shap_dependence_plots(dataset, shap_values, importance_idxs,
+                                   feature_labels)
+
+    def local_plot(self,
+                  datapoint:DF,
+                  features:List[str],
+                  shap_values:List[float]):
+        """Plot the explanation for the decision 'decision_label for the ith test datapoint
+        label_value_strengths: is the list of tuples of (feature_label, feature_value and feature_strength), 'feature_strength' being the contribution of that feature to the
+        decision.
+        """
+        print(f'Shap Values Plot for the datapoint:')
+        print(datapoint)
+        print()
+        fig, ax = plt.subplots()
+        bar_colors = [('red' if s < 0 else 'green') for s in shap_values]
+        label_values = [f'{l} ({v:.3F})' for l, v in list(zip(features, shap_values))]
+        y_pos = np.arange(len(features))
+        ax.barh(y_pos, shap_values, align='center', color=bar_colors)
+        ax.set_yticks(y_pos, labels=label_values)
+        ax.invert_yaxis()  # labels read top-to-bottom
+        ax.set_xlabel('Feature Shap')
+        ax.set_ylabel('Feature - Value')
+        ax.set_title('Shap Feature Importance')
+        plt.show()
+
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+
+N_EXPLANATION_SAMPLES = 5
+N_PERMS = 30
+BUCKET_SIZE = 1.0
+
+shap_data = ShapData('bikesharing_daily',
+                     drop_cols=['yr', 'instant','dteday','casual','registered', 'atemp'],
+                     feature_labels=['Season', 'Month', 'Holiday', 'Weekday',
+                                     'Working Day', 'weathersit', 'Temperature', 'Humidity',
+                                     'Windspeed'],
+                     target_label='Count')
+ref_data, ref_targets = shap_data.get_data_sample(subset='ref')
+expl_data, expl_targets = shap_data.get_data_sample(subset='test',
+                                                    sample_size=N_EXPLANATION_SAMPLES)
+shap_model = ShapModel(model=RandomForestRegressor())
+print()
+test_score = shap_model.train_and_test(ref_data, ref_targets,
+                                       expl_data, expl_targets)
+
+print()
+print('Trained the Model on the Training Data. Test Score: ', test_score)
+
+shap = Shap(ref_data=ref_data,
+            model=shap_model,
+            n_perms=N_PERMS)
+shap.local_shap(expl_data, expl_targets, shap_data.feature_labels, shap_data.features)
+
+shap.global_shap(ref_data, shap_data.feature_labels, bucket_size=BUCKET_SIZE)
+
+
+
+Sample of the Raw Dataset
+   instant      dteday  season  yr  mnth  holiday  weekday  workingday  weathersit    temp   atemp     hum  windspeed  casual  registered   cnt
+0        1  2011-01-01       1   0     1        0        6           0           2 0.34417 0.36362 0.80583    0.16045     331         654   985
+1        2  2011-01-02       1   0     1        0        0           0           2 0.36348 0.35374 0.69609    0.24854     131         670   801
+2        3  2011-01-03       1   0     1        0        1           1           1 0.19636 0.18940 0.43727    0.24831     120        1229  1349
+3        4  2011-01-04       1   0     1        0        2           1           1 0.20000 0.21212 0.59044    0.16030     108        1454  1562
+4        5  2011-01-05       1   0     1        0        3           1           1 0.22696 0.22927 0.43696    0.18690      82        1518  1600
+
+Sample of the Cleaned Dataset
+   season  mnth  holiday  weekday  workingday  weathersit    temp     hum  windspeed   cnt
+0       1     1        0        6           0           2 0.34417 0.80583    0.16045   985
+1       1     1        0        0           0           2 0.36348 0.69609    0.24854   801
+2       1     1        0        1           1           1 0.19636 0.43727    0.24831  1349
+3       1     1        0        2           1           1 0.20000 0.59044    0.16030  1562
+4       1     1        0        3           1           1 0.22696 0.43696    0.18690  1600
+
+N Train Datapoints: 584, N Test Datapoints: 147, N Features: 9
+
+
+Trained the Model on the Training Data. Test Score:  -0.1627941514280531
+Total Contribution vs Prediction MSE: 0.000
+
+Shap Values Plot for the datapoint:
+   season    mnth  holiday  weekday  workingday  weathersit    temp     hum  windspeed      Count
+0 3.00000 7.00000  0.00000  3.00000     1.00000     1.00000 0.71667 0.63333    0.15173 7264.00000
+
+
+
+
+Shap Values Plot for the datapoint:
+   season    mnth  holiday  weekday  workingday  weathersit    temp     hum  windspeed      Count
+0 2.00000 4.00000  0.00000  1.00000     1.00000     2.00000 0.59565 0.71696    0.32447 3348.00000
+
+
+
+Shap Values Plot for the datapoint:
+   season    mnth  holiday  weekday  workingday  weathersit    temp     hum  windspeed      Count
+0 2.00000 5.00000  0.00000  1.00000     1.00000     2.00000 0.63167 0.81000    0.23384 4274.00000
+
+
+
+Total Contribution vs Prediction MSE: 0.000
+(584, 9)
+
+Feature: Season ----- Shap Values Max: 1071.9945000000005, Min: -527.0761666666666
+Feature: Month ----- Shap Values Max: 692.2383333333338, Min: -740.5673333333335
+Feature: Holiday ----- Shap Values Max: 113.20783333333333, Min: -570.1550000000002
+Feature: Weekday ----- Shap Values Max: 708.0233333333332, Min: -554.2675000000002
+Feature: Working Day ----- Shap Values Max: 166.5783333333333, Min: -231.5611666666665
+Feature: weathersit ----- Shap Values Max: 59.69233333333349, Min: -742.2945000000001
+Feature: Temperature ----- Shap Values Max: 1502.6405000000004, Min: -3854.2405000000003
+Feature: Humidity ----- Shap Values Max: 1284.2406666666668, Min: -3339.490500000001
+Feature: Windspeed ----- Shap Values Max: 1005.2096666666671, Min: -1102.6939999999997
+
+SHAP Demo-Numerical Data 2
+
+
+00:00:00 - 00:00:59
+Numpy array manipulation for deep learning
+So here I'm using very similar strategy that we use for the other implementations like PDP and Line. Basically a lot of numpy array manipulation using dimensions. And if you study this code closely, I think apart from Shaft itself, I'm sure you will get a lot of insight into ways in which you can manipulate multi dimensional arrays using numpy, which will come very handy when you're doing deep learning with pipe or your Tensorflow. Because there this is the bread and butter. You have to deal with high dimensional arrays and you need to be able to manipulate them at will. All the different kinds of manipulations that you can do with these arrays. You will be able to get a fairly good sense of how these manipulations are done if you study this code well, OK, so here you can see that to compute the coalition samples, I compute the inclusion mask and exclusion mask.
+00:01:00 - 00:02:02
+Coalition samples and mask computation
+The mask is basically a 01 array which will pick some features and leave out some of the features because we have to pick subsets, right? And the mask basically does that. So wherever there is a one, those features are the ones I'm going to pick. Wherever there's a zero, those features I'm going to ignore. OK, yeah. So this is basically where I am doing that. This is the mean reference data and wherever the mask is 1, you pick it up from the original data point X, and wherever it is not one which is 0, I'm going to pick it up from the reference data. OK. And yeah, the same thing I do for exclusion. So use the exclusion mask. The only difference between exclusion mask and inclusion mask will be at that position, there will be a one for inclusion and it will be a 0 for exclusion. So wherever the mask says 1, I pick it up from X, wherever it is zero, I pick it up from the mean reference data and those will give you the other samples. OK, the only other thing we need to see is how do you generate the masks?
+00:02:03 - 00:04:00
+Generating masks using numpy permutations
+The masks basically is a whole bunch of numpy array manipulation using numpy. OK, so here I am just taking the normal sequence of features. This is what this is, and I am creating multiple copies of those, right? So I need to generate multiple permutations, right? So I'm making multiple copies of 1 to whatever number of features we have, in our case M, And this permuted, this particular call is the one that permutes each of the rows independently. OK, so that basically gives me as many permutations as I want. OK, Then I'm turning that into zeros and ones. This is the permutation of the actual numbers, right? So like 12345 will become 31254 or something like that. But I'm then going to turn the 315 into a mask. So if I have 031542 let's say OK this is a permutation of 0 to 4 and how do I turn it into a mask? Basically do A1 hot encoding. This basically becomes the matrix where its 10000000010 0100000001000000. This is 0. This is 3. This is one. This is 4. This is 2. 0 means one is at the zeroth position, 3 means it's at the third position. 1 means it is at position 14 means it is at position 2 means it is at position two. OK, and key in generating the mask is basically this.
+00:04:00 - 00:05:03
+Global summary plot of SHAP values
+And that's essentially what this statement does. So you have the permutations and then this I call will basically it's an identity matrix with zeros and ones. And then if you index it with the permutation array that you have created, you will essentially get what I just showed you. OK. And from there you generate the inclusive and exclusive by just taking out the diagonal elements or adding the diagonal elements. That's what it is. OK, so that is how you implemented using numpy. We can now run it. And yeah. So here is the, it shows the relative importances of each of the features, OK. And you can see that it is kind of consistent with what we saw. The temperature seems to have the maximum influence. And yeah, this is what is called a global, the summary plot of Shaft.
+00:05:04 - 00:06:01
+Computing global SHAP values
+OK, yeah. And this is in the order of their importance. So higher the shaft value of the feature, more important that features, right, It has more contribution to make towards the eventual outcome. So what we discussed was how do you compute the sharp value for a feature for a given data point? OK, Now if you repeat this exercise for every data point in your data set and you take the average sharp value for every feature across the data set, you will get the average sharp for that feature. And this is the global shaft value, OK? So this is in the order of increasing from bottom to up. It is in the order of increasing average shaft value. And you can see the temperature is right on top, humidity is right up there just below temperature, and wind speed is somewhere here. OK? So which is consistent with what we saw in PDP, OK.
+00:06:01 - 00:07:20
+Feature value influence on SHAP values
+And this is actually what I meant by saying that shaft can also be used as a global feature explanation method, OK. And yeah, so you can also have other interesting plots using shop. You can see how the shop value changes with the actual feature value. So across all data points, right? Fix a feature. OK, So let's say temperature like here, OK, now you look at every data point, look at the actual temperature value in that data point and look at the the shaft value for temperature for that data point, OK. And you plot the two. This is the sort of plot you get, OK. And what this basically tells you is, yeah, as the temperature goes up, its shaft value is also increasing, right. So which is that it seems to have more and more influence over the decision over the counts as the temperature goes up. So as it becomes warmer, people are more inclined to go out for a bike ride. OK. That's what this trend is telling you. And this is something very similar to your PDP plot or the IC plot, right? So you can also do this kind of analysis using SHAFT.
+
+
+SHAP Demo-Image Data
+
+
+00:00:00 - 00:00:32
+Introduction to image analysis using pre-trained model on Google Colab
+Let's now move on to the last demo which is for images and this time I'm going to run it on Google Polab because it needs GPU and using a ready made pre trained model from Pytorch for image analysis. There is very little difference between what we implemented for the bike share thing and this. The only difference here is that because we are dealing with images, we need to 1st figure out what features are we going to use, right?
+00:00:33 - 00:01:03
+Understanding image features and human interpretability
+The features that we consider should also be interpretable by humans. The model uses pixels, but if I tell you that this pixel 453 by 364, that pixel is more important than some other pixel, does that make any sense to us? No, it doesn't, right? Because we perceive the image more gross level, we don't look at the image in terms of pixels, right? So when you come up with an interpretation, it must be in terms of features that humans can interpret.
+00:01:04 - 00:01:57
+Super pixels as meaningful image features
+And for images, what is typically done is you divide the image into super pixels. Super pixels are more meaningful clusters of pixels. OK, so in this particular image, you can see that these yellow lines show that super pixel boundaries. And like the body of the tiger, the face of the tiger and the scales, each of them forms a different super pixel, right? Which is kind of meaningful to us. Similarly for another image, this is a vacuum cleaner. So you can see that the vacuum is 1 super pixel, the face is 1 super pixel, the body is several super pixels and so on, right? So the individual super pixels are the features 1st and we're trying to see which super pixel was more influential in the decision that the model took. OK.
+00:01:58 - 00:03:11
+SHAP values and super pixel influence on model decisions
+And I'm not going to run this here because it takes a little while now I'm just going to show you the results. So for the first image, there are shortlisted 4 super pixels which had the highest shaft values, OK? And these super pixel are the one shown here like so this part which is here and this super pixel which is here. And you can see that the 1st 2:00 are the ones that were the primary contributors to the overall decision, and the other two were minimal, which is quite logical, right? This is exactly what you would have liked to see if you would have wanted to see the model relying on this part of the image, the actual tiger to say that it's a tiger, OK. And yeah, the prediction by the model was actually a tiger, OK. Yeah. So in terms of the sharp implementation, there is absolutely no difference. The only thing is I need to do some image processing Junglery to generate the Super pixels and then turn that into a feature vector for each image and then use our regular shaft model by taking subsets of these super pixels and seeing which one of them had a bigger role to play in the overall prediction. And yeah, for the second image is another example.
+00:03:11 - 00:04:27
+Image processing and feature vector generation for SHAP model
+The prediction was that it's a vacuum cleaner. So this part, OK. And what contributed to that decision, you can see that it has actually highlighted parts of the vacuum cleaner, OK? Yeah. And those are the first two major contributors to the decision. OK. In terms of code, you only you have to watch out for how this has been implemented on Pytorch because there are a few things that you have to worry about because images are very heavy in terms of the amount of space it will take. And one thing you can notice here, and that's the reason why I didn't run the code, you look at this, there are 4000 sample super Pixel coalition images that have been generated, right? So you're generating multiple permutations. And for each permutation, you take the the left to right and the right to left. And then you. So that gives you 2 different samples, right? And you need to repeat this for 50 features, OK? So total there are 4000 images that you have to predict on. That takes the bulk all the time. OK. And yeah, but then you can't generate all these 4000 images in one shot because that will simply overwhelm your memory.
+00:04:27 - 00:05:08
+Implementation details for handling large image data in Pytorch
+In fact, you will run out of memory space even if you run it on Google collab. So to avoid that, you have to do something. You need to use some of the machinery that iPod provides you by using a data loader and doing it in batches. So I don't generate all the samples together and then I end up, you know, predicting for all of them in bulk. No, I can't do that because I can't store all the images. I have to do it in batches. And for that you have to use the data loader mechanism that I thought you provide you. So those are some of the implementation details that you have to worry about. And if you study this code, you should be able to figure that out. The rest of the actual SHAP implementation is exactly the same as what we did.
+
+import os
+import numpy as np
+from numpy import ndarray as Array
+from typing import Any, Dict, List, Tuple, Callable
+from google.colab import drive
+drive.mount('/content/gdrive')
+IMAGES_PATH = os.path.join('/content/gdrive/My Drive/',
+                           'Documents/IIITB/Courses/Upgrad/xAI/images')
+# IMAGES_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Images'))
+
+from skimage.segmentation import slic
+from skimage.segmentation import mark_boundaries
+from skimage.util import img_as_float
+from skimage import io
+from matplotlib import pyplot as plt
+from math import prod
+
+
+class ImageShapData:
+    """Data class for images where xp-space is the superpixel space for the images"""
+    def __init__(self,
+                 # List of image file names
+                 images:List,
+                 # Max number of superpixels to segmnet each image into
+                 # The SLIC algorithm will try to create as close to n_segments superpixels
+                 # as possible
+                 n_segments:int=100,
+                 # This is for the smoothing applied to the images as part of preprocessing
+                 smoothing:float=2.0):
+        self.imgs, self.segments = self._images_to_array(images, n_segments, smoothing)
+        assert self.imgs.shape[:3] == self.segments.shape, \
+                    f'{self.imgs.shape} != {self.segments.shape}'
+        # Number of superpixels in each image
+        self.n_segments:Array = np.max(self.segments.reshape(self.segments.shape[0], -1),
+                                       axis=1)
+        self.max_segments = int(np.max(self.n_segments))
+        self.x = self.gen_xp_representations_()
+        assert self.x.shape == (self.imgs.shape[0], self.max_segments)
+        self.n_examples = self.x.shape[0]
+        self.image_shape = self.imgs.shape[1:]
+
+    def _images_to_array(self,
+                         images:List,
+                         n_segments:int,
+                         smoothing:float):
+        # intended to be a private method
+        """Converts the list of images into numeric (pixel values) arrays
+        n_segments: number of target superpixels to create
+        smoothing: smoothing parameter (sigma) for SLIC
+        """
+        # load the images and convert them to a floating point data type
+        images = [img_as_float(io.imread(os.path.join(IMAGES_PATH, img)))
+                  for img in images]
+        max_h = max([img.shape[0] for img in images])
+        max_w = max([img.shape[1] for img in images])
+        x, segments = [], []
+        for img in images:
+            # Pad all the images with zeros to bring all of them to the same size
+            pad_x1 = (max_w - img.shape[1]) // 2
+            pad_x2 = (max_w - img.shape[1]) - pad_x1
+            pad_y1 = (max_h - img.shape[0]) // 2
+            pad_y2 = (max_h - img.shape[0]) - pad_y1
+            x.append(np.pad(img, pad_width=((pad_y1, pad_y2), (pad_x1, pad_x2), (0, 0))))
+            # apply SLIC and extract (approximately) the supplied number
+            # of segments
+            seg = slic(img, n_segments=n_segments, sigma=smoothing)
+            segments.append(np.pad(seg, pad_width=((pad_y1, pad_y2), (pad_x1, pad_x2))))
+        # Combine the individual images and segments into single arrays
+        return np.array(x), np.array(segments)
+
+    def extract_segments(self,
+                         image_id:int=0,
+                         segment_ids:List[int]=None,
+                         blank_rest:bool=False):
+        segments_only = segment_ids is not None and len(segment_ids) > 0
+        img, all_segments = self.imgs[image_id], self.segments[image_id]
+        if segments_only:
+            # Choose the segments if given
+            only_given_segments = np.where(np.isin(all_segments, segment_ids), all_segments, 0)
+            if blank_rest:
+                # Blank out the rest of the image
+                img = img * np.expand_dims(np.where(only_given_segments > 0, 1, 0), axis=2)
+            else:
+                img = mark_boundaries(img, only_given_segments)
+        else:
+            img = mark_boundaries(img, all_segments)
+        return img
+
+    def show_image(self,
+                   image_id:int=0,
+                   segment_ids:List[int]=None,
+                   blank_rest:bool=False):
+        """Display the image with the supplied segment (superpixel) highlighted
+        If 'blank_rest' is True, the rest of the image will be blanked out else
+        just the choson segment if any will be highlighted
+        """
+        segments_only = segment_ids is not None and len(segment_ids) > 0
+        superpixel_caption = f'Superpixels {segment_ids} of ' if segments_only else ''
+        title = f'{superpixel_caption}Image {image_id + 1}'
+        fig = plt.figure(title)
+        ax = fig.add_subplot(1, 1, 1)
+        img = self.extract_segments(image_id, segment_ids, blank_rest)
+        ax.imshow(img)
+        plt.axis("off")
+        plt.title(title)
+        plt.show()
+        return img
+
+    def xp_labels_(self,
+                   idxs: Array) -> Tuple[str]:
+        """Index itself is the label"""
+        return tuple([('Superpixel ' + str(i)) for i in idxs.tolist()])
+
+    def gen_xp_representations_(self):
+        """Generate the xp-representations for each image
+        The representation is just a string of 1's because the image by default
+        has all the superpixels, except the filler slots at the end to make
+        all images of the same size"""
+        # This is a vectorized implementation
+        return (1 - np.cumsum(np.eye(self.max_segments)[self.n_segments-1], axis=1))
+
+        # =======================================================================
+        # Equivalent with a for loop
+        # x = np.zeros((self.n, self.max_segments))
+        # for i in range(self.n):
+        #     # Number of segments for this image
+        #     n_segments = self.n_segments[i]
+        #     # Fill the number of segments in image 'i' with 1
+        #     x[i, :n_segments] = 1
+        # return x
+        # =======================================================================
+
+    def reverse_map_(self,
+                     image_id:int,
+                     xp_image:Array) -> Array:
+        """Reverse map an image in the superpixel representation to an actual image
+        'image_id' contains the index of the original image from which this
+        xp_image sample has been created. THe image_id is required to access the
+        # segment and pixel information for the original image.
+        """
+        assert xp_image.shape == (self.max_segments,), \
+                    f'{xp_image.shape} != {(self.max_segments,)}'
+        # Get the segments info for the original image - The segmeent ids are 1-based
+        sample_segments = self.segments[image_id] - 1
+        # Get the actual images in the sample
+        original_image = self.imgs[image_id]
+        # Creates 'self.max_segments' copies of the image without channels, each copy
+        # containing the pixels corresponding to exactly one superpixel/segment of the image
+        i_segments = np.eye(self.max_segments)[sample_segments]
+        # [:2] to ignore the channel dimension if any
+        image_dim_without_channels = self.image_shape[:2]
+        target_shape = (*image_dim_without_channels, self.max_segments)
+        assert i_segments.shape == target_shape, f'{i_segments.shape} != {target_shape}'
+
+        # The two new axes added are for the image dimensions
+        # This will select only those pixels belonging to the superpixels present in xp_image
+        active_pixels = xp_image[np.newaxis, np.newaxis, :] * i_segments
+        active_pixels = np.sum(active_pixels, axis=2)
+        assert active_pixels.shape == image_dim_without_channels, \
+                    f'{active_pixels.shape} != {image_dim_without_channels}'
+        # Add another dimension for the channels and restore the original pixel values
+        # Add the sample dimension (dim 0) to the original image
+        return active_pixels[:,:,np.newaxis] * original_image
+
+import torch
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
+from torchvision.models import ResNet50_Weights
+from torchvision import models as pretrained_models, transforms
+from tqdm.notebook import tqdm
+
+DEVICE = torch.device('cuda')
+
+class TorchImageDataset(Dataset):
+    """Takes care of loading and preprocessing the images"""
+    def __init__(self,
+                 imgs:Array,
+                 reverse_map_fn:Callable):
+        super().__init__()
+        self.images = imgs
+        self.n_images = imgs.shape[0]
+        self.reverse_map_fn = reverse_map_fn
+
+        # =================================================================
+        # Only for very large images and/or datapoint/samples
+        # MemoryMappedTensor --- maps the tensor to a file on the disk
+        # which can be accessed as a normal Pytorch array
+        # self.images = MemoryMappedTensor.empty(imgs.shape,
+        #                                        dtype=torch.float32,
+        #                                        prefix=IMAGES_PATH,
+        #                                       )
+        # =================================================================
+
+        # Define the image transformations that pytorch typically expects
+        self.transform = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+        ])
+
+    def __len__(self): return self.n_images
+
+    def __getitem__(self,
+                    idx:int):
+        # Conver the superpixel representation back to the pixel representation
+        img = self.reverse_map_fn(idx, self.images[idx])
+        # Pytorch expects images to be given as (channels, height, width)
+        image = torch.from_numpy(np.permute_dims(img, axes=(2, 0, 1))).float().to(DEVICE)
+        # Transform the image to make it ready for the model
+        if self.transform:
+            image = self.transform(image)
+        return image
+
+class PytorchModule(nn.Module):
+    def __init__(self,
+                 model:str):
+        super().__init__()
+        self.model = nn.Sequential(
+            model,
+            # Convert model prediction logits into probabilities
+            nn.Softmax(dim=1)
+        )
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class TorchImagenetClassificationModel:
+    IMAGENET_CATEGORIES = ResNet50_Weights.DEFAULT.meta["categories"]
+    # Available pytorch pretrained models on imagenet
+    MODELS = {
+        "vgg16": pretrained_models.vgg16(pretrained=True),
+        "vgg19": pretrained_models.vgg19(pretrained=True),
+        "inception": pretrained_models.inception_v3(pretrained=True),
+        "densenet": pretrained_models.densenet121(pretrained=True),
+        "resnet": pretrained_models.resnet50(pretrained=True)
+    }
+    IMAGENET_LABELS = dict(enumerate(IMAGENET_CATEGORIES))
+
+    def __init__(self,
+                 model:str,
+                 batch_size:int=16):
+        """Classifier model that gives probabilities for each class"""
+        self.model_name = model
+        self.model = PytorchModule(self.MODELS[model])
+        self.model.to(DEVICE)
+        self._print_model_stats()
+        self.batch_size = batch_size
+
+    @property
+    def n_classes(self): return len(self.IMAGENET_CATEGORIES)
+
+    def _print_model_stats(self):
+        # Count the number of parameters
+        num_params = sum(p.numel() for p in self.model.parameters())
+        print()
+        print(f"Number of Model Parameters: {num_params}")
+
+        # Approximate memory usage for weights (float32)
+        # This does not include activations, gradients, or optimizer state
+        memory_bytes = num_params * 4  # 4 bytes per float32
+        memory_mb = memory_bytes / (1024 * 1024)
+        print(f"Approximate memory for weights: {memory_mb:.2f} MB")
+
+    def predict_(self,
+                 x:Array,
+                 reverse_map_fn:Callable) -> Array:
+        """Get the model predictions for the datapoints in x"""
+        dataloader = DataLoader(TorchImageDataset(x, reverse_map_fn),
+                                batch_size=self.batch_size, shuffle=False,
+                                drop_last=False)
+        # Set the model to evaluation mode
+        self.model.eval()
+        preds = []
+        for batch in tqdm(dataloader, desc='Predictions'):
+            # Disable gradient calculation for inference
+            with torch.no_grad():
+                output = self.model(batch.to(DEVICE))
+                preds.append(output)
+        return torch.cat(preds).cpu().numpy().astype(float, copy=False)
+
+
+from math import prod
+from functools import partial
+
+class Shap:
+    def __init__(self,
+                 images:ImageShapData,
+                 model:TorchImagenetClassificationModel,
+                 n_classes_of_interest:int,
+                 n_perms:int=10):
+        self.images = images
+        self.model = model
+        self.n_perms = n_perms
+        self.n_perms2 = (2 * self.n_perms)
+        self.x = self.images.x
+        self.n_examples, self.n_features = self.x.shape
+        self.n_samples = self.n_examples * self.n_perms
+        self.n_samples2 = (2 * self.n_samples)
+        self.n_classes_of_interest = n_classes_of_interest
+
+    def generate_coalition_masks(self):
+        """Generate the masks used to apply permutations to the features
+        - n_perms permutations for each sample and the masks correspond to
+        both the l2r and r2l coalitions for every feature"""
+        def restore_perm_and_reshape(a:Array):
+            a = np.take_along_axis(a, revs, axis=1)
+            return np.reshape(a, (self.n_examples, self.n_perms,
+                                  self.n_features, self.n_features))
+
+        # Generate 'n_sample' permutations of the features
+        idxs = np.tile(np.array([[i for i in np.arange(self.n_features)]]),
+                       (self.n_samples, 1))
+        rng = np.random.default_rng()
+        perms = rng.permuted(idxs, axis=1)
+
+        # Get the inverses of the permutations and  expand it in the feature dimension (dim 2)
+        # so the same position permutations are applied to each sample-feature pair
+        rev = np.argsort(perms, axis=1)
+        assert np.all(idxs == np.take_along_axis(perms, rev, axis=1))
+        revs = np.tile(rev[:,:,np.newaxis], (1, 1, self.n_features))
+
+        # perm_mask[i,j,k] will be 1 iff in the i-th permutation (sample),
+        # feature k appears in position j. It's a 0-1 array
+        # dim 1 of size self.n_features represents features
+        # dim 2 of size self.n_features represents a coalition in which the feature can appear
+        perm_mask = np.eye(self.n_features)[perms]
+        assert perm_mask.shape == (self.n_samples, self.n_features, self.n_features), \
+                f'{perm_mask.shape} != {(self.n_samples, self.n_features, self.n_features)}'
+
+        # The 1's in each of the 4 arrays below represent possible coalitions for each
+        # sample-feature pair
+        # incl - including the feature in the coalition; excl - excluding the feature
+        # l2r - the coalition of features following any given feature in the permutation
+        # r2l - the coalition of features preceding the feature
+        l2r_incl = np.cumsum(perm_mask, axis=1)
+        # Subtract perm_mask to set the perm_mask locations back to zero
+        l2r_excl = l2r_incl - perm_mask
+        # Revert back to the original order of the features and reshape them
+        l2r_incl = restore_perm_and_reshape(l2r_incl)
+        l2r_excl = restore_perm_and_reshape(l2r_excl)
+        # Create the r2l coalitions
+        r2l_incl, r2l_excl = (1 - l2r_excl), (1 - l2r_incl)
+
+        # The r2l and l2r coalitions together gives us double the number of samples
+        # for each datapoint-feature pair
+        incl_mask = np.concatenate([l2r_incl, r2l_incl], axis=1)
+        excl_mask = np.concatenate([l2r_excl, r2l_excl], axis=1)
+        assert (incl_mask.shape == excl_mask.shape ==
+                (self.n_examples, self.n_perms2,
+                 self.n_features, self.n_features))
+
+        # Finding the shap weights --- depending on the coalition size (count)
+        # Higher the coalition size the higher the weight
+        weights = 1.0 / (self.n_features - np.sum(excl_mask, axis=3, dtype=int))
+        assert (weights.shape == (self.n_examples, self.n_perms2, self.n_features))
+        return incl_mask, excl_mask, weights
+
+    def generate_coalition_samples(self):
+        """Generate coalitions of superpixels and the rest filled with zeros
+        for each image in 'self.x'. Use the coalition mask to fill
+        slots for superpixels not in the coalition with 0.
+        For each superpixel, we need samples that include it and also
+        samples that exclude it (1's in those slots replaced by 0).
+        The coalitions are generated using the permutation method
+
+        The reference values for images are just 0.
+        """
+        x = np.expand_dims(self.x, axis=(1, 2))
+
+        # Generate the coalition masks
+        incl_mask, excl_mask, weights = self.generate_coalition_masks()
+        # Apply the coalition masks (of the features) to x and the random samples
+        # The 'reference' values for the features outside the coalition come from the
+        # random samples and for those in the coalition come from xx
+        shap_samples_incl = np.where(incl_mask == 1, x, 0)
+        shap_samples_excl = np.where(excl_mask == 1, x, 0)
+        return shap_samples_incl, shap_samples_excl, weights
+
+    def reverse_map_func(self,
+                         n_samples_per_set:int,
+                         set_shape:Tuple[int],
+                         idx:int,
+                         superpixel_representation:Array):
+        set_idx = idx if idx < n_samples_per_set else (idx - n_samples_per_set)
+        image_id = np.unravel_index(set_idx, set_shape)[0]
+        return self.images.reverse_map_(image_id, superpixel_representation)
+
+    def shap(self):
+        """Core Shap algorithm --- will return the shapley values of the superpixels for each image in 'self.images'"""
+        # Getting the predictions for the given images
+        decision_classes, decision_probs = self.predict_for_images()
+        assert self.n_examples == len(decision_classes)
+        n_classes = decision_classes.shape[1]
+        # Generate the coalition samples
+        samples_incl, samples_excl, weights = self.generate_coalition_samples()
+        assert samples_incl.shape == samples_excl.shape
+        assert samples_incl.shape == (self.n_examples, self.n_perms2,
+                                        self.n_features, self.n_features)
+        assert weights.shape == (self.n_examples, self.n_perms2,
+                                 self.n_features)
+
+        # We will be creating (n_examples * n_preds2 * n_features) images for
+        # each explanation datapoint --- this will be extremely memory
+        # intensive. So we club all the images together and let the pytorch dataloader
+        # process the images in batches to manage memory better. The mapping back to an image
+        # from the superpixel representation will be done before the model is called for
+        # each individual image. The function reverse_map_func facilitates this. It is
+
+        n_samples_per_set = self.n_samples2 * self.n_features
+        set_shape = (self.n_examples, self.n_perms2, self.n_features)
+
+        samples_for_prediction = np.concatenate([samples_incl.reshape(n_samples_per_set,
+                                                                      self.n_features),
+                                                 samples_excl.reshape(n_samples_per_set,
+                                                                      self.n_features)],
+                                                axis=0)
+        print(f'Predicting for {len(samples_for_prediction)} sample superpixel coalition images ...')
+        partial_reverse_map_func = partial(self.reverse_map_func,
+                                           n_samples_per_set,
+                                           set_shape)
+        sample_preds = self.model.predict_(samples_for_prediction,
+                                           partial_reverse_map_func)
+        # Restore the original indices
+        incl_preds = sample_preds[:n_samples_per_set].reshape(*set_shape,
+                                                              self.model.n_classes)
+        excl_preds = sample_preds[n_samples_per_set:].reshape(*set_shape,
+                                                              self.model.n_classes)
+        # Get the incremental contributions
+        deltas = np.mean((incl_preds - excl_preds), axis=1)
+        shap_values = np.take_along_axis(deltas, decision_classes[:, np.newaxis, :], axis=2)
+        # Sorting the features in decreasing order of the deltas (shap values)
+        feature_indices = np.argsort(shap_values, axis=1)[:, ::-1, :]
+        shap_values = np.take_along_axis(shap_values, feature_indices, axis=1)
+        assert shap_values.shape == (self.n_examples, self.n_features, n_classes)
+        self.shap_plot(feature_indices, shap_values, decision_classes, decision_probs)
+
+    def predict_for_images(self):
+        imgs = self.images.x
+        partial_reverse_map_func = partial(self.reverse_map_func,
+                                           len(imgs),
+                                           (len(imgs),))
+        pred = self.model.predict_(imgs, partial_reverse_map_func)
+
+        k = self.n_classes_of_interest
+        top_k_class_indices = np.argsort(pred, axis=1)[:, -k:].astype(int)
+        top_k_class_probs = np.take_along_axis(pred, top_k_class_indices, axis=1)
+        for i in range(len(imgs)):
+            top_class_indices = list(reversed(top_k_class_indices[i].tolist()))
+            print()
+            print(f'Top {k} Predictions for Image {i+1}: ',
+                [model.IMAGENET_LABELS[f] for f in top_class_indices])
+            top_k_probs = [f'{pred[i][f]:.5f}' for f in top_class_indices]
+            print(f'Top {k} Prediction Probabilities for Image {i+1}: ', top_k_probs)
+            print()
+        return top_k_class_indices, top_k_class_probs
+
+    def shap_plot(self,
+                  feature_indices:Array,
+                  shap_values:Array,
+                  decision_classes:Array,
+                  decision_probs:Array,
+                  n_shortlisted_features:int=4):
+        n_examples, n_features, n_classes = shap_values.shape
+        assert feature_indices.shape ==shap_values.shape
+        assert decision_classes.shape == (n_examples, n_classes)
+        for datapoint_id in range(n_examples):
+            print()
+            print()
+            # Showing the plot only for the top decision
+            decision_label = self.model.IMAGENET_LABELS[decision_classes[datapoint_id][-1]]
+            prob = decision_probs[datapoint_id][-1]
+            # Considering the top 4 features in terms of the Shap score
+            feature_indices_for_decision = feature_indices[datapoint_id, :, -1].tolist()
+            feature_indices_for_decision = feature_indices_for_decision[:n_shortlisted_features]
+            shap_values_for_decision = shap_values[datapoint_id, :, -1].tolist()
+            shap_values_for_decision = shap_values_for_decision[:n_shortlisted_features]
+
+            print(f'Decision Probability: {prob}')
+            print(f'Total Shap Value of the top {n_shortlisted_features} features: '
+                  f'{sum(shap_values_for_decision)}')
+            print(f'Total Shap Value across all features: '
+                  f'{np.sum(shap_values[datapoint_id, :, -1])}')
+            print()
+            # Get the images --- the original image and the images with only the selected
+            # superpixels
+            full_image = self.images.extract_segments(datapoint_id)
+            feature_images = [self.images.extract_segments(image_id=datapoint_id,
+                                                           segment_ids=[(f+1)],
+                                                           blank_rest=True)
+                              for f in feature_indices_for_decision]
+            labels = [f'Superpixel {f+1}' for f in feature_indices_for_decision]
+            fig, ax = plt.subplots(2, 3, figsize=(20, 6))
+            ax[0, 0].imshow(full_image)
+            ax[0, 0].set_title('Full Image')
+            ax[0, 0].axis('off')
+            for i, f in enumerate(feature_indices_for_decision):
+                c = (i+1) if i < 2 else (i-2)
+                r = 0 if i < 2 else 1
+                ax[r, c].imshow(feature_images[i])
+                ax[r, c].set_title(labels[i])
+                ax[r, c].axis('off')
+            ax[1,2].bar(labels, shap_values_for_decision)
+            ax[1,2].set_xlabel('')
+            ax[1,2].set_ylabel('Shap Value')
+            ax[1,2].set_title(f'Superpixel Shap Score Bar Chart')
+            plt.suptitle(f'Shap analysis of the Top Prediction "{decision_label}" of '\
+                         f'Model "{self.model.model_name}" '\
+                         f'on Image {datapoint_id+1} in terms of '\
+                         f'the top {n_shortlisted_features} Superpixels')
+            plt.show()
+
+
+# All tunable parameters
+N_SEGMENTS = 50
+BATCH_SIZE = 12 # Prediction will be done in batches
+N_FEATURES_TO_SHORTLIST = 5
+N_CLASSES_OF_INTEREST = 5
+N_PERMUTATIONS = 10
+
+img_data = ImageShapData(images=['tiger.JPEG', 'vacuum.JPEG'], n_segments=N_SEGMENTS)
+print('Image Size: ', img_data.imgs[0].shape)
+print('Max Number of Superpixels: ', img_data.max_segments)
+print('Sample Superpixels for the First Image: ')
+print(img_data.segments[0])
+print()
+img_data.show_image()
+print()
+img_data.show_image(1)
+model = TorchImagenetClassificationModel(model="inception", batch_size=BATCH_SIZE)
+
+# Running Shap on the image and the predictions
+shap = Shap(images=img_data, model=model,
+            n_classes_of_interest=N_CLASSES_OF_INTEREST,
+            n_perms=N_PERMUTATIONS)
+shap.shap()
+
+
+DeepLIFT Method
+
+
+00:00:00 - 00:00:34
+Introduction to Deep Lift Method for Deep Neural Networks
+So deep lift method, till now we understood all the machine learning methods but now we want to understand for the deep neural network. So deep neural network has a input layer, right? So if I'm having a input layer, these are my inputs and then there will be a hidden layers and then let's say these are my output. So now I want to understand what is the impact of each input in chap method. I can easily find out using the Shapley values but how I'm going to do it in deep neural network?
+00:00:34 - 00:01:15
+Calculating Impact of Inputs in Deep Neural Networks
+So here what we do is for every neuron in the network, let's say if it has 2 hidden layers and it has five neurons, OK, this also has five neurons for every neuron in the network. Let's say this is neuron 1 and one deep lift computes its activation for real input and compares against a reference input. And then like this it will calculate the impact and we keep on calculating contribution scores difference between actual and a reference activation values.
+00:01:16 - 00:01:41
+Deep Lift Activation and Contribution Scores
+And then we keep on propagate through network layer by layer, every layer contribution split and proportionally among the incoming neurons based on the weights and activation. So once we calculate, we do the back propagation continues all the way for the input layer, right and calculate which particular feature is more important of how that feature is contributing. So that's all we try to do.
+00:01:41 - 00:02:14
+Challenges of Implementing Deep Lift in Complex Models
+It seems easy, but when in the actual real life it will become much more complicated. Implementing deep lift for a smaller neural network can be fine, but as the model become complex and bigger it will be much more complicated. So that's why many people still call it as a black box model. But with deep lift we can get little bit understanding of parameters but not in the details how we have got it in our previous methods.
+
+Comparison of XAI Libraries
+
+
+00:00:00 - 00:00:24
+Introduction to XAI library comparison
+Now that we have learned about key explainable AI tools, it is important to understand how popular XAI libraries differ uptwas several parameters. The upcoming comparison will help you choose the right library, lime shaft or deep lift depending on your model, use case, and explanation needs.
+00:00:24 - 00:00:39
+Choosing the right XAI library based on model and use case
+Let's look at how these libraries complement each other and where each one excels. So let us understand what are the different libraries we have for explainable AI.
+00:00:39 - 00:01:04
+Overview of Lime, Sharp, and Deep Lift libraries
+So we have Lime, we have Sharp and then we have Deep lift. So Lime is suitable for local explanation and then it is both for local and global. This is also local and layer wise model type. Both are agnostic Lime and Sharp. Deep lift is mostly used for deep learning. It is compatible with our Pytouch or Keras or Tensorflips.
+00:01:05 - 00:01:20
+Strengths and compatibility of XAI libraries
+OK, so the strength it's a simple and initiative line shaft is also consistent, reliable and residuals deep lift handles nonlinearity. But because it is a deep neural network, so which will become a non convex function, right?
+00:01:20 - 00:01:45
+Use cases for Lime, Sharp, and Deep Lift
+It's a nonlinear function. So that's why it can help us in identifying those things. But so there are some use case speed and which particular model to use where deep neural network is there then we can go for deep lift. If you want to do model debugging or model fitness study then go for sharp. But if you want a fast explanation of individual instance then we can go for line method.
+
+
+In this session, you learnt about the different XAI methods (PDP, ICE, PFI, LIME, SHAP) as well as how they are implemented in Python.
+
+First, you learnt about explainability and its importance in making data-driven decisions. Then, you learnt about the different global and local interpretability methods starting with PDP. The key pointers are given below.
+
+Partial dependency plot (PDP) is used to understand how a particular feature influences the predictions of an ML model on average.
+Individual Conditional Expectation (ICE) which helps us understand how a model’s prediction changes for each individual data point when we vary a feature.
+Permutation Feature Importance (PFI) measures the decrease in a model’s performance when the values of a single feature are randomly shuffled (permuted).
+Surrogate models provide interpretable, transparent approximations of complex ML models.
+LIME (local interpretable model-agnostic explanation) uses a simple linear model which is trained to mimic the predictions of the complex model around a single instance.
+SHAP (Shapley Additive Explanation) computes each feature’s contribution by averaging its marginal impact across all possible feature subsets. There are different types of SHAP: Kernel, Tree, Linear, Deep, Permutation.
+DeepLIFT method is used for deep neural networks.
+
+Module Summary
+
+
+In this module, we explored how reliable machine learning solutions require more than fitting a model. 
+
+ 
+
+You learnt the importance of evaluating generalisation using techniques such as holdout validation and cross validation, and how hyperparameter tuning and complexity control contribute to stable performance. Feature selection methods helped us to understand how models can remain efficient, interpretable, and focused on informative predictors while avoiding unnecessary noise.
+
+ 
+
+We explored explainable AI techniques to give visibility into how models behave. Tools such as partial dependence and ICE plots, permutation importance, LIME and SHAP allow us to understand the influence of each feature on predictions and build confidence in model outputs. This transparency is vital when models are used to support decisions in sensitive applications.
+
+ 
+
+You now have a strong foundation in selecting models that generalise well, managing model complexity, interpreting predictions, and preserving trustworthy behaviour throughout the lifecycle of a machine learning system.

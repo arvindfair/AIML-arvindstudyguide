@@ -1,0 +1,379 @@
+
+Margin Classifiers
+
+Session Overview
+
+
+Welcome to the session ‘Margin Classifiers’, the first part of support vector machines (SVM). 
+
+
+ 
+
+Before we begin talking about support vectors and margins, let us talk about the concepts of bias, variance, and the trade-off that governs model performance. Understanding this balance is essential before exploring Support Vector Machines, because SVMs are specifically designed to reduce model variance while maintaining reliable decision boundaries. 
+
+ 
+
+Then we will move on to introduce the key geometric perspective behind SVMs, and how classification can be viewed as separating data points using a hyperplane. You will learn how such boundaries appear in two-dimensional and three-dimensional spaces, and how increasing dimensionality allows greater flexibility in separating data. 
+
+ 
+
+The first model we discuss will be the Maximal Margin Classifier, a formulation that identifies the boundary with the largest possible cushion between classes. This margin helps ensure better generalisation, linking the method back to the bias–variance discussions that opened the session. 
+
+ 
+
+Real-world data, however, rarely separates perfectly. This brings us to the idea of SVMs. To address this, we will introduce the Soft Margin Classifier, which allows controlled misclassification using slack variables. You will see how the cost of misclassification becomes a key parameter influencing model behaviour in SVMs. 
+
+Bias and Variance
+
+
+So far in our discussions, we have explored the strengths of simpler models and the appeal of more complex ones. We have seen that simpler models tend to generalise well but often struggle with real-world complexity. More expressive models can adapt closely to the training data but risk becoming overly sensitive to noise. This tension leads to one of the most important considerations in machine learning: the bias-variance trade-off. 
+
+ 
+
+To build reliable predictive models, we must understand how much complexity is appropriate, and what we sacrifice when we over- or undersimplify. Before we move further into Support Vector Machines, which are specifically designed to control this trade-off through margins, let us examine how bias and variance influence model performance. 
+
+ 
+
+Let’s formally introduce bias and variance next. 
+
+00:00:05 - 00:00:14
+Introduction to model complexity and data memorization
+We have seen how simple models can miss important patterns, while complex ones can end up memorizing the data.
+00:00:14 - 00:00:20
+Concept of bias and variance in models
+Let us now connect these ideas using the concept of bias and variance.
+00:00:21 - 00:00:37
+Balancing model learning and generalization
+This gives us a clearer picture of why models behave the way they do, and how finding the right balance helps a model learn better and still perform reliably on unseen data.
+00:00:37 - 00:01:00
+Example of linear regression model
+We want the model to learn the patterns in training data well and also generalize those learning to unseen data. So let's take a very simple example. Here we have a data set and we try to fit a very simple linear regression model.
+00:01:01 - 00:01:21
+Linear regression model performance metrics
+Let's say I have this model. The equation might be Y is equal to W X + b and it has generalized with a very medium performance. So if you can see my R square is 0.8 and my mean absolute percentage error is 10%.
+00:01:22 - 00:02:09
+Transition from simple to complex models
+So this is a simple model with a good or a very decent accuracy. The moment I start making this model as complex one from simple linear regression to I transfer it to a polynomial equation. Let's say I have done it as polynomial equation, right? Y is equal to X square plus B. So now what this model does, it will start going to each point and understanding or memorizing the data which you can see here.
+00:02:11 - 00:03:02
+Disadvantages of complex models and overfitting
+So the model has become from simple, it has transitioned to a complex model. It has more parameters right? Why we are calling it as a complex? Initially it had only two parameters WXW and BX was our input, Y was our output. Now when we make it to a polynomial now it has three parameters W 1, W 2 and D So because the more parameters it is coming, it can become complex. Can also learn or memorize the training data. So perfect performance on the training data if you see our complex model. But what is the disadvantage of a complex model? Why not we always go for a complex model?
+00:03:03 - 00:05:09
+Model performance on training vs testing data
+So when we use the same model, the simpler model which we had YW X + b and this was our model YW One X ^3 plus W 2X square plus B. When I use these two models here, so Y is equal to W X + b. If you see on a testing data or on unseen data, the model has retained its performance, right? So the R square here is 0.75 and mean absolute percentage error is around 12%. So model has retained its performance. It has not degraded too much, but the same complex model when we utilize here and when we want to see them on a unseen data. Now you see the model performance which was almost perfect in the training data has become poor in the testing data set. So the accuracy which was around 0.99 and the mean absolute percentage error which was oh point 1% has come down now to R square is being 0.85 and mean absolute percentage error is 25%. So this is a very clear case of overfitting here we have seen it as a clear overfitting, right? Why? Because here it is perfect but here it is not working as intended. So the percentage error has increased if you are comparing with the training, it has increased many folds. So that's why we call it as a overfitting. So now this dilemma will always be there with a machine learning engineer whether to go for a simple or whether to go for a complex model.
+00:05:10 - 00:05:43
+Model selection using bias and variance
+To make it simple the model selection or to understand better which particular model to choose, we utilize the phenomenon of bias and variance. So what is bias and what is variance? We want to understand these two concept in detail and then we can see how we can optimize our approach in choosing which one to go for, whether to go for bias or whether to go for variance.
+00:05:45 - 00:06:10
+Understanding bias and variance in detail
+Apart from random Gaussian errors, a model can have like two major source of errors. One is the inbuilt noise which data has which we are unable to capture. But model can also has some errors by training right while fitting the model. So if you see here, there are two classes.
+00:06:12 - 00:07:00
+Classification model example with bias and variance
+OK, here there are two classes. So this is our Class A and this one, the red one is class D So now we have two classes and we have made a very, very simplistic classification model, right? So this classification model job is to divide these two classes. But with this very simple simplest model, is it doing its job? No, right? Why? Because the Class 1 and Class 2 if you see here are not very clearly. So accuracy will be less here because it is saying this is as Class A or class one.
+00:07:01 - 00:08:03
+Complex model classification and variance
+This is will be Class 2. But if you notice so many points here are misclassified and so many points here also misclassified. But if you make it as a complex model, if you develop a model which can draw this particular line right, this line which says OK, this thing will be class one, right? Or Class 2, the red one is Class 1. So if you notice this model is a complex one, it can, you know, do very well. So in the first one, very simplistic, we just take any mean and then we draw a line. We said anything above that line is Class 2, anything below that line is class one. But in a complex model it can perfectly classify both the classes. But what is happening?
+00:08:04 - 00:09:03
+High bias vs high variance dilemma
+So in the first one Evers due to wrong assumption often caused by overly simple model. This one, this particular model will have high bias. OK, the simplest model will have high bias, but variance is errors due to complex model often having high sensitive to training noise. So what happens here is the noise is also get captured. The model can fit to the noise, it can memorize the noise as well. So this one, this particular model will have high variance. Variance will be high here. So what to do now? We almost got stuck between high bias and high variance.
+00:09:04 - 00:10:03
+Underfitting and overfitting in models
+So high bias is the model is very simple and does not learn the pattern. Basically if I make it very simplistic I can say it is caused due to under fitting even though the data is complex. But the model whichever we have selected is too simple and it under fits OK does not learn the pattern in the training data well. So it shows poor performance on both training as well as testing data. That is the main thing because it say overly learn under fit model it works it generalize medium with whatever the accuracy it works with works well on both training and testing. But on the other hand, when we have a high variance model, what it does the model learn or memorize the noise in the training data and over fits.
+00:10:04 - 00:10:53
+Finding balance between model complexity
+This kind of models always go for like they have will they will have a very bad performance on new data or unseen data. So this creates the same problem, right? We have seen one example of linear regression before linear versus a polynomial. Here we are seeing for a classification. So for any type of models we have to encounter this thing. So what we can do? We can find a balance between a instead of taking a very simplistic model and also instead of taking a very complex model, we can find a balance. That balance is helps us to make better decision and have a better model.
+00:10:55 - 00:12:04
+Analyzing bias and variance with examples
+So let's take. What does this figure show? This particular figure we have the image here. So I want you to think this particular image and these are the data points. So what it is showing high bias, high variance or high bias low variance, low bias, high variance or low bias, low variance. So you can eliminate one after one. OK, think and give the answer now this one. Now if you notice the data points have moved So what it has high bias, high variance again high bias, low variance, low bias, high variance. And what is the answer for example 2? What is the answer for example 3 and what is the answer for example 4?
+
+ 
+
+Beyond unavoidable random error, two major components contribute to a model’s performance: 
+
+Bias: inaccuracies arising from overly restrictive assumptions that prevent capturing true patterns in the data 
+
+Variance: instability caused by models that adapt too closely to training data and fail to generalise 
+
+ 
+
+A model that memorises every detail of the training set may drastically change its predictions when even a small portion of data changes, reflecting high variance. Conversely, a model that is too simplistic may consistently produce inaccurate results on unseen data, indicating high bias. 
+
+ 
+
+Achieving the right balance between these forces is crucial. We will discuss this next. 
+
+ 
+
+Additional Note: Understanding the Target (Bullseye) Analogy
+At the end of the video, the examples use a target (bullseye) diagram to illustrate the concepts of bias and variance.
+
+ 
+
+In this analogy:
+
+Each point on the target represents a prediction made by the machine learning model.
+The centre of the target represents the true or expected value.
+ 
+
+To interpret the diagrams:
+
+Bias indicates how close the predictions are, on average, to the centre of the target.
+Predictions centred around the bullseye indicate low bias.
+Predictions consistently away from the bullseye indicate high bias.
+ 
+Variance indicates how much the predictions vary from one another.
+Predictions that are tightly clustered indicate low variance.
+Predictions that are widely scattered indicate high variance.
+ 
+
+When interpreting each target diagram, consider the following:
+
+How far is the overall cluster of points from the centre? This indicates the level of bias.
+How closely are the points grouped together? This indicates the level of variance.
+ 
+
+Using these two observations together will help you identify whether the model exhibits high or low bias and high or low variance in each example.
+
+Bias and Variance - Recall Quiz
+
+
+Consider the figure given below, where the yellow points show predictions made by the model.
+
+Predictions in the red portion are closest to the actual values, while blue and green areas represent predictions that are farther to the actual values.
+
+ 
+
+1. What case of bias and variance does this model show?
+
+Correct. The model predictions are far from the actual values, and the predictions are not consistent among themselves. So it has a high bias and a high variance.
+
+
+2. Consider the figure given below, where the yellow points show predictions made by the model.
+
+
+Predictions in the red portion are closest to the actual values, while blue and green areas represent predictions that are farther to the actual values.
+
+ 
+
+What case of bias and variance does this model show?
+Correct. The model predictions are far from the actual values, but the predictions are consistent among themselves. So it has a high bias and a low variance.
+
+
+3.Consider the figure given below, where the yellow points show predictions made by the model.
+
+
+
+Predictions in the red portion are closest to the actual values, while blue and green areas represent predictions that are farther to the actual values.
+
+
+What case of bias and variance does this model show?
+
+
+Correct. The model predictions are near to the actual values, but the predictions are not consistent among themselves. So it has a low bias and a high variance.
+
+
+4. Predictions in the red portion are closest to the actual values, while blue and green areas represent predictions that are farther to the actual values.
+
+What case of bias and variance does this model show?
+
+Correct. The model predictions are near to the actual values, and the predictions are consistent among themselves. So it has a low bias and a low variance.
+
+
+Bias-Variance Tradeoff
+
+
+Evaluating a model’s performance requires more than simply checking its accuracy on a test set. To truly understand why a model performs the way it does, we must break down prediction error into its underlying sources. This is where the bias–variance decomposition becomes essential. The error can be decomposed into three parts: 
+
+ 
+
+Equation
+
+ Error = Bias Square + variance + Irreducible Error 
+
+The irreducible error comes from noise inherent in the data and cannot be removed. Our focus is on the two components that reflect how well the model has learned. We will discuss this in more detail now. 
+
+
+00:00:00 - 00:00:26
+Introduction to noise in machine learning models
+When we are developing a machine learning model on the real world samples, they are not always the true values. They might also contain some random noise as well in the real sample. So the random level while defining the relationship of a real values of Y&X is Y -, F of X.
+00:00:27 - 00:00:59
+Function approximation and prediction error
+So what is F of X here? F of X is a function which has the actual representation of Y and the YY minus the representation of the Y. So when we are building a model F-OF X right the predicted model F-OF X to approximate F of X, we want a model which can exactly behave like F.
+00:01:00 - 00:01:25
+Components of prediction error: noise and model fitting
+Just to make very simplistic thing, let's say my F is 2X3. OK, 2X3 this is my F. Now I want to approximate my model to be like this 1.999 of X3.
+00:01:25 - 00:02:22
+Expected prediction error and real-world example
+So this is my approximation. I want to reach to that exact F of X. So the error is Y the actual value minus F of X. The representation of the F of X and when we are building F-OF X will come. So when we are squaring the errors so the Y -, F dash of X0 whole star right this thing. So this is the prediction error which has two component to it. One component arising from the noise in the data. The second component is coming from the actual fitting of the model. So if our model has like let's say some data which is like our predicted model 1.99 X 3. So the error which is getting introduced here right.
+00:02:23 - 00:03:00
+Calculating expected prediction error over samples
+This is also one error. The another error is the noise which our actual real world sample has. So these two combining is the error of the model. So when we take expected value over large number of samples, right, Many samples for example there is a traffic stop, the number of vehicle at that the same hour of each day is supposed to be 10 true function value, right? But each day actual value of the vehicles will be 9/11, 1010129 something like this.
+00:03:01 - 00:04:18
+Decomposing prediction error into variance and bias
+So these are the true values for each hours it might be different. So this is not one sample but the value of Y for X0, that is X0 is the starting point. So what is the value of Y? So for north random samples we donate the expected prediction error. So we calculated the YY predicted at X0 and then square. So if you take the sum of all at X0XX1 everything, then the summation of that sum of all the intervals if you take it from YK to 1 to north for that particular sample at X0 right? So at X0 we are taking for a different value Y1F of 1X0 then Y2F of 2 of X0Y3F of three of X0 so on up to YNF of north of X0. So when we take all these values, take the average or the mean of them. That is the expected prediction error.
+00:04:18 - 00:05:09
+Inducible random error and bias-variance reduction
+OK, so with some calculation this can be decomposed into three parts. There is some like mathematics behind it. So we when we want to expand it. So when we expand it, this can give us the standard variance plus F cap of X 0 -, F of X0 and expected value of F of X 0 minus expected value of F of X0 whole square. So this error what we have is the inducible random error which is the error generated from the noise in the data. So we cannot do anything for that. That will still remain whatever model we develop.
+00:05:10 - 00:06:12
+Understanding bias in model predictions
+But this error, the bias square in the variance, this is what we want to mitigate or we want to make reduction in that. So the inducible random error which is the error generating from the samples or the error coming from the actual data cannot be done. But we what we can do is we can do some approximation to reduce the bias and the variance. So bias is the inability of the model to fit the underlying data distribution right. So, high bias is like model systematically wrong or under fitting right? And the simplest model. So the bias can be calculated, it is the expected value. Expected values like the sum of all the values of the mean of L values of F cap of X naughty minus F of X naughty. So the F expected value of F cap of X naughty is the average function right?
+00:06:13 - 00:07:02
+Explaining variance in model predictions
+It is coming at the expectation. Expected value is coming from a distributions right whether it is a discrete or the probability distribution and how the average coming from that distribution. So here what we are saying here we are seeing that it's the models average prediction. The bias has expected value of F cap of X0 that is the predicted value of F at X 0 minus the actual value of F of X zero. OK the average function it modules it trains on the random sample data set. So the difference between true function values and the function value shows the systematic offset that how long the model average predictions are from the actual value to predictor value. So that is the average which what we are calculating.
+00:07:04 - 00:08:00
+Comparing high bias and high variance models
+So here if you see there is a high bias right there is a high error from D's point. So at each point, if we calculate the errors, it will be high because the value will be here, the predicted value of F cap, right? Again, same thing here. The predicted value of F cap will be here, the actual value is here. So this is our error. So if you're combining all taking mean of it, you can see that there is a high bias here. But on the other hand, so if you combine here, the bias will be very less. So in the first module there is a high bias, so high errors or the sum of errors between the sample of a calculated value and the original value.
+00:08:00 - 00:09:06
+Optimal balance between bias and variance
+So the model has low bias. Model has more flexibility and fits the training data closely. So let us understand in a similar way variance. Variance is the difference in fits between the data cell right? So it is like FK, it is the calculation of expected value of F, cap of X0, expected value of F, prediction of X0. So what we are doing in the previous one there was number K. So we were taking that particular point and then calculating it right. So if you see here, there is no K involved here. So there is no K in the F of function or function here. There is no K but here there is AF. So what we are doing in variance variance models calculate the expected value of F is the average prediction function and then it is the difference with the prediction on sample K.
+00:09:07 - 00:10:04
+Plotting bias versus variance for error minimization
+So how much prediction on the set compared to averages. So if you take the K samples how much is the variations happening or variance happening. So how we are calculating is the expected value of FK of prediction at X 0 minus the expected value of F of F predicted at X0 square. So the difference between the prediction on sample K tells how much is it has the variance. So if you see in the first module, it has very low variance because this particular if for each different samples, for there's one sample, the second sample there are two samples. Here both the samples have the same expectation values because it is a underfit or it is not overfitting so it is not moving that much.
+00:10:04 - 00:11:07
+Achieving optimal model fit without underfitting or overfitting
+So the samples are very close. But here they have the two samples, they have the different values. So there is a gap between them. So high variance models varies widely when trained on different data set. Whereas the low variance model does not fluctuate as much. OK, so if you have data set is keep on training changing then you might have the high variance the data sample change. Then there might be introduction of the because the IT get used to the noise right? High variance models are getting used to the noise because of the low bars we have seen in the previous thing. So that's why this problem comes in. So generally like if we can summarize bias and variance bias is ever caused in that particular sample of data where we are training the model and model is not properly trained or under fit right?
+00:11:07 - 00:12:07
+Examples of bias and variance in different models
+Our simplest model variance is when you have trained a model you have made it very complex but which can work well for one particular data but may not work well for other sample datas like validation set or test set. So that will have has the high variance. So now we want to find out an optimal way where basically where we can say that the model has low bias and low variance. So this is the thing where we can say low bias and low variance. So if you see our error term whatever the error in model is Sigma plus bias plus variance, right. So Sigma is the error which is caused by the data sample like noise in the data itself. So which can we cannot do anything for this term. So this is bias and variance term. So if you have either one of them also high, your total error will again will increase.
+00:12:07 - 00:13:08
+Balancing model complexity for performance across samples
+So what we need to do, we can try where we can have both bias and variance as optimal 1. So we don't want to have both of them increase. So we want to get that optimal thing. So we can see that, you know, like if you can plot the bias versus variance one in the plot here like this is like here we will have high bias region. This is a high variance region, so we cannot have either one of them. So what we need to do, we need to get the region where total error is less, so where the bias invariance is also less. Because again, total error is Sigma plus bias plus variance, right? So that's where we want to make it an optimal 1 S We have to always remember that we want to get an optimal solution where there is not much high bias or not much high variance. OK.
+00:13:09 - 00:14:54
+
+So just in a very, very simplistic terms, we can say that we want to get a model which does not have under fit as well as over fit. OK. So if this image which I have asked in the previous video, you can see that this has high bias and high variance. It has not approximated well and very generic, right? And also it is not able to formulate for different data sets. So high bias and high variance in this one, it has high bias and low variance because it can get more away from the model that has high bias but it can approximate well for other data set. So low variance, right. So this one has low bias, it is close but high variance because it is very scattered for different data set. So this is an optimal one which has low bias and low variance. We have now broken model errors into two main parts, bias which comes from model being too rigid and variance which comes from model reacting too much to noise. Understanding this balance helps us decide whether a model is too simple or too sensitive, and guide us towards choosing a level of complexity that keeps performance balance across different data samples.
+
+
+Bias measures how much the model’s average predictions differ from the true underlying relationship. Mathematically, for a prediction function (Equation) approximating the true function (Equation): 
+ 
+
+Equation
+
+ 
+
+A model with high bias: 
+
+Assumes an overly simplified structure, such as a linear model for nonlinear data 
+
+Underfits patterns and performs poorly on both training and test data 
+
+Produces predictions that are consistently incorrect in a similar way 
+
+ 
+
+High bias in a model can be due to excessive regularisation, limited model capacity, or restrictive assumptions. 
+
+ 
+
+ 
+
+Variance captures how sensitive the model is to fluctuations in the training data: 
+ 
+
+Equation
+
+ 
+
+A model with high variance: 
+
+Fits noise and random fluctuations within training samples 
+
+Performs extremely well on the training set, but poorly on unseen data 
+
+Changes significantly when trained on a slightly different dataset 
+
+ 
+
+High variance can be caused by overly complex models, insufficient training samples, or weak regularisation. 
+
+ 
+
+ 
+
+The Bias-Variance Trade-off 
+
+ 
+
+Improving one component often worsens the other. Increasing model flexibility tends to reduce bias but raises variance. Conversely, constraining a model reduces variance, but risks increasing bias. 
+
+ 
+
+Graphically, this relationship is typically represented as: 
+
+Training error decreases with higher complexity 
+
+Test error reduces initially, but then rises again as variance becomes dominant 
+
+image 
+The goal of model design and selection is to find the optimal level of complexity that minimises overall error, not just training error. 
+
+ 
+
+As we move toward Support Vector Machines, you will see how maximising the decision margin is an explicit strategy to control variance while maintaining sufficient model expressiveness. This mathematical foundation helps explain why SVMs perform strongly even in high-dimensional classification tasks. 
+
+ 
+
+ 
+
+Before moving to SVMs, let’s see a quick demonstration which shows models with varying bias and variance in action. 
+
+Demonstration - Bias and Variance
+
+
+Let’s explore how different models and configurations display different balances of bias and variance when trained on the same dataset. 
+
+ 
+
+In the next video, we will work with three representative models: 
+
+Linear Regression: a simpler model expected to show higher bias 
+
+Deep Decision Tree: a flexible model prone to higher variance 
+
+Random Forest: an ensemble method designed to balance bias and variance 
+
+00:00:00 - 00:00:31
+Introduction to Bias and Variance in Model Development
+Now let us understand the concept of bias and variance with a notebook and when we develop a model, how we can detect the bias and how we can detect the variance component of it. So this particular notebook, we are utilizing a California housing data and our main goal is to just to explore the concept of bias and variance. So we'll be more focused only on that particular concept, OK.
+00:00:31 - 00:00:50
+Exploring Bias and Variance with California Housing Data
+So we will be seeing high bias model and then high variance model and then a balanced model. So initial steps of importing the packages, what are all the things we want to import and then we are importing the data set, California housing data.
+00:00:51 - 00:01:12
+Data Import and Initial Analysis
+And then just using the head here to see the 1st 5 rows of all the columns what we have. So we have Med Inc house, age, available rooms, bedrooms, population, all these things.
+00:01:12 - 00:02:04
+Simple Linear Regression Model Development
+And then there is a basic analysis, if you can see the describe one. So all these steps I'm going to skip because our focus is just to see the bias part. So we are splitting the model into train and test and then the standard scalar. So now we will develop a simple linear regression model here. So we are fitting. So what we are doing, we are importing from psychedelon linear regression and fitting the model for our train data. So X train scale and Y train. And then once we fit we are predicting the models accuracy or predicting the output values or for getting the accuracies metrics for fun training data as well as on the testing data.
+00:02:04 - 00:03:05
+High Bias and Low Variance Model Analysis
+And then we are printing those values here. So what we have noticed here you can see the models training because we have not done any optimization, hyperparameter training or anything. Just we have developed a simple model. So model is showing around 30% accuracy right? And it is a simple underfit model. What we can say it has very high bias because the model is very simple but it has low variance Why? Because the testing 1 also it performs similarly. So it has high bias and low variance because if on the another data set which is a testing data which has the model has not seen previously, it is giving a similar kind of accuracy on the same data set. Let us build a decision tree here we are keeping the depth as 30.
+00:03:06 - 00:04:28
+Decision Tree Model with High Variance
+Why? We purposely want the model to train better and you know go into understand everything and so that's why we are going for a higher depth. And once there are very high depth, there is a high chance that it has gone into over fitting. Now we are doing the same thing fitting the model predicting. So if you notice here on that particular data set, the train mean absolute percentage error is very, very small. It is 0 point 00047 but on the test one it is 0.24. So the values on a training data set is very good but on the testing data it is very high. So this model shows low bias and high variance right? Why it is low bias? Because it has learned better on that particular data set, training data set, it is performing better but it has high variance when the moment it sees the other the data set, the scatter the distance between them is high. We have seen that how the bias invariance calculation is done.
+00:04:28 - 00:05:36
+Random Forest Model for Optimal Bias-Variance Balance
+So now what is an optimal way here? So the optimal way is let's develop a random forest and keep the maximum depth to 12 only. OK. And number of trees also we're keeping it as 300 and then let us build it. So now if you see the train and test good accuracy and it is working well for training data as well as the testing data. So there is no overfit or there is no underfit. So this we can say low bias and low variance or an optimal model. OK, So if you want to see bias variance behavior, we can, you know, resample the data set into multiple training and testing sets and then train three decision tree models with varying depth to see how the high bias, you know, high variance will be here, achieved here, balance is achieved here and low variance.
+00:05:36 - 00:05:52
+Purpose of Notebook: Bias-Variance Demonstration
+So that this particular the purpose of this notebook was to just to show how high bias, high variance or a balanced model will look like while developing the machine learning algorithms.
+
+
+
+
+
+We saw that 
+ 
+
+A high-bias model, such as linear regression, may produce stable but consistently inaccurate predictions 
+ 
+
+Increasing model complexity with a deep decision tree reduces bias but introduces volatility, reflecting high variance 
+ 
+
+A balanced random forest mitigates variance by aggregating multiple decision trees, resulting in more dependable performance across resampled datasets 
+
+ 
+
+Through resampling the dataset into multiple training-testing splits, we understood how bias and variance accumulate over a number of samples to influence a model’s performance. By comparing these behaviours side by side, the essential nature of the bias-variance trade-off becomes clearer. This understanding will guide informed choices about model complexity and regularisation as we progress into more advanced classification methods. 
+
+ 
+
+Having understood the fundamentals of bias and variance, let’s now move on to understanding the motivation for SVM. 

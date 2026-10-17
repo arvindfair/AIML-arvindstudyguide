@@ -1,0 +1,1078 @@
+Surrogate Models
+
+00:00:05 - 00:00:42
+Introduction to LIME method for AI model interpretation
+In this session, we are going to discuss a very popular method for interpreting black box AI models and this method is called LIME. That is what it is known as popularly it stands for Linear Interpretable Model Diagnostic Explanation.
+00:00:53 - 00:01:00
+Explanation of LIME as Linear Interpretable Model Diagnostic Explanation
+OK, so this is a very popular strategy for interpreting AI models.
+00:01:01 - 00:01:56
+Local vs Global Interpretability in AI models
+So this is a local interpretation model. You may recall from an earlier video that there are two kinds of interpretations. Broadly, you could do a global interpretation of what the model is doing. You can also do a local interpretation which is specific to a given data point and the decision that the model gave on that data point. So this is a local interpretability method interpretations. It is not global and this is also part of what are known as surrogate methods. What is a surrogate method?
+00:01:56 - 00:02:25
+Understanding surrogate methods in AI
+The word surrogate is basically a proxy. OK, something which is not the main thing, but you are using something else to represent the main. OK, so that's a surrogate now. So if you go back to the reasons why we need interpretability in the 1st place, that's primarily because most of the AI models that we deal with today are way too complex.
+00:02:25 - 00:04:51
+Need for interpretability in complex AI models
+They're extremely complex and the complexity just simply beats us. When you have a model which has a few 10s of billions of parameters sitting inside, you have no clue what to do with it, right? I mean, you can use it, of course, but you have no idea what's going on inside and how to interpret those. That's simply inconceivable, right? So, So what do you do is you try to build a surrogate model which kind of mimics the behavior of the original model. Now we seem to be going around in circles here, but not not exactly. If you actually want to build a model which is as good as the original model in every possible scenario, then obviously it is going to be as complex as the original. There is nothing that you have gained. So the idea is to build a proxy model which is very simpler, which can be interpreted easily. And that simplicity comes from the fact that you are trying to employ the surrogate model under some restricted conditions, right? So what you would want to do is say something like, you know, this is the full domain of the original model. This is the original model domain, OK, in whatever way you think of domain, we will get into the specifics a little later. So this is the original model domain. It includes all the data points, all the different scenarios in which you can use it. Now you take a subset of that and within this you build a surrogate. The expectation is that the surrogate model will very closely approximate the original as long as you are in the restricted room. OK, so the idea is to basically simplify the original complexity into a simple surrogate model which can be easily interpreted but within a restricted room. Now what does LIME do?
+00:04:51 - 00:05:02
+LIME's approach to building surrogate models
+LIME essentially builds a surrogate model in the locality of a specific data point and a decision.
+
+
+Example 1
+
+
+00:00:00 - 00:00:17
+Introduction to credit card decision model
+Let's take a specific example. Let's use the same kind of examples that we used in some of the earlier videos. So let's say there is a credit card company and they want to issue a card. So there is a decision to be taken on an applicant, right?
+00:00:17 - 00:01:21
+Attributes affecting credit card decision
+And there are attributes like salary, age, then net worth, gender and so on, right? So these are the attributes and the decision to be taken is yes. OK, so this is I am trying to build a model for this. And let's say I have a very complex model which has phenomenal accuracy, OK? But now I take a specific customer with a certain salary. So let's say the salary is 10,00,000, age is 35, and the net worth is maybe 50,00,000 gender, say three, OK? And the model said yes.
+00:01:22 - 00:02:01
+Explanation need for model decision
+So this is the decision by the model and this is the profile of the custom, all the features. So we are taking a very specific case, OK, or maybe let's say no. OK, the model said no. OK, Now obviously this person then wants to have an explanation for why the card was denied. OK, because the model said and I need to generate an explanation. So what do I do?
+00:02:02 - 00:03:23
+Creating neighborhood around data point
+Please remember I'm not trying to create an explanation for the model as a whole across data points. It is for this specific data point for this specific decision given by the model, OK. And now what I do is I take a small neighborhood around this particular instance. So what do I mean by neighborhood? Maybe the salary instead of this is the original which is 10. So maybe I can vary it from say 5 to 15, OK. And the age it is 35, so maybe I'll vary from 25 to 45. And then the net worth I can say go from 10,00,000 to 1,00,00,000 and gender toggle between female and male. OK, so I create a neighborhood like this which is around this particular data point. OK, what I do is I generate multiple proxy data points in this neighborhood.
+00:03:24 - 00:04:03
+Generating proxy data points
+OK, so you could have one data point which is say 6/28/12 and female and then 836 and then 60,00,000 and say male, OK and so on. So say 12 age is 1029, maybe 30,00,000 female. OK.
+00:04:03 - 00:05:08
+Using model predictions for proxy data
+So I have created multiple data points and say the model said yes for this, no for this, and maybe also more for this. OK, so I had this original data point and then I created several proxy data points like this by sampling from the neighborhood of this original data point and use the same model to make a prediction about each of these. If there was a person with this profile, what would the model have said? If there was someone with this profile, what would the model have said? And so now I have a bunch of data points with their decisions, and all these data points are in the neighborhood of this specific data point for which I'm looking for an explanation. OK, now it becomes any regular machine learning problem, typically a regression or it could even be a classification.
+00:05:08 - 00:06:10
+Building simple regression model
+So in this case I now have a classification problem where this is one data point, the original, and then the second data point and the third data point and the fourth data point. I can have as many as I want and for each of them there is a decision. OK and so these are decisions given by the original model which was complex and which is what I am trying to interpret. Now I build a simple model like say a linear regression which takes these data points and these decisions, the decisions given by the original model. Please remember now I am trying to use the decisions given by the original model as the ground truth, right? Because my surrogate model needs to mimic the behavior of the original model. So I give the decision by the original model as the ground truth and train a model which will produce values which are very close to the values given by the original model.
+00:06:12 - 00:08:37
+Interpreting regression model for decision explanation
+And assuming that linear regression is easy to interpret because it is simply. If you remember one in the earlier videos, we had a discussion about what makes a model complex. So we talked about the fact that a linear regression model will typically be something like some constant into salaries, 8.36 into salary plus 9.28 into the age, plus something else into the network minus, Yeah, another constant into the gender, which is you can reduce it to 01. And if there's more than some threshold, say .5, then you say yes. If it is less than, right. So what you do is you try to build a regression model like this, which will produce this value, right? So we assuming that the original model, if it just gave a zero or one, then you put a zero or one, this is equal to yeah. So instead of gender, you put this equal to the decision. So one if it's a female, 0 if it's something. OK. And so you have the regression model will try to figure out what these constants must be for it to meet this criteria. It could even be the original model was a probabilistic model. Then these would have been some probabilities which you would have converted into decisions, right? The probability could be whatever. If it's more than oh .5, you would have said yes. If it's less than oh .5 you would have said no. OK. So this would be some number. You can put that number here. So for the first case, it could be point because it was a no, so maybe it was .35. Second case it was yes, maybe it was .82, right? And so you basically have a bunch of target numbers with the corresponding features which are locally generated from that data point. And you fit a regression model to this. OK Yeah. So you you now have a regression model which closely replicates the behavior of the original model in the vicinity of this particular data point. That's the idea, OK.
+
+
+LIME Nomenclature
+
+00:00:00 - 00:00:27
+Introduction to Linearly Interpretable Models
+Just going back to the name, So we said that the name is what linearly interpretable. So why are we calling it linearly interpretable? So this model, we are now trying to generate, this regression model is the surrogate model, right? So and the surrogate model is a linear model and the surrogate model is the one that is going to be interpretable because the original model is not.
+00:00:28 - 00:01:34
+Surrogate Model and Model Agnostic Explanation
+So that's why we call it linearly interpretable model agnostic. Why is it model agnostic? Because I'm really not using anything about the internals of the original model. The only thing that I'm using is the decisions that the original model will give on any given data point. That's it. So these are the only things that are coming from the original model, nothing else. So I'm basically treating it as a black box. You give an input, it will give give me an output. And that output is what I am recording. And I am trying to build a model, a surrogate model, which will try to mimic these outputs given by the original model. So it is, it doesn't matter to me what goes inside the black box. It can be a neural network, it can be XG boost, it can be random forest, it can be anything. Absolutely fine, right? The only thing that matters to me is what is the output this model is going to give me. That's it. So that's is why the name linearly interpretable model agnostic explanation.
+
+
+Now that you have understood the LIME nomenclature, let us understand how surrogate models are used to reduce complexity.
+Reducing Complexity
+
+
+00:00:00 - 00:01:00
+Challenges of High-Dimensional Linear Regression
+There is one other thing that we need to handle now conceptually, if you look at this right, we are going to build a linear regression. So far so good. But is that enough? What if the number of features that you had ran into thousands? OK. If not millions, then your linear regression model is also going to have 1000 or 1,000,000 coefficients. Now is this interpretable? Not exactly, right. I mean, it's no big deal, brought it down from a billion to a few thousands, but it's still bad enough right now. So it doesn't help in our Causeway, which is interpretability. So before you build this surrogate model, you have to go through one more step.
+00:01:00 - 00:02:10
+Feature Reduction for Interpretability
+And that step is to cut down on the number of features to something that is manageable, something that you can do relate to. For example, if as a human evaluator, if you were to do an evaluation of a particular data point, how many features would you be looking at? Maybe half a dozen, probably a dozen, but that's about it, right. Very rarely would you have humans looking at 100 different features or definitely not in thousands, right. So if you want it to be interpretable, you have to bring down the number of features to something that humans can relate to. And that is the step that you have to go through before you build your surrogate model. Yeah. So now we have pretty much all the ingredients for the line framework to interpret a black box AI model. So suppose you have a model M This is your original model, right?
+00:02:10 - 00:03:15
+Introduction to LIME Framework
+And you are given a data point and the decision given by the model on this data point. So this is the decision given these three. I am now looking for an explanation. An explanation for why the model said Y on X. And that is the explanation that I am looking for. So what do I do? The first step is to generate or sample, yeah, proxy data points in the locality of X.
+00:03:17 - 00:05:03
+Generating Proxy Data Points
+OK, so let's call these as say, Z1 to whatever ZK. Then Y1 to YK prime are the the predictions of my original model on these proxy data points that I have generated. Then what I do is 3rd step is do a feature reduction. So which means I am going to cut down Z1 to Z1 prime, Z2 to Z2 prime, etc, ZK to ZK prime and in such a way that the dimensions or the number of components of ZI prime is much much less than the number of components of the origin.
+00:05:06 - 00:06:26
+Feature Reduction in LIME
+And now what we need to do is to build a linear, typically a linear regression like bridge regression on to ZK prime as Theta points. And these the values or the decisions given by the original model which is Y1 prime to YK prime as the targets. If you have say M features in zi prime, OK, then what you do is. So what this will give you is coefficients C1 to CM for the reduced set of attributes that you have.
+00:06:27 - 00:07:18
+Building Regression Model for Explanation
+So this is the first reduced attribute and the MTH reduced attribute. So these are the short listed attributes after the feature reduction. These are the regression coefficients. If you look at the the values of these, then it will tell you the relative strengths of these features. OK, yeah. So if this constant is high, that means this feature is more important. If this constant is negative, that means it has a negative influence on the target. And so, so you can do all your interpretations based on these constants. OK, so this is the broad idea.
+
+
+General Formulation
+
+
+00:00:00 - 00:00:19
+Introduction to surrogate model GE and original model F
+A more general formulation, which is how it was presented in the original paper, is that you have GE which is a surrogate model. F is the original model.
+00:00:21 - 00:01:05
+Minimization of loss function and complexity of surrogate model
+Then what you try to do is to minimize over all possible G's OK and the loss function. So this is your loss function. The target is the original function F and this is the G. This is the surrogate model that I am building. And there is something called π X which I will talk about in a minute plus this. So this is the complexity of G.
+00:01:06 - 00:02:17
+Regression minimization and target difference
+So I don't want the surrogate model to become very complex then it beats the whole purpose, right? So I want to put a check on the complexity of the surrogate model. And in the case of line very specifically though this is how the paper started. But then this term actually becomes irrelevant because the only surrogate models we are considering are all linear models, so they are all of the same complexity. So this pretty much reduces to a constant. So you can kind of ignore this. You don't have to worry about this at all OK? But if you are considering a more general class of surrogate functions, then this may become important. OK, The only other term, everything else we have discussed. So this minimization is what the regression is doing, basically. OK. And the loss is. So this is your target. And you try to minimize the difference between what the surrogate model produces in the vicinity of that particular data point with what the original model would have given. OK. And yeah, what is this π X.
+00:02:17 - 00:03:20
+Weight assignment to data points using π X
+This puts a weight on each data point. So if you had let's say say this was your original data point. OK. I'm just giving you a simplistic representation. So I'm going to sample points from here, right? Like if you had the salary was 10 in the original data point, we took anything from 5 to 15, right? But here, clearly if I take 5, I don't expect the prediction on the data point where the salary field is 5 to be as close to this data point.
+00:03:20 - 00:05:03
+Distance-based weight assignment and prediction accuracy
+So say let's say this data point was A, this data point is the original data point, and say this data point is B. The salary value for B is much closer to the salary value for X, right? So the distance between the B dot salary and X dot salary, or in general say distance between B&X, it is less than the distance between A and X. So B is a data point. Though it is a perturbed version of X, it is much closer to X than A S, correct? So you would expect the prediction on B. So prediction by M, right. So we had a notation for that. The difference between M on B&M on X, which is the original data point is also going to be less than the difference between the prediction on A and the prediction on X because this B is closer to XI could expect the prediction also to be closer to X because I'm assuming the model is reasonably well behaved. OK, So I cannot treat all these data points equally because I don't expect them to all have exactly the same characteristics as the original data point. And this is precisely where the Pi X comes in.
+00:05:03 - 00:06:23
+Variants of Lime framework and surrogate model choices
+Yeah. So this is the weight that I assigned to every data point. Closer it is to the original, the weight is going to be higher because that is closer to the original and the farther it is from the original data point, the weight is going to be lower. I am not going to give it too much importance, right? So this is essentially how the line framework works. So it actually gives you a lot of freedom. There are several different variants of the original line that was proposed. So many of those variations come in the form of how am I going to assign the weights? What kind of surrogate models am I going to use? So is it going to be linear always? Like if I just want the surrogate model to be interpretable, can I use a simple thing like a decision tree? OK, so instead of building regression model, I build a decision tree model on the proxy data points that I generate in the vicinity of my original data point. So you can do the all these kinds of variations, but the original paper just talked about building a linear regression model as the surrogate model. OK, yeah. So that's pretty much what Lime is.
+
+
+Interpretability of Features
+
+
+00:00:00 - 00:00:13
+Introduction to feature interpretability in models
+There is one last subtlety that I do need to talk about and that subtlety is this.
+00:00:13 - 00:01:33
+Challenges of interpreting pixel-based features in image models
+So here we talked about these features, right? And we only said the number of features may be too big for us to interpret. So I'm going to cut it down to some reasonable number. But the features themselves, are they interpretable? Probably not. Now I'll give you an example. Why, right. So let's take an image for for instance, I, I have a model and and a very say, state-of-the-art image processing model which does image classifications give an image, it will give you a decision. Now it could be something like say MNIST for instance, right now where you have these handwritten digits. Now the features as far as the classification model is concerned with the original model are what are the pixels? But is that the way you look at it as a human? So if I tell you this pixel value is R in a scale of 0 to 255, it is 0.36, the B is 0.99 and something else, right? I give you these three numbers and I give you these values, these triplet of values for say, 100 pixels. Can you make head or tail of what's going on? No, you cannot. Can you interpret what that image is all about?
+00:01:33 - 00:02:25
+Human perception versus model feature analysis
+No, you really cannot, right? Because we as humans don't look at an image in the form of pixels. We look at a much higher level of perception, right? Our we abstract a lot of the underlying detail out, whereas the model basically looks at the pixels and the numbers. So if you use the same features that the original model used for doing the prediction, you would have a bunch of pixels. Even if you do a regression later on, the regression will say this pixel. So say you had this image, your regression might tell you, OK, this pixel has this much weight, this pixel has this much weight, this has this much weight, this has this much weight. Does that make any sense? No, not really, right?
+00:02:25 - 00:03:07
+Importance of interpretable feature spaces
+So what we also have to think about is that the the list of features that the model original model uses may not be terribly interpretable for a human. Before we do all this, these steps are correct. There's nothing wrong in it, right? So we have to generate a proxy in the locality and all of that. But we had made one subtle assumption here that the feature vector is the same or the set of features is the same for the surrogate model and the original model. That is something that we have to definitely address if you want good interpretability. So there is a zeroth step before this.
+00:03:08 - 00:03:38
+Creating interpretable feature representations for data points
+You need to decide on an interpretable space. You need to represent every data point, like an image or a sentence or something in a space which is interpretable by cubes. So you need to represent the same object with a different set of features, and those set of features must be interpretable for us.
+
+Example 2
+
+00:00:00 - 00:00:20
+Introduction to image representation and objects
+So let me give an example to make this concrete. Suppose I take an image. This is an image of say that the classic is sun and there are hill, there's grass here, there's a river flowing OK, And there is a tree here and so on.
+00:00:20 - 00:02:03
+Concept of super pixels in image processing
+OK, maybe there is a boat in this. OK, so here is an image. OK, Now what we won't think of is in terms of the objects that are there, the entities that the image represents. There is a mountain peak, there is the sun. OK, so there is a peak. And then so let me highlight this in red. This is the sun, this is a tree, and this is a water body, this is a boat and so on, right? So this is grass and so on South, maybe there is some snow. These are the terms in which we like to think of an image. We don't think of an image in terms of pixels. So what you do is you convert the image. First thing is you convert it into, uh, what are known as super pixels, which is basically an aggregation of pixels making up objects which can be perceived, which you typically think in terms of like all these objects. So the sum would become one super pixel, and then the peak would become another super pixel, the water body would become another super pixel, the boat within the water body will become another super pixel, the tree would become another super pixel, and so on.
+00:02:04 - 00:03:03
+Super pixel representation and object detection
+South, each of these are super pixels. OK, And there are algorithms for generating super pixels. It's usually not this way. You would have it lot more regular, but I mean the idea is this idea is to aggregate the low level pixels into the higher level objects that you think in terms of. And the Super pixel kind of partitioning is one of the key techniques that people use for object detection and things like that. OK so now I have a representational of an image in terms of these super pixels, not in terms of the original pixels. And the representation is just suppose there are 10 super pixels it's just one 1111 where one for a super pixel.
+00:03:03 - 00:05:07
+Generating local variants and regression model
+Each of these the position represents a super pixel and one means presence and if it is 0 then it is absent. OK now you can see how you can generate the local variants right? Just switch these things off. So suppose I had taken the mountain off, then what would the model have said? OK, like for example, say my classification model needs to say whether is this a landscape? OK, yes. So that that is the decision that the model is trying to take. So now I'm trying to understand, if the model said yes, why did the model say yes? Was it because of the mountain, because of the sun, because of the tree? What is it? OK, so how do you check that? This is what we do. So you create these super pixels and then you switch them on and off. OK, so you create multiple data points, meaning multiple images. Some images will have the sun and the mountain, but not the tree. Another image will have the sun and the tree, but not the mountain. The third one will have the mountain and the tree, but not the sun. And so on. So you create all these different versions of the same image by fiddling around with these ones, and then you fit a regression model. You give each of those modified images as inputs to your original model, get the predictions, and now you fit a regression model. And the regression model will then tell you, is this more important than this? Was the mountain more important than the sun? Or was the tree more important than the than the mountain as far as the original model is concerned? So which of these features is the original model taking more seriously as far as this particular image is concerned?
+00:05:08 - 00:06:08
+Interpretable representation in sentiment analysis
+OK, so the 0 TH step in this is to create an interpretable representation of the original data point. OK, another example for an interpretable space is again similar say this product is terrible. OK, so this is the review for some product. I'm doing a sentiment analysis to say whether it is yes or no. OK, so I gave this to my NLP model, the sentiment analysis model, and it said no, it is a negative statement. So I'm classifying between negative and positive, right? So now I want to know why it said it is negative. And the way we think about it is, OK, it is negative because of this particular world, OK.
+00:06:08 - 00:07:03
+Understanding sentiment analysis through token presence
+But if you look at the way the model was trained, the model was trained on some word embeddings. And so each of these is going to be a vector of size some 756 or whatever, right? 7681024 makes no sense to us, right? So if we want to interpret it, we should be able to say it said negative because of this word. OK, so or let's say I say, OK, not too bad. Now this is a positive sentiment, right? It's not exactly negative. And so how do I know that this is a positive sentiment because of these two words, bad is negative, not is negative. And they kind of neutralize each other out, OK. And that's what makes it a positive thing.
+00:07:04 - 00:08:03
+Building local proxy models for sentiment analysis
+So if the model correctly says it is positive, I want to know why it is saying it is positive. Maybe it is saying it is positive because of two, which is not good enough for me because then I can't rely on the model. But if the model is actually pointing out to these two things and saying I said pause because of these two, then I'm happy, right? So again, exactly like the Super pixels that we talked about in images, the interpretable representation of a sentence is simply the presence or absence of these tokens. You could have multiple ways of representing that data point in an interpretable manner. The most obvious thing is just switch these on and off. So if I had removed this word, would the model still have said the same thing? If I remove this word, would the model still have said the same thing? That's the sort of reasoning I do when I build the local proxy model.
+00:08:04 - 00:09:10
+Introduction to Lime and its implementation
+OK, so that was Lime and as we did in the earlier videos, we will go through a quick demo which is again a ground up implementation of Lime without using any of the ready made libraries. There are ready made libraries for Lime and I would encourage you to use it for production. But if you want to learn how the thing works, it is best to just try implementing it once, play around with a, get a good understanding and then go to the ready made library because obviously the ready made library is far more performance oriented. It is, it will be fast, it's debugged, lot of people have looked at it and all of that, right? Yeah. So for production purposes, definitely go to the ready made libraries and I'm sure you can figure out how to use these libraries. That's that's a no brainer. This video is meant to help you understand how and why Lime works OK, And the best way to do that is to illustrate it through a ground up implementation. OK?
+
+
+LIME Demonstration
+
+
+import os
+DATASETS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Datasets'))
+IMAGES_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Images'))
+CHECKPOINTS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Checkpoints'))
+
+# from google.colab import drive
+# drive.mount('/content/gdrive')
+# IMAGES_PATH = os.path.join('/content/gdrive/My Drive/',
+#                            'Documents/IIITB/Courses/Upgrad/xAI/images')
+
+from dataclasses import dataclass
+
+@dataclass
+class LimeHyperparameters:
+    # Number of local samples generated for every datapoint to be explained
+    n_local_samples = 100
+    # 'Explanation Complexity' - #'significant' features to retain, tree depth etc.
+    k = 5
+    # Sampling parameter --- used for generating the local samples
+    # interpretation will depend on the sampling strategy used
+    alpha = 0.1
+    # Kernel width for an RBF kernel --- used to compute pairwise distances using an RBF kernel
+    rbf_weight_kernel_width = 0.75
+**LIME - Locally-Interpretable Model-agnostic Explanations**<br>
+Explanation-Space: A compact / sparse representation for the input datapoints<br>
+**xp-space**: Explanation Space; **inp-Space**: Input Space<br>
+**xp_** --- is often used as a prefix to denote "explainable"<br>
+<br>
+**Convention**<br>
+--- methods ending with single underscore (\_) are meant to be overridden in subclasses<br>
+--- methods starting with a single underscore (\_) are meant to be 'private' methods, not to be called from ourside the class.
+# Default data class for vanilla tabular, numeric data
+
+import numpy as np
+from numpy import ndarray as Array
+from typing import Any, Tuple, List
+from math import prod
+
+class LimeData:
+    """Encapsulates the data, the predictions for which require explanations"""
+    def __init__(self,
+                 x:Array,
+                 hp:LimeHyperparameters):
+        super().__init__()
+        self.hp = hp
+        # 'x' is in the inp-space
+        self.x:Array = x
+        # xp-representations of 'x' along with local samples around each 'x' in the xp-space
+        self.xp_augmented:Array = None
+        # Points in the input space corresponding to each of the xp-space augmented samples
+        self.perturbed_x:Array = None
+        # Weight for each sample in 'self.xp_augmented'
+        self.weights:Array = None
+        print(f'{self.x.shape[0]} Points for explanation with {self.inp_attr_shape} features each')
+
+    @property
+    def xp_local(self) -> Array:
+        """Return the xp-representations of 'x' and local samples in the
+        xp-space around each data point in 'x' and generate a weight for each
+        sample"""
+        if self.xp_augmented is None:
+            # Generate the xp-representations of 'x'
+            xp_x = self.gen_xp_representations_()
+            assert xp_x.shape[0] == len(self), f'{xp_x.shape[0]} != {len(self)}'
+
+            # Generate locally perturbed samples in the vicinity of each of the inputs in 'x'
+            # in the xp-space
+            local_samples = self.gen_local_samples_(xp_x)
+            assert local_samples.shape[0] == len(self), \
+                    f'{local_samples.shape[0]} != {len(self)}'
+
+            # Merge the xp-version of the input x into the samples
+            # The first 'sample' is the original datapoint
+            self.xp_augmented = np.concatenate((np.expand_dims(xp_x, axis=1),
+                                               local_samples),
+                                               axis=1)
+            assert self.xp_augmented.shape[0] == len(self), \
+                    f'{self.xp_augmented.shape[0]} != {len(self)}'
+
+            # Find the corresponding points in the input space
+            self.perturbed_x = self.reverse_map_()
+            assert self.perturbed_x.shape == (len(self), *self.inp_samples_shape),\
+                    f'{self.perturbed_x.shape} != {(len(self), *self.inp_samples_shape)}'
+
+            # Assign weights to each local sample w.r.t the base datapoint
+            self.weights = self.get_sample_weights_()
+            assert self.weights.shape == (len(self), self.n_samples,),\
+                    f'{self.weights.shape} != {(len(self), self.n_samples)}'
+
+        return self.xp_augmented
+
+    # ======= Methods that can / need to be reimplemented in derived classes =========
+
+    def xp_labels_(self,
+                   i:int,
+                   idxs)-> Tuple[str]:
+        """Labels associated with a given set (as an array of feature indexes) of xp-features for a given datapoint 
+        with index 'i' --- this is accommodate cases where the labels are different for different datapoints"""
+        # Default Implementation: Index itself is the label"""
+        return tuple([('Feature ' + str(int(i))) for i in idxs])
+
+    def gen_xp_representations_(self) -> Array:
+        """Generate the xp-representations of each datapoint in 'x'
+        The xp-features have to be one dimensional. It is assumed that the array
+        returned by this will have the datapoint id and the xp-features as the 0, 1 dimensions.
+        """
+        # Default implementation where xp-space is the same as the input space
+        return self.x
+
+    def xp_flatten_transform_(self,
+                              z:Array) -> Array:
+        """This is called while building the local linear model for the input datapoints --- 
+        'z' here represents the xp-representations. This function transforms the 'z' into a flat one-dimensional 
+        numeric vector as the final xp-representation for each datapoint.
+        Often this function does nothing -- just returns 'z' as is, since in most cases
+        the xp-representations returned by gen_xp_representations_ are already flat."""
+        return z
+
+    def gen_local_samples_(self,
+                           z:Array) -> Array:
+        """Generate 'self.n_local_samples' samples in the vicinity of every datapoint in
+        'z' in the xp-space"""
+        # Default Implementation: Generate Gaussian samples around each point in 'z'
+        # 'alpha' is treated as the variance of the Gaussian from which we sample"""
+        augmented_x = np.expand_dims(z, axis=1)
+        noise = np.random.normal(0, self.hp.alpha,
+                                 size=(self.n, self.hp.n_local_samples, *self.inp_attr_shape))
+        return augmented_x + noise
+
+    def remove_padding_(self,
+                        i:int,
+                        samples:Array) -> Array:
+        """Remove padding if any that was added for the i-th datapoint
+        By default we don't do anything"""
+        return samples
+        
+    def reverse_map_(self) -> Array:
+        """Find the points in the inp-space for every point in 'z' in the xp-space"""
+        # Default implementation where xp-space is the same as the input space
+        return self.xp_local
+
+    def diff_(self, x:Array, y:Array) -> Array:
+        """Find the difference between two arrays
+        This could be reimplemented to other 'differences' like the Hamming distance
+        Used in the default get_sample_weights_ method"""
+        return (x - y)
+
+    def get_sample_weights_(self) -> Array:
+        """Assign weights to each sample in 'self.xp_augmented'
+        The weights are relative to the original data point (sample 0, in dim 1)"""
+        # Default implementation where Weights use a RBF kernel"""
+        n_values = prod(self.inp_attr_shape)
+        original_x = np.expand_dims(self.perturbed_x[:,0], axis=1).\
+                        reshape(self.n, 1, n_values)
+        perturbed_x = self.perturbed_x.reshape(self.n, self.n_samples, n_values)
+        distances = np.linalg.norm(self.diff_(perturbed_x, original_x), axis=2)
+        return np.exp(-(distances**2) / (2 * self.hp.rbf_weight_kernel_width**2))
+
+    # ===================================================================================
+
+    def __len__(self):
+        """Number of data points to be 'explained'"""
+        return self.x.shape[0]
+    @property
+    def n(self) -> int: return len(self)
+    @property
+    def n_samples(self) -> int: return self.xp_local.shape[1]
+
+    @property
+    def inp_attr_shape(self) -> Tuple:
+        """Shape of the input attributes"""
+        return self.x.shape[1:]
+
+    @property
+    def xp_attr_shape(self):
+        """Shape of the xp-attributes"""
+        return self.xp_local.shape[2:]
+
+    @property
+    def local_samples_shape(self) -> Tuple:
+        return (self.n_local_samples, *self.xp_attr_shape)
+    @property
+    def inp_samples_shape(self) -> Tuple:
+        return (self.n_samples, *self.inp_attr_shape)
+    @property
+    def xp_samples_shape(self) -> Tuple:
+        return (self.n_samples, *self.xp_attr_shape)
+
+
+from abc import ABC, abstractmethod
+
+class LimeModel(ABC):
+    """Encapsulates the model whose predections need explanations"""
+    def __init__(self,
+                 model:Any,
+                 in_shape:Tuple,
+                 out_shape:Tuple):
+        super().__init__()
+        self.model = model
+        self.in_shape = in_shape
+        self.out_shape = out_shape
+
+    # ======== Methods that need to be reimplemented in derived classes =======
+    @abstractmethod
+    def predict_(self,
+                 x:Array) -> Array:
+        """Apply the model on any given set of inputs"""
+        pass
+
+    @abstractmethod
+    def decisions_(self,
+                   predictions:Array) -> Tuple[Tuple, Tuple]:
+        """Decisions implied by the model predictions
+         --- both as 'values' and a printable labels for the values"""
+        pass
+
+    @abstractmethod
+    def prediction_scores_(self,
+                           predictions:Array,
+                           decisions:Tuple) -> Array:
+        """Find the prediction scores for a given decision (class, etc.) --- the scores
+        could be a score, probability, etc."""
+        pass
+    # ===================================================================================
+
+
+# Core LIME Algorithm<br>
+Lime finds a local model that minimizes the objective<br>
+$$\arg\min_g \mathcal{L}(f,g,\pi_x) + \Omega(g)$$
+where $\mathcal{L}$ is the loss function between $f$ representing the model we are trying to explain, $g$ the 'explanation function' which is a local approximation around the given input point $x$ and $\pi_x$ is the function assigning weights to each sample in the vicinity of $x$. $\Omega(g)$ is the regularizer representing the complexity of the local function $g$ --- clearly it is meant to discourage very complex 'explanations'.
+
+The default implementation here using linear local models, in particular k-LASSO and Ridge regression is the version that was originally published as '“Why Should I Trust You?”
+Explaining the Predictions of Any Classifier' by Marco Tulio Ribeiro, Sameer Singh, and Carlos Guestrin in 2016.
+
+
+
+from sklearn.linear_model import lars_path
+import matplotlib.pyplot as plt
+
+class Lime:
+    """The main LIME algorithm"""
+    def __init__(self, hp:LimeHyperparameters, explanation_model:Any):
+        super().__init__()
+        self.hp = hp
+        # Local explanation model --- the default implementation uses Ridge regression
+        self.explanation_model = explanation_model
+
+    # ======== Methods that can / need to be reimplemented in derived classes =======
+
+    def shortlist_k_features_(self,
+                              local_samples:Array,
+                              targets:Array) -> Array:
+        """Extract the k significant xp-attributes"""
+        # Ensure the local_samples have a 'flat' representation
+        assert local_samples.ndim == 2, f'{local_samples.ndim} != 2'
+
+        # This is the default implementation as in the original LIME paper
+        # this extracts the significant xp-attributes from the lars_path
+        alphas, active_indices, coeffs = lars_path(local_samples.astype(np.float64), targets.astype(np.float64),
+                                                   method='lasso', verbose=False)
+        n_nonzero_coeffs = [np.sum(coeffs[:, i] != 0) for i in range(coeffs.shape[1])]
+        diff_k = np.abs(np.array(n_nonzero_coeffs) - self.hp.k)
+        top_k_iter = np.argmin(diff_k)
+        return np.nonzero(coeffs[:, top_k_iter])[0]
+
+    def get_sparse_local_model_(self,
+                                local_samples:Array,
+                                targets:Array,
+                                weights:Array,
+                                feature_labels:Tuple) -> Tuple[Any, Tuple]:
+        """
+        This finds the model 'g' that minimizes the objective using the ~K significant xp-attributes
+        local_samples: are the xp-representations
+        targets: are the 'f' function values
+        weights: are the \\pi_x values.
+        Returns a pair --- the objective minimizing model (Any) and the indices of the significant xp-features (Tuple)
+        """
+        # Default implementation using the linear local model used in the original paper on LIME
+        # The local approximation is a linear regression model obtained through Ridge regression
+        assert local_samples.shape[0] == targets.shape[0] == weights.shape[0],\
+                f'{local_samples.shape[0]} != {targets.shape[0]} != {weights.shape[0]}'
+        assert len(targets.shape) == len(weights.shape) == 1,\
+                f'{targets.shape} != {weights.shape}'
+        # Ensure the local_samples have a 'flat' representation
+        assert local_samples.ndim == 2, f'{local_samples.ndim} != 2'
+
+        # Get the significant features
+        top_indices = self.shortlist_k_features_(local_samples, targets)
+        print(f'Shortlisted features: {[feature_labels[i] for i in top_indices]}')
+
+        # Generate the local linear model over the shortlisted features
+        self.explanation_model.fit(local_samples[:,top_indices],
+                                   targets,
+                                   sample_weight=weights)
+        print(f'Found local linear model with Coeffs: {self.explanation_model.coef_}')
+        return top_indices
+
+    def feature_scores_(self) -> Array:
+        """Return the scores for the xp-features in the local_model"""
+        # Assumes the explanation model is a linear model
+        return self.explanation_model.coef_
+
+    def plot_explanation_(self,
+                          i:int,
+                          decision_label:str,
+                          label_value_strengths:List[Tuple],
+                          data:LimeData):
+        """Plot the explanation for the decision 'decision_label for the ith test datapoint
+        label_value_strengths: is the list of tuples of (feature_label, feature_value and feature_strength), 'feature_strength' being the contribution of that feature to the
+        decision.
+        """
+        print(f'Explanation:')
+        label_value_strengths = sorted(label_value_strengths,
+                                       key=lambda x:x[2], reverse=True)
+        for label, value, strength in label_value_strengths:
+            print(f'{label}: Value {value:.3F}, Strength {strength}')
+        fig, ax = plt.subplots()
+
+        labels, values, strengths = zip(*label_value_strengths)
+        bar_colors = [('red' if s < 0 else 'green') for s in strengths]
+        label_values = [f'{l} ({v:.3F})' for l, v in list(zip(labels, values))]
+        y_pos = np.arange(len(label_values))
+        ax.barh(y_pos, strengths, align='center',color=bar_colors)
+        ax.set_yticks(y_pos, labels=label_values)
+        ax.invert_yaxis()  # labels read top-to-bottom
+        ax.set_xlabel('Feature Stength')
+        ax.set_ylabel('Feature - Value')
+        ax.set_title(f'Explanation for model prediction {decision_label} on datapoint {i}')
+        plt.show()
+
+    # ===================================================================================
+
+    def get_sample_predictions(self,
+                               model:LimeModel,
+                               augmented_data:LimeData):
+        """Get the model prediction for each datapoint (the original and the local samples)
+        in 'augmented_data'"""
+        # Flatten the first two dims of perturbed_x to bring it to the input format
+        perturbed_x = np.reshape(augmented_data.perturbed_x,
+                                 ((len(augmented_data) * augmented_data.n_samples),
+                                  *augmented_data.inp_attr_shape))
+
+        # Get the model predictions for the perturbed samples and reshape it back
+        sample_predictions = model.predict_(perturbed_x)
+
+        sample_predictions = np.reshape(sample_predictions,
+                                        (len(augmented_data),
+                                         augmented_data.n_samples,
+                                         *model.out_shape))
+
+        return sample_predictions
+
+    def explain(self,
+                model:LimeModel,
+                data:LimeData):
+        """Explain the action/decision of the 'model' on the datapoints in 'data'"""
+        # Get/generate local samples in the interpretable space
+        xp_samples = data.xp_local
+        print()
+        print(f'Augmented Data genereated with {data.xp_local.shape[1]-1} local samples around each input point')
+        print(f'Augmented Data shape: {data.xp_local.shape}')
+
+        # Get the model predictions for the samples
+        sample_predictions = self.get_sample_predictions(model, data)
+
+        # Get the decisions for each original data point and the printable decision labels
+        decisions, decision_labels = model.decisions_(sample_predictions[:,0])
+        assert len(decisions) == len(data) == len(decision_labels), \
+                f'{len(decisions)} != {len(data)} != {len(decision_labels)}'
+
+        print('Generating Model Predictions for all the local samples ...')
+        # Get the prediction scores for the data points for the given decisions
+        prediction_scores = model.prediction_scores_(sample_predictions, decisions)
+        assert prediction_scores.shape == (len(data), data.n_samples),\
+                f'{prediction_scores.shape} != {(len(data), data.n_samples)}'
+
+        # Generate an explanation of the action of the model on each data point in 'x'
+        for i in range(len(data)):
+            # Explain the decision for the ith data point
+            decision_label = decision_labels[i]
+            print()
+            print(f'Explaining Model Prediction {decision_label} for datapoint {i+1}')
+            samples = xp_samples[i]
+            assert samples.shape == data.xp_samples_shape, \
+                        f'{samples.shape} != {data.xp_samples_shape}'
+
+            # Remove padding if any that was added for this datapoint
+            samples = data.remove_padding_(i, samples)
+            print(f'Samples shape after removing padding: {samples.shape}')
+
+            # Flattening the representation for each sample to make it linear
+            samples = data.xp_flatten_transform_(samples)
+
+            feature_labels = data.xp_labels_(i, range(prod(data.xp_attr_shape)))
+            # Fit a local interpretable model to the 'local_samples' around 'x'
+            # and get the 'K' significant features
+            print('Generating the sparse local model')
+            feature_indices = self.get_sparse_local_model_(samples,
+                                                           prediction_scores[i],
+                                                           data.weights[i],
+                                                           feature_labels)
+
+            feature_labels = data.xp_labels_(i, feature_indices)
+            feature_values = xp_samples[i,0,feature_indices]
+            feature_strengths = self.feature_scores_()
+            label_value_strengths = zip(feature_labels, feature_values, feature_strengths)
+            self.plot_explanation_(i, decision_label, label_value_strengths, data)
+
+
+# Model class representing a typical Probabilistic Classification Model
+
+class xProbClassificationModel(LimeModel):
+    def __init__(self,
+                 model:Any,
+                 in_shape:Tuple,
+                 out_shape:Tuple):
+        """Classifier model that gives probabilities for each class"""
+        super().__init__(model, in_shape, out_shape)
+
+    # ======== Methods that can / need to be reimplemented in derived classes =======
+
+    def predict_(self,
+                 x:Array) -> Array:
+        return self.model.predict_proba(x)
+
+    def decisions_(self,
+                   predictions:Array) -> Tuple[Array, Tuple]:
+        d = np.argmax(predictions, axis=1)
+        return d, tuple([str(i) for i in d.tolist()])
+
+    def prediction_scores_(self,
+                           predictions:Array,
+                           decisions:Tuple) -> Array:
+        indexes = np.expand_dims(np.expand_dims(np.array(decisions), axis=1), axis=2)
+        scores = np.take_along_axis(predictions,indexes, axis=2)
+        return np.squeeze(scores, axis=2)
+
+# ===================================================================================
+
+
+# Lime demonstration on a synthetic classification dataset with a RandomForest model
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_classification
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import Ridge
+
+
+def lime_on_synthetic_classification_data(hp:LimeHyperparameters,
+                                          explanation_model:Any):
+    n_test_data, in_features, n_classes = 5, 10, 2
+    # Generate data
+    X, y = make_classification(n_samples=1000, n_features=in_features, n_classes=n_classes,
+                            random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Train blackbox model
+    model = RandomForestClassifier(random_state=42)
+    model.fit(X_train, y_train)
+
+    # Select test sample for explanation
+    test_sample = X_test[np.random.randint(X_test.shape[0], size=n_test_data), :]
+    # Explain the model action on the test data
+    lmodel = xProbClassificationModel(model, (in_features,), (n_classes,))
+    ldata = LimeData(test_sample, hp)
+    # Using the default Ridge regression explanation model
+    lime = Lime(hp, explanation_model)
+    lime.explain(lmodel, ldata)
+
+HP = LimeHyperparameters()
+EXPLANATION_MODEL = Ridge()
+lime_on_synthetic_classification_data(HP, EXPLANATION_MODEL)
+
+
+5 Points for explanation with (10,) features each
+
+Augmented Data genereated with 100 local samples around each input point
+Augmented Data shape: (5, 101, 10)
+
+Explaining Model Prediction 0 for datapoint 1
+Samples shape after removing padding: (101, 10)
+Generating the sparse local model
+Shortlisted features: ['Feature 0', 'Feature 2', 'Feature 5', 'Feature 6', 'Feature 7']
+Found local linear model with Coeffs: [-0.0030433   0.00104836 -0.00987935 -0.01426859 -0.00135191]
+Explanation:
+Feature 2: Value 0.865, Strength 0.0010483623919766282
+Feature 7: Value -1.210, Strength -0.001351911424371117
+Feature 0: Value 0.773, Strength -0.003043304884088699
+Feature 5: Value -1.320, Strength -0.009879349667006227
+Feature 6: Value -1.520, Strength -0.014268594153895515
+
+
+Explaining Model Prediction 1 for datapoint 2
+Samples shape after removing padding: (101, 10)
+Generating the sparse local model
+Shortlisted features: ['Feature 4', 'Feature 6', 'Feature 7', 'Feature 8', 'Feature 9']
+Found local linear model with Coeffs: [-0.00133885 -0.00158251  0.02495426 -0.00126575  0.00630601]
+Explanation:
+Feature 7: Value 1.374, Strength 0.024954258475394
+Feature 9: Value 0.994, Strength 0.006306012559556172
+Feature 8: Value -2.006, Strength -0.0012657476072962094
+Feature 4: Value -1.340, Strength -0.0013388539051405815
+Feature 6: Value 1.943, Strength -0.0015825124824051184
+
+
+
+Explaining Model Prediction 1 for datapoint 3
+Samples shape after removing padding: (101, 10)
+Generating the sparse local model
+Shortlisted features: ['Feature 3', 'Feature 4', 'Feature 6', 'Feature 8', 'Feature 9']
+Found local linear model with Coeffs: [-0.018758   -0.01890958  0.01119285  0.00822003 -0.0644178 ]
+Explanation:
+Feature 6: Value 0.956, Strength 0.011192852028687642
+Feature 8: Value 1.100, Strength 0.008220029982557372
+Feature 3: Value 1.133, Strength -0.018757999520013818
+Feature 4: Value 1.030, Strength -0.01890957889494304
+Feature 9: Value 1.597, Strength -0.06441780083699822
+
+
+
+Explaining Model Prediction 1 for datapoint 4
+Samples shape after removing padding: (101, 10)
+Generating the sparse local model
+Shortlisted features: ['Feature 2', 'Feature 4', 'Feature 6', 'Feature 7', 'Feature 8']
+Found local linear model with Coeffs: [ 0.00648484  0.00111086  0.00631014  0.02429698 -0.0065661 ]
+Explanation:
+Feature 7: Value 0.766, Strength 0.024296984570717602
+Feature 2: Value -0.528, Strength 0.006484839141362505
+Feature 6: Value 1.570, Strength 0.006310137359849819
+Feature 4: Value 0.742, Strength 0.001110862742440142
+Feature 8: Value -1.608, Strength -0.006566103497908603
+
+
+
+Explaining Model Prediction 0 for datapoint 5
+Samples shape after removing padding: (101, 10)
+Generating the sparse local model
+Shortlisted features: ['Feature 0', 'Feature 2', 'Feature 6', 'Feature 8', 'Feature 9']
+Found local linear model with Coeffs: [-0.00228383  0.01743311 -0.00574531 -0.02380175  0.0117499 ]
+Explanation:
+Feature 2: Value 1.442, Strength 0.017433109754655337
+Feature 9: Value -2.907, Strength 0.011749899484792508
+Feature 0: Value 1.471, Strength -0.0022838300600640745
+Feature 6: Value -2.272, Strength -0.005745306227696472
+Feature 8: Value -1.162, Strength -0.023801754107254495
+
+
+Applying Algorithm on Datasets
+
+00:00:00 - 00:01:34
+Synthetic Classification Data Set and Random Forest Classifier
+So what we are doing now is in terms of the demo. So we'll do 2 quick demo. So 1 is on a synthetic classification data set just created on the fly. And just to see how the whole thing works. And I'm using a random forest classifier as my black box model and Ridge regression is your explanation model. OK, so all these I'm using ready made APIs from Psychic Learn. So there we go. We can actually run the whole thing now. Yeah. So there are five points that I gave for explanation and the augmented data had 100 local samples around each. So basically becomes 101, right. So five data points, 101 samples including the original, and these are the number of features. OK. And then for each data point, for each of the five, I'm doing an explanation separately. Yeah, I'm generating the local model. So out of the 10 features, these five were shortlisted. OK, Then with these coefficient values. So here is a plot of this and shows you what which has negative influence, which has positive influence and to what degree. This is what you get for each of the data points.
+00:01:37 - 00:03:02
+Text Sentiment Analysis Using IMDb Data Set
+OK, another example is for a text sentiment analysis. So the data set that we are using here is the IMDb data set which is a movie reviews. This is the data set that I got from Cagle. So on text again. So same thing. So the explainable representation, it is just a bunch of ones. The dummy ID is just for the padding and wherever it is not padding, just put a one there. That's it, right? So this is it's as simple as that. And yeah, and in this case, again, the reverse map is pretty straightforward, right? So I'm going to switch some of these things off, right? So wherever there is a zero, I keep it as zero. Wherever there was a one, I put the original token ID. OK. The other small thing that you have to take care of here for text, you have to look at the difference between the the original data point, the sampled data point, right in the interpretable space. And that difference is you can't take the difference in the token ID. See, you can't do that. That doesn't make sense, right? So instead you just see if the token is the same amount because you're just looking at whether that token was there or was it not there. By token, I mean the word itself, right? And yeah, so that's it.
+00:03:04 - 00:05:56
+Explanation of Sentiment Analysis Predictions with Flare Model
+The core algorithm is exactly the same. There is absolutely no difference. OK, and there you go. So now we can run it. The IMDb data set is actually quite a it has about 50,000 movie reviews that take a very long time, so I'm taking only 5000 out of those. And for explanation, I'm only picking five of these, OK, and using the 5000 that I'm loading just to create the list of all words so I can assign a unique ID to each of them and and then look at whether I'm going to have this token or not in each particular sentence. So these are the samples. So there is this particular review. It was classified as positive and negative, positive, positive, positive by the original model, which is in this case is the Flare model. Flare is a is again a popular NLP framework. They give lots of pre trained models. I am using one of those pre trained models here. These are the ground truths, this positive, negative, etcetera. This is what the model has predicted. OK, So clearly there are some mistakes like the second one here it is negative and here is positive. So it's not 100% accurate. Yeah. But the idea here is not to build a state-of-the-art model. The model is what it is. It's a black box. I'm trying to understand why the model said whatever it did, right or wrong. OK. And I've generated the augmented data and now I'm trying to explain the predictions for data .1 explainable features of the words in the review, right? So it says the shortlisted features are these, and these are the coefficients that I've got after the linear regression, OK. And here it shows the plot again with the individual strengths, OK. And yeah, so similar thing for the others. Yeah. So again it's a positive. So in this case there are it doesn't show any negatives. But if you run it again anyway, it's a random sample. So if you if you run it again, you will see some some other words with different sound negative, some positive. So that completes our description of line, the linear interpretable model agnostic explanation.
+
+
+lime_text 
+
+import os
+DATASETS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Datasets'))
+IMAGES_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Images'))
+CHECKPOINTS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Checkpoints'))
+from ipynb.fs.defs.lime_base import Lime, LimeHyperparameters, LimeData, xProbClassificationModel
+from tqdm import tqdm
+
+# from google.colab import drive
+# drive.mount('/content/gdrive')
+# IMAGES_PATH = os.path.join('/content/gdrive/My Drive/',
+#                            'Documents/IIITB/Courses/Upgrad/xAI/images')
+
+# Lime on a Text Classifier --- Sentiment Analysis
+## Using a pretrained Falir model for Sentiment Analysis
+
+import csv
+import numpy as np
+from numpy import ndarray as Array
+from typing import Any, Tuple, List
+import math
+
+## Create the custom Lime data and model classes for text
+
+import flair
+from flair.models import TextClassifier
+from flair.data import Sentence
+
+class FlairTextPreprocessor:
+    POS, NEG = 'POSITIVE', 'NEGATIVE'
+    SENTIMENT_VALUES = {POS: 1, NEG: 0}
+    SENTIMENT_LABELS = {0: NEG, 1: POS}
+    BIG_CONST = 100
+    def __init__(self,
+                 dataset_name:str,
+                 size_to_load:int=None):
+        self.sentences, self.token_lists, self.tokens, self.labels = self.load_tokenize_dataset(dataset_name, size_to_load)
+        self.token_map = {i: t for t, i in self.tokens.items()}
+        self.max_sentence_length = max([len(s) for s in self.sentences])
+        print(f'Preprocessing Dataset {dataset_name}')
+        print(f'N Sentences: {self.n_sentences}; N Tokens: {self.n_tokens}')
+        print(f'Max Sentence Length: {self.max_sentence_length}')
+
+    @property
+    def dummy_id(self):
+        return math.ceil(len(self.token_lists)/self.BIG_CONST) * self.BIG_CONST
+
+    @property
+    def max_token_id(self):
+        return max(self.token_map.keys())
+
+    @property
+    def n_tokens(self):
+        return len(self.tokens)
+    
+    @property
+    def n_labels(self):
+        return len(self.SENTIMENT_LABELS)
+
+    @property
+    def n_sentences(self):
+        return len(self.sentences)
+
+    def id(self,
+           token:str):
+        return self.tokens[token]
+
+    def token(self,
+              token_id:int):
+        return self.token_map[token_id]
+
+    def label(self,
+              l:int):
+        return self.SENTIMENT_LABELS[self.labels[l]]
+
+    def load_tokenize_dataset(self,
+                              dataset_name:str,
+                              size_to_load:int=None):
+        # Open the CSV file in read mode
+        with open(os.path.join(DATASETS_PATH, f'{dataset_name}.csv'), 'r', newline='') as csvfile:
+            # Create a CSV reader object
+            # The 'newline=' argument prevents extra blank rows when reading CSV files
+            csv_reader = csv.reader(csvfile)
+            # Ignore the first (header) row
+            next(csv_reader)
+
+            sentences, token_lists, tokens, labels = [], [], {}, []
+            # Iterate over each row in the CSV file
+            token_id = 1 # 0 is reserved for dummy token
+            for review, label in tqdm(csv_reader, desc='Tokenizing dataset ...'):
+                sentence = Sentence(review, use_tokenizer=False)
+                sentences.append(sentence)
+                labels.append(self.SENTIMENT_VALUES[label.upper()])
+                for token in sentence:
+                    if token.text not in tokens:
+                        tokens[token.text] = token_id
+                        token_id += 1
+                token_lists.append([tokens[token.text] for token in sentence])
+                if size_to_load is not None and len(sentences) >= size_to_load:
+                    break
+        return sentences, token_lists, tokens, labels
+
+
+class TextLimeData(LimeData):
+    def __init__(self,
+                 preprocessor:FlairTextPreprocessor,
+                 n_for_explanation:int,
+                 hp:LimeHyperparameters):
+        self.preprocessor = preprocessor
+        token_array = np.array([(s + ([preprocessor.dummy_id] * (preprocessor.max_sentence_length - len(s))))
+                                for s in self.preprocessor.token_lists])
+        self.sample_idxs = np.random.choice(token_array.shape[0], n_for_explanation, replace=False)
+        token_array = token_array[self.sample_idxs]
+        super().__init__(token_array, hp)
+        print()
+        print('Reviews for explanation:')
+        for i in self.sample_idxs:
+            print(self.preprocessor.label(i), self.preprocessor.sentences[i])
+        
+        self.targets = np.array([self.preprocessor.labels[i] for i in self.sample_idxs])
+
+    @property
+    def max_token_id(self):
+        return self.preprocessor.max_token_id
+
+    def gen_xp_representations_(self) -> Array:
+        """The xp-representation we are using is just a 0-1 array for each sentence
+        to indicate the presence or absence of a taken at that position w.r.t to the
+        original sentence.
+        """
+        # Replace all valid tokens by 1 and dummy tokens by 0
+        return np.where(self.x == self.preprocessor.dummy_id, 0, 1)
+
+    def xp_labels_(self,
+                   d:int,
+                   idxs)-> Tuple[str]:
+        """Labels associated with a given set (as an array of feature indexes) of xp-features for a given datapoint 
+        with index 'i' --- this is accommodate cases where the labels are different for different datapoints"""
+        datapoint_id = self.sample_idxs[d]
+        datapoint_tokens = self.preprocessor.token_lists[datapoint_id]
+        # Get the tokens at the given indexes"""
+        return tuple([self.preprocessor.token_map[datapoint_tokens[i]] for i in idxs if i < len(datapoint_tokens)])
+
+    def gen_local_samples_(self,
+                           z:Array) -> Array:
+        """Randomly replace some of the 1's in the xp-representation with 0's
+        This is equivalent to removing some of the words from the sentence at random
+        """
+        n_features = z.shape[1]
+        random_ones = np.random.choice(a=[0,1], p=[(1 - self.hp.alpha), self.hp.alpha],
+                                       size=(self.n, self.hp.n_local_samples, n_features))
+        # Replace the 1's in z with random choices
+        return z[:, np.newaxis, :] * random_ones
+
+    def remove_padding_(self,
+                        d:int,
+                        samples:Array) -> Array:
+        """Remove padding if any that was added for the d-th datapoint
+        By default we don't do anything"""
+        # Find the number of tokens in the d-th datapoint
+        d_width = len(self.preprocessor.token_lists[d])
+        # Truncate samples to the width of the d-th datapoint
+        samples = samples[:, :d_width]
+        return samples
+
+    def reverse_map_(self) -> Array:
+        """Find the points in the inp-space for every point in 'z' in the xp-space"""
+        # Replace the 1's in the xp-representation with the actual token ids at those positions
+        return self.xp_local * self.x[:, np.newaxis, :]
+
+    def diff_(self, x:Array, y:Array) -> Array:
+        """Implementing the Hamming distance"""
+        return np.where((x - y) != 0, 1, 0)
+
+
+class TextLimeModel(xProbClassificationModel):
+    def __init__(self,
+                 preprocessor:FlairTextPreprocessor,
+                 model:Any):
+        super().__init__(model, (preprocessor.max_sentence_length,), (preprocessor.n_labels,))
+        self.preprocessor = preprocessor
+
+    def decision(self, score:float):
+        return 1 if score > 0 else 0
+
+    def sign(self, decision:str):
+        return -1 if decision == self.preprocessor.NEG else 1
+
+    def prob_pair(self, score:float, value:str):
+        signed_score = self.sign(value) * score
+        p = (signed_score + 1) / 2
+        return ((1 - p), p)
+
+    def predict_(self,
+                x:Array) -> Array:
+        """x is an array of token_ids"""
+        # Convert x into sentences
+        sentences = [Sentence(' '.join([self.preprocessor.token_map[t] for t in s if t != 0]))
+                     for s in x.tolist()]
+        self.model.predict(sentences)
+        # Get the predictions
+        return np.array([self.prob_pair(s.labels[0].score, s.labels[0].value) for s in sentences])
+
+    def decisions_(self,
+                   predictions:Array) -> Tuple[Array, Tuple]:
+        d, labels = super().decisions_(predictions)
+        return d, tuple([self.preprocessor.label(int(i)) for i in d.tolist()])
+
+from sklearn.linear_model import Ridge
+
+
+def lime_on_flair_classification_on_imdb_data(hp:LimeHyperparameters,
+                                              preprocessor:FlairTextPreprocessor,
+                                              n_for_explanation:int,
+                                              explanation_model:Any):
+    model = TextClassifier.load('en-sentiment')
+    lmodel = TextLimeModel(preprocessor, model)
+    ldata = TextLimeData(preprocessor, n_for_explanation, hp)
+    model_decisions, decision_labels = lmodel.decisions_(lmodel.predict_(ldata.x))
+    print()
+    print(f'Model Decisions on the Loaded Data: {decision_labels}')
+    # Using the default Ridge regression explanation model
+    lime = Lime(hp, explanation_model)
+    lime.explain(lmodel, ldata)
+
+HP = LimeHyperparameters()
+HP.alpha = 0.7
+PREPROCESSOR = FlairTextPreprocessor('imdb_reviews', 5000)
+EXPLANATION_MODEL = Ridge()
+lime_on_flair_classification_on_imdb_data(HP, PREPROCESSOR, 5, EXPLANATION_MODEL)
+
+Tokenizing dataset ...: 4999it [00:04, 1247.65it/s]
+Preprocessing Dataset imdb_reviews
+N Sentences: 5000; N Tokens: 101664
+Max Sentence Length: 1737
+5 Points for explanation with (1737,) features each
+
+Reviews for explanation:
+POSITIVE Sentence[157]: "There are films that make careers. For George Romero, it was NIGHT OF THE LIVING DEAD; for Kevin Smith, CLERKS; for Robert Rodriguez, EL MARIACHI. Add to that list Onur Tukel's absolutely amazing DING-A-LING-LESS. Flawless film-making, and as assured and as professional as any of the aforementioned movies. I haven't laughed this hard since I saw THE FULL MONTY. (And, even then, I don't think I laughed quite this hard... So to speak.) Tukel's talent is considerable: DING-A-LING-LESS is so chock full of double entendres that one would have to sit down with a copy of this script and do a line-by-line examination of it to fully appreciate the, uh, breadth and width of it. Every shot is beautifully composed (a clear sign of a sure-handed director), and the performances all around are solid (there's none of the over-the-top scenery chewing one might've expected from a film like this). DING-A-LING-LESS is a film whose time has come."
+NEGATIVE Sentence[367]: "I came away from this movie with the feeling that it could have been so much better. Instead of what should be a gripping, tense story of a boy's fight for survival in the wilderness, it comes off as a National Geographic documentary meets Columbia sportswear ad.<br /><br />The film begins with Brian (Jared Rushton) preparing for a journey by plane to see his father. His mother fortuitously gives him the curious choice of a hatchet as a going-away gift (what's wrong with a Rubik's Cube?), little knowing how badly he will soon need it. Once in the air, the plane's pilot (a blink-and-you'll-miss-him cameo by Ned Beatty) suffers a fatal heart attack, leaving Brian helpless as the plane crashes into a lake. Extremely lucky to walk (or rather swim) away virtually unscathed, Brian must find shelter, food and hope for rescue.<br /><br />Here is where the main problem with the movie begins. By the very nature of Brian's solitude, Jared has very few lines to speak, and so the film ought to have compensated by ratcheting up the tension of each scene. Instead, he is shown walking around, sitting around, and so on, with only a minimal sense of danger. As a result, too much reliance is placed on flashbacks to the parents' troubled marriage as the source of tension. These scenes merely get in the way and don't particularly add much to the story. Even worse, occasionally Jared – his face covered with mud - lets out a primal scream or two, which conjures up unfortunate parallels to `Predator.' Speaking of unfortunate, we could have done with being spared the sight of his mullet, but it presumably helped keep him warm at night.<br /><br />Another disappointment is Pamela Sue Martin in a totally ineffectual performance as the mother. Both she and the father have very little impact in the movie. For instance, we are never shown how they react to news of Brian's disappearance, how they might be organizing rescue attempts, and so on. This is just one source of tension the film-makers would have done well to explore instead of spending so much time on events that happened before Brian embarked on his journey."
+POSITIVE Sentence[459]: "I've heard a few comments, particularly from prisoners of war, that CHANGI is not historically accurate, and that it is disappointing. Perhaps it is for those who actually had to live through this stuff, and much worse. But for the rest of us, who really have no idea of how prisoners were treated by the Japanese during World War II, CHANGI is a remarkable introduction. But CHANGI isn't a war documentary - if it had have been, then the historical accuracy aspect would have been paramount. It is a miniseries drama, with fictional characters and fictional situations (though based loosely on actual events I've heard and read about) - and at the centre of the story is the ideal of mateship. This group of young Australian soldiers, taken prisoner by the Japanese and held in appalling conditions for years, became mates through adversity and the strength of their friendships continued throughout their lives after the war. It is also a cultural study of the differences between the Japanese of the time and the western world, with its music, games and entertainment: in part 5, when it is becoming clear that Japan will lose the war after Germany has surrendered in Europe, the Japanese prison camp colonel insists that his country must study the culture of their prisoners - in order to defeat a people, one must defeat their culture - and to do this, one must understand it. All in all, Australia continues its rich tradition of producing exceptional television miniseries, and is an unrivalled world leader in this regard: vyeing for the AFI Award with CHANGI is MY BROTHER JACK, the adaptation of George Johnston's novel, and also a worthy winner. Miniseries in recent years include DAY OF THE ROSES (the story of the investigation into the Glanville train crash), KINGS IN GRASS CASTLES (the adaptation of Mary Durack's historical account of her pioneering ancestors), KANGAROO PALACE (about a group of friends from a country town in Australia who travel to London and change and grow apart), and the (somewhat disappointing) adaptation of Bryce Courtenay's powerful novel, THE POTATO FACTORY. Less recently: Nancy Cato's sweeping saga of life on the Murray - ALL THE RIVERS RUN; Cusack & James' brilliant novel about postwar life in Sydney - COME IN SPINNER; Colleen McCullough's outstanding pioneering saga - THE THORN BIRDS; THE RIVER KINGS; Ruth Park's novel THE HARP IN THE SOUTH; BODYLINE; EUREKA STOCKADE; ANZACS; etc..., etc... (Of course, there have been some not-so-good productions - for instance, MOBY DICK, DO OR DIE, ON THE BEACH, THORN BIRDS: THE MISSING YEARS; etc...) Generally, though, if an Australian miniseries comes your way, make sure you see it - and this goes double for CHANGI, a superbly directed masterpiece. Rating: 9/10."
+POSITIVE Sentence[456]: "A convict serving time comes forward to give the Cold Case unit information about the murder of a policeman, committed years before. The murder of Sean Cooper, a good cop, was never solved. Naturally, the detectives believe the new evidence will help them put together all the pieces of the puzzle that frustrated their colleagues.<br /><br />In flashbacks we are taken to the baptism of James Bruno's baby. Sean and Jimmy were partners. There is tension as Sean, who is the godfather, arrives disheveled and late for the rite. Eileen Bruno doesn't appear to be happy being there. The real mystery is revealed by her. She caught Sean, who was drinking with Jimmy in the backyard, kiss her husband, and more shocking yet, Jimmy responding willingly.<br /><br />Somehow at the station the partners become the center of gossip. Sean has not endeared himself to his superior because he discovered the involvement with a criminal in his area who controlled the drug business. Sean realizes this man is in with the drug strong man because he always makes an excuse to free the scum bags Sean and Jimmy haul into the station all the time. The pressure is too much on Jimmy. Sean is comfortable in his homosexuality and wants to be honest about it. Cooper's own father doesn't want anything to do with a queer son. Even his superior McCree wants him out of his jurisdiction, but the case is complicated because Cooper comes from a long line of Irish men serving in the police force. Sean is killed because his homosexual condition, and for knowing too much on his peers' involvement in taking dirty money.<br /><br />Tom Petit wrote this honest portrayal of the life of a police officer in the closet and his secret love with another fellow cop. We thought it was a frank account of a serious matter no one talked about in those days. Sometimes the people involved with the show, fearing reprisals from sponsors, or the networks, don't dare to present these real situations. Jeannot Szwarc, shows a sensitive approach to this thorny issue, which is dealt without the sensationalism the case might have been shown with a different team.<br /><br />There is a rare Chad Everett appearance as the older Jimmy Bruno. His take is right on target with a touch of sentimentality that doesn't get out of hand. Shane Johnson makes an excellent contribution to the show as Sean Cooper. The cast is marvelous and it includes good all around performances from everyone under Mr. Szwarc's direction.<br /><br />In this episode, Nick Vera, gets closer to his neighbor, the mother of the basketball player the detective took his ball away. Nick is heading for romance with the woman!"
+POSITIVE Sentence[118]: "I have seen many many movies and this just totally blew my mind. The trauma, the suspense is just amazing. I ended so wound up in the psychological fear and Philosophy of it, and relating it to reality. Movies that play and challenge your mind are movies you don't forget, those that make you doubt your reality. A problem could be the quality, but that doesn't bring down the essence of the movie.<br /><br />The idea it self is brilliant and the ending leaves you just completely shocked and with the question for you to seek the answer. I just totally loved it! So many clues and twitches and puzzles. One of the best movies ever, hands down."
+
+Model Decisions on the Loaded Data: ('POSITIVE', 'POSITIVE', 'POSITIVE', 'POSITIVE', 'POSITIVE')
+
+Augmented Data genereated with 100 local samples around each input point
+Augmented Data shape: (5, 101, 1737)
+
+Explaining Model Prediction POSITIVE for datapoint 1
+Samples shape after removing padding: (101, 307)
+157
+Generating the sparse local model
+[ 35  39  42  94 132]
+5
+('There', 'are', 'films', 'that', 'make', 'careers.', 'For', 'George', 'Romero,', 'it', 'was', 'NIGHT', 'OF', 'THE', 'LIVING', 'DEAD;', 'for', 'Kevin', 'Smith,', 'CLERKS;', 'for', 'Robert', 'Rodriguez,', 'EL', 'MARIACHI.', 'Add', 'to', 'that', 'list', 'Onur', "Tukel's", 'absolutely', 'amazing', 'DING-A-LING-LESS.', 'Flawless', 'film-making,', 'and', 'as', 'assured', 'and', 'as', 'professional', 'as', 'any', 'of', 'the', 'aforementioned', 'movies.', 'I', "haven't", 'laughed', 'this', 'hard', 'since', 'I', 'saw', 'THE', 'FULL', 'MONTY.', '(And,', 'even', 'then,', 'I', "don't", 'think', 'I', 'laughed', 'quite', 'this', 'hard...', 'So', 'to', 'speak.)', "Tukel's", 'talent', 'is', 'considerable:', 'DING-A-LING-LESS', 'is', 'so', 'chock', 'full', 'of', 'double', 'entendres', 'that', 'one', 'would', 'have', 'to', 'sit', 'down', 'with', 'a', 'copy', 'of', 'this', 'script', 'and', 'do', 'a', 'line-by-line', 'examination', 'of', 'it', 'to', 'fully', 'appreciate', 'the,', 'uh,', 'breadth', 'and', 'width', 'of', 'it.', 'Every', 'shot', 'is', 'beautifully', 'composed', '(a', 'clear', 'sign', 'of', 'a', 'sure-handed', 'director),', 'and', 'the', 'performances', 'all', 'around', 'are', 'solid', "(there's", 'none', 'of', 'the', 'over-the-top', 'scenery', 'chewing', 'one', "might've", 'expected', 'from', 'a', 'film', 'like', 'this).', 'DING-A-LING-LESS', 'is', 'a', 'film', 'whose', 'time', 'has', 'come.')
+157
+...
+film-making,: Value 1.000, Strength 2.4290405105464272e-17
+are: Value 1.000, Strength 2.166914079713404e-17
+copy: Value 1.000, Strength 2.369901692542622e-18
+and: Value 1.000, Strength 1.881497574851925e-18
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+
+
+
+Explaining Model Prediction POSITIVE for datapoint 2
+Samples shape after removing padding: (101, 162)
+367
+Generating the sparse local model
+[ 2 11 21 45 68]
+5
+('I', 'came', 'away', 'from', 'this', 'movie', 'with', 'the', 'feeling', 'that', 'it', 'could', 'have', 'been', 'so', 'much', 'better.', 'Instead', 'of', 'what', 'should', 'be', 'a', 'gripping,', 'tense', 'story', 'of', 'a', "boy's", 'fight', 'for', 'survival', 'in', 'the', 'wilderness,', 'it', 'comes', 'off', 'as', 'a', 'National', 'Geographic', 'documentary', 'meets', 'Columbia', 'sportswear', 'ad.<br', '/><br', '/>The', 'film', 'begins', 'with', 'Brian', '(Jared', 'Rushton)', 'preparing', 'for', 'a', 'journey', 'by', 'plane', 'to', 'see', 'his', 'father.', 'His', 'mother', 'fortuitously', 'gives', 'him', 'the', 'curious', 'choice', 'of', 'a', 'hatchet', 'as', 'a', 'going-away', 'gift', "(what's", 'wrong', 'with', 'a', "Rubik's", 'Cube?),', 'little', 'knowing', 'how', 'badly', 'he', 'will', 'soon', 'need', 'it.', 'Once', 'in', 'the', 'air,', 'the', "plane's", 'pilot', '(a', "blink-and-you'll-miss-him", 'cameo', 'by', 'Ned', 'Beatty)', 'suffers', 'a', 'fatal', 'heart', 'attack,', 'leaving', 'Brian', 'helpless', 'as', 'the', 'plane', 'crashes', 'into', 'a', 'lake.', 'Extremely', 'lucky', 'to', 'walk', '(or', 'rather', 'swim)', 'away', 'virtually', 'unscathed,', 'Brian', 'must', 'find', 'shelter,', 'food', 'and', 'hope', 'for', 'rescue.<br', '/><br', '/>Here', 'is', 'where', 'the', 'main', 'problem', 'with', 'the', 'movie', 'begins.', 'By', 'the', 'very', 'nature', 'of', "Brian's", 'solitude,', 'Jared', 'has', 'very', 'few', 'lines', 'to', 'speak,', 'and', 'so', 'the', 'film', 'ought', 'to', 'have', 'compensated', 'by', 'ratcheting', 'up', 'the', 'tension', 'of', 'each', 'scene.', 'Instead,', 'he', 'is', 'shown', 'walking', 'around,', 'sitting', 'around,', 'and', 'so', 'on,', 'with', 'only', 'a', 'minimal', 'sense', 'of', 'danger.', 'As', 'a', 'result,', 'too', 'much', 'reliance', 'is', 'placed', 'on', 'flashbacks', 'to', 'the', "parents'", 'troubled', 'marriage', 'as', 'the', 'source', 'of', 'tension.', 'These', 'scenes', 'merely', 'get', 'in', 'the', 'way', 'and', "don't", 'particularly', 'add', 'much', 'to', 'the', 'story.', 'Even', 'worse,', 'occasionally', 'Jared', '–', 'his', 'face', 'covered', 'with', 'mud', '-', 'lets', 'out', 'a', 'primal', 'scream', 'or', 'two,', 'which', 'conjures', 'up', 'unfortunate', 'parallels', 'to', "`Predator.'", 'Speaking', 'of', 'unfortunate,', 'we', 'could', 'have', 'done', 'with', 'being', 'spared', 'the', 'sight', 'of', 'his', 'mullet,', 'but', 'it', 'presumably', 'helped', 'keep', 'him', 'warm', 'at', 'night.<br', '/><br', '/>Another', 'disappointment', 'is', 'Pamela', 'Sue', 'Martin', 'in', 'a', 'totally', 'ineffectual', 'performance', 'as', 'the', 'mother.', 'Both', 'she', 'and', 'the', 'father', 'have', 'very', 'little', 'impact', 'in', 'the', 'movie.', 'For', 'instance,', 'we', 'are', 'never', 'shown', 'how', 'they', 'react', 'to', 'news', 'of', "Brian's", 'disappearance,', 'how', 'they', 'might', 'be', 'organizing', 'rescue', 'attempts,', 'and', 'so', 'on.', 'This', 'is', 'just', 'one', 'source', 'of', 'tension', 'the', 'film-makers', 'would', 'have', 'done', 'well', 'to', 'explore', 'instead', 'of', 'spending', 'so', 'much', 'time', 'on', 'events', 'that', 'happened', 'before', 'Brian', 'embarked', 'on', 'his', 'journey.')
+367
+Shortlisted features: ['away', 'could', 'be', 'sportswear', 'gives']
+Found local linear model with Coeffs: [ 1.21195996e-39  2.12554954e-42  1.40448044e-42  4.45465192e-44
+ -4.13979619e-42]
+generated sparse local model
+367
+('away', 'could', 'be', 'sportswear', 'gives') [1 1 1 1 1] [ 1.21195996e-39  2.12554954e-42  1.40448044e-42  4.45465192e-44
+ -4.13979619e-42]
+Explanation:
+away: Value 1.000, Strength 1.2119599577161933e-39
+could: Value 1.000, Strength 2.1255495391216974e-42
+be: Value 1.000, Strength 1.404480437930304e-42
+sportswear: Value 1.000, Strength 4.454651922810461e-44
+gives: Value 1.000, Strength -4.139796191631175e-42
+
+
+Explaining Model Prediction POSITIVE for datapoint 3
+Samples shape after removing padding: (101, 166)
+459
+Generating the sparse local model
+[ 22  66  99 120 149]
+5
+("I've", 'heard', 'a', 'few', 'comments,', 'particularly', 'from', 'prisoners', 'of', 'war,', 'that', 'CHANGI', 'is', 'not', 'historically', 'accurate,', 'and', 'that', 'it', 'is', 'disappointing.', 'Perhaps', 'it', 'is', 'for', 'those', 'who', 'actually', 'had', 'to', 'live', 'through', 'this', 'stuff,', 'and', 'much', 'worse.', 'But', 'for', 'the', 'rest', 'of', 'us,', 'who', 'really', 'have', 'no', 'idea', 'of', 'how', 'prisoners', 'were', 'treated', 'by', 'the', 'Japanese', 'during', 'World', 'War', 'II,', 'CHANGI', 'is', 'a', 'remarkable', 'introduction.', 'But', 'CHANGI', "isn't", 'a', 'war', 'documentary', '-', 'if', 'it', 'had', 'have', 'been,', 'then', 'the', 'historical', 'accuracy', 'aspect', 'would', 'have', 'been', 'paramount.', 'It', 'is', 'a', 'miniseries', 'drama,', 'with', 'fictional', 'characters', 'and', 'fictional', 'situations', '(though', 'based', 'loosely', 'on', 'actual', 'events', "I've", 'heard', 'and', 'read', 'about)', '-', 'and', 'at', 'the', 'centre', 'of', 'the', 'story', 'is', 'the', 'ideal', 'of', 'mateship.', 'This', 'group', 'of', 'young', 'Australian', 'soldiers,', 'taken', 'prisoner', 'by', 'the', 'Japanese', 'and', 'held', 'in', 'appalling', 'conditions', 'for', 'years,', 'became', 'mates', 'through', 'adversity', 'and', 'the', 'strength', 'of', 'their', 'friendships', 'continued', 'throughout', 'their', 'lives', 'after', 'the', 'war.', 'It', 'is', 'also', 'a', 'cultural', 'study', 'of', 'the', 'differences', 'between', 'the', 'Japanese', 'of', 'the', 'time', 'and', 'the', 'western', 'world,', 'with', 'its', 'music,', 'games', 'and', 'entertainment:', 'in', 'part', '5,', 'when', 'it', 'is', 'becoming', 'clear', 'that', 'Japan', 'will', 'lose', 'the', 'war', 'after', 'Germany', 'has', 'surrendered', 'in', 'Europe,', 'the', 'Japanese', 'prison', 'camp', 'colonel', 'insists', 'that', 'his', 'country', 'must', 'study', 'the', 'culture', 'of', 'their', 'prisoners', '-', 'in', 'order', 'to', 'defeat', 'a', 'people,', 'one', 'must', 'defeat', 'their', 'culture', '-', 'and', 'to', 'do', 'this,', 'one', 'must', 'understand', 'it.', 'All', 'in', 'all,', 'Australia', 'continues', 'its', 'rich', 'tradition', 'of', 'producing', 'exceptional', 'television', 'miniseries,', 'and', 'is', 'an', 'unrivalled', 'world', 'leader', 'in', 'this', 'regard:', 'vyeing', 'for', 'the', 'AFI', 'Award', 'with', 'CHANGI', 'is', 'MY', 'BROTHER', 'JACK,', 'the', 'adaptation', 'of', 'George', "Johnston's", 'novel,', 'and', 'also', 'a', 'worthy', 'winner.', 'Miniseries', 'in', 'recent', 'years', 'include', 'DAY', 'OF', 'THE', 'ROSES', '(the', 'story', 'of', 'the', 'investigation', 'into', 'the', 'Glanville', 'train', 'crash),', 'KINGS', 'IN', 'GRASS', 'CASTLES', '(the', 'adaptation', 'of', 'Mary', "Durack's", 'historical', 'account', 'of', 'her', 'pioneering', 'ancestors),', 'KANGAROO', 'PALACE', '(about', 'a', 'group', 'of', 'friends', 'from', 'a', 'country', 'town', 'in', 'Australia', 'who', 'travel', 'to', 'London', 'and', 'change', 'and', 'grow', 'apart),', 'and', 'the', '(somewhat', 'disappointing)', 'adaptation', 'of', 'Bryce', "Courtenay's", 'powerful', 'novel,', 'THE', 'POTATO', 'FACTORY.', 'Less', 'recently:', 'Nancy', "Cato's", 'sweeping', 'saga', 'of', 'life', 'on', 'the', 'Murray', '-', 'ALL', 'THE', 'RIVERS', 'RUN;', 'Cusack', '&', "James'", 'brilliant', 'novel', 'about', 'postwar', 'life', 'in', 'Sydney', '-', 'COME', 'IN', 'SPINNER;', 'Colleen', "McCullough's", 'outstanding', 'pioneering', 'saga', '-', 'THE', 'THORN', 'BIRDS;', 'THE', 'RIVER', 'KINGS;', 'Ruth', "Park's", 'novel', 'THE', 'HARP', 'IN', 'THE', 'SOUTH;', 'BODYLINE;', 'EUREKA', 'STOCKADE;', 'ANZACS;', 'etc...,', 'etc...', '(Of', 'course,', 'there', 'have', 'been', 'some', 'not-so-good', 'productions', '-', 'for', 'instance,', 'MOBY', 'DICK,', 'DO', 'OR', 'DIE,', 'ON', 'THE', 'BEACH,', 'THORN', 'BIRDS:', 'THE', 'MISSING', 'YEARS;', 'etc...)', 'Generally,', 'though,', 'if', 'an', 'Australian', 'miniseries', 'comes', 'your', 'way,', 'make', 'sure', 'you', 'see', 'it', '-', 'and', 'this', 'goes', 'double', 'for', 'CHANGI,', 'a', 'superbly', 'directed', 'masterpiece.', 'Rating:', '9/10.')
+459
+Shortlisted features: ['it', 'CHANGI', 'loosely', 'mateship.', 'continued']
+Found local linear model with Coeffs: [-1.08746339e-48 -7.58232614e-49  1.62570171e-45  1.54378839e-45
+ -1.13187818e-47]
+generated sparse local model
+459
+('it', 'CHANGI', 'loosely', 'mateship.', 'continued') [1 1 1 1 1] [-1.08746339e-48 -7.58232614e-49  1.62570171e-45  1.54378839e-45
+ -1.13187818e-47]
+Explanation:
+loosely: Value 1.000, Strength 1.6257017101194158e-45
+mateship.: Value 1.000, Strength 1.5437883939620203e-45
+CHANGI: Value 1.000, Strength -7.582326136669755e-49
+it: Value 1.000, Strength -1.0874633905182781e-48
+continued: Value 1.000, Strength -1.1318781786457358e-47
+
+
+Explaining Model Prediction POSITIVE for datapoint 4
+Samples shape after removing padding: (101, 138)
+456
+Generating the sparse local model
+[  3  22  89  98 130]
+5
+('A', 'convict', 'serving', 'time', 'comes', 'forward', 'to', 'give', 'the', 'Cold', 'Case', 'unit', 'information', 'about', 'the', 'murder', 'of', 'a', 'policeman,', 'committed', 'years', 'before.', 'The', 'murder', 'of', 'Sean', 'Cooper,', 'a', 'good', 'cop,', 'was', 'never', 'solved.', 'Naturally,', 'the', 'detectives', 'believe', 'the', 'new', 'evidence', 'will', 'help', 'them', 'put', 'together', 'all', 'the', 'pieces', 'of', 'the', 'puzzle', 'that', 'frustrated', 'their', 'colleagues.<br', '/><br', '/>In', 'flashbacks', 'we', 'are', 'taken', 'to', 'the', 'baptism', 'of', 'James', "Bruno's", 'baby.', 'Sean', 'and', 'Jimmy', 'were', 'partners.', 'There', 'is', 'tension', 'as', 'Sean,', 'who', 'is', 'the', 'godfather,', 'arrives', 'disheveled', 'and', 'late', 'for', 'the', 'rite.', 'Eileen', 'Bruno', "doesn't", 'appear', 'to', 'be', 'happy', 'being', 'there.', 'The', 'real', 'mystery', 'is', 'revealed', 'by', 'her.', 'She', 'caught', 'Sean,', 'who', 'was', 'drinking', 'with', 'Jimmy', 'in', 'the', 'backyard,', 'kiss', 'her', 'husband,', 'and', 'more', 'shocking', 'yet,', 'Jimmy', 'responding', 'willingly.<br', '/><br', '/>Somehow', 'at', 'the', 'station', 'the', 'partners', 'become', 'the', 'center', 'of', 'gossip.', 'Sean', 'has', 'not', 'endeared', 'himself', 'to', 'his', 'superior', 'because', 'he', 'discovered', 'the', 'involvement', 'with', 'a', 'criminal', 'in', 'his', 'area', 'who', 'controlled', 'the', 'drug', 'business.', 'Sean', 'realizes', 'this', 'man', 'is', 'in', 'with', 'the', 'drug', 'strong', 'man', 'because', 'he', 'always', 'makes', 'an', 'excuse', 'to', 'free', 'the', 'scum', 'bags', 'Sean', 'and', 'Jimmy', 'haul', 'into', 'the', 'station', 'all', 'the', 'time.', 'The', 'pressure', 'is', 'too', 'much', 'on', 'Jimmy.', 'Sean', 'is', 'comfortable', 'in', 'his', 'homosexuality', 'and', 'wants', 'to', 'be', 'honest', 'about', 'it.', "Cooper's", 'own', 'father', "doesn't", 'want', 'anything', 'to', 'do', 'with', 'a', 'queer', 'son.', 'Even', 'his', 'superior', 'McCree', 'wants', 'him', 'out', 'of', 'his', 'jurisdiction,', 'but', 'the', 'case', 'is', 'complicated', 'because', 'Cooper', 'comes', 'from', 'a', 'long', 'line', 'of', 'Irish', 'men', 'serving', 'in', 'the', 'police', 'force.', 'Sean', 'is', 'killed', 'because', 'his', 'homosexual', 'condition,', 'and', 'for', 'knowing', 'too', 'much', 'on', 'his', "peers'", 'involvement', 'in', 'taking', 'dirty', 'money.<br', '/><br', '/>Tom', 'Petit', 'wrote', 'this', 'honest', 'portrayal', 'of', 'the', 'life', 'of', 'a', 'police', 'officer', 'in', 'the', 'closet', 'and', 'his', 'secret', 'love', 'with', 'another', 'fellow', 'cop.', 'We', 'thought', 'it', 'was', 'a', 'frank', 'account', 'of', 'a', 'serious', 'matter', 'no', 'one', 'talked', 'about', 'in', 'those', 'days.', 'Sometimes', 'the', 'people', 'involved', 'with', 'the', 'show,', 'fearing', 'reprisals', 'from', 'sponsors,', 'or', 'the', 'networks,', "don't", 'dare', 'to', 'present', 'these', 'real', 'situations.', 'Jeannot', 'Szwarc,', 'shows', 'a', 'sensitive', 'approach', 'to', 'this', 'thorny', 'issue,', 'which', 'is', 'dealt', 'without', 'the', 'sensationalism', 'the', 'case', 'might', 'have', 'been', 'shown', 'with', 'a', 'different', 'team.<br', '/><br', '/>There', 'is', 'a', 'rare', 'Chad', 'Everett', 'appearance', 'as', 'the', 'older', 'Jimmy', 'Bruno.', 'His', 'take', 'is', 'right', 'on', 'target', 'with', 'a', 'touch', 'of', 'sentimentality', 'that', "doesn't", 'get', 'out', 'of', 'hand.', 'Shane', 'Johnson', 'makes', 'an', 'excellent', 'contribution', 'to', 'the', 'show', 'as', 'Sean', 'Cooper.', 'The', 'cast', 'is', 'marvelous', 'and', 'it', 'includes', 'good', 'all', 'around', 'performances', 'from', 'everyone', 'under', 'Mr.', "Szwarc's", 'direction.<br', '/><br', '/>In', 'this', 'episode,', 'Nick', 'Vera,', 'gets', 'closer', 'to', 'his', 'neighbor,', 'the', 'mother', 'of', 'the', 'basketball', 'player', 'the', 'detective', 'took', 'his', 'ball', 'away.', 'Nick', 'is', 'heading', 'for', 'romance', 'with', 'the', 'woman!')
+456
+Shortlisted features: ['time', 'The', 'Eileen', 'The', 'station']
+Found local linear model with Coeffs: [-1.18366374e-49 -3.23741404e-48 -9.03385082e-49  3.50996041e-48
+  3.82575207e-49]
+generated sparse local model
+456
+('time', 'The', 'Eileen', 'The', 'station') [1 1 1 1 1] [-1.18366374e-49 -3.23741404e-48 -9.03385082e-49  3.50996041e-48
+  3.82575207e-49]
+Explanation:
+The: Value 1.000, Strength 3.509960413430977e-48
+station: Value 1.000, Strength 3.8257520727860215e-49
+time: Value 1.000, Strength -1.1836637417933287e-49
+Eileen: Value 1.000, Strength -9.033850817308075e-49
+The: Value 1.000, Strength -3.237414036043149e-48
+
+
+
+Explaining Model Prediction POSITIVE for datapoint 5
+Samples shape after removing padding: (101, 230)
+118
+Generating the sparse local model
+[ 5 18 44 73 99]
+5
+('I', 'have', 'seen', 'many', 'many', 'movies', 'and', 'this', 'just', 'totally', 'blew', 'my', 'mind.', 'The', 'trauma,', 'the', 'suspense', 'is', 'just', 'amazing.', 'I', 'ended', 'so', 'wound', 'up', 'in', 'the', 'psychological', 'fear', 'and', 'Philosophy', 'of', 'it,', 'and', 'relating', 'it', 'to', 'reality.', 'Movies', 'that', 'play', 'and', 'challenge', 'your', 'mind', 'are', 'movies', 'you', "don't", 'forget,', 'those', 'that', 'make', 'you', 'doubt', 'your', 'reality.', 'A', 'problem', 'could', 'be', 'the', 'quality,', 'but', 'that', "doesn't", 'bring', 'down', 'the', 'essence', 'of', 'the', 'movie.<br', '/><br', '/>The', 'idea', 'it', 'self', 'is', 'brilliant', 'and', 'the', 'ending', 'leaves', 'you', 'just', 'completely', 'shocked', 'and', 'with', 'the', 'question', 'for', 'you', 'to', 'seek', 'the', 'answer.', 'I', 'just', 'totally', 'loved', 'it!', 'So', 'many', 'clues', 'and', 'twitches', 'and', 'puzzles.', 'One', 'of', 'the', 'best', 'movies', 'ever,', 'hands', 'down.')
+118
+Shortlisted features: ['movies', 'just', 'mind', '/><br', 'just']
+Found local linear model with Coeffs: [5.89379672e-16 1.85366399e-15 5.88576335e-12 3.98533385e-14
+ 1.32239832e-16]
+generated sparse local model
+118
+('movies', 'just', 'mind', '/><br', 'just') [1 1 1 1 1] [5.89379672e-16 1.85366399e-15 5.88576335e-12 3.98533385e-14
+ 1.32239832e-16]
+Explanation:
+mind: Value 1.000, Strength 5.885763354298103e-12
+/><br: Value 1.000, Strength 3.985333852377786e-14
+just: Value 1.000, Strength 1.853663990047267e-15
+movies: Value 1.000, Strength 5.893796724388426e-16
+just: Value 1.000, Strength 1.3223983172510456e-16
+
+

@@ -1,0 +1,128 @@
+Choosing the Right Naïve Bayes Model
+
+
+We will now conduct a side-by-side comparison of the Multinomial, Bernoulli and Gaussian Naïve Bayes models. Through short code experiments, you will identify the type of data each model is best suited for and observe how assumptions about features influence performance. 
+
+
+00:00:00 - 00:00:26
+Introduction to Naive Bayes Variants: Multinomial, Bernoulli, Gaussian
+Hello in this session let us expand knowledge by understanding three main variants of a new base which are multinomial, Bernoulli and the Gaussian new base right? So the key is here to learn when to use each one as selecting the correct variant is a crucial critical for the optimal performance, right.
+00:00:27 - 00:01:02
+Overview of Multinomial, Bernoulli, and Gaussian Naive Bayes
+So this multinomial NB is ideal for the word counts or the frequency features which are common extra classification, right? And the Bernoulli is best suited for the binary features like word presence or absence. So some binary features, it is more helpful. And the Gaussian NB which we have already explored is for the continuous numerical features. And finally, we will discuss choosing the correct model for the different data set, whether they have text binary indicators are the continuous attributes.
+00:01:03 - 00:02:29
+Gaussian Naive Bayes: Data Preparation and Model Training
+So here our learning objectives are we will be able to distinguish between these three variants and identify the appropriate use case for each based on the type of the data we are working with it. And we will also learn to select the correct variant by understanding the underlying probability distribution assumption. Each one makes it. So as usual, let's quickly import all the necessary packages or the libraries and then let us load our data set. And as we saw earlier, so here we have the 58 columns in the 58 features here, right? So now once we loaded that data set, let us quickly look into the Gaussian name base which are the continuous features here as here if you see the previous features so that the O frequency make and all those are the continuous features. So now let us prepare the data to apply this Gaussian name base where we extract the features into X and we extract the target variables and again we are splitting into 3070 split here. And then once I have the data, I am initializing my Gaussian name base. I am getting that training data and we are getting the predictions. And this is how my accuracy and the classification report look like, right?
+00:02:30 - 00:04:19
+Multinomial Naive Bayes: Data Preparation and Model Training
+So if you observe that we got an accuracy of around 8 to 2.4% and the class 0 it has a high precision but slightly lower record whereas the Class 1 which is a spam, it has low precision but very high recall. This means Gaussian NB is very good at catching the spam emails but sometimes it classifies ham as a spam which is a common trade off in the spam filtering scenario. Now let us go to the another variant which is a multinomial name base which is good for the word counts or the frequency features, right? So here also we are doing the same thing. We are taking the train and the test and then initializing the model and again fitting the model and getting the predictions. So if you observe the output here, we got around the accuracy of 76.6. When we compare this to the Gaussian, if you remember it is around, I think you know 82.4% where we see the multinomial NB performs a bit worse on this transform data set, right? So here we observe even the classification report shows that the lower precision and recall for both classes compared to the Gaussian Levis classification report that we just saw few seconds before, right? So this performance difference is expected because the original features of continuous percentages and are rounding and integer conversion might lose some valuable information. However, this demonstrates how to prepare the data for the multinomial neighbors if you had a raw word counts.
+00:04:21 - 00:06:13
+Bernoulli Naive Bayes: Data Preparation and Model Training
+Finally, let's look at Bernoulli neighbors which is specifically designed for the binary features. Features that indicates whether the value is present or absent. In our case it is a whether it is a spam or ham. So if you see the what we are doing exactly here is that so we are creating the boolean array where true means the feature value is greater than 0 and false means it is a zero. It is an absent here, right? And here once we have these details, we are also converting, you know it is just two to one and false to 0 to create the binary features. Here again, once we have the data, we are doing the same process where we are initializing, fitting and then prediction. And if you observe the output, we have around 88 point 7%, right. Supplisingly, this Bernoulli NB achieves the highest accuracy so far. Then we compare to the previous two that we did and it also shows strong precision and recall for class zero. And for class one also it has an excellent precision in the recall. So this is very interesting result, right? So basically, it suggests that for this specific data set, the presence or absence of certain words is actually a more powerful indicator of spam or ham than the exact frequency of this words, right? So basically, it is highlighting that, you know, the feature type really matters when choosing a new base variant here, right? Now, once we saw the different variants, let us summarize our findings, right?
+00:06:13 - 00:08:05
+Summary and Comparison of Naive Bayes Variants
+To do so, let's create a small, you know, comparison table here of the accuracies from our three new base variants, right? So if you look into that table, you know, I mean the model and the particular accuracy here. As we saw this Bernoulli achieves the best performance compared to the previous. And then the next is the Gaussian and the final is the multinomial. So this results, you know it is we can derive A crucial insight like these demonstrate the best variant depends on how feature distribution aligns with the model assumption and not on which algorithm is better, right? So even though this Bernoulli and we perform the best here, that does not mean it is always the best. It is also depend upon the data set that you select, right? So if you can tell in the other scenarios like this Gaussian name base, it will more suitable for the continuous numeric features with a normal distribution assumption and the multinomial NB it will be suitable for word counts typically from the text corpus. You know like with a multinomial distribution assumption and Bernoulli is suitable for the binary features like binarized text with a Bernoulli distribution assumption here, right? So these are our observations from the scenarios or the experiments that we performed here. So where we can't say this particular model is or this particular variant is always best scenario, right? It always depends upon the data sets and the features that we explored for that particular task.
+
+
+You learnt how to distinguish among the three main Naïve Bayes variants. Multinomial NB works well for frequency-based text data, Bernoulli NB for binary features, and Gaussian NB for continuous numerical data. Understanding these distinctions helps you select the right model quickly and interpret results confidently. 
+
+ 
+
+Next, you will understand the advantages and disadvantages of Naive Bayes. 
+
+Advantages and Disadvantages of Naïve Bayes
+
+You will now understand the strengths and limitations of Naive Bayes. You will understand where the model demonstrates strong performance and where its underlying assumptions, may restrict its effectiveness in more complex data scenarios.
+
+ 00:00:00 - 00:02:17
+Advantages and Disadvantages of Naive Bayes Classifier
+Let us discuss the advantages and disadvantages of naive based classifier. It is very simple and very versatile algorithm. So the advantage of this is fast for training and inference. You don't. It is so fast for training and inference. It works well with high dimensional data. Since we have a product of the likelihoods. It extends well with high dimensional data and then it is simple and interpretable. It is very important. It is simple and interpretable and it supports multiple data type. We have seen a discussion about how we have got variants of dive base using multinomial, binomial and Gaussian process. We have got variance to address various data types. The advantages we can have all the combinations of data types in the same data set. That is a unique advantage. Unlike in algorithms with linear regression where you have category, if you have categorical variables you have to do one hot encoding and dummy variables. We do not have that type of a problem here. In naive base we can use all the data type multiple data types in the same algorithm. The disadvantages is this is fundamentally called live based because we make an assumption that the feature independence, we assume that the features are independent which is not. It is a unrealistic in the assumption I would say because usually the features are dependent of among each other. We looked at the example of rain and cloudy. We assume that rain and cloudy weather are independent of features which is not the case. So this is unrealistic assumption but it works. That is and then it cannot model feature interaction. The moment we say that the features are independent, they cannot model feature interactions. Again coming to same example rain and cloud example, it cannot model the interaction between cloudy weather and rain which is unrealistic. And then it assumes the continuous data to be Gaussian. We assume for continuous variable, we assume that the data is Gaussian. So this is a big assumption for continuous variables. If the data is not normally distributed, the condition is breached actually.
+
+
+You observed that Naïve Bayes offers key advantages such as simplicity, fast training and inference, scalability with high-dimensional data, and consistent performance in structured classification tasks such as text analysis. However, its strict independence assumption can reduce accuracy when features are strongly correlated, and its probability estimates may lack calibration in real-world conditions. 
+
+ 
+
+Developing clarity on both its benefits and constraints enables a balanced understanding of its applicability. Next, you will broaden your view by comparing Naïve Bayes with other classification algorithms and situating it within the larger framework of parametric and non-parametric models.
+
+Comparing Naïve Bayes and Other Models
+--------------------------------------
+
+We will now compare Naïve Bayes with other commonly used classification models such as logistic regression, decision trees and SVMs. You will also understand the distinction between parametric and non-parametric approaches and where Naïve Bayes fits within this landscape.
+
+00:00:00 - 00:01:10
+Introduction to Naive Bayes and other classification models
+Welcome to the session. We will expand perspective by comparing the Naive Bayes to several other common classification models. So basically this exercise is about understand the strengths, weakness and the fundamental differences. Particularly distinguish between the parametric and the non parametric models. So specifically we will learn or else we will compare the performance of Naive Bayes again as steno, logistic regression, decision tree, KNN and the SVM models here. And then we will make a conceptual distinction between the parametric and the non parametric models which is a crucial concept in the machine learning. And then finally, we will discuss how assumptions, data requirements and the mode of flexibility differ among the selected algorithms here. And our learning objective is to able to compare the snail base within the other classification models and to grab the idea of the parametric versus non parametric approaches.
+00:01:10 - 00:02:06
+Data preparation and feature scaling
+And then we will run the comparator experiments on our spam data set and observe the differences in assumptions, training time, interpretability. And of course, the main part is an accuracy here, right? So let us quickly start our, you know, start by importing the necessary libraries and then we will load our data set. And the data set that we are using is the same in the previous sessions. And then we are quickly preparing our data set, you know by taking the X&Y values and then we are splitting into training and testing. And then here before we are fitting the model, we are scaling the data here where this transformation standardize the features by removing the mean and scaling to unit variance, right. So this results in features with a mean of 0 and a standard deviation of 1.
+00:02:06 - 00:03:30
+Training and evaluating classification models
+And here we are fitting the data and then you know, we are transforming the data and if you quickly see the shape here which we have around 4601 samples with a 58 columns. So our full data set has you know 57 features plus one is the target variable here. And if you see the training on the test bed they are around 3000 to 20 training samples and 1381 testing samples with the 50 some features for both. Now let us define trainer models that we are going to use. So we are going to train this models like which are Gaussian, a based vajstri equation decision tree which is a non parametric and then again K&N is a non parametric and the final is a SVM. Here we will use a linear kernel here in the SVM for simplicity here making it you know decision boundary parametric in mature. So we will train in all these models where here we are keeping them in the Python dictionary for easy iteration here. Now here we are iterating through each model, we train it and make the prediction, measure its training time and evaluation its performance here.
+00:03:31 - 00:05:39
+Model performance comparison and results analysis
+So basically here for each model we are fitting and we are predicting prediction and we are getting the time it take and the accuracy in the final the results that we have. So let us quickly run this. Now our results are ready. So let's go through the results, one like for each and every model here where if you see the name base, my accuracy is around eight, 2.4% with the training time of 1.013 seconds. So this is our baseline model. It is very fast, but its performance we observe is moderate here, right? Now I move on to the logistic regression where the accuracy improves which is around nine 2.83%, right, which is significantly higher accuracy than naive base with a still very fast training time, right? So this suggest a linear model can perform well on the data set that we selected. Now if we see the other output of the decision tree model where the accuracy is 89%. So again this is also good accuracy which is better than neighbors but not as high as logistic regression rate and shrining time is also bit longer than most regression. Similarly, if we see the KNN where you know we got eight 9.93% which is similar accuracy to decision tree but it is slightly better and the training time is also reasonable here. And if you see the output of the SVM, the accuracy is 92.9%, right? This models achieve an accuracy which is very similar to the logistic iteration, making it one of the top performance here out of the models that we explode. However, if you see the training time, it is very longer compared to the other fast models here, right? So from this initial results, we can see a clear hierarchy in accuracy and also significant differences in the training speed here.
+00:05:40 - 00:08:08
+Visualizing model accuracy and training time
+Right? Now, let us analyze and visualize this model accuracy and training times more, you know systematically. So here what we are doing so for each you know all the models that we train, this is accuracy, this is the training time which will help us to gain the insights quickly. As discussed, this SVM large regression, these are the top performance both are above 92% here, right? And if you compare the training time where this new ways is a pass followed by the logistic regression and then KNN and you know it is a decision tree and finally the SVM here, right? The SVM is the most lowest form out of all this. Let us quickly plot this and see the insides. So you know this conforms our results where this SVM and the last regression clearly stand out as the most accurate model on this spam data set. And the naive base which is fast is the least accurate among the all the models that we trained here. So this highlights that while naive base is a good simple baseline which is more sophisticated models can often achieve the higher performance right? Now let us quickly visualize, you know training time comparison to see the trade-offs between the speed and the accuracy, right. So if you see here, as we discussed, naive base is by far the fastest model which is complete and the time it is taking is very in very few seconds, right? And the logistic regression and KNN is also very quick decision to is a bit slower, but SVM is far or significantly slower than the others taking over more than half a second, right. So this, you know, emphasize that choosing a model isn't just about accuracy. Competition cost, especially for the last data set is a critical factor. So naive base has the lowest training time, making it an excellent choice when speed is a paramount R as a quick baseline. Now let us move on to the parametric versus non parametric models.
+00:08:09 - 00:09:47
+Understanding parametric vs non-parametric models
+So parametric models you know it assumes a specific functional form, example linear or the Gaussian distribution for the relationship in the features and the target. So they estimate a fixed set of parameters from the data. And the training is typically fast and efficient when their assumptions hold true here. Whereas the non parametric models do not assume a predefined function form right? So instead they learn the relationship directly from the data, adapting to its shape and the complexity. So this flexibility often means they require more data and can be computationally more intensive, but they can capture the more complex patterns here, right? So if you see the table here, this clearly illustrate the key differences where the parameter models like you know the naive based logistic regression, these have the fixed parameters and specific assumptions making them less flexible. Whereas the non parametric models like the dysentery scan and adopt more to the data offering higher flexibility but potentially you know at the cost of interpretability and requiring more data. So and SVM here, you know it can bridge both worlds depending on its kernel choice that you are making here, right? So if I need to summarize the findings from the here, there are few characteristics you know that you want to focus on.
+00:09:47 - 00:11:18
+Summary of model characteristics and recommendations
+Let us say if it is an accuracy versus interpretability, dashantry and logistic regression are considered easier to interpret. Whereas SVM and KNN are you know, they are more opaque making it harder to explain the individual predictions and the naive base is also quite interpretable or it is probabilistic nature. And the second thing is the training time where the naive base and the lost regression train very quickly, making them suitable for large data sets or for the real time applications. But Canon and SVM can be slower, especially on the large data set of SELECT. And the third is the module assumption where the naive base assumes feature independence and that features follow a specific distribution right and large iteration usually assumes a linear separability in the transformed feature space. Whereas the decision tree and the KNN make you know relatively minimal assumptions about the data distribution or underline the relationship which makes them more flexible but also prone to over fitting if not regularized right. And the 4th characteristic is a parameter versus non parametric choice. Use parametric models when your data fits known the distribution and you know value the simplicity, speed and interpretability. Whereas use the non parametric models when the relationships are complex or unknown and you have enough data to learn these complexities without explicit assumptions.
+
+
+ 
+
+You learnt that Logistic Regression and Naïve Bayes performed the best in terms of accuracy and training time. You also learnt that Logistic Regression and Naïve Bayes are parametric models, relying on estimated parameters such as means, variances, or word probabilities, whereas non-parametric models such as k-NN and decision trees derive structure directly from data without fixed assumptions. Naïve Bayes offers interpretability, low computational cost and strong performance on well-structured data, even when more complex methods exist. 
+
+ 
+
+With this, we will conclude our discussion on the Naïve Bayes framework, from conceptual foundations and theoretical derivation to implementation, model selection and comparison within the wider classification family. Next, we will summarise your learnings from this session.
+Session Summary
+
+
+In this session, we explored probabilistic classification as a way to reason under uncertainty. You derived Bayes’ theorem from conditional probability and built the Naïve Bayes classifier through the independence assumption. You implemented a simple version to understand priors, likelihoods and posteriors and then examined its three main variants: Multinomial (for frequency-based data), Bernoulli (for binary features) and Gaussian (for continuous variables). You also addressed numerical underflow using log-space computations, learnt how to choose the appropriate variant based on the data type, learnt its advantages and disadvantages, and compared Naïve Bayes with other models while distinguishing between parametric and non-parametric approaches.
+
+ 
+
+Collectively, these concepts provide a complete understanding of how Naïve Bayes combines theoretical elegance, computational efficiency and practical effectiveness across a wide range of classification tasks. 
+
+Why is a probabilistic classifier considered more robust in real-world data scenarios than a deterministic one?
+
+
+It expresses uncertainty, allowing decisions to reflect confidence levels.-Correct. Probabilistic classification models uncertainty explicitly through posterior probabilities, giving confidence-based decisions.
+
+Which statement best explains the conceptual role of Bayes’ theorem in probabilistic classification?
+
+It reverses the conditional probability to express how evidence updates a prior belief about a class.--Correct. Bayes’ theorem updates the prior belief P(C) into a posterior belief P(C∣X) once evidence X is observed.
+
+Naïve Bayes assumes that all features are conditionally independent given the class label. What pedagogical reason justifies this 'naïve' assumption?
+
+It simplifies computation while still performing well in many practical cases.--Correct. The assumption simplifies joint probability computation without major loss in many domains.
+
+If two classes have overlapping Gaussian distributions for a feature, what does the model’s posterior P(C∣x) primarily depend on?
+
+On the relative likelihood values under each class’s distribution and the class priors.--Correct. The model weighs likelihoods P(x∣C) and priors P(C) to compute posteriors even when distributions overlap.
+
+Why might Bernoulli Naïve Bayes underperform on text data compared with Multinomial Naïve Bayes?
+
+It treats multiple occurrences of the same word as a single event, losing information about frequency.--Correct. Bernoulli NB uses binary features (presence/absence), ignoring how often words appear, unlike Multinomial NB, which captures counts.
+
+
+SVM and Naive Bayes - Graded Questions
+Program:Master's In Machine Learning and AI
+Course: Advanced Machine Learning
+
+
+
+
+
+
+
+
+
+
+
+

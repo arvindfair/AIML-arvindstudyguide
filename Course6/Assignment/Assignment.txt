@@ -1,0 +1,356 @@
+Introduction
+
+
+This assignment will provide you with a practical understanding of model selection in real-world scenarios. You will learn how to analyse and preprocess data, extract meaningful features and apply various machine learning models to uncover patterns and insights. Using model evaluation and optimisation techniques, you can compare different approaches and select the most effective one. This process will enhance your skills in building reliable predictive models, improving decision-making and ensuring model accuracy and generalisation in diverse applications.
+
+ 
+
+In the next video, let’s understand the basics of model selection. We will take an example of three models, and talk about them to understand various aspects of choosing a model.
+
+00:00:05 - 00:00:58
+Introduction to Model Selection Fundamentals
+Welcome. In this presentation we will go through the fundamentals of model selection and the guidelines and best practices around model selection that are recommended to be followed when working on a model selection task. So what is model selection? Model selection is the process of choosing the best performing ML model for a given business problem. So when we say best performing machine learning model, we mean many things. It involves comparing multiple ML models based on metrics. So these could be if your ML model is for classification, then these could be sensitivity, specificity, accuracy, F1 score and so on.
+00:00:59 - 00:02:36
+Importance of Model Selection in Machine Learning
+If it is regression that you are doing with your machine learning model, it would be RMSE, map and so on. And you also need to look at multiple models to see which one performs optimally for that business problem. The goal is to find a balance between bias, variance and generalization. So this involves keeping a close track on your models, seeing that it does not overfit to the data, also making decisions based on the models bias, variance trade off as well. That is this the right model for this data? Is there a better model for this kind of data or problem statement? So these are the main goals of model selection. So why is model selection important? The first thing is that we want to optimize our performance. So model selection ensures that the ML model that you end up building and eventually goes to deployment generalizes well to unseen data. So the prime goal of ML modeling and deployment is to create models that can predict well. That means generalize well, make good predictions on new data in a good way. That's one of the main tasks in model selection. Also we want to avoid over fitting, under fitting and related issues.
+00:02:37 - 00:04:35
+Understanding Business Problems for Model Selection
+So many a times we would be able to see that certain models tend to over fit or some models are not complex enough to capture the variance in the target. So maybe the model is under fitting or not good enough for a certain business problem. So we want to avoid both. We want to avoid a model which has overfit on the data. We also want to avoid a very weak model. So this also is a part of model selection principles and business impact is of course the most important part of ML modeling and model selection because a well selected model will lead to Better Business decision making and outcomes. So if your model is in a certain way, that will have direct impact on the business outcomes for which you have built that model. So understanding the business problem becomes central to any data analysis or any ML model task. Before selecting a model, understanding your business objective is central. It is the key. So you need to start by defining the type of problem. Is it a classification problem? For example, are you doing spam detection, e-mail spam detection, or are you doing some kind of disease risk prediction? It could be a regression problem. So are you predicting the prices of houses or are you predicting stock prices, behavior and so on? Is it unsupervised? Is it some kind of clustering, ML modeling? So are you doing some kind of customer segmentation and so on? So you need to define given your business problem, what kind of ML task are you actually considering or needs to be done in that business problem.
+00:04:36 - 00:07:08
+Comparison of ML Models: Logistic Regression, Decision Tree, Random Forest
+And then you identify the constraints. So accuracy would be a constraint, interpretability of the model would be a constraint, scalability, speed, cost and so on. So these are your constraints of the ML model. No ML model can be 100% perfect. So there are many constraints and there will be many trade-offs between these constraints. So let's compare a few different ML models in terms of their type, strength, weakness, bias, variance, trade off and so on. So let's take for this table at least, let's take logistic regression, decision tree, and random forest. Now logistic regression is used for classification, Decision tree is used for classification or regression. And random forest which is built on decision trees is also used for classification or regression. Now random forest we say is a model, but it is actually an ensemble of decision tree models. It's an ensemble technique in terms of strength. The logistic regression is interpretable and fast in the decision tree. It is very easy to understand and the random forest handles complex data well. So these are the strengths of these three models. But what about their weaknesses? The logistic regression model assumes linearity, which again leads to it being a high bias model. So it assumes linearity and linear relationships in the variables. The decision tree may be easy to understand, and it can give you various levels of decisions that have been made in terms of splitting the data space into more homogeneous regions. That's how a decision tree works. So it's easy to understand how it was built. You know what the nodes look like. All of that is easy. But the weakness of decision tree is that it tends to overfit. It is very prone to overfitting. Now the random forest, it handles complex data well. It does deal with the overfitting to some extent, but it is computationally expensive because you are using multiple decision trees, training multiple decision trees here in an ensemble. So it is slightly more computationally expensive. So you need to keep in mind the strengths and weaknesses of each model when you are using different models to do your classification or regression task.
+00:07:09 - 00:09:02
+Bias-Variance Trade-off in Machine Learning Models
+And you have to take decisions based on the business problem and what you are expecting from this ML model, what the business problem solution or the suggested or the proposed solution you are expecting from these models. In terms of bias variance, also logistic regression, it's high bias and low variance. This means that it's has a tendency to be biased towards certain behavior. So for example it assumes linearity and so on. And it has a low variance, which means that the power of logistic regression to capture the variance in the target output may be a little lower. Decision tree on the other hand is quite the contrary. It's a low bias model. In other words, it basically builds its nodes directly from the data. So if we see how a decision tree is actually built, it goes node by node splitting the data space S the model itself is driven by the data space very low bias and it has very high variance. So the output of the decision tree it can cover a large variance in the data. On the flip side, one of the biggest issues as we have seen is the over fitting issue of the decision tree. Next random forest. It's a low bias model. So again it is built on decision trees. So it is low bias and it has moderate variance. So it's not a high variance model like the decision tree. And very high variance is also something you have to consider. Do you want such a high variance, right? Do you want such high variance in your predictions? So what exactly does your prediction region look like that also you need to take care.
+00:09:03 - 00:10:15
+Visualizing Bias-Variance Trade-off
+So random forest built on top of decision tree is built such that it is intended to be a better model than a decision tree. So typically it has moderate variance. It's slightly lower than the decision tree. So visually if we were to look at bias variance trade off, you could see here. So in all of these diagrams you can say that this circle here or this circle here and this circle here and this circle here, these are the data space. So this is where my actual data lies. You can think of it like some kind of target, right? So all my actual data suppose lies inside this circle. OK, this is my actual data space. Now what does a high bias, low variance model look like? So you will notice that it's predictions will be far away from the data space. So you will see that first of all the predictions are clumped up together.
+00:10:16 - 00:12:20
+Model Complexity and Overfitting vs. Underfitting
+So you can see that there is very less variation in the predictions. So it's almost as if it is predicting very, very similar values. So that's a low variance and it's a high bias. High bias because my actual data space is here, which means that the model was not able to capture this data, but instead it is capturing some other region. So this circle is the data space for my actual data. Of course, this is the complete space. The square you can think of as the complete space of various data points. So this is the data points that I am working with. So the model has actually captured some other region or some other data point. So that's a high bias. Now what would a high bias, high variance model look like? So it's kind of similar to high bias, low variance. The only difference is that the predictions will be all over the place. So whereas we want some variance so that our model is able to capture the variations in the target, but still because of the high bias, it's not within the region on which we are training the model. So that's a high bias model with a high variance, a low bias, low variance model. What does that look like? So because it has low bias, it was able to correctly identify the region in which it should be predicting. But because of its low variance, it's not able to cover the complete data space on which we intended the model to be built. So if there are data points outside of this plump of predictions, it is not able to capture those predictions. Now typically a low bias and moderate to high variance model is what typically we might consider as a good model because since it has low bias, it is able to capture the predictions in the intended data space by training on the data. So you can see most of these predictions are in the region which is intended and it's high variance.
+00:12:20 - 00:13:12
+Optimal Model Complexity and Business Justification
+That's why the predictions are actually all over the region wherever it is intended. So out of all these four, we would typically say that a low bias, high variance model is relatively better than some of these other kinds of models. Now, this doesn't mean that you cannot use models of different types. So sometimes models can be tuned right. We can tune the models, we can train the models correctly, we can do a lot of data processing to see which models are suitable for a certain business problem. The idea there is it's not just about bias invariance, it's also about simplicity, complexity, cost and so on. South, all of these things need to be kept in mind.
+00:13:15 - 00:14:40
+Regularization Techniques to Prevent Overfitting
+For example, if we talk about simplicity and complexity, here is an example of a time series data. So you can see on the X axis it's the time and the Y axis is the value. This could be some kind of temperature reading or stock price or whatever. So this is the same data. This these blue data points are the same in all three graphs. And this dotted line is basically our predictions. So you will see that in the first graph here it's a very simple model. It's just a straight line. I'm predicting values along a straight line as simple as it gets. In the second graph, you can see that it's the predictions are following the trend in the data, not fully capturing all the variation, but it is more or less following the trend in the data. So for example, this blue point would be predicted as this black point, This blue point would be predicted as the black point. So there is slight error, but more or less it is following the trend. In the third graph here you can see that the predictions are exactly going through the data points. So this is where we would start considering that is this actually learning? Is this machine learning or is it memorizing the data? So this is what we call over fitting. In the first case, this is what we call under fitting.
+00:14:41 - 00:16:02
+Hyperparameters and Their Role in Model Selection
+And typically what we are looking for is a model like the second graph here, which has generalized well to the trends in the data and are able to make reasonable predictions. So that's a very good balance between bias and variance, between simplicity and complexity. So typically if we look at a model complexity and say we start with simple models on the left and as we go towards the right on the X axis here the model complexity increases, then you will see that as the model complexity increases, the variance will typically increase, the variance of the model will typically increase and the bias of the model will typically decrease. So what we are looking for is not these extremes. We don't want a very low variance, high bias kind of model. We don't want a very high bias, low variance kind of model. We want something that is optimum. We want something that has a good trade off between bias and variance. Now of course, we could easily say that the intersection point of the bias, variance, trade off, whichever model comes up is the best model here. But you still need to justify that with your business problem. So this is this is just an ideal sort of situation where we are saying that where bias and variance are trading off here is your optimal model. So this is just version one of the answer, so to speak.
+00:16:02 - 00:18:04
+Hyperparameter Tuning: Grid Search and Random Search
+You will need to understand whether this is actually better or do you want to trade off little more bias for more variance or do you want to trade, you know, on the left side. So it's all about trading off between complexity and variance and predictability, predictive power. So whereas this is a good guiding principle, the actual model which you end up using will be fully dependent on the business problem and what you're expecting out of the solution of the business problem. Let's then talk about regularization. So regularization is one of the most standard methods used in model selection to help prevent overfitting. So basically regularization, for example in regression models, what regularization does is it adds a penalty to the loss function and penalizes coefficients. And for trees and such models we have other techniques, regularization techniques actually they are called pruning and so forth. So there are post pruning methods, pre pruning methods and so on. South. All of these work in certain ways to prevent overfitting. So the way that say, regression overfits is by assigning more predictive power to coefficients. So be it linear regression or logistic regression, more power to coefficients is the way in which it tends to overfit. A decision tree overfits by basically building more nodes and building more branches. That's the way decision tree overfits. So every type of model would have suitable regularization techniques that you would have to look at and consider to prevent overfitting. So in regression you could use L1 and L2. These are LASSO and rich regularization. So again, both these regularization techniques essentially penalize coefficient magnitude. So L2 would reduce magnitudes, L1 would shrink. The magnitudes may be 1 to 0.
+00:18:05 - 00:20:24
+Cross Validation Techniques for Model Stability
+In decision trees you can do pruning to remove unnecessary branches and prevent over. So all of these things depend on hyperparameters. Hyperparameters are settings that are defined before training a model, which are used to fine tune or regularize the model to keep it optimally complex. So for example, if I take regression, the coefficients of the variables, so these are your coefficient values for each feature. Those are the parameters in the regression model. If you regularize it, then of course you have a penalization factor. That is the Lambda, right? That would be the hyper parameter. So that is your regularization loss control. So depending on the strength of Lambda, you would be able to control the strength of the regularization. That Lambda is a hyper parameter for regression and similarly you have parameters and hyper parameters for the other models such as free models. So you may now have to look at various values of these hyper parameters and rebuild the models N number of times to see which value gives you optimal models. Now you have to define optimal based on some kind of loss or some kind of metric you're looking for. So are you looking for good accuracy, good sensitivity, good MAPE? You need to define that based on your business problem. And then you can search through the various hyper parameter space, build the model again and again and see which optimal model is coming up. So grid search and random search are commonly used techniques to do hyperparameter tuning. So for example in logistic regression you can choose the type of penalty and the strength of the penalty. So C here by default is 1. So this is SK learn logistic regression. The Lambda value is 1 and penalty by default is rich. So here you would tune on various values of Lambda and try L1 and L2 regularization and see which one gives you a better model. In decision tree criterion is Gini. So the gini index is used to build the tree.
+00:20:24 - 00:22:02
+Challenges in Model Selection: Data Quality, Computational Cost, Hyperparameter Tuning
+You could change the criterion and see entropy is also an option to build the tree. Max depth is a hyper parameter that you could tune on. So typically if you limit the Max depth it is generally going to limit over fitting right? But if you limit the Max depth too much then it would be under fit so on and so forth. So you have other pair up hyperparameters like min sample split, min samples leave. So this is the minimum samples in a node so that it can split. So if there are four data points in a node and if min sample split is 2 then that node will split. So if this was made five then min samples for splitting would be 5. Then the node with four data points would not split. Similarly, you have all of these hyperparameters that you could tune on for random forest. Since random forests are built on trees, you will find similar hyperparameters here, Max depth, min samples, split min samples, leaf and so on. You will also find an estimator. So this is the number of estimators or number of predictor models. So random forest is an ensemble of these say by default hundred decision trees. So how many decision trees? So this is also a hyperparameter that needs to be tuned on. Now when we do hyperparameter tuning and model selection, cross validation is typically used so that we can ensure stable model performance on the complete data. So it helps in selecting best model without overfitting.
+00:22:03 - 00:23:09
+Bias-Variance Trade-off Dilemma in Model Selection
+So the common techniques are K fold, stratified K fold, leave one out cross validation. So K fold splits the data into K subsets strains on K -, 1 and then validates or tests on the remaining and this is done K number of times right? This is the most common stratified K fold maintains class balance. So this is good for imbalanced data and leave one out is better for smaller data sets. So here's an example of how K fold might work. So if this is your training data and you have already separated 1 testing set or validation set. Then in this training data when I apply K fold cross validation, what will happen is that the training data is broken into K subsets. So you have K data sets and these are K parts of the training data. So in the first iteration of model building, model training, K -, 1 parts of the data 1 to K -, 1 is used for training for some specific hyper parameter.
+00:23:10 - 00:24:34
+Best Practices in Model Selection: Start Simple, Use Cross Validation, Domain Knowledge
+And then the performance metric is evaluated on the part that is left out. And this is done K number of times. So iteration 1, iteration 2, iteration 3. So in iteration K part number 234 up to K is used for training for that same specific hyper parameter value Lambda. And validation is done on the part that was left out, so in this case 1. So you get K estimates of the predictive performance for a specific value of Lambda. So from this you can see that the performance is stable across various training instances. So training it on K -, 1 parts here and then K -, 1 parts here and so on. So when you take out K -, 1 K -1 each time. So suppose K is say 5. So there will be 5 parts. So training will happen five times. Part number 123 and 4 will be used for training for the first part for the first iteration, then part number 134 and five and so on. And then each time you get some predictive performance for a specific value of Lambda. And here you can select the best value of Lambda and then fit using the entire training data. So this ensures that your model performance is stable and that the training is happening as intended.
+00:24:34 - 00:25:26
+Hyperparameter Tuning and Model Performance Monitoring
+This whole process, we will be repeating it for the range of Lambda values for different Lambda values. So here the symbol Lambda is used as a generic indicator of hyperparameter. So when you're training logistic regression or a regression model, there is only one Lambda, which is the regularization loss control strength, right? When you're training decisions, there will be many such lambdas. So there will be Max depth, there will be min sample split and so on each of those hyperparameters you will have to specify a range of values that you want to check and for each of those values in each of those ranges the cross validation will be done K times. So this way you are able to avoid any biases in the training. So cross validation is quite important model search.
+00:25:28 - 00:26:31
+Summary of Model Selection and Best Practices
+Now what are the challenges you may face when you do model selection? The first challenge is data quality issues. This is a challenge everywhere, missing values, imbalance classes, noisy features, outliers, corrupt data and all these kinds of issues. So EDA and data processing is of utmost importance when you work with any data. Computational cost. So large models will require more training time. You will observe this if you say use random forests on large amount of data, you will see that it takes a lot more time to train as compared to say a regression model. So computational cost is something to keep in mind. Hyperparameter tuning is not straightforward because we are now dealing with many number of hyper parameters and each hyper parameter would have many values. In fact infinite values, right? For example, Lambda. If I take Lambda in logistic, there are it's it's a continuous game, there are infinite values to tune.
+00:26:31 - 00:31:27
+
+So what is the right approach to arrive at the right Lambda? We cannot search for infinite values and rebuild the logistic model each time. So then what is the right way? What kind of value should I check for? Is there some strategy I can adopt to be able to locate the range of values and then make the range smaller? You know those kinds of things. So there is complexity when it comes to looking for the hyper parameters. So choosing a hyper parameter and checking a model is not necessarily that complex. Looking for those hyper parameters can get time consuming and complex. So this is something to keep in mind. And of course you always have the bias variance trade off dilemma. That is, do you want a model which has greater predictability, you know, but it it it also say has low bias. So maybe your accuracy and things like that are not looking that great. Or do you want, or are you OK with better performance but not much variation? So these are some things that you need to keep in mind because this model would then actually be used on large scale in some kind of business process. So the model would then be integrated into some kind of business workflow and the output from the model would be directly used to execute that workflow. So this is very important. The overfitting, the underfitting, the bias variance trade-offs are quite important to know, understand and work with and declare. So at the end of your model selection, when you are done with your selection and you're declaring that this is the most optimal model, you'll have to declare why it's optimal. So does it have what kind of performance is it showing? What are your thoughts about the model given the bias variance trade off of the model? What are the, you know, things that say the business or stakeholders should know about the model? So it's not just you have built a model and it shows 95% accuracy. It's not just that you have to, you know, report further details to the business stakeholders on what can go wrong and in what situations what can go wrong and how to correctly use the model, you know, report the limitations of the model and the strengths of the model. So what what are these things that you should be reporting to the business stakeholders? So there are all these challenges that come up in model selection. The best thing that an analyst or an ML scientist can do here is to work diligently and sincerely on the data, do all the steps and keep track of what you have done and report, you know, to the business stakeholder in terms of what were the pitfalls and what were the decisions you made and how this model was built, on what basis and what decisions. So best practices start with simple models and then you slowly increase complexity if required. So don't go for a complex model directly because more training time and more cost and things like that. So start with a simple model, see where it's failing, see is it suitable for the data, change your models and then go to more complex models and increase complexity of model. If you feel there is a need, use cross validation always. It ensures model stability. It's a good way to train ML models. Domain knowledge, as I've been discussing, is very important when selecting models because as an analyst or a data scientist or a ML engineer, we will, you know, know something about how this machine learning model works. We will know something about the the math behind the models, the behavior of the models, but we also need to discuss that with the business stakeholder in terms of the knowledge of the business stakeholder. That is, is my model for stocks, is my model for healthcare, is my model for house price, What is it for? And that domain knowledge needs to be considered and whatever we report has to make sense in the context of that domain. So then you know the business holders can then make sense of why certain model is behaving certain way or which model is better and so on. Hyperparameter tuning is very standard practice. So you can do it to optimize the performance of the models and monitor the model performance and update it when needed. So see how your model is doing and if at all you feel that OK, there needs to be some update in the model, then try it out again and update the model. So this was a summary of model selection and best practices guidelines for model selection tasks.
+
+With this, you have revised the basics of model selection. Let’s proceed to the next session to find the assignment details.
+
+
+Yes. Think of **ensemble** as:
+
+> **“Instead of trusting one model, combine many models and let them work together to make one final prediction.”**
+
+### 🌳 Simple example
+
+Suppose you want to decide whether a person will **buy a car**.
+
+You build **5 decision trees**:
+
+* Tree 1 → **Yes**
+* Tree 2 → **No**
+* Tree 3 → **Yes**
+* Tree 4 → **Yes**
+* Tree 5 → **No**
+
+Now we have:
+
+**Yes = 3 votes**
+**No = 2 votes**
+
+The ensemble's final answer is:
+
+👉 **Yes**, because the majority of trees voted Yes.
+
+This is called **ensemble learning**.
+
+### Why not use just one decision tree?
+
+A single decision tree can make mistakes because it may learn the training data too closely.
+
+For example:
+
+```text
+                 Decision Tree
+                      |
+             ┌────────┴────────┐
+             |                 |
+           Yes                 No
+          /   \               /  \
+        ...   ...            ...  ...
+```
+
+If this one tree makes a wrong decision, your prediction is wrong.
+
+With an ensemble:
+
+```text
+             Data
+               |
+       ┌───────┼───────┬───────┐
+       ↓       ↓       ↓       ↓
+     Tree1   Tree2   Tree3   Tree4  ... Tree100
+       ↓       ↓       ↓       ↓
+      Yes      No      Yes     Yes
+       └───────┴───────┴───────┘
+                   ↓
+             Majority Vote
+                   ↓
+                  YES
+```
+
+The idea is:
+
+> **Many models working together can produce a more reliable prediction than one model alone.**
+
+### 🌲 Why is Random Forest called an ensemble?
+
+**Random Forest = many Decision Trees + combination of their predictions**
+
+For classification:
+
+**Majority voting**
+
+```text
+Tree 1 → Cat
+Tree 2 → Dog
+Tree 3 → Cat
+Tree 4 → Cat
+Tree 5 → Dog
+
+Final → Cat
+```
+
+For regression:
+
+**Average of predictions**
+
+```text
+Tree 1 → 100
+Tree 2 → 110
+Tree 3 → 105
+Tree 4 → 95
+Tree 5 → 90
+
+Final = (100 + 110 + 105 + 95 + 90) / 5
+      = 100
+```
+
+### 🧠 Important distinction
+
+**Ensemble** is a general concept, not a specific algorithm.
+
+Examples:
+
+| Ensemble technique    | How models are combined                                    |
+| --------------------- | ---------------------------------------------------------- |
+| **Random Forest**     | Many decision trees → voting/average                       |
+| **Bagging**           | Train multiple models independently → combine              |
+| **AdaBoost**          | Models are built sequentially, focusing on previous errors |
+| **Gradient Boosting** | Each new model tries to correct previous model errors      |
+| **XGBoost**           | Optimized gradient boosting                                |
+| **Voting Classifier** | Different models vote                                      |
+| **Stacking**          | Predictions of several models are given to another model   |
+
+So when you hear:
+
+> **“Random Forest is an ensemble of decision trees.”**
+
+Translate it in your mind as:
+
+> **“Random Forest creates many different decision trees and combines their answers to make one final answer.”** 🌳🌳🌳🌳🌳 → 🎯
+
+And the **“Random”** in Random Forest comes from how it introduces randomness when creating the trees—particularly through **random samples of training data and random subsets of features**. This helps make the trees different from each other.
+
+
+Yes. This is an important ML distinction. The easiest way to remember it is:
+
+> **Regularization = a technique used to control model complexity.**
+> **Hyperparameter = a setting that you choose before training.**
+
+And **regularization parameters are often hyperparameters**.
+
+### Example: Linear Regression
+
+Suppose your model is:
+
+$$
+y = w_1x_1+w_2x_2+w_3x_3
+$$
+
+Without regularization, the model tries to minimize:
+
+$$
+\text{Loss} = MSE
+$$
+
+With **Ridge regularization (L2)**:
+
+$$
+\text{Loss} = MSE + \lambda\sum w_i^2
+$$
+
+Here:
+
+* `MSE` → prediction error
+* `λ` → **regularization strength**
+* `λ` is a **hyperparameter**
+* The `λ × Σw²` part → **regularization**
+
+So:
+
+> **Regularization is the mechanism; λ is the hyperparameter controlling that mechanism.**
+
+### 🔥 Example with different λ
+
+Suppose:
+
+```text
+λ = 0
+```
+
+No regularization.
+
+```text
+λ = 0.01
+```
+
+Weak regularization.
+
+```text
+λ = 10
+```
+
+Strong regularization.
+
+As λ increases, the model is penalized more for having large coefficients.
+
+```text
+Small λ
+   ↓
+Less restriction
+   ↓
+More complex model
+   ↓
+Potentially higher variance
+```
+
+Whereas:
+
+```text
+Large λ
+   ↓
+More restriction
+   ↓
+Simpler model
+   ↓
+Potentially higher bias + lower variance
+```
+
+---
+
+### Hyperparameters are much broader
+
+**Hyperparameter** means *any important model setting that you choose before/during training rather than learn directly from the training data.*
+
+For Random Forest:
+
+```python
+RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_split=5,
+    max_features="sqrt"
+)
+```
+
+All of these are **hyperparameters**:
+
+| Hyperparameter      | What it controls                  |
+| ------------------- | --------------------------------- |
+| `n_estimators`      | Number of trees                   |
+| `max_depth`         | Maximum tree depth                |
+| `min_samples_split` | Minimum samples required to split |
+| `max_features`      | Features considered for a split   |
+
+But these aren't necessarily called **regularization**.
+
+### Where regularization fits
+
+Think of it as:
+
+```text
+                 Hyperparameters
+                       │
+          ┌────────────┼─────────────┐
+          ↓            ↓             ↓
+     Regularization   Model        Training
+      parameters      settings      settings
+          │
+       λ / α
+```
+
+For example:
+
+**Ridge**
+
+```python
+Ridge(alpha=10)
+```
+
+`alpha` → hyperparameter
+`alpha` controlling the penalty → regularization parameter
+
+**Lasso**
+
+```python
+Lasso(alpha=0.1)
+```
+
+Again:
+
+`alpha` → hyperparameter
+L1 penalty → regularization
+
+### ⭐ Exam shortcut
+
+If your exam asks:
+
+**"Is regularization a hyperparameter?"**
+
+The precise answer is:
+
+> **Regularization itself is a technique, while its strength/parameter (such as λ or alpha) is a hyperparameter.**
+
+And remember:
+
+> **Every regularization strength parameter is a hyperparameter, but not every hyperparameter is a regularization parameter.**
+

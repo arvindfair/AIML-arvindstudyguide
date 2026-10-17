@@ -1,0 +1,1188 @@
+Dimensionality and Feature Selection
+
+
+More features do not always mean better performance. Some attributes may be irrelevant, redundant or simply add noise, making the model unnecessarily complex. As dimensionality increases, the risk of overfitting grows and computation becomes heavier. 
+
+ 
+
+Feature selection helps us retain only what is useful for prediction, improving generalisation as well as interpretability. 
+
+ 
+
+Let us understand how we control dimensionality and choose informative features. 
+
+00:00:00 - 00:00:29
+Impact of Increasing Dimensionality on Data Geometry
+Now let us discuss how increasing dimensionality alters data geometry. With more features, points becomes sparse, distance loose meaning, and models require far more data to remain reliable. Feature selection act as a directive mechanism, improving interpretability, stability, and generalization. Let us discuss the curse of dimensionality.
+00:00:29 - 00:01:22
+Understanding the Curse of Dimensionality
+So what does the curse mean here? Curse means as the dimensions kept on increasing right? If you see here we have the data point in one-dimensional space. As the dimensions kept on increasing from one dimension, we have two dimensions like this we might have 3 dimensions right XYZ. So we might have 3 dimensions here. So this 3 dimensions if you see the data points because the space will become bigger and bigger so the data, the distance among those data points will keep on increasing. And specially if you are working on a distance based algorithms like K&K means it will become even more problematic.
+00:01:23 - 00:01:45
+Challenges with Distance-Based Algorithms in High Dimensions
+So what happens as your number of features kept on increasing? You also need to increase the number of rows or number of data points exponentially so that that can give support to the number of increased dimensions. So there are some ways we can deal with the dimensionality.
+00:01:47 - 00:02:10
+Strategies to Handle High Dimensionality
+So we can use PCA method or we can utilize feature selection method. So feature selection method, what it does feature adds estimation uncertainty. So what it basically does feature space like it will remove irrelevant or noisy dimensions. So what does I mean here?
+00:02:10 - 00:02:56
+Feature Selection Methods and Their Importance
+So for example, these are the let's say my features or the columns I have X5, X6X7 and X8. So these are the columns I have. So what it does, it will remove. Basically if let's say X3 is not important, it will remove, X8 is not important, it will remove and also it can help me combine. If there are two things which can combine, we can use that thing as well. So, there are some common methods of feature selection, filter method, wrapper method and embedded method and we will discuss them each one by one.
+00:02:56 - 00:03:17
+Motivation for Reducing Dimensionality and Selecting Features
+We have outlined the core motivation for reducing dimensionality, mitigating sparsity, improving model robustness and avoiding unnecessary complexity. Selecting informative feature is therefore a fundamental step in building a stable predictive systems.
+
+
+ 
+
+You saw that an increase in the number of features leads to the introduction of sparsity in data, and a reduction in the density of information available for use. These extra features add estimation uncertainty and risk of overfitting, as the amount of data needed to generalise over the increased feature space increases exponentially.  
+
+ 
+
+Feature selection helps in such cases by reducing the number of features or retaining the most important features only. Feature selection can be driven by different principles. Some common techniques used are:
+ 
+
+Filter methods rely on statistical measures computed before modelling, such as correlation scores or mutual information, selecting features that show strong independent relationships with the target.  
+ 
+Wrapper methods evaluate subsets of features using the model itself, searching for combinations that maximise performance, though they can be computationally expensive.  
+ 
+Embedded methods incorporate selection into model training. For example, L1 regularisation naturally shrinks some coefficients to zero, removing those predictors from the model. 
+ 
+
+By reducing the number of features, we simplify the hypothesis space and help the model focus on the real structure in the data. This supports stability, clearer interpretation and faster training without compromising (and often improving) predictive power. 
+
+ 
+
+Next, you will learn specific filter-based approaches that can be applied in practical model selection. 
+
+Filter-Based Methods for Feature Selection
+
+Before involving any model, we can already learn a lot by asking a simple question: how strongly does each feature relate to the target on its own?  
+
+ 
+
+Filter methods do exactly this by applying statistical tests directly to the data, ranking features by their relevance and allowing us to remove weak predictors early, before we invest in more complex modelling or tuning. 
+
+ 
+
+Let’s explore this in more detail. 
+
+00:00:00 - 00:00:14
+Introduction to Filter Based Feature Selection
+Let's learn about filter based feature selection. Filter based methods evaluate each feature independently using statistical criteria such as correlation or mutual information.
+00:00:15 - 00:00:23
+Overview of Filter Based Methods
+These techniques are fast, model agnostic and effective for initial screening of large feature sets.
+00:00:24 - 00:00:52
+Statistical Tests and Feature Ranking
+So what happens here? The raw feature we will take and we will use some statistical test and feature ranking and select the top K features. So that's the basically thing. So what we do inside this step, let us understand that. So filter method, rank features by statistical relevance, OK features, select feature that shows the strongest predictor target association.
+00:00:53 - 00:01:10
+Univariate and Multivariate Filters
+These methods are generally model agnostic. So basically what they do, they might use univariate filters or multivariate filters, treat each feature independently. So basically we can use Pearsons correlation or univariate mutual information.
+00:01:10 - 00:01:31
+Correlation and Mutual Information
+So basically what it does, let's say I have these features X1X2X3X4 and X5 and there is a output feature output I can say O1. So it will calculate, it will see how X1 is related, how X2 is related, how X3 is related, X4X5.
+00:01:31 - 00:03:18
+Correlation Heat Maps and Analysis
+So based on that we can select OK, X1X3 and X5 are the important features because it might have high correlation or mutual information is high. But if you want to combine multivariate filters. So what we can do is consider redundancy between the features that also we can do. But what are the problems here? Testing too many features results in many tests, right? Because we need to keep on running and identifying. And also this in this kind of feature selection might increase the risk of false discoveries like for example, we use some correction methods to control this, right? So for example like false discoveries like, we might end up identifying some features which may not be actually important. So we have to use some false discovery rate method to control this thing. So correlation is 1 type of feature method, right? So we usually do this heat map. So what does heat map tells? It tells about how my X1 is correlated with X4 is correlated with X1X4 is correlated with X2X3 and X4. So this is definitely X4 to X4 should be 1X3 to X3 it should be 1. So you can see here this is 1. But what is the highest correlation apart from this? This 1X1 and X2 are highly correlated as compared to all other. X1X4 to X1 is weak correlation. So we can say that this is a high correlation and this is a weak correlation. But what are the disadvantages of this method?
+00:03:19 - 00:03:33
+Disadvantages of Correlation Methods
+The disadvantages is it misses nonlinear relationship. So mutual information method this is in this method what we do, we measured shared information between feature and target.
+00:03:34 - 00:05:03
+Mutual Information Method and Nonlinear Relationships
+So it is based on comparing the joint distribution. So if we have two fees like X&Y and then take the probability of the joint distribution XY and detect any form of dependency linear or nonlinear. So it will be really helpful to find out the relationship even if it is a nonlinear relationship. How much knowing X reduces the uncertainty of Yi have two variables XY. Just to be on safer side let's say X1X2 and Y. So what I can do? I can calculate the joint probability of X1Y and X2Y. So knowing which One South. Basically I have two features and one output. So it will help me identify which feature reduces the uncertainty. So if I use X1 whether it reduces the uncertainty of Y or X2 reduces the uncertainty of Y, then I can make a choice between 1:00. So like this, if you have multiple features, we can work with the same principle. Filter methods provide efficient first pass rankings, but because they assess features in isolation, they cannot capture interactions or joint informative combinations.
+00:05:03 - 00:05:09
+
+Their value lies primarily in early stage dimensionality reduction.
+
+In the video, you saw two univariate filter methods. 
+
+ 
+
+The first is Pearson correlation, which measures the strength and direction of the linear relationship between a feature and a continuous target.  
+
+Its value lies between −1 and 1. Values close to +1 indicate a strong positive relationship, values close to −1 indicate a strong negative relationship and values near 0 suggest little or no linear association. It is a quick and informative first pass when linearity is a reasonable assumption, though it will miss nonlinear patterns. 
+
+ 
+
+The second method is mutual information, which measures how much knowing a feature reduces uncertainty about the target. It compares the joint distribution of the feature and target to what would be expected if they were independent and can capture any form of dependency, whether linear or nonlinear.  
+
+Mutual information works for both continuous and categorical variables, but it is more computationally more demanding and depends on how we estimate the underlying distributions. 
+
+ 
+
+Because filter methods test many features, they can occasionally flag spurious relationships simply by chance. To manage this risk, we can apply some statistical corrections when many tests are run together. 
+
+ 
+
+Next, we will move on to wrapper methods, where the model’s own validation performance is used to decide which feature subsets are truly useful. 
+
+Wrapper Methods for Feature Selection
+
+
+After removing clearly weak features using simple statistical checks, the next question is whether certain features only show their value in combination with others. To answer that, we need to involve the model itself.  
+
+ 
+
+Wrapper methods evaluate subsets of features by training the model and observing how well it performs on validation data. This makes them more informed than filters, but also more expensive. Let us understand how wrapper methods guide feature selection next. 
+
+ 
+
+00:00:00 - 00:00:19
+Introduction to Wrapper Methods for Feature Selection
+Let's now explore wrapper methods which evaluate subsets of features by actually training a model on them. Approaches like recursive feature elimination leverage model based important signals and allow interaction between features to be captured.
+00:00:19 - 00:01:26
+Recursive Feature Elimination and Computational Cost
+We use a predictive model to evaluate subset of a features by actually training the model on different set of features. So let's say we have 10 features. So we can train the models on different set of features and then capture or take the accuracy metrics and then take a decision based on the accuracy metrics whatever we have got. But what it what is the problem here? So basically what we are doing, we have X2, X3X4 and X5 and I have a output feature F for example. So I need to train the model with X1 to FX-2 to FX3 to FX4 to FX-5 to F So, so many different machine learning models we are developing. So what it happens, it will lead to high computational cost. So we might, you know we are if you're working, our time will also go and then computational cost will also be higher in this method. So, it is recursive feature elimination method.
+00:01:28 - 00:02:44
+Recursive Method Process and Error Analysis
+So what it does, it will fit the model rank feature and remove the weakest one and then it will repeat. So basically let's say we have started with five variables or one variable. It will see calculate the model and take the accuracy and then it will take 2 variables and then let's say it has five variables, it has taken 5 variables. Now it will develop the model and out of the five let's say only three are good 2 are the weak features. So it will remove 2 and then keep only three. So like this it will keep on increasing and then it will remove all those weak variables and then keep the only features which are important. So it is a recursive method which will keep on going. So if you notice the recursive method at one point the other might be high, and then when we is reach the optimal range, the error will be low and then the error will again become higher. So that's how we can pick. Wrapper methods provide more informed selection than filters, yet they carry a significant computational button due to repeated model training.
+00:02:44 - 00:02:53
+Comparison of Wrapper Methods and Filters
+When resources allow, they offer detailed insight into which features meaningfully support predictive performance.
+
+
+Wrapper approaches search for the subset of features that leads to the best validation performance. Because the model is fitted repeatedly on different feature sets, it automatically accounts for feature interactions that filters might overlook. However, this repeated training increases computation as the number of features grows. 
+
+ 
+
+One widely used wrapper technique is recursive feature elimination (RFE). The model is first trained with all the features, after which they are ranked by importance, and the least important feature is removed. This cycle continues until the desired number of features is reached, producing a clear order of feature importance.  
+
+ 
+
+An extended version, RFECV, places the elimination process inside cross-validation. It identifies not only which features matter but also how many we need for optimal generalisation. 
+
+ 
+
+Wrapper methods can yield highly effective subsets, but they must be used with care due to their higher computational cost. 
+
+ 
+
+Next, we will discuss embedded methods, where feature selection happens automatically as part of the model training. 
+
+Embedded Feature Selection Methods
+
+Some models can determine which features matter while they are being trained. Such models are known as embedded methods. They offer a balance between efficiency and insights, as feature selection happens as a part of the learning process, avoiding the repeated retraining required by wrapper methods. As a result, embedded techniques provide feature selection as a natural by-product of fitting the model.  
+
+ 
+
+Let’s discuss the different types of embedded feature selection methods. 
+
+00:00:00 - 00:01:01
+Introduction to Embedded Methods in Feature Selection
+Let's finally discuss embedded methods where feature selection occurs as part of model fitting process itself. We consider techniques such as L1 regularization, tree based importance and permutation based measures that integrate selection into learning dynamics. Embedded method is selection happens as part of the model fitting process. Model learns which feature to keep or shrink automatically. So like for example L1 regularization. So in lasso all those non important features it will eliminate entry based. Also feature importance is there and permutation method. So basically the coefficient or the importance learn will keep on becoming 0 or it will shrink or make them zero. So in the case of Lasso, it will shrink all those feature which are weights of all those feature which are not important. It will become zero.
+00:01:02 - 00:01:59
+Lasso Regularization and Feature Elimination
+So basically that's how it will help us, right? So let's say we started with I have this one W 1X1 plus W 2X2 plus W 3X33 features I had. So what lasso does Lasso will Let's say this feature is very weak feature not dependent. So if I add lasso here, lasso here, then it will just help me eliminate. It will make the weight of W 2 to 0. So W 2 will become zero. So I will be in my final model. I will have only two features and their corresponding weights W 1 and W 3. So that's how the feature selection using embedded methods work. Similarly, we can utilize tree based feature importance method and permutation importance.
+00:02:01 - 00:02:42
+Tree-Based Feature Importance and Information Gain
+So L1 regularization We have discussed in tree based feature importance method, we can see that the BP is greater than 120. This is the most important feature. So it can take decide OK, this particular feature is most important because if you take that feature and then split then you have highest information gain, right. So that is why that particular feature will become most important feature like this age will become second most important feature because if you split with age, you will have highest information gain, right? Or lesser entropy or Gigeny or means parallel.
+00:02:43 - 00:03:31
+Permutation Feature Importance and Correlation Challenges
+Based on that, we can identify which particular features to focus on. In the permutation feature importance, we keep on shuffling one feature value, then measure, and then there's a large drop. Then feature is important if there is less drop, and then we can use this way. But it also also highly correlated features can often mask each other. So that can be a problematic, but it works well after training any models. Embedded methods keep a balance between efficiency and model driven insights. They reduce overhead of wrappers while capturing structure that filters may ignore, making them practical choice for many modeling pipelines.
+
+
+During training, certain models evaluate how each feature contributes to reducing loss or impurity. When a feature adds little or no value, its influence is reduced or eliminated entirely.  
+
+ 
+
+One familiar example is L1 regularisation, where the absolute penalty forces some coefficients exactly to zero. This creates sparse models by dropping irrelevant or redundant predictors without any separate selection step. 
+
+ 
+
+Tree-based models also offer feature selection, driven by how much each feature reduces impurity in the early and informative splits. Features that drive clear separations naturally receive higher importance scores.  
+
+ 
+
+Finally, permutation importance checks how much the model’s performance worsens after randomly shuffling a feature’s values. A strong drop means the feature is truly needed. This method is model-agnostic and highlights interactions, although correlated features may mask each other. 
+
+ 
+
+Embedded approaches, therefore, simultaneously train the model and identify relevant predictors, making them practical and well-aligned with generalisation. 
+
+ 
+
+Next, we will conclude leakage-safe and unbiased feature selection tips. 
+
+Leakage-Safe and Unbiased Feature Selection
+
+
+Even powerful feature selection techniques can fail if they are not positioned properly in the workflow. If the selection is allowed to “see” data intended for validation, the model ends up learning patterns it should never encounter.  
+
+ 
+
+This results in inflated performance and poor generalisation once deployed. Ensuring a leakage-safe setup is therefore essential for trustworthy model selection. We will talk about some pointers that can help us ensure the feature selection and validation processes remain separated and unbiased. 
+
+00:00:00 - 00:00:07
+Introduction to leakage safe feature selection and unbiased evaluation
+Let's briefly discuss leakage safe feature selection and importance of unbiased evaluation.
+00:00:07 - 00:00:21
+Feature selection within cross-validation folds to prevent inflated performance
+Performing feature selection inside each cross validation fold prevents the model from seeing validation information and avoids artificially inflated performance.
+00:00:21 - 00:00:36
+Nested Cove for separating feature selection from final assessments
+Nested Cove further separates feature selection from final assessments. If feature selection sees the whole data set, then the problem is the at validation set. It might see the validation set and then memorize it.
+00:00:37 - 00:00:52
+Importance of performing feature selection on training fold
+So selected features encode information from the validation set or result in inflated performance. So what we need to do? We need to do the feature selection on the train folder, OK train fold, feature selection, model training and then validate.
+00:00:53 - 00:01:17
+Using nested CV to prevent overfitting in feature selection
+So this will become important here. Why if I use instead of train folder, I used all my data right? All the data for feature selection then it might give me the wrong information because my models can have the leakage so information. So I need to do the feature selection ideally on a training folder. OK, so we can use nested CV.
+00:01:17 - 00:01:44
+Problems with model seeing validation or testing data
+Performing model select or feature selection in inner CV prevents the overfitting. So we have to be careful if we are utilizing anyway we are picking like the model can see the data on the validation test or testing set, then it will become problematic. We might get some inflated accuracy results.
+00:01:44 - 00:02:11
+Importance of leakage safe pipelines for model evaluation
+We have seen why leakage safe pipelines are essential for trustworthy model evaluation. When feature selection or tuning uses information from outside the training fold, the resulting performance no longer reflect true generalization. Ensuring the separation of roles preserves the integrity of modeling process.
+
+
+ 
+
+Feature selection must be performed inside each training fold, not on the full data set. When the selection uses all the data, including the data held out for validation, it picks predictors partially based on information from the future validation set. That hidden leakage makes the model appear more capable than it truly is. 
+
+ 
+
+A proper sequence is to first create training folds → perform feature selection using only that fold → train the model → then validate.  
+
+ 
+
+For even stricter evaluation, nested cross-validation is used. The inner loop performs feature and model selection, while the outer loop evaluates the chosen configuration. This prevents overfitting to the validation strategy itself and is especially important in high-stakes modelling, where unbiased performance estimates are non-negotiable. 
+
+ 
+
+Next, we will move into demonstrations of filter, wrapper and embedded feature selection methods in practice. 
+
+
+A dataset has 2,000 features but only 500 samples. A linear model trained on all features shows very poor generalisation. Which explanation best accounts for this behaviour?
+
+
+The model is overfitting due to high-dimensional sparsity.
+
+
+The model is underfitting because linear models cannot represent high-dimensional data.
+
+
+The dataset violates linearity assumptions, causing bias.
+
+Mutual information is selected as a filter method for feature selection. Which scenario makes this choice superior to simple correlation-based filtering?
+
+The dataset contains no categorical features.
+
+The number of features is extremely small.
+
+The relationship between a feature and target is nonlinear but strongly dependent.
+
+All features are pairwise uncorrelated.
+
+Correct. Mutual information measures general dependency, unlike Pearson correlation which detects only linear associations
+
+Suppose you run RFE on the entire dataset before applying 5-fold cross-validation. The model shows unusually high performance across folds. What is the most likely methodological issue?
+
+The RFE algorithm incorrectly ranked the features.
+
+Feature selection was performed before CV, causing leakage from validation folds.
+
+The CV folds were not stratified.
+
+The model was not regularised during RFE.
+
+Correct. Feature Selection must occur within each CV fold; otherwise, the selector “peeks” at validation data 
+
+A tree-based model reports high feature importance for a feature with hundreds of unique values, even though domain experts believe it adds little value. Which property of tree-based importance explains this outcome?
+
+A tree-based model reports high feature importance for a feature with hundreds of unique values, even though domain experts believe it adds little value. Which property of tree-based importance explains this outcome?
+
+Tree-based importance always produces unbiased estimates for all feature types.
+
+The model suppresses high-cardinality (large number of classes) features by design.
+
+Importance scores are predetermined by entropy values alone.
+
+Models tend to assign high importance to high-cardinality features.
+
+Correct. A feature with many unique values offers many potential thresholds, making it easier for the tree to find splits that reduce impurity, even if those splits reflect noise rather than meaningful structure.
+
+When performing feature selection and model fitting within a cross-validation workflow, why is it necessary to use a pipeline rather than applying feature transformation or selection before creating CV folds?
+
+Applying feature selection before CV allows information from validation folds to influence the feature subset.
+
+Feature transformation outside the pipeline leads to incorrect calculation of importance scores for a specific fold.
+
+Pipelines are required only when both model and selector are non-linear.
+
+Cross-validation cannot run without a preprocessing and modelling pipeline.
+
+Applying feature selection before CV allows information from validation folds to influence the feature subset.
+ Correct. Performing feature selection outside the CV loop leaks validation information into training, producing overly optimistic estimates. A pipeline ensures that feature selection occurs inside each fold during training only.
+
+A regularised linear model uses L1 penalties for feature selection. Under which condition would L1 regularisation be especially advantageous compared with L2?
+
+When all features have identical predictive strength.
+
+When many features are irrelevant or strongly correlated, and sparsity is desired.--Correct. L1 drives some coefficients exactly to zero, creating sparse models and selecting among correlated predictors.
+
+
+
+When the goal is to shrink coefficients without removing any feature.
+
+When the dataset requires preserving all features for interpretability.
+
+
+Filter Methods Demonstration
+
+
+
+Before training any model, we can first check which features meaningfully relate to the target and remove those that do not. Filter methods allow us to do this efficiently using statistical evidence alone.  
+
+ 
+
+Now, we will apply them to build a cleaner starting point for model selection. 
+
+00:00:00 - 00:00:38
+Introduction to Feature Selection with Filter Methods
+So in this session we are going to look at feature selection with the filter methods, where our goal is to reduce the noise in our data set by keeping only the useful features of the variables. So for this we will use two specific techniques, which are, you know, correlation for the linear relationships and the mutual information for nonlinear relationships. So for this, we are going to use the red wine quality data set where you know, each row represents a wine sample described by the physical and the chemical measurements and the target variables.
+00:00:39 - 00:00:42
+Red Wine Quality Dataset Overview
+You know, it's a sensory quality score assigned with experts here.
+00:00:43 - 00:01:48
+Data Import and Initial Exploration
+So let's quickly start importing the necessary libraries where you know we import all the required libraries from the cyclic loan. And then let us quickly read the CSV file where if you see the output here we see the physical and the chemical properties of the wine like you know the acidity, sugar or sulphur, all these details. And the last column is the quality which is at Target variable. That is what we want to predict for this data set, right? So now let us quickly see the information of the data frame there. So if you observe this, so we have around 4898 rows and there are no null values at all and all features are numerical, meaning the floats, which makes things easier for us, right?
+00:01:49 - 00:02:29
+Data Description and Scaling Considerations
+And then let us see the described description where if you see the output, this shows that the scales here very significantly. For example, if you see the total sulphur dioxide, this has a mean of 138, while if you see the chlorides, this is down at 0.04, right? So this variance suggests that for some models we might need scaling later though the random forest, you know, handle this well as we are going to work on the random forest model, right?
+00:02:30 - 00:03:02
+Data Splitting for Training and Testing
+So now once we saw the once we got the insights from the data set, let's quickly split our data set to ensure that we don't overfit and so that you know we will separate our data in the training and testing sets. So where here we are dropping the quality column which is our target variable and we are taking the remaining features and we are taking the quality as our Y and then here by using the trend test plate.
+00:03:02 - 00:03:40
+Introduction to Filtering Methods for Feature Ranking
+So here we are splitting the data into 8020 ratio and we also setting up the random state. So our results are reproducible, right? So if you see the outputs, we have around 3009 one eight rows for training and 980 rows for the testing, right? So now let us start with our filtering methods for the feature ranking here, right? So we can estimate now how each feature contributes to predicting the wine quality, but without involving any model here. So usually these are called as the filter methods.
+00:03:41 - 00:05:06
+Correlation Method for Feature Ranking
+So we will do with two different relevance measures, 1 is the correlation and another one is the mutual information where coming to the correlation. So this correlation you know this ranks the features based on how strictly they have a linear relationship with the target, right. So we are going to calculate this, the correlation of all these features with the quality, right? The target variable by taking the absolute value and sorting, sorting all those values, right. So if I quickly calculate the correlation scores and let us visualize the output of this. So if you observe this plot where this alcohol is the strongest prediction, I mean predictor linearly, which is followed by density and then the other features, you know all the features are followed here, right? But the few features like the citric acid and the phase sulphur dioxide is a very correlations course, implying they might not be very useful in a linear model right now as we got some inserts on the correlation. Now let us see how you know the mutual information method is useful to us, right?
+00:05:07 - 00:06:04
+Mutual Information Method for Feature Ranking
+So the reason behind is when you see the correlation, this correlation misses few complex patterns, right? The future might be very useful but not in the straight line. So to catch up these things we will use the mutual information where this calculate the dependency between the variables which captures the non linear relationship between them. So let us strictly calculate our mutual information where we are passing our training data along with the features and the target variables. And then if we quickly visualize the output here, notice that you know there is a difference between the previous one and this one where here the alcohol is still top which give us confidence in it. But look at the order of the others.
+00:06:04 - 00:07:18
+Baseline Model Training with All Features
+This has shifted right? The order is completely shifted right? So this suggests that these are non linear relationships and the data that correlation missed but are mutual information method captured it, right. So now let us move on to the feature selection, where first let us train a model with all the features to take as a baseline, where as we discuss, we are going to use a random forest regression here. And we are fitting the model with the training data and then we got the predictions and then we are calculating the different metrics here where RMSE, R square and map right. So our baseline RM machine here now is approximately 0.60 where you know our goal with the feature selection is to get close to this number or even better using very few features rather than using the all the features that we have in the data set right now. Let's move on like you know by considering or picking only set of K values.
+00:07:18 - 00:08:28
+Feature Selection Using Top K Values
+Let us say in this case we are going to considered the K values from 5:00 to 9:00, right? So for this what we are doing, so we are generalized with the K values and in the in the loop we are selecting the top K features based on our MI scores. And then we are again fitting the model on the training set where we are not using all the features now. We are only fixing the few features now and then we are predicting on the test set again only the few feature sets that we defined before. And then if you observe the scores with all the K values here, these K values if you see here, then so basically as we increase you know from 5:00 to 9:00, this RMSE score, this slightly decreases. But you know, it is an expected as we as you know, we are giving the model more data here, right? So let us quickly, you know plot these errors to find which spot meaning the point of diminishing returns here, right?
+00:08:28 - 00:09:42
+Plotting Errors and Diminishing Returns
+So if you see here, you know we are plotting the number of selected features in the X axis and it's again is the RMSE which is in Y axis, right? So now we picked out of features based on one training set, right? But is the features are correct? So to be sure on this, let us check the stability using the cross validation that we saw in the previous sessions, right? So here let us split the data into five different folds. Here again we're shuffling the data and with the we're also passing the random state here. So for each fold, we are going to calculate the mutual information again and pick the top 7 features, right? So we count how many times each feature we made it into the top seven list across the five folds, right? We quickly visualize the output here. The quick insides about the this graph is that the top 6 features, if you see here these are, you know, came across or appear 5 out of five times, right?
+00:09:42 - 00:10:10
+Cross-Validation for Feature Stability
+Meaning these are very stable here. However, if you look at the other two, they only appear in the some folds, right? So this tells that that while the top six are solid and the and but the 7th feature that we are going want to consider is fluctuating depending on the data data samples. So this insight allow us to be, you know, much more confident in which features are two liquidity here.
+
+
+ 
+
+Correlation shows how strongly a feature changes with the quality score when the relationship is linear. We extract and sort these values to reveal the strongest signals: 
+
+ 
+corr_scores = df.corr()["quality"].drop("quality").abs().sort_values()
+ 
+
+ 
+
+Mutual information looks beyond linearity. It quantifies how much knowing a feature reduces uncertainty about the target. 
+
+ 
+
+mi_scores = mutual_info_regression(X_train, y_train)
+ 
+
+We also repeated the mutual information scoring under cross-validation. A feature chosen frequently across folds is more stable and more likely to generalise than one that appears only occasionally. 
+
+ 
+
+Filter methods provide a fast first-stage reduction in dimensionality, ensuring that subsequent stages focus on features that consistently show predictive value. 
+
+ 
+
+
+
+
+Feature selection helps reduce noise and retain only the variables that contribute meaningfully to prediction. Filter based feature selection methods evaluate each feature independently of the model.
+
+Let's apply filter based techniques to assess features' relevance to the target variable. We will score features using correlation (linear) and mutual information (non-linear).
+
+#### Loading Data
+
+For this, we will use the Red Wine Quality dataset from the UCI repository. Each row represents a wine sample described by physical and chemical measurements (e.g. acidity, sulphates, alcohol), and the target variable is a sensory quality score assigned by experts.
+
+# imports
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt, seaborn as sns
+import math
+from sklearn.model_selection import KFold, train_test_split
+from sklearn.feature_selection import mutual_info_regression
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percentage_error
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+df = pd.read_csv('./datasets/wine quality/winequality-white.csv', sep=';')
+df.head()
+df.info()
+df.describe()
+X = df.drop("quality", axis=1)
+y = df["quality"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+
+X_train.shape, y_train.shape, X_test.shape, y_test.shape
+
+We will be using a random forest ensemble for this task.  All the features are numeric and on slightly different scales.
+
+Do you think the features need scaling or normalisation? Why / Why not?
+
+### Filter Methods for Feature Ranking
+Let's now estimate how each feature contributes to predicting wine quality, but without involving a model. These are called *filter methods*.
+
+We will compute two different relevance measures:
+
+- **Correlation:** how strongly the feature relates to quality if the relationship is linear  
+- **Mutual Information (MI):** how much information the feature provides about quality even if the relationship is non-linear
+
+# Pearson correlation
+corr_scores = df.corr()["quality"].drop("quality").abs().sort_values(ascending=False)
+
+plt.figure(figsize=(10,4))
+corr_scores.plot(kind="bar")
+plt.title("Feature Ranking by Correlation (magnitude) with Quality")
+plt.ylabel("Correlation")
+plt.show()
+
+Correlation ranks features based only on linear association with the target. However, real data patterns are rarely linear. A variable might carry important information even if its influence on the target is non-linear.
+
+Since our predictive model is a random forest, which forms decision boundaries using hierarchical splits, it does not assume linear behaviour. It can leverage more complex relationships if the features contain such patterns.
+
+#### Mutual Information
+
+To account for this, we complement correlation scores with mutual information. MI quantifies how much information a feature contributes to the target, regardless of the form of the relationship. Features with low correlation but high MI may still be valuable to a non-linear model such as random forest.
+
+
+We can utilise `mutual_info_regression` from scikit-learn to estimate this score for each feature and rank them accordingly. Together, correlation and MI provide a more complete basis for selecting useful predictors before modelling. It takes the predictors and target feature to calculate each predictor's mutual information with the target.
+
+# Mutual information
+mi_scores = mutual_info_regression(X_train, y_train)    # returns an array of estimated MI values for each predictor
+mi_scores = pd.Series(mi_scores, index=X_train.columns).sort_values(ascending=False)
+
+plt.figure(figsize=(10,4))
+mi_scores.plot(kind="bar")
+plt.title("Feature Ranking by Mutual Information with Quality")
+plt.ylabel("MI Score")
+plt.show()
+
+
+The plots show that some features, such as `alcohol`, appear at the top under both metrics. These are strong candidates for feature selection.
+
+Other features differ notably between the two rankings. Their effect on wine quality may not be captured fully by a linear measure alone. This is why combining correlation with MI leads to a more informed selection process.
+
+### Feature Selection
+First, let's train a model with all features to take as a baseline
+
+base = RandomForestRegressor(random_state=1)
+
+base.fit(X_train, y_train)
+preds_base = base.predict(X_test)
+
+rmse = math.sqrt(mean_squared_error(y_test, preds_base))
+r2 = r2_score(y_test, preds_base)
+mape = mean_absolute_percentage_error(y_test, preds_base)
+
+rmse, r2, mape
+
+We can now select the top-k features and evaluate performance. An optimal point will give a good reduction in the number of features without affecting the performance too much. We will be using random forest regressor as the choice of model.
+
+Let's take a set of k values, say `[5, 6, 7, 8, 9]`, and train the model on each value of k to compare.
+
+
+k_values = [5, 6, 7, 8, 9]
+
+results = {}    # this dict is for displaying the overall results
+score = {}      # additional dict, for easier visualisation of scores (MAPE)
+
+for k in k_values:
+    
+    top_k = mi_scores.head(k).index     # taking the top k features based on MI
+
+    model = RandomForestRegressor(random_state=1)
+    model.fit(X_train[top_k], y_train)
+    
+    preds = model.predict(X_test[top_k])
+    rmse = math.sqrt(mean_squared_error(y_test, preds))
+    r2 = r2_score(y_test, preds)
+    mape = mean_absolute_percentage_error(y_test, preds)
+    
+    results[k] = (rmse, r2, mape)
+    score[k] = mape 
+
+print("Results: {'k': (rmse, r2, mape)}")
+results
+
+plt.plot(score.keys(), score.values(), marker="o")
+plt.xlabel("Number of Selected Features (k)")
+plt.ylabel("RMSE")
+plt.title("Generalisation Performance vs Feature Count")
+plt.show()
+
+At 7 features, we see a minor elbow. There is a minor bump in the error value as we go from 7 to 6 or 5 features (7.9% to 8.1% to 8.5%). So, we can take the top 7 predictors from the feature set, which are: 
+mi_scores.head(7)
+
+#### Feature Stability across Folds
+A feature ranked highly once may simply be the result of sampling variability. To ensure reliability, we examine whether the same features consistently appear important across different folds of the data.
+
+To check whether feature importance remains consistent across different samples of the data, we repeat the MI ranking under cross-validation. If a feature is truly useful, it should appear frequently among the top features, no matter which fold is used for training.
+
+`KFold.split()` returns indices of training and validation rows `(train_idx, test_idx)` for samples of each fold. We only need the training indices here, because feature selection must always be based on training data to avoid information leakage.
+
+kf = KFold(n_splits=5, shuffle=True, random_state=1)
+
+feature_counts = pd.Series(0, index=X.columns)      # this series will contain the number of times each feature appears in the top 7
+
+for train_idx, _ in kf.split(X):        # taking only the training part, ignoring the validation rows
+
+    mi_fold = mutual_info_regression(X.iloc[train_idx], y.iloc[train_idx])  # mutual info for rows used for training
+    
+    top7 = pd.Series(mi_fold, index=X.columns).sort_values(ascending=False).head(7).index      # we will take the top 7 features for each fold
+    
+    feature_counts[top7] += 1      # how often each feature appears in top 7
+
+feature_counts.sort_values().plot(kind="barh", figsize=(6,4))
+plt.xlabel("Selection Frequency Across Folds")
+plt.title("Feature Stability via Mutual Information")
+plt.show()
+
+We can see that the 6 features `alcohol`, `total sulfur dioxide`, `density`, `residual sugar`, `free sulfur dioxide`, `citric acid` are in the top 7 features in each fold while `chlorides` appears in only 4 folds, whereas `volatile acidity` appears in 1 remaining fold. So we can safely take `chlorides` as the seventh feature.
+
+Features selected frequently are stable contributors to performance. Inconsistently chosen features are more likely to be affected by fold-specific sampling patterns.
+
+Feature selection should prioritise both relevance and stability when guiding model design.
+
+
+
+Next, we will move to wrapper methods, where the model itself helps decide which features are worth keeping. 
+
+
+Wrapper Methods Demonstration
+
+
+Wrapper methods evaluate different subsets by training and validating the model each time. This allows us to capture interactions between features that filters might overlook. 
+
+ 
+
+Let’s see the wrapper-based methods, recursive feature elimination (RFE) and recursive feature elimination with cross-validation (RFECV), in action. 
+
+ 
+00:00:00 - 00:00:41
+Introduction to Wrapper Methods and Recursive Feature Elimination
+Now we are going to move towards a wrapper methods. You know like unlike the filters which look at the data in the isolation, these wrapper methods actually use a machine learning model to in order to grade these features, right. So for this, we are going to use the recursive feature elimination to iteratively remove the last useful features and then we will do the CV implementation and then we use this RFPCV to choose the optimal number of features using the cross validation, right. So again, let us quickly import our necessary or standard libraries.
+00:00:41 - 00:01:06
+Importing Libraries and Loading California Housing Dataset
+So we are using we also import the linear regression as an estimator and then we are loading the California housing data set using you know this for California housing. So as this is a regression problem where we are trying to create the house values here, right. So let us quickly fetch the data 1st and see the how data look likes.
+00:01:07 - 00:02:00
+Data Scaling and Splitting for Training and Testing
+So here if you see that there are 8 columns including you know the median income, housing gauge, average rooms etcetera then let us quickly see the describe of the data frame where if you can see the again there is a huge difference in the scales here. So if you see the population which is having mean around 1425, right and if you see the Med income which is around again 3.8 only as we are using the linear regression, this scale difference is a problem for us. So the model will get confused by these large numbers and the huge variation. So we need to scale the data before we fit the model right.
+00:02:00 - 00:03:12
+Standard Scaling and Data Leakage Prevention
+So now let us quickly you know get the data set for the X&Y from the data and then again we will split them into training and testing within 8020 split. So here if you see the shape we have around 16000512 samples for training and 4128 samples for testing. Then we are doing a standard scaling here where we notice that we are performing this fit and this for transform on only the training set but only transforms the test set. So this prevents the data leakage as we do not want the model to know the statistics of the test set. And after this if you observe the data now we have around 16512 samples in training and the 4128 samples in the testing. It is the same basically what we have earlier. Right now, let us move on to, you know, RFE, where you know to observe the performance changes as we vary the number of features.
+00:03:12 - 00:04:24
+Using RFE to Observe Performance Changes with Feature Variation
+For this, we are initializing a simple linear regression model where this model will assign the weights to features which RFE uses to decide which ones to draw. Right now, let's now use RFE to see how performance changes as we add more features. So here we are loop. We consider K values as one to 8 where we are looping for each value in the K value set, right? So inside the loop what we are doing. So we are just you know calling this RFA function which tells the algorithm to keep only the top K features and discourse the rest. And then we are fitting the model on this scale data and the target variables right. And then here we are reducing the columns both the training and the test set and then we are fitting the models and getting the results on the I mean getting the predictions on the test set. So if you see the output here which we got the results for all the K values.
+00:04:26 - 00:05:13
+Analyzing RMSE and R Square with Feature Count
+So when K is 1, the error is high meaning it has around 1.13. So if you observe this, by the time we get to you know 3 to 4 features, the error brought significantly from 1.13 to the 0.74, right. So and the error keeps on reducing when we go from 1:00 to 8:00. So let us see how this RMSE and you know this R square change as we vary the number of selected features here. So, so here we are, we are creating the 2 plots, 1 is for RMSE versus the feature count and then another one is R square versus the feature count.
+00:05:13 - 00:06:07
+Selecting Top Features Using RFE
+If we quickly understand the insides from this figures. So observe this blue line where you know this is a massive improvement going from 1:00 to 3:00 here, right? However, after this three or the 4th features, the line flattens out completely adding the 5th, 6th you know or the 7th and 8th features, right? The feature gain is almost 0 performance right? So this suggestion is simpler. Model with just three or four variables is sufficient for this. It is the same manner even if you observe the aspect. The same scenario we are saying for both RMS and the R square here, right? So once we have this, now we analyze this information, right?
+00:06:08 - 00:09:32
+Recursive Feature Elimination with Cross Validation (RFECV)
+So let us assume we picked 4 features, right? So which ones are they? So we don't know, right? So let us use RFE asking for the top K features. Now we are selecting the best K as a four here where so we are using this selected dot best support to get the you know the boolean mask of which columns were chosen here, right? So if I quickly run this, if you see the output here clearly you know the winners are like median income and it is an average bedrooms latitude and the longitude bed. These are the most critical drivers of house prices here. So now let us move on to RFECV which is recursive feature elimination with the cross validation. So basically in our previous step we manually guessed that 4 was a good number but we can automate that with the RFECV. So this RFECV it performs RFE inside this K fold and the cross validation loop. So it automatically figure out the optimal number of features that give the best validation score for it. So here we are using the fivefold class validation and you know we are giving the score on the negative mean squared error. So here after fitting the model. So here we are printing the best K and our algorithm decided that 3 features is actually the optimal number here, meaning I mean it is like slightly trickier than our manual Gaza 4, right? So if you remember in our previous step, we fixed the four as a best K, but now our model is saying mono 4 is no need of four. Three are just enough to get the best performance right? Now let us quickly visualize how the cross validation curve it will be when it pick three, right? So here we are plotting the number of selected features. Again is the cross validation MSE. So let us quickly look into the output here. So if you notice that here the Y axis is inverted Y axis where. This means that the highest point of the graph represents the lowest error or the best performance. So this peak is clearly at 3 features, right? After that, if you observe, the performance flattens or even, you know, drops slightly, right? So this confirms mathematically that we only need 3 specific variables to predict housing prices effectively, right? So with this, you can now state the selected features here where you know again these are the three selected features where wedding latitude and the longitude here, right?
+00:09:32 - 00:10:18
+Conclusion on Wrapper Methods and Model Simplification
+So, and if you quickly take only those features and that fit our linear regression and then predict on the test set, we can see that our RMSE is around 0.743 and the R square is around 0.578. This by looking at this course, this is virtually identical to the model that used all 8 features, right? So we have successfully reduced the complexity of our model by more than half without losing any accuracy right. Previously we have 8 but now with three itself we got the best accuracy right?
+00:10:20 - 00:10:43
+
+To quickly conclude this, these wrapper methods like RFE, you know these are par 5 because they considered the interaction between the features and the specific model you are using. So by balancing the generalization performance and the model complexity, we built a simpler, faster and more integrable model.
+
+
+ 
+
+For RFE, the model is trained, the least useful feature is removed, and the process continues until only the chosen number remains: 
+
+ 
+
+selector = RFE(estimator=model, n_features_to_select=k)
+
+selector.fit(X_train_scaled, y_train)
+ 
+
+ 
+
+By varying k and checking RMSE and R² on the test set, we see where adding more features stops helping. When the performance gain becomes negligible, the simpler option is preferred. To automate this decision, we use RFECV, which runs RFE inside cross-validation and identifies the best feature count based on generalisation: 
+
+ 
+
+rfecv = RFECV(estimator=LinearRegression(),cv=KFold(5), scoring="neg_mean_squared_error") 
+
+ 
+rfecv.fit(X_train_scaled, y_train)
+ 
+
+This approach selects features that consistently support prediction, rather than simply showing isolated relevance. While it does require more computation since the model is refitted multiple times, this approach leads to a reliable and compact set of inputs. 
+
+
+ 
+# Feature Selection with Wrapper Based Methods
+
+Unlike filter based methods which are independent of the model, wrapper methods use the model's performance to decide feature importance. Now, we will use Recursive Feature Elimination (RFE) to iteratively remove the last useful features, and its CV implementation, RFECV to choose the optimal number of features using cross-validation.
+
+import pandas as pd, numpy as np
+import math
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.datasets import fetch_california_housing
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.feature_selection import RFE, RFECV
+from sklearn.pipeline import Pipeline
+
+data = fetch_california_housing(as_frame=True)
+df = data.frame
+df.head()
+
+df.describe()
+
+#### Data Splitting and Scaling
+
+Linear regression models are sensitive to feature scale, so we need to scale the features here.
+
+# Features and Target
+X = df.drop(columns=["MedHouseVal"])
+y = df["MedHouseVal"]
+feature_names = data.feature_names
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+
+X_train.shape, y_train.shape, X_test.shape, y_test.shape
+
+# Scale only on training data to avoid leakage
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+X_train_scaled.shape, y_train.shape, X_test_scaled.shape, y_test.shape
+
+#### RFE
+
+Let's use Recursive Feature Elimination (RFE) to observe performance changes as we vary the number of features
+
+k_values = [1,2,3,4,5,6,7,8]
+
+rfe_scores = {}
+
+for k in k_values:
+
+    selector = RFE(estimator=model, n_features_to_select=k, step=1)
+    selector.fit(X_train_scaled, y_train)
+
+    # reduced columns
+    X_train_sel = selector.transform(X_train_scaled)
+    X_test_sel = selector.transform(X_test_scaled)
+
+
+    model.fit(X_train_sel, y_train)
+    preds = model.predict(X_test_sel)
+
+    rmse = math.sqrt(mean_squared_error(y_test, preds))
+    r2 = r2_score(y_test, preds)
+
+    rfe_scores[k] = (rmse, r2)
+
+print("{'k' : 'rmse', 'r2'}")
+rfe_scores
+
+rmse_list = [rfe_scores[k][0] for k in k_values]
+r2_list = [rfe_scores[k][1] for k in k_values]
+
+scores_df = pd.DataFrame(rfe_scores).T.reset_index()
+scores_df.rename(columns={"index": "k", 0: "rmse", 1: "r2"}, inplace=True)
+
+# RMSE
+fig1, ax1 = plt.subplots()
+ax1.plot(scores_df["k"], scores_df["rmse"], marker='o')
+ax1.set_xlabel("Number of Selected Features (k)")
+ax1.set_ylabel("RMSE")
+ax1.set_title("RFE: RMSE vs Feature Count")
+
+# R2
+fig2, ax2 = plt.subplots()
+ax2.plot(scores_df["k"], scores_df["r2"], marker='o')
+ax2.set_xlabel("Number of Selected Features (k)")
+ax2.set_ylabel("R² Score")
+ax2.set_title("RFE: R² vs Feature Count")
+
+plt.show()
+
+These results show how the model behaves as we allow more features to remain.
+
+Although RFE reported its best score when retaining 8 features, the improvement over 3-4 features is marginal. Keeping slightly fewer features gives us a simpler model with very similar (almost indistinguishable) generalisation performance.
+
+In practice:
+
+- 3-4 features: better complexity–accuracy trade-off  
+- 8 features: slight gain in score, but more risk of noise and overfitting
+
+> If the performance difference is very small, we prefer the simpler model
+
+
+Let's check the selected feature names
+
+best_k = 4
+
+selector_best = RFE(estimator=model, n_features_to_select=best_k)
+selector_best.fit(X_train_scaled, y_train)
+
+selected_features = np.array(feature_names)[selector_best.support_]
+pd.DataFrame({"Selected Features": selected_features})
+
+The preferred feature count is where RMSE is lowest and R² highest. Our function checks for this strictly, but very small improvements for including all the features might not be the tradeoff we always go for, so we choose 4 here.
+
+A flat curve suggests that increasing the number of features over a range does is not adding any particular contribution. 
+
+
+Now, let's use cross validation and `RFECV` to perform feature selection.
+
+
+RFECV identifies the number of features that give the best cross-validated generalisation performance.
+
+cv = KFold(n_splits=5, shuffle=True, random_state=1)
+
+rfecv = RFECV(estimator=LinearRegression(), step=1, 
+              cv=cv, scoring='neg_mean_squared_error')
+
+rfecv.fit(X_train_scaled, y_train)
+
+best_k = rfecv.n_features_
+best_k
+
+RFECV picked 3 features as it found further features to not benefit the linear estimator enough during cross-validation, so a small core set of strong linear predictors becomes optimal for generalisation.
+
+# Extract cross-validated negative MSE scores
+mean_scores = rfecv.cv_results_["mean_test_score"]
+
+# Convert to positive MSE for better visualisation
+mse_scores = -mean_scores
+
+plt.plot(range(1, len(mse_scores) + 1), mse_scores, marker='o')
+plt.xlabel("Number of Selected Features")
+plt.ylabel("Cross-validated MSE")
+plt.title("RFECV Curve")
+plt.gca().invert_yaxis()
+plt.show()
+
+RFECV determines how many features should be kept to achieve the best cross-validated performance.
+# we can also check the selected featues
+
+selected_features = np.array(feature_names)[rfecv.support_]
+selected_features
+# taking selected feature sets from training
+X_train_final = X_train_scaled[:, rfecv.support_]
+X_test_final = X_test_scaled[:, rfecv.support_]
+
+model_final = LinearRegression()
+model_final.fit(X_train_final, y_train)
+
+preds_test = model_final.predict(X_test_final)  # test using testing set as we performed kfold cv
+
+rmse_test = np.sqrt(mean_squared_error(y_test, preds_test))
+r2_test = r2_score(y_test, preds_test)
+
+rmse_test, r2_test
+
+Wrapper-based feature selection provides a way to identify and keep only the predictors that help model performance.
+
+A balanced decision can be taken by considering:
+- generalisation performance (RMSE and R²)
+- model stability under cross-validation
+- complexity vs interpretability
+
+
+Next, we will use embedded methods, where feature selection happens naturally as part of model training. 
+
+
+Embedded Methods Demonstration
+
+Embedded methods can select important features while learning. They balance interpretability and performance by identifying features that contribute to prediction during training.  
+
+ 
+
+Let’s see the embedded approaches using L1 regularised logistic regression, tree-based importance, and permutation importance. 
+
+ 
+00:00:00 - 00:00:08
+Introduction to Embedded Methods in Feature Selection
+So far we have covered the filter and the wrapper methods, and now we are going to look into the embedded methods.
+00:00:08 - 00:00:24
+Feature Selection During Model Training
+Unlike the others, these methods perform the feature selection during the model training process itself, right? So let us quickly import all the necessary libraries and then we here let us load the Teleco churn data set.
+00:00:25 - 00:00:44
+Loading and Exploring Teleco Churn Dataset
+And if you observe or if you go deep into the data frame here, we can see we have around 7032 rows of data with, again not with not null values. And we have a mixture of both categorical and the numerical columns here.
+00:00:44 - 00:01:04
+Preprocessing for Logistic Regression
+And the target variable here is a churn. Since we have this categorical data and we plan to use the logistic regression, we need to do some preprocessing before we pass our data to the model. So for that let us define our features and the target.
+00:01:04 - 00:01:19
+Defining Features and Target Variable
+So here we are getting the features data after removing the target variable and the customer ID. So after removing this, we have around 19 features in our data set with around 7032 data points, right?
+00:01:20 - 00:01:39
+Splitting Data and Column Transformation
+So once we split the data here we are creating 2 lists, one for the numerical features, another for the categorical features, right? And then we are going to build the column transformer with PC solution. We are applying the standard scalar to the numbers which is essential for this regression.
+00:01:39 - 00:02:00
+Standard Scaling and One-Hot Encoding
+And then we are also applying 1 hot encoder for the categories like turning this South or no, you know into ones and zeros. And then finally, we are splitting the data into training and testing again with the 1820 display and the stratifies Y to keep the class balance even.
+00:02:01 - 00:02:13
+Introduction to L1 Regularization (LASSO)
+Now let us see what is the magic of the embedded here, right? So we are going to use the L1 regularization, which is also known as LASSO.
+00:02:14 - 00:02:31
+Pipeline Creation for L1 Regularization
+So for this we are going to create, you know, pipeline that preprocess the data and then feed into the largest regression here. So here we are setting the penalty as L1 and the solver, as you know, linear.
+00:02:31 - 00:03:02
+Fitting Model with L1 Regularization
+So meaning this LL regularization, it tries to minimize the error while also minimize the size of the quotients. So basically it forces the quotients of weak features to become exactly the zero here, right? So if we quickly see the pipeline, I have the processor we are using the standardized scalar for the NUM and the one hot encoding for the categorical variables. And then we are fitting the model here.
+00:03:03 - 00:03:28
+Extracting Feature Importance from L1 Regularization
+Right now the model is fitted like, you know like unlike other methods where we select the features before training, here our model itself decide which features were important while it was learning here. Right now, as we saw the model is learned, we need to extract the information to see what it prioritized.
+00:03:29 - 00:04:05
+Visualizing Feature Importance from L1 Regularization
+So because we one hot encoded the data, we have more columns than what we started with. So we retrieve these new features from the transformer and then we combine that with the numeric feature names here. And then we are extracting the quotients with this dot to coeff method from the largest regression model where we take the absolute value because a strong negative indicator is just as important as a +1.
+00:04:07 - 00:04:56
+Understanding Feature Importance in Logistic Regression
+And then we are sorting them to see the winners here, right? So now if you see the output after the R process clearly shows that the 10 year, you know, contract 2 year and the sounds of features. So all these features, the quotient is, you know, very high here, right? Let us quickly, you know, visualize this for the better understanding to get the better insights here. So if you see here the tenure is the highest one here, the bar is very huge.
+00:04:56 - 00:05:48
+Introduction to Random Forest for Feature Importance
+This means that you can know that the tenure is the most powerful linear signal for predicting churn. And then we also have the contact 2 year like the customer has a two year contract. This is the most important powerful signal for the prediction churn. And then features with the tiny bars would have the quotients near 0, meaning the L1 penalty effectively removed them here, which are not showing here though. Now we saw the logic regression feature importance. Now let us move on to the, you know, random for this, the model is powerful here because it can capture the complex non linear interactions between the features, right?
+00:05:48 - 00:06:25
+Pipeline Creation and Fitting for Random Forest
+So for this we are going to use the same preprocess step. We define a new pipeline, but this time the IT is just that the model is a random force classifier with 2000 estimators, right? So similarly, like previously, we fit the pipeline to our training data and this this visualization confirms that you know, data goes through the transformer and lands in random forest during the training process, right? So now let us see what is the importance, how the importance changes here, right?
+00:06:26 - 00:07:02
+Extracting and Visualizing Feature Importance in Random Forest
+So what we are doing, so we just access the train model using the dot name steps of model. And then we are pulling the feature importance attribute. And then we are combining this course with the feature names into data frame and then we are just sorting them out here. We are looking into the top front here. Let us quickly again visualize and see what are the most important features. So from this, we can understand this total charges, 10 year and monthly charges, these are the top three, right? And also these are all the numerical values.
+00:07:02 - 00:08:19
+Comparing Feature Importance: Logistic Regression vs Random Forest
+So basically, this is some key characteristics of the tree based importance, meaning they tend to favor the continuous variables because there are many places to split the data here, right? So if you remember in the previous logistic regression model, the categorical features like contracts for Top Rank, whereas here from this information, the numerical take the lead here, right. So again, let's quickly visualize the thing output and the insides here. Yeah. So again as we discussed this shows the dominance of the three numerical features where you know the first category feature feature to appear here is the contract month to month followed by online security, right. This highlights why it is important to check multiple feature selection methods rather than fixing with one or two, right. So 11 regularization said contracts were, you know, first one, right, The I mean the number one feature, whereas the random forest is the total charges you said #1 feature.
+00:08:20 - 00:09:20
+Introduction to Permutation Importance
+We cannot say like which one is wrong. So neither is wrong in this case. They just view the data through the different, you know, mathematical lenses here, right. So now let us move on to the another way of looking or the feature importance, which is the permutation importance. The quotients, you know what we saw earlier or the mutual information are great for the linear and the non linear. But what if you want a model agnostic way to judge the importance here? Right? That's where the permutation importance will come into picture. Here the logic is pretty simple, like we will take a single column and shuffle its values randomly, breaking the relationship with the target, and then we will measure how much the models accuracy drops.
+00:09:20 - 00:10:03
+Applying Permutation Importance to Logistic Model
+If the accuracy crashes, that feature was important. If it stays the same, that feature was useless to us. So this is the simple logic behind this permutation importance. So for this here we are reusing the fitted L1 logistic model pipeline and then here we are transforming the test data to use in the permutation importance. And here we are passing our logistic model and then we are extracting the transform feature names like what we did earlier. And here we are creating the data frame by passing all the important necessary information, right?
+00:10:04 - 00:11:03
+Visualizing Permutation Importance Results
+So if I quickly show the top table here and this shows that the importance mean here, right? Where a value of 0.20 for NUM-, tenure meaning numerical tenure means that shuffling the tenure data cost this AUC score to drop by 0.20 here, right. This is a massive drop, right, Confirming that tenure, I mean tenure feature is very critical, right. So it is visualize this outcome and get the more insights from it. Yeah. So if we observe this tenure here, this takes the top spot here even above the contracts here.
+00:11:06 - 00:12:25
+Summary of Feature Selection Methods
+So this is interesting, basically what it is suggesting that while contracts have a high quotient tenure has a higher impact on the overall performance metric like the other one that is take is the AUC, right. This method is the robust 1 compared to the earlier because it test the features actual contribution to the prediction accuracy, same time capturing the interactions that raw quotients might miss, right. So to wrap up our feature selection series. So we saw three methods, filter method which is a correlation. These are fast and good for initial screening. Whereas we saw the wrapper method which is an RFE. These are computationally expensive but we found the best subset for a specific model, right? And the third is our embedded method, which is L1 permutation, strike a balance here, right? So they are efficient compared to the other two because they happen during the training itself and directly highlight the features that drive the model performance.
+
+
+
+
+
+# Embedded Feature Selection
+
+Let us see embedded feature selection methods using the Telco Churn dataset. Unlike filter and wrapper methods, embedded approaches perform feature selection as part of the model training process.
+
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, roc_auc_score, recall_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.inspection import permutation_importance
+
+
+df = pd.read_parquet('./datasets/telco_churn_cleaned.parquet')
+df.info()
+
+
+# define features and target
+y = (df["Churn"] == "Yes").astype(int)
+X = df.drop(columns=["Churn", "customerID"])
+X.shape, y.shape
+
+### Data Transformation Pipeline and Splitting
+
+numeric_features = X.select_dtypes(include=["int", "float"]).columns
+categorical_features = X.select_dtypes(include=["category"]).columns
+
+# setting up pipeline 
+preprocess = ColumnTransformer(
+    transformers=[("num", StandardScaler(), numeric_features),("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)]
+)
+
+
+### L1-Regularised Logistic Regression
+
+L1 penalty encourages sparsity, so coefficients may become zero. Features with non-zero weights are considered important contributors.
+
+
+logreg_l1 = Pipeline([("preprocess", preprocess),
+                      ("model", LogisticRegression(penalty="l1", solver="liblinear", max_iter=200))])
+
+logreg_l1.fit(X_train, y_train)
+
+
+# Retrieve final feature names after one-hot encoding 
+ohe = logreg_l1.named_steps["preprocess"].named_transformers_["cat"]
+ohe_features = ohe.get_feature_names_out(categorical_features)
+
+all_features = np.concatenate([numeric_features, ohe_features])
+
+# Coefficients from classifier
+coef = logreg_l1.named_steps["model"].coef_.flatten()
+
+selected_l1 = all_features[coef != 0]
+
+l1_df = pd.DataFrame({"Feature": selected_l1,"Coefficient": coef[coef != 0]}).sort_values("Coefficient", key=abs, ascending=False)
+l1_df
+
+
+plt.figure(figsize=(7,6))
+plt.barh(l1_df["Feature"].head(15), abs(l1_df["Coefficient"].head(15)))
+plt.gca().invert_yaxis()
+plt.title("Top L1 Coefficient Magnitudes")
+plt.xlabel("|Coefficient|")
+plt.show()
+
+Here, a larger magnitude of feature coefficient means stronger influence on predicting churn.
+
+Only non-zero coefficients remain after applying the L1 penalty. Features with stronger magnitude values are more influential for churn prediction. However, importance here reflects a purely linear relationship, interactions and non-linear effects may not be captured.
+
+### Random Forest Feature Importances
+
+Tree-based models capture non-linearities and interactions and provide feature contributions via impurity reduction
+
+rf_pipe = Pipeline([("preprocess", preprocess), ("model", RandomForestClassifier(n_estimators=200, random_state=1))])
+
+rf_pipe.fit(X_train, y_train)
+
+Decision trees give importance based on splits. Random forest will give a better generalised view of important features across the subsets.
+
+importances = rf_pipe.named_steps["model"].feature_importances_
+
+rf_df = pd.DataFrame({"Feature": all_features, "Importance": importances}).sort_values("Importance", ascending=False)
+
+rf_df.head(20)
+
+
+plt.figure(figsize=(7,6))
+plt.barh(rf_df["Feature"].head(15), rf_df["Importance"].head(15))
+plt.gca().invert_yaxis()
+plt.title("Random Forest Feature Importance")
+plt.xlabel("Importance")
+plt.show()
+
+### Permutation Importance
+
+Permutation importance is model-agnostic ranking based on performance drop when we randomise any feature. If the performance drops for a feature, then that particular feature is more important.
+
+
+logreg_pipe = logreg_l1  # reuse fitted L1 logistic model pipeline
+
+# transform test data (preprocess part of pipeline) to use in permutation importance
+X_test_transformed = logreg_pipe.named_steps["preprocess"].transform(X_test)
+
+perm_log = permutation_importance(estimator=logreg_pipe.named_steps["model"],  # logistic model
+                                  X=X_test_transformed, y=y_test, scoring="roc_auc",
+                                  n_repeats=10, random_state=1)
+
+# Extract transformed feature names
+feature_names_out = logreg_pipe.named_steps["preprocess"].get_feature_names_out()
+
+perm_log_df = pd.DataFrame({"Feature": feature_names_out, "Importance Mean": perm_log.importances_mean,
+                            "Importance Std": perm_log.importances_std}).sort_values("Importance Mean", ascending=False)
+
+perm_log_df.head(20)
+
+top_k = 15
+plt.figure(figsize=(7,6))
+plt.barh(perm_log_df["Feature"].head(top_k),perm_log_df["Importance Mean"].head(top_k))
+plt.gca().invert_yaxis()
+plt.title("Permutation Importance: Top 15 Features")
+plt.xlabel("Mean Performance Drop (AUC)")
+plt.show()
+
+A feature whose randomisation substantially reduces AUC is considered predictively important. Unlike coefficient magnitudes, permutation importance captures interactions and scaling adjustments implicitly handled by preprocessing. 
+
+
+Across the three models, we observe that features linked to billing and tenure appear most influential for churn detection, while some other inputs contribute minimally.
+
+Embedded feature selection directly integrates the importance evaluation into model training.
+
+- L1 logistic regression promotes sparsity and highlights the most predictive linear signals
+- Random Forest can capture non-linear interactions and diverse relationships
+- Permutation importance provides a fair performance-based ranking
+
+The most reliable features are those consistently ranked highly across multiple embedded approaches.
+
+
+First, we used the L1 penalty, which pushes some coefficients to zero, leaving only useful predictors: 
+
+ 
+
+logreg_l1 = LogisticRegression(penalty="l1")  
+
+logreg_l1.fit(X_train, y_train) 
+ 
+
+
+
+ 
+
+Next, we applied a random forest. Tree-based models judge feature importance by how much each split improves homogeneity. Features used in strong splits naturally receive higher scores: 
+
+ 
+
+importances = model.feature_importances_
+ 
+
+ 
+
+Finally, we evaluated permutation importance. We shuffle a feature’s values and observe the drop in model performance. A larger drop means the feature was truly needed: 
+
+ 
+
+permutation_importance(model, X_test_transformed, y_test) 
+ 
+
+ 
+
+By comparing the most influential features across these three methods, we focus on predictors that consistently contribute, even under different learning mechanisms. 
+
+ 
+Having selected the models, features, and hyperparameters, we can now close our discussion by seeing how we can save these trained models, along with their parameters or predictors. 
+
+
+Saving and Loading Models
+
+
+Saving Models 
+
+ 
+
+Once we have selected and trained a model, we may want to reuse it without retraining every time. Storing the trained model allows us to deploy it, share it and apply it later on new data. This is important both for efficiency and for maintaining consistency in predictions. 
+
+ 
+
+For most scikit-learn models, whether parametric or non-parametric, the entire fitted object can be saved using joblib or pickle.  
+ 
+
+This also applies when the model is wrapped inside a preprocessing pipeline: 
+
+import joblib 
+ 
+joblib.dump(pipeline, "model.pkl")        # saving 
+pipeline_loaded = joblib.load("model.pkl")  # loading 
+preds = pipeline_loaded.predict(X_new)
+ 
+
+Neural networks in Keras can be stored together with their learned weights and architecture: 
+
+model.save("model.keras")                 # saving 
+model = keras.models.load_model("model.keras")   # loading
+ 
+
+When using pipelines, it is better to save the entire pipeline rather than just the model, as preprocessing steps such as scaling, encoding or feature selection must be applied in the same way as they were during training. Storing only the model without these transforms can lead to mismatched inputs and inaccurate predictions. 
+
+ 
+
+In some cases, we may need to save additional artefacts such as: 
+
+selected_features          # after feature selection 
+label_encoder              # for class labels 
+threshold value            # if a specific cutoff was chosen 
+feature_names after OHE    # to interpret coefficients later 
+ 
+
+Small files containing these objects ensure that all decisions taken during training are preserved for deployment. 
+
+ 
+
+Models and saved objects depend on library versions. Updating libraries may render old files incompatible. Keeping a record of the package versions used during training helps maintain reproducibility when the model is loaded in a different environment. 
+
+ 
+
+ 
+
+Using Saved Models 
+
+ 
+
+Once a model has been saved, using it again becomes straightforward. The key requirement is that the new data is prepared in the same way as the data used during training. If preprocessing is already part of a saved pipeline, then the entire flow is handled automatically at the time of prediction. 
+
+ 
+
+For scikit-learn models saved using joblib: 
+
+import joblib 
+ 
+pipeline_loaded = joblib.load("model.pkl")    # load the trained pipeline 
+predictions = pipeline_loaded.predict(X_new)  # make predictions on new input
+ 
+
+If probability estimates are needed, we can use:
+
+probs = pipeline_loaded.predict_proba(X_new)
+ 
+
+For Keras models: 
+
+from keras.models import load_model 
+ 
+model = load_model("model.keras")             # load network architecture and weights 
+preds = model.predict(X_new_processed)        # input must be preprocessed
+ 
+
+If the pipeline was not saved, we must ensure that all transformations (such as scaling, encoding and feature selection) are applied to the new data in the same order and are using the same fitted parameters. Any mismatch between training and inference preprocessing can lead to incorrect predictions or errors. 
+
+ 
+
+If a specific decision threshold was chosen during model selection, that value must also be applied during inference: 
+
+pred_label = (probs[:, 1] >= chosen_threshold).astype(int) 
+ 
+
+Using a saved model involves three steps: loading the model, preparing the input in the same form as the training data and generating the output. This enables the deployment of trained models reliably without needing to retrain or repeat the previous work. 
+
+ 
+
+Additionally, you can try reading more on the following techniques: 
+
+Serving models via an API (Flask/FastAPI) 
+
+Saving models in ONNX for interoperability 
+
+ 
+
+Finally, let’s summarise our learnings from this session. 
+Session Summary
+
+In this session, you learnt how selecting a model is not only about achieving low training error but about ensuring generalisation to new, unseen data. You explored how model choice depends on data characteristics, interpretability needs and business objectives and learnt why simpler models often generalise better when performance is similar. 
+
+ 
+
+We examined the validation strategies that are used to obtain more stable performance estimates from limited data, such as holdout sets and cross-validation. We discussed the role of performance metrics in guiding selection and explained how the right metric depends on the practical goals of the problem. 
+
+ 
+
+We also discussed hyperparameter search techniques, such as grid search and random search, and noted the importance of avoiding data leakage when tuning models. You also gained an understanding of dimensionality as well as feature selection (including filter, wrapper and embedded approaches), which ensure models remain efficient and focused on informative predictors. 
+	
+ 
+
+Understanding the fundamental model and feature selection principles creates a strong foundation for building models that balance performance, stability and practical usefulness in real-life applications. 

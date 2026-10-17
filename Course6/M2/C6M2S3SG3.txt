@@ -1,0 +1,544 @@
+Setting the Context
+
+Let’s begin by setting the context for the analysis. We will outline the problem we aim to address, the data we will be working with, and how the upcoming steps will fit into the overall workflow. This will frame the purpose of the code you’ll see next and prepare us for a deeper exploration of the dataset. 
+
+ 
+
+Please have a look at the .zip file provided below, as it contains the dataset and the code we’ll be using for the analysis. 
+import os
+import pandas as pd
+import numpy as np
+from numpy import array as Array
+from typing import Any, List, Tuple, Dict
+from abc import ABC, abstractmethod
+from collections import OrderedDict
+import matplotlib.pyplot as plt
+from itertools import combinations
+
+
+# from google.colab import drive
+# drive.mount('/content/gdrive')
+DATASETS_PATH = os.path.join(os.path.expanduser('~/Projects/UpgradDemos/Datasets'))
+pd.options.display.float_format = '{:.5f}'.format
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
+pd.set_option('display.max_colwidth', None)
+
+# Base (Abstract) class for datasets on which we will run the Apriori Algorithm
+
+class TxnItemsets(ABC):
+    def __init__(self, dataset_name:str):
+        super().__init__()
+        dataset_file = os.path.join(DATASETS_PATH, f'{dataset_name}.csv')
+        self.n, grouped_dataset = self.partition_load_dataset(dataset_file)
+
+        # Map of each item name to a unique id; and the reverse map
+        self.item_map = self.get_item_map(grouped_dataset)
+        self.reverse_item_map = OrderedDict([(id, item) for item, id in self.item_map.items()])
+        self.n_items = len(self.item_map)
+        self.max_txn_items = max(list(grouped_dataset.keys()))
+
+        # Ordered dict of txn size vs the set of all transactions with that many items
+        # The representation of the transaction set for each size is left to specific
+        # implementations
+        self.dataset = self.create_dataset(grouped_dataset)
+        print(f'N transactions: {self.n}')
+        print(f'N Unique Items: {self.n_items}')
+        print(f'Max Transaction Items: {self.max_txn_items}')
+        transaction_sizes = list(self.dataset.keys())
+        n_txns = [len(self.dataset[m]) for m in transaction_sizes]
+        plt.bar(transaction_sizes, n_txns)
+        plt.xlabel('Transaction Size')
+        plt.ylabel('Number of Transactions')
+        plt.title('Transaction Size Distribution')
+        plt.show()
+
+    def __len__(self):
+        return self.n
+
+    def __getitem__(self, idx):
+        return self.dataset[idx]
+
+    def item(self, idx:int):
+        return self.reverse_item_map[idx]
+
+    def partition_load_dataset(self, dataset_file:str) -> OrderedDict:
+        """Split the dataset into individual dataframes each with
+        a constant number of items (ignoring the blanks)
+        """
+        df = pd.read_csv(dataset_file)
+        print('Sample Transactions -- Raw Data')
+        print(df.head())
+        print()
+        grouped_txns = {}
+        for m, dfg in df.groupby('Item(s)'):
+            dfg.drop(columns=['Item(s)'], inplace=True)
+            # Assumes all the non-blank items are together in the leading columns
+            dfg.dropna(axis=1, how='all', inplace=True)
+            grouped_txns[m] = dfg
+        grouped_txns = OrderedDict(sorted(grouped_txns.items(), reverse=True))
+        return len(df), grouped_txns
+
+    def get_item_map(self, grouped_dataset:dict) -> OrderedDict:
+        """Extract the list of unique items from the dataset, map them to individual ids"""
+        # Extract the list of all unique items from across transactions
+        all_unique_items = set()
+        for m, dfg in grouped_dataset.items():
+            for c in dfg:
+                all_unique_items.update(dfg[c].dropna().unique())
+        all_unique_items = sorted(list(all_unique_items))
+        return OrderedDict([(item, id) for id, item in enumerate(all_unique_items)])
+
+    @abstractmethod
+    def create_dataset(self, grouped_dataset:dict) -> OrderedDict: pass
+
+## TxnItemsets (vectorized) implementation using numpy 
+
+class NumpyTxnItemsets(TxnItemsets):
+    """Uses a numpy/jax representation of itemsets in transactions"""
+    def __init__(self, dataset_name:str):
+        super().__init__(dataset_name)
+
+    def diagonal_array(self,
+                       size:int) -> Array:
+        """Create an identity matrix (diagonal array) of size 'size'"""
+        return np.eye(size, dtype=int)
+
+    def to_onehot(self,
+                  itemsets:Array):
+        """Create a 0-1 array of shape (..., n_items) with 1 appearing wherever an item was part of a transaction
+
+        identity_matrix[txnarray] will create an array of shape 
+        (*item_array.shape, n_items) --- essentially a one-hot array of size n_items
+        for each item in itemsets. The sum operation then aggregates across items 
+        for each transaction in itemsets
+        """
+        return np.sum(self.diagonal_array(self.n_items)[itemsets], axis=-2)
+
+    def create_dataset(self, grouped_dataset:Dict) -> OrderedDict:
+        """Replace the item names in the partitioned dataframes by their ids
+        and make them numeric arrays
+        """
+        partitioned_arrays = OrderedDict()
+        for m, dfg in grouped_dataset.items():
+            # Replace items by their ids
+            id_array = Array(dfg.map(lambda x: self.item_map[x]).to_numpy(), dtype=int)
+            # Sort the item ids in each transaction for consistency
+            partitioned_arrays[m] = self.to_onehot(np.sort(id_array, axis=1))
+        return partitioned_arrays
+
+# Core Apriori Algorithm as an abstract base class
+
+class Apriori(ABC):
+    def __init__(self,
+                 transactions:TxnItemsets,
+                 min_support:float,
+                 confidence_threshold:float):
+        super().__init__()
+        self.transactions = transactions
+        assert min_support >= 0 and min_support <= 1, "min_support must be in [0, 1]"
+        self.min_support_count = int(self.transactions.n * min_support)
+        self.confidence_threshold = confidence_threshold
+        print(f'Min Support Count: {self.min_support_count}, Min Support: {min_support}')
+        self.singleton_counts = None
+
+    @property
+    def n_items(self) -> int:
+        return self.transactions.n_items
+    @property
+    def n_transactions(self) -> int:
+        return self.transactions.n
+    @property
+    def txns(self) -> Dict[int, Array]:
+        return self.transactions.dataset
+    @property
+    def max_txn_items(self) -> int:
+        return self.transactions.max_txn_items
+
+    # ========== Methods to be implemented in specific implementations =====================
+
+    @abstractmethod
+    def get_singletons(self): pass
+
+    @abstractmethod
+    def shortlist_frequent_itemsets(self,
+                                    itemsets,
+                                    k:int):
+        """Count the number of occurrences of each of the itemsets in 'itemsets'
+        and return the frequent ones, along with the counts for each
+        """
+        pass
+
+    @abstractmethod
+    def get_pairwise_k_unions(self,
+                              itemsets,
+                              k:int):
+        """Get the pairwise unions of all the itemsets in 'itemsets'
+        and filter out those with exactly k items"""
+        pass
+
+    @abstractmethod
+    def generate_k_minus_1_subsets(self,
+                                   k_itemset_candidates,
+                                   k:int):
+        """Generate all the (k-1) subsets of each of the candidate k-itemsets"""
+        pass
+
+    @abstractmethod
+    def with_all_subsets_frequent(self,
+                                  k_itemset_candidates,
+                                  all_k_minus_1_subsets,
+                                  frequent_k_minus_1_itemsets,
+                                  k:int):
+        """Filter out those k-itemset candidates for which there are no (k-1)
+        subsets that are not frequent (not present in frequent_k_minus_1_itemsets).
+        k_itemset_candidates: collection of all candidate k-itemsets to be filtered from
+        all_k_minus_1_subsets: collection of all (k-1)-itemsets of all the candidate
+                               k-itemsets
+        frequent_k_minus_1_itemsets: collection of all frequent (k-1)-itemsets
+        """
+        pass
+
+    @abstractmethod
+    def get_singleton_counts(self, frequent_items, counts):
+        """Make a map of the frequent items to their counts"""
+        pass
+
+    @abstractmethod
+    def frequent_itemsets_as_list_of_idlists(self,
+                                             frequent_itemsets:List[Tuple[int, Any, Any]]):
+        pass
+
+    # ======================================================================================
+
+    def frequent_itemsets(self):
+        """Core Apriori algorithm"""
+        # Get the singleton items as individual itemsets of size 1
+        singleton_itemsets = self.get_singletons()
+        # Shortlist the items that have minimum support count
+        singleton_itemsets, counts = self.shortlist_frequent_itemsets(singleton_itemsets, 1)
+        self.singleton_counts = self.get_singleton_counts(singleton_itemsets, counts)
+        # self.print_frequent_itemsets(singleton_itemsets, counts, 1, label='Frequent Singleton Itemsets')
+
+        frequent_itemsets = [(1, singleton_itemsets, counts)]
+        for k in range(2, self.max_txn_items+1):
+            # Get the frequent itemsets of size (k-1)
+            k_minus_1_itemsets = frequent_itemsets[-1][1]
+
+            # Generate candidates for the k-itemsets
+            # Generate pairwise unions of the frequent (k-1) itemsets with exactly k items
+            k_itemset_candidates = self.get_pairwise_k_unions(k_minus_1_itemsets, k)
+
+            # Remove those candidates who have (k-1) subsets that are not frequent
+            ## (i) generate all the (k-1) subsets of each of the candidate k-itemsets
+            ##     there will be exactly k-such (k-1) subsets for each k-itemset
+            all_k_minus_1_subsets = self.generate_k_minus_1_subsets(k_itemset_candidates, k)
+
+            ## (ii) filter out those k-itemset candidates for which there are (k-1) subsets
+            ##      that are not frequent (not in 'k_minus_1_itemsets' --- note that
+            ###     'k_minus_1_itemsets' is the collection of ALL frequent (k-1)-itemsets)
+            k_itemset_candidates = self.with_all_subsets_frequent(k_itemset_candidates,
+                                                                  all_k_minus_1_subsets,
+                                                                  k_minus_1_itemsets, k)
+
+            # Finally eliminate those candidates of size k that are not frequent enough
+            frequent_k_itemsets, counts = self.shortlist_frequent_itemsets(k_itemset_candidates, k)
+
+            if len(frequent_k_itemsets) > 0:
+                # self.print_frequent_itemsets(frequent_k_itemsets, counts, k,
+                #                              label=f'Frequent {k}-Itemsets')
+                # Add the final list of 'k' itemsets to the frequent itemsets' list
+                frequent_itemsets.append((k, frequent_k_itemsets, counts))
+            else:
+                # If the frequent_k_itemsets is empty --- cannot add any more frequent itemsets
+                print()
+                print(f'There are no frequent itemsets of size {k}{" or more" if k < self.max_txn_items else ""}')
+                print()
+                print()
+                break
+        freq_itemsets, counts = self.frequent_itemsets_as_list_of_idlists(frequent_itemsets)
+        return self.sanitize_frequent_itemsets(freq_itemsets, counts)
+
+    def sanitize_frequent_itemsets(self, frequent_itemsets:List[Tuple[int]], counts:List[int]) -> pd.DataFrame:
+        """Convert the lists of itemsets and counts into a sorted, cleaned, printable dataframe"""
+        max_itemset_size = max(len(itemset) for itemset in frequent_itemsets)
+        # Create the dataset with appropriate column names
+        df = pd.DataFrame(frequent_itemsets, columns=[f'Item {i+1}' for i in range(max_itemset_size)])
+        # Replace NaNs by a blank string; and ids by the item names
+        df = df.map(lambda x: '' if pd.isna(x) else self.transactions.item(x))
+        # Add the itemset size, count and support columns
+        n_items = len(df.columns)
+        df['Size'] = n_items - df.apply(pd.Series.value_counts, axis=1)[''].fillna(0).astype(int)
+        df['Counts'] = counts
+        df['Support'] = (df['Counts'] / self.n_transactions)
+        df = df.sort_values(by='Support', ascending=False)
+        df = df.sort_values(by='Size', ascending=True)
+        # Remove the duplicates
+        df = df.drop_duplicates()
+        return df.reset_index(drop=True)
+
+    def generate_all_antecent_consequent_pairs(self, itemset:Tuple, consequent_size:int):
+        """Generate all consequents of size 'consequent_size' from the itemset and their antecents"""
+        for consequent in list(combinations(itemset, consequent_size)):
+            # Get the antecedent for each consequent (as the complement w.r.t itemset)
+            antecent = tuple([item for item in itemset if item not in consequent])
+            yield antecent, tuple(consequent)
+
+    def association_rules(self, frequent_itemsets_df:pd.DataFrame, consequent_size:int) -> pd.DataFrame:
+        """Get the association rules from the frequent itemsets"""
+        print(f'Considering only {frequent_itemsets_df[frequent_itemsets_df['Size'] > consequent_size].shape[0]} '
+              f'itemsets of size greater than {consequent_size}')
+        frequent_itemsets = frequent_itemsets_df.iloc[:, :-3].values
+        counts = frequent_itemsets_df['Counts'].values
+        support = frequent_itemsets_df['Support'].values
+
+        # Making a dictionary to look up the counts and supports for any given itemset
+        frequent_itemsets = {tuple([item for item in itemset if item != '']): (counts[i], support[i])
+                             for i, itemset in enumerate(frequent_itemsets.tolist())}
+
+        association_rules = []
+        for itemset, (count, support) in frequent_itemsets.items():
+            # The itemset size should be greater than the consequent size
+            if len(itemset) <= consequent_size:
+                continue
+            # Generate all possible antecedents and consequents the given consequent size
+            for antecedent, consequent in self.generate_all_antecent_consequent_pairs(itemset, consequent_size):
+                # Check the confidence --- output if qualified
+                confidence = count / frequent_itemsets[antecedent][0]
+                lift = (confidence * self.n_transactions) / frequent_itemsets[consequent][0]
+                if confidence >= self.confidence_threshold:
+                    association_rules.append((f'{antecedent} -> {consequent}', confidence, lift))
+        df = pd.DataFrame(association_rules, columns=['Rule', 'Confidence', 'Lift'])
+        df = df.sort_values(by=['Confidence', 'Lift'], ascending=False)
+        return df.reset_index(drop=True)
+
+## Vectorized Numpy Implementation of Apriori
+
+class NumpyApriori(Apriori):
+    def __init__(self,
+                 transactions:TxnItemsets,
+                 min_support:float,
+                 confidence_threshold:float):
+        super().__init__(transactions, min_support, confidence_threshold)
+
+    def diagonal_array(self,
+                       size:int)-> Array:
+        """Create an identity matrix (diagonal array) of size 'size'"""
+        return self.transactions.diagonal_array(size)
+
+    def to_onehot(self,
+                  itemsets:Array):
+        """Create a 0-1 array of shape (..., n_items) with 1 appearing wherever an item was part of a transaction
+
+        identity_matrix[txnarray] will create an array of shape 
+        (*item_array.shape, n_items) --- essentially a one-hot array of size n_items
+        for each item in itemsets. The sum operation then aggregates across items 
+        for each transaction in itemsets
+        """
+        return self.transactions.to_onehot(itemsets)
+
+    def to_itemids(self,
+                   itemsets:Array,
+                   k:int):
+        """Convert to an array with the item ids instead of the one-hot representations"""
+        # np.argwhere(candidate_k_itemsets == 1) returns an array with two columns where
+        # each row contains the row and col id of a '1' found in the given array
+        return np.argwhere(itemsets == 1)[:, 1].reshape(-1, k)
+
+    def remove_duplicate_rows(self, itemsets:Array) -> Array:
+        """Remove duplicate rows from 'itemsets'"""
+        # Convert to a dataframe
+        df = pd.DataFrame(itemsets)
+        df.drop_duplicates(inplace=True)
+        # Convert back to a jax array
+        return Array(df.to_numpy())
+
+    # ========= Implementing the abstract methods in the base class ====================
+
+    def get_singletons(self) -> Array:
+        """Get the singleton items as individual itemsets of size 1"""
+        singleton_ids = np.expand_dims(Array(range(self.n_items), dtype=int), axis=1)
+        singleton_onehot = self.to_onehot(singleton_ids)
+        return singleton_onehot
+
+    def get_singleton_counts(self, frequent_items:Array, counts:Array):
+        singletons = np.squeeze(self.to_itemids(frequent_items, 1))
+        """Make a map of the frequent items to their counts"""
+        return {item: count for item, count in zip(singletons.tolist(), counts.tolist())}
+
+    def shortlist_frequent_itemsets(self,
+                                    itemsets:Array,
+                                    k:int) -> Tuple[Array, Array]:
+        """Count the number of occurrences of each of the itemsets in 'itemsets' across
+        transactions; filter only those itemsets out that have minimum support
+        """
+        counts = np.zeros(len(itemsets), dtype=int)
+        for m, m_txns in self.txns.items():
+            if m < k:
+                # Itemsets of size k cannot appear in transactions of size < k
+                break
+            intersection = itemsets[:, np.newaxis, :] & m_txns[np.newaxis, :, :]
+            intersection = intersection.sum(axis=-1)
+            intersection = np.where(intersection == k, 1, 0).astype(int)
+            counts += intersection.sum(axis=1)
+        # Filter those with minimum support count
+        valid_counts = (counts >= self.min_support_count)
+        return itemsets[valid_counts], counts[valid_counts]
+
+    def get_pairwise_k_unions(self,
+                              itemsets:Array,
+                              k:int) -> Array:
+        """Generate all pairwise itemset unions of itemsets in 'itemsets'"""
+        # Looping through the rows of 'itemsets' - as an exception here
+        # Generate pairwise unions
+        unions = itemsets[:, np.newaxis, :] | itemsets[np.newaxis, :, :]
+        # Filter out the unions with exactly k items
+        valid_unions = np.where(unions.sum(axis=-1) == k)
+        unions = unions[valid_unions]
+        assert len(unions.shape) == 2 and unions.shape[1] == self.n_items
+        # Get rid of duplicate rows
+        return self.remove_duplicate_rows(unions)
+
+    def generate_k_minus_1_subsets(self,
+                                   candidate_k_itemsets:Array,
+                                   k:int) -> Array:
+        """Generate all the (k-1) subsets of each of the itemsets in 'candidate_k_itemsets'
+        Note that each itemset in 'candidate_k_itemsets' will have exactly k subsets of size
+        (k-1). candidate_k_itemsets.shape will be (m,k); this function will return an array of shape (m, k, k), where the vector at
+        (i,j) is the j-th subset of size (k-1) of the i-th itemset in candidate_k_itemsets"""
+        n_itemsets = len(candidate_k_itemsets)
+        itemids = self.to_itemids(candidate_k_itemsets, k)
+        assert itemids.shape == (n_itemsets, k)
+        # This will select everything other than the diagonal
+        diag_complement = (self.diagonal_array(k)+1)%2
+        # Zero out each of the items in the k-itemsets one by one to create the (k-1) itemsets
+        all_k_minus_1_subsets = itemids[:, np.newaxis, :] * diag_complement
+        assert all_k_minus_1_subsets.shape == (n_itemsets, k, k)
+        non_zeros = np.where(all_k_minus_1_subsets != 0)
+        all_k_minus_1_subsets = np.sort(all_k_minus_1_subsets[non_zeros].reshape(n_itemsets, k, (k-1)),
+                                        axis=2)
+        return self.to_onehot(all_k_minus_1_subsets)
+
+    def with_all_subsets_frequent(self,
+                                  k_itemset_candidates:Array,
+                                  all_k_minus_1_subsets:Array,
+                                  frequent_k_minus_1_itemsets:Array,
+                                  k:int):
+        """Filter out those k-itemset candidates for which there are no (k-1)
+        subsets that are not frequent (not present in frequent_k_minus_1_itemsets).
+        all_k_minus_1_subsets: collection of all (k-1)-itemsets of all the candidate
+                               k-itemsets
+        frequent_k_minus_1_itemsets: collection of all frequent (k-1)-itemsets
+        """
+        n_itemsets = len(all_k_minus_1_subsets)
+        n_frequent_itemsets = len(frequent_k_minus_1_itemsets)
+        assert all_k_minus_1_subsets.shape == (n_itemsets, k, self.n_items), f'{all_k_minus_1_subsets.shape}'
+        assert frequent_k_minus_1_itemsets.shape == (n_frequent_itemsets, self.n_items), f'{frequent_k_minus_1_itemsets.shape}'
+
+        flat_k_minus_one_subsets = all_k_minus_1_subsets.reshape(-1, self.n_items)
+        n_all_subsets = len(flat_k_minus_one_subsets)
+        # Do a pairwise and of the itemsets in both groups
+        intersections = flat_k_minus_one_subsets[:, np.newaxis, :] & frequent_k_minus_1_itemsets[np.newaxis, :, :]
+        assert intersections.shape == (n_all_subsets, n_frequent_itemsets, self.n_items)
+
+        # Check where the intersections are of size (k-1)
+        matching_pairs = np.where(np.sum(intersections, axis=2) == (k-1), 1, 0)
+        assert matching_pairs.shape == (n_all_subsets, n_frequent_itemsets)
+        # An itemset in flat_k_minus_one_subsets appears in frequent_k_minus_1_itemsets
+        # when it matches with at least one of them
+        frequent_subsets = np.any(matching_pairs, axis=1)
+        # Reshape back to (n_itemsets, k)
+        frequent_subsets = frequent_subsets.reshape(n_itemsets, k)
+        # Candidate k-itemsets are those for which all the (k-1) subsets are frequent
+        valid_k_itemsets = frequent_subsets.sum(axis=1) == k
+        return k_itemset_candidates[valid_k_itemsets]
+
+    def frequent_itemsets_as_list_of_idlists(self,
+                                             frequent_itemsets:List[Tuple[int, Any, Any]]):
+        freq_itemsets, all_counts = [], []
+        for k, k_itemsets, counts in frequent_itemsets:
+            itemsets_as_ids = self.to_itemids(k_itemsets, k).tolist()
+            if k > 1:
+                itemsets_as_ids = [sorted(itemset, key=lambda i: self.singleton_counts[i], reverse=True)
+                                   for itemset in itemsets_as_ids]
+            freq_itemsets.extend(itemsets_as_ids)
+            all_counts.extend(counts.tolist())
+        return freq_itemsets, all_counts
+
+# Run
+
+txn_dataset = NumpyTxnItemsets('groceries')
+apriori = NumpyApriori(txn_dataset, min_support=0.02, confidence_threshold=0.3)
+frequent_itemsets_df = apriori.frequent_itemsets()
+print()
+print('Frequent Itemsets:')
+print(frequent_itemsets_df)
+print()
+print('Association Rules with a Single Consequent:')
+association_rules_df1 = apriori.association_rules(frequent_itemsets_df, 1)
+print(association_rules_df1)
+print()
+print('Association Rules with Consequents of Size 2:')
+association_rules_df2 = apriori.association_rules(frequent_itemsets_df, 2)
+print(association_rules_df2 if association_rules_df2.shape[0] > 0 else 'No Such Association Rules Found')
+
+
+
+We have now established the background and clarified what we aim to uncover with the data.  
+
+ 
+00:00:00 - 00:00:10
+Introduction to Apriori algorithm implementation
+The best way to understand an algorithm is actually to implement it from the ground up. And this is 1 implementation of the Apriori algorithm.
+00:00:11 - 00:00:51
+Challenges with traditional Apriori implementations
+This is not a very common implementation. Normally you would come across implementations which use the usual Python sets and all that because itemset is a set. So you basically look at intersections and unions of sets and stuff like that, and you implement the algorithm that way. It may be conceptually probably easier to implement it like that, but it is definitely not going to scale, especially because the a priori algorithm requires you to scan the entire data set repeatedly to count the number of occurrences of item sets and all that, right?
+00:00:51 - 00:02:00
+Using Numpy arrays for efficient Apriori implementation
+And doing that repeatedly on large data sets and and then doing subset operations and union operations and all that can make it very, very, very slow. OK, So if you want to really scale it up to larger data sets, then you will need a different kind of implementation. That's basically what has been attempted here. So this implementation is based entirely on Numpy arrays. And as you know, Numpy arrays are very fast. You can do extremely fast numerical manipulations on very large multidimensional arrays. Good thing is that now you even have the GPU enabled versions in a way of numpy. There is this library called JAX if you have heard of it. It's an implementation by Google which is often seen as a GPU enabled. You know, Numpy on steroids if you will, right? So it it actually makes use of GPU's to accelerate the computation even faster.
+00:02:00 - 00:02:45
+Accelerating computation with JAX library
+And it JAX actually can often be used. There are some restrictions, but by and large, and definitely for this implementation, you can use JAX as a pretty much plug in replacement for numpy. So if you want to speed up of by all those magnitude for even larger data sets, you can actually choose JAX instead of numpy. All you need to do is a global replace, search, replace wherever you have NP dot replace it by say JNP dot for jax and the the code will run almost as is. OK, so. So that's a quick background about this implementation.
+
+
+
+
+With this foundation in place, the next topic moves into Data Exploration, where we start examining the dataset more closely to understand its structure, patterns, and potential insights. 
+
+00:00:00 - 00:01:06
+Introduction to Market Basket data set and its structure
+So first the the the data set. Let me quickly show you the data set on which we're going to run this. This is a Market Basket data set downloaded from cable. So this has you will see the statistics very soon, but I can show you right here. This is the this is the raw data set. So this has about 9000 odd transaction. Each row is a transaction and you can see the items in each transaction. So first transaction had four items, this second one had three, then the single item bowl milk, then fourth one again had three and so on. Right. The maximum number of items any transaction has is as you can see these even goes further. Yeah, but all the statistics you'll anyway see when we're on the fourth. OK, so this is the raw data set. Just thought it will be good for you to first take a look at the data set before we look at the implementation of the a priori algorithm. This is the number of items in each of the rows in each of the transactions.
+00:01:06 - 00:01:12
+Overview of data set format and preparation for Apriori algorithm
+So this is how the the data set looks. And it's a CSV file, right? It's a grocery dot CSV OK.
+00:00:00 - 00:00:22
+Introduction to library imports for algorithm implementation
+So this is the this way we just importing the required libraries. Then this code is has been organized to make the the core conceptual part of the algorithm very clear and kind of separate out the implementation details.
+00:00:22 - 00:01:03
+Organizing code for algorithm clarity and separation of implementation details
+Like as I said, the same apriori algorithm can be implemented in multiple different ways. So idea was not to muddle up the implementation with the core algorithm itself. So there is a base class which defines the the core algorithmic aspects and the specific implementation has been put into a derived class. So let's see what happens in the code. So there is I'm defining an item set here, OK?
+00:01:04 - 00:01:37
+Defining transaction item set and data set capture
+And yeah, so the this is the transaction item set. So this class essentially captures the entire data set for you. OK. And I'm giving the name of the file from where to pick up the data set. And what it actually does is I am first grouping the data set into into groups of transactions and within each group the number of items in those transactions will be the same.
+00:01:37 - 00:02:13
+Grouping transactions by item count for data representation
+Like if you just go back to the raw data, all the transactions which have the same number of items like 444 and you may have other 4 here and so on, right? And all these fours, I will club those transactions together, OK. And all the threes will club them together, all the five will club them together. So that's the way this implementation does it. And there's a reason for that because if you, let me just show you conceptually what happens.
+00:02:13 - 00:03:06
+Conceptual representation of transactions using arrays and data frames
+So if I have say 4 items in each transaction like this, OK, then I can easily represent it as an array. And it's, it could be an array or a data frame or any of those, right? If if it is not the same number of items in every transaction, then you're going to have a problem representing it. You'll have to pad it up with novels and stuff like that, right? So to make it cleaner, we are grouping it into transactions which have the same number of items within each group. The all the transactions within a group will have the same number of items. And then because we are going to work with numpy which is essentially numeric library, we do not want to have item names.
+00:03:06 - 00:04:13
+Assigning unique IDs to items for numeric manipulation
+We want to deal with numbers where that is what numpy can easily manipulate. So what we do is get rid of all the symbolic names. We assign a unique ID to every item. So some like here I would assign say 1 to citrus fruit, 2 to this, three to this, and four to this. So I would represent this in transaction as 1234 and yeah, depending on the ID. So it will be 57910 and whatever, right? So that that's basically how we want to represent the transactions and also item sets reducing everything to numbers. But before we do that, I need to make a map of items versus numbers. So I need to know what ID I was assigned to which which item, because later when we actually print out the item sets and the association tools that we have found, we need to have this mapping because otherwise those numbers may not make sense to us.
+00:04:13 - 00:05:05
+Creating item-to-ID map for transaction representation
+So I'm just creating a map of those items, all the unique items that you found, and we're mapping it to unique IDs, OK. And yeah, the the rest are so we have the maximum number of items in any transaction and the total number of items that we have. And yeah, so all these are generic. You would need this for any a priori implementation. And that's what the data set basically does for you. OK, so basically what I'm doing here is, you know, this partition load data set is the key method which groups the transactions into those which have the same number of items.
+00:05:05 - 00:05:10
+Partitioning and loading data set into data frames
+And as I said, then it becomes very convenient to use things like data frames and arrays.
+00:05:10 - 00:06:00
+Grouping transactions into data frames by item count
+So I am actually reading the entire CSV file into a data frame. That's the first thing. And then I'm grouping them by the number of items. So number of items is already a column, since we know that I showed you to you in the data set, right? So using that, I can group them into smaller data frames and each data frame will have the same number of items in them and remove all the nulls and all that. Yeah. So this immediately gives you the the group data set, right? So under grouping, I'm actually storing it in a dictionary where the ID is the is the number of items in that group.
+00:06:00 - 00:06:59
+Utilizing data frames for unique item counting and fast computations
+And the group of transactions with that many items is basically stored as a as a data frame and and then we also create an item map. Here, as I said, you first collect all the unique items and and and then assign an ID to each of those unique items. That's it. Now, you can already see how I am actually making use of data frames here. Because I since I'm I'm using a data frame, I can immediately count the number of unique items. So all these are functions or methods that are readily available for data frames. Yeah. So it actually makes sense for you to make use of these tools while you're doing this implementation. And they're proven tools for very fast computations. OK, so this is the base data set class.

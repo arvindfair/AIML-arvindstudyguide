@@ -1,0 +1,292 @@
+margins Classifiers
+
+Margins and Maximum Margin
+
+
+We have discussed the basic idea of how a line (hyperplane) can be generated so that it perfectly separates two classes: spam and ham. However, there could be multiple lines (or hyperplanes in general) possible, which perfectly divide the two classes.
+
+
+Now, let's start discussing how to get the optimum hyperplane.
+
+
+00:00:00 - 00:00:13
+Introduction to the concept of separators
+So now we know what it means to find a separator. But is there only one such separator for any given data set with, say, 200 points?
+00:00:14 - 00:01:24
+Multiple valid separators for data classification
+Clearly not. As you can see in this example, you can draw any number of lines you want and all of which will satisfy the property that we want to separate to satisfy. Every blue point will lie on one side, every red point will lie on the other side. A line like this is not a valid separator, neither is this line. Whereas all the lines that are shown here are indeed valid separators. So which of these do I go with? And please notice that it is important for me to pick one of these as a model and for a new data point that I might encounter. For example, after having built this model, I get a new e-mail and I am required to figure out whether this e-mail is a spam or not and I have to use the model that are built to do this discrimination.
+00:01:26 - 00:02:06
+Using models to classify new data points
+You can see that for a given data point which is new depending on which model I pick among these lines. Just remember that all of these lines are valid discriminating models. Depending on which one I take, I will get a different answer. So if the new e-mail that I am going to classify is this meaning if I find the attributes, those numeric attributes for this e-mail and plotted in this picture, this is where the pointer so that e-mail corresponds to this point.
+00:02:07 - 00:03:42
+Challenges with edge cases in classification
+If I use any of these models, they're going to tell me this e-mail is spam. If I use any of these models, they're going to tell me this e-mail is not spam. So which of these do I believe if I take this particular model, it is too close to this data point. So if I pick this as my final model, in a way I am saying that this particular data point is right on the edge. But that is a little unlikely, right? I mean if you take Well if you take a random e-mail it is. It is very unlikely that this random e-mail is an edge case. Meaning if I change one word in the e-mail, suddenly it will become non spam from spam or the other way around right? Any small tweaking, if I change the D to A it will become spam, and if I make the A to B it will become non spam. Now such things typically will not happen, and all of us know that, right? So there is a significant difference between something which is spam and something which is not a spam. And if I take a spam and do some little tweaking to it, introduce a typo or change one word to another, it's suddenly not going to jump from one category to another category.
+00:03:43 - 00:05:06
+Choosing the least risky model for classification
+So we have reasons to believe intuitively that the points that we got for training, it's very unlikely any of them are going to be sitting right on the edge of the hyperplane which separates these two categories. They got a reasonably well separated from the hyperplane. So that now gives us a handle with which to pick just the right model which is least risky and what is that right model? That model is most likely the one which is least committal in terms of these two. So it doesn't it doesn't go stick to any one of these models too closely, right? So I try to maintain a safe distance from both of these, so giving me enough room to accommodate other data points that I have not seen. So finally we now have a criterion to pick one unique, very well defined model that will discriminate between the two classes and is very likely to work well on any new data point that you may not have seen.
+00:05:07 - 00:06:28
+Constructing a hyperplane with maximum margin
+And that hyperplane is 1. It should satisfy the condition that we have already laid out, meaning it should have all the blue points on one side, all the red points on the other side, and it should maintain an equal distance between both of these. So how would you construct such a hyperplane again in 2D if you have the plus points here and the minus points here, I am then talking about a hyperplane which is like this. Look at the plus point, which is closest to the hyperplane, and the minus point which is closest to the hyperplane. These two are equidistant from the hyperplane. If you push this line closer to the minus point, then you are incurring a greater risk on this side. If you push it on this side, then you're incurring a greater risk on the plus side. So I want to maintain a safe distance from both of them, and that happens when these two distances are exactly the same. And this distance is what is referred to as the margin.
+00:06:29 - 00:06:39
+Definition and importance of margin in classification
+So margin is the amount of clearance that I have between the closest data point and the separating hyperplane.
+
+
+ 
+
+The best line is the one that maintains the largest possible equal distance from the nearest points of both the classes. It is also referred to as a maximal margin classifier. You can think of the margin as a 'band' that the hyperplane has on both its sides.
+
+ 
+
+There can be several lines (hyperplanes) possible in the same data set, as shown in the figure below, with different values of margins. Among these, the line with the maximum margin would be considered the best fit line for the given data.
+
+ 
+
+Suppose you’ve three different hyperplanes with three different margin values. Which hyperplane is the best for this data?
+
+ 
+
+Fig 
+ 
+
+It's obvious, from the given margin values, that the third hyperplane is the best of the lot. Why? Because it maintains the maximum margin value.
+
+ 
+
+But finding the maximal margin hyperplane needs a mathematical formulation. Let's now understand the formulation for an optimal maximal margin classifier.
+
+ 
+
+Note: In the coming lectures, you will need to recall the concept of the dot product of two vectors.
+
+Say there are two vectors A = [2, 3, 5] and B = [1, 0, 4], then the dot product of A and B is the element-wise multiplication of A and B, i.e. transpose(A). B = A'B = 2.1 + 3.0 + 5.4 = 22.
+
+Note that the dot product of two vectors returns a scalar number, in this case, 22.
+
+ 
+
+ 
+
+Before moving on to more mathematical formulations, let's revise a few basic concepts that will be useful here.
+
+Refresher - Hyperplane as Dot Product
+------------------------------------
+Before we move further in this session, let's get familiar with a few notations that are used in the SVM formulation. 
+
+
+00:00:05 - 00:00:36
+Introduction to coordinate geometry formulae
+I guess I'm a teaching assistant with Professor Raghavan and in this, in the next couple of videos, I'll just walk you through some notations that we have used in this module that Professor Raghavan has used in the subsequent lectures so that you find it really easy to follow the lectures, right? Apart from the notations, I'll also cover some very basic formulae which you will have studied in high school. So I'm just here to help you recall those quickly. All right, so that's just some very basic coordinate geometry formulae.
+00:00:36 - 00:01:32
+Equation of a line and hyperplane in 2D and N dimensions
+OK, so the first thing is a simplification of notation that we'll use going ahead in this module, right? So what you already know is that the equation of a line in 2D is or a hyperplane in 2D is simply W naughty plus W 1X1 plus W 2 X 2 = 0, right? And you also know that for an N dimensional generalization, you can just simply write W naughty plus summation WIX I = 0 where I goes from one to north, right? So this is something you already know right? Now going forward, we'll further simplify this notation by doing a little neat trick, which is actually commonly used in a lot of textbooks also. So you might come across that notation very, very frequently, right?
+00:01:32 - 00:02:51
+Simplification of notation using dummy column
+So, so let's look at what that simplification is. So the data points that you get right now we are denoting the data points as let's say X1X2 till XN, right? So let's say this is your data point. So basically what it looks like when you get the data is that each of these XS are your columns, right? So let's say you have N columns. Each of these XS is a column. And then you have a label, right? Plus one or -1 for classification problem. So 1 trick that we do is that simply add a dummy column to your data set, which is just one, right? So let's say so this is your data set. So you have some excise as your entries, right? And you have what you do is you add just one to all of your data points, right? So this is let's say the ith data point, this one. OK, now what you do is simply this. So now your data point can be denoted as a vector, which is 1 X1, X2 till XN, right? So, so this is how the data point looks like. I'll just very quickly tell you why this is useful, right? But just to make sure, you have just added a dummy column, right?
+00:02:51 - 00:03:50
+Notation for hyperplane equation as vectors
+And then finally you have a label and let's call that L So this the variable labeled is called an L, which is basically just plus one or -1 right? All right, so now, until now, we were looking at the the equation of a hyperplane in terms of WS, right? So, so now if you write your equation of a hyperplane as a vector, basically the coefficients of your hyperplane as a vector. So you have W naughty W 1 W 2 till WN, all right, right. And now let's say this is your ith data point. OK, So now what you do is you basically denote this as let's say Yi, right? And this might be a little confusing, but this is a notation that you have used in the lectures and you might also fall come across very frequently in some text and books, right? So this is this might be confusing in the sense that Y is usually used for a label, right?
+00:03:50 - 00:05:04
+Dot product representation of hyperplane equation
+But here what we are using is for label, we are using an L, OK. And now the Yi data point is being denoted as this one, right? So one, X1, X2. And this is your. So this is your ith data point, let's say, right? So this just just the addition of this one as a dummy column convert your. This is being called Yi. So this is your Yi data point. And these are your coefficients, right? Now the reason this is convenient is simply this that now the equation of a hyperplane simply can be written as which is W naughty plus W1X1 plus W2X2. So this can be basically simply written as W as a vector. So by the way, this is now I'm calling this AW vector and this is AY vector, right? So each data point is a vector of n + 1 elements, which is called Yi and the weights are called the West vector, right? Denoted by the arrow, right? So now the equation of hyperplane can be simply written as W dot Y, right? So, so this this dot product so basically W naughty into one plus W1 into X1. So this can simply be written as W dot Y and what you want.
+00:05:05 - 00:06:09
+Condition for linear separability using dot product
+So you also know that W dot Y is positive and negative on either sides of the hyperplane, right? So if a data point I sorry, this is I right? So if a data point I lies above the hyperplane WW dot I will Yi, sorry, will be positive. Below the hyperplane, it will be negative. The sign depends on the the the coefficients, but it the signs will be different. Basically, that's the idea, right? And for a hyperplane to actually linearly separate some data points, you want this condition to be true. So W dot Yi multiplied by the label Li. So what is Li here? So this is the L column. So this is L1. This is L2 and in general the label is Li right? So L is basically either plus one or -1 depending on the actual class of the data point. OK, So what you want is Li multiplied by W dot Yi should be greater than 0, right? So this is 1 simplification of notation that we use going forward.
+
+
+So we saw how a hyperplane can be represented as the dot product of the weight vector and the feature vector
+
+Equation w.y with direction(vectors)
+
+ 
+
+As we discussed earlier, a point lying above the hyperplane will result in a positive value when plugged into the hyperplane expression, and a point lying below it will result in a negative value. So, based on the class labels l (+1 or -1), we can say
+
+Equation -li(w,y) >0 
+
+ 
+
+Next, we will discuss about the distance of a point from a hyperplane.
+
+Refresher - Distance Formula for a Hyperplane
+-------------------------------------
+
+Now, you will learn about the distance formula from a hyperplane. You can read more about the distance formula here. --https://mathworld.wolfram.com/Point-PlaneDistance.html
+
+
+
+00:00:00 - 00:00:17
+Introduction to distance of a point from a hyperplane
+The other thing that we'll use going forward is the notion of a distance of a point from a hyperplane. OK, So let's quickly look at the second thing that we'll use. This will also involve some simplification of notation, but also there's a formula to calculate the distance of a point from a line.
+00:00:17 - 00:01:05
+Revision of distance formula for a point from a line
+You would have, I'm sure, come across that, but in your high school. OK, so let's quickly revise that formula once. So what we are looking at how do you compute the distance of a point from a hyperplane in general? Right now in 2D, this hyperplane is basically a line, but in 3D and higher dimensions it could be something else. OK. So first let's look at a 2D setting. OK, so in a in a 2D setting, what you have is you have a line which you are denote which you the general equation of the line. You can write as this OK, And then you have a data point right? Now, according to the new notation that we have right now, remember we don't denote a data point here as X1, X2.
+00:01:06 - 00:02:08
+Distance formula for a point from a hyperplane in 2D
+We have a one, X1, X2, right? So let's say this data point P is called one, X1. And I'm putting a dash over X1 just to discriminate between this variable and this actual data point. OK? So similarly X2 dash. So this is your data point. And the distance of a point from a hyperplane is basically this. So you drop a perpendicular from the point to the hyperplane and this distance is B. So I'm sure I'll know this, right? And the formula for calculating the distance is something I'll just discuss in a while. The reason why we are discussing the notion of distance of a point from a line is the maximal margin classifier, right? So remember that in maximal margin classifier, you are trying to find the the optimal hyperplane such that the margin which is the distance of the closest point from the from the hyperplane is maximized. OK? So that's why this will be useful going forward. OK, so the distance formula is given by simply W naughty plus W 1.
+00:02:08 - 00:03:04
+Simplification and rescaling of line equations
+So basically you just plug in this data point into this. In other words, you can just simply take the dot product. So W naughty into one plus W1 into X1 dash plus W2 into X2 dash, OK, divided by root of W 1 ^2 plus W 2 ^2 OK, so this is the distance formula and this is for A2 dimensional hyperplane, right? So the simplification of notification that I was talking about is something very, very, very convenient, in fact. Alright, so for example, if you have a line in 2D, which is something like 2X1 plus 3X2 plus 4 = 0, you can simply multiply this entire thing by two or multiply by something or divide by something, as long as you're doing it on the both sides. So the equation of the line basically will not change, right?
+00:03:04 - 00:04:44
+Concise notation for distance in maximal margin classifier
+So in other words, what you can do is you can actually rescale these coefficients, OK, in whichever way you want, right? And why would you want to do that? So for example, if you have the general equation as this right, W naughty plus W1 X1 plus W2 X 2 + 0 right? Now if you divide this entire thing by under root of W 1 ^2 plus W2 square, right? What will happen is you are rescaling the coefficients in such a way such that W 1 ^2 plus W2 square basically becomes one, right? So you are simply rescaling the coefficients such that W 1 ^2 plus W2 square is one, right? And what's the benefit of that? The benefit of that is that now the distance of a point which is this one point P from this hyperplane can be very concisely written as simply the West vector right dot the Y vector. What is the Y vector? Remember that this point we had called YY is a vector, right? And if this is the ith data point, then you can just Simply put an I here. OK, so the distance of a point from a line is now represented by this concise notation W dot Yi. And this will be useful going forward when you actually incorporate the notion of a distance of a point from a line in the maximum margin classifier, right? One more last thing to note about is this is simply the although we have done this written this expression for two-dimensional hyperplane, this is generally applicable to any dimensional hyperplane.
+00:04:44 - 00:05:46
+Generalization of distance formula to higher dimensions
+So for example, in, if you look at 3D, right? So in three DA hyperplane is basically a plane, which is. And let's say if you have a point here, which is let's say 1, X1 dash, X2 dash, X3 dash. OK, so the distance is basically when you drop a perpendicular from this point to the plane, this line represents the distance, right? And as you already know, the equation of a hyperplane is simply can be written as simply W naughty plus summation of WIXI right equals 0. So this formula can is actually applicable to 3D4D and in general ND as well where your W vector is basically W naughty W 1 till WN OK and your Y vector is this starting from 1X1X2X3 till XN. So now this concise notation will be very helpful going forward.
+
+
+
+
+We saw how the distance of a point from a hyperplane can be represented as the dot product of the point vector Y and the weights vector W. This is an expansion of the representation we discussed in the previous video.
+
+ 
+
+Now that you are comfortable with the notations, let's move forward with finding the optimal hyperplane.
+
+
+Maximal Margin Hyperplane
+-------------------------
+
+In the following video, professor Raghavan will explain how do you find the maximum margin classifier mathematically.
+
+
+00:00:00 - 00:00:03
+Introduction to problem formulation
+So this is how we now formulate the problem.
+00:00:04 - 00:00:59
+Maximizing the margin in SVM
+So what we need to do is to maximize the margin. Let's denote the margin as M. So M is the distance between the point which is closest to the separating hyperplane and the hyperplane. So this is what we want to maximize and under certain conditions. So this we want to maximize subject to certain constraints. And what are those constraints? The constraint is basically saying that the hyper plane that we produce as a model must be a valid linear discriminator, which means all the plus points on one side, all the minus points on one side.
+00:00:59 - 00:01:55
+Constraints for valid linear discriminator
+And we already know how to say that mathematically. So what we require is that for every I from 1 to north, this condition must be true, which is the label into the dot product between West and the vector corresponding to the ith data point must be greater than 0. Just recollect that this was the condition for saying that W correctly classifieds the ith data point. If it correctly classifieds, this condition must clearly be true. So what we want to do is to maximize the margin subject to this condition.
+00:01:55 - 00:02:56
+Relation between margin and weight vector
+But this is not complete. I still haven't said how is this margin related to the West. Please remember that what we are eventually trying to produce as the West the margin is, is a derived quantity, right? The what determines the separator hyperplane is the West. The moment I tell you what the W vector is, the coefficients are, I know what the hyperplane is. And the moment I know what the hyperplane is, I can then go ahead and compute the distances. So if this is my hyperplane and you have points here, from each of the points I can then tell you what the distance of this point is from the hyperplane. And then I can compute the minimum among those distances and that becomes my margin. So margin is not an independent quantity that you try to control. Margin is derived.
+00:02:56 - 00:03:40
+Distance from point to hyperplane
+The moment I know what the West is, the margin is fixed, right? So I want to maximize the margin subject to all the choices of the West vector, right? But how exactly is the margin determined given West? It turns out that again we will not go into the the math behind this, but it turns out that the distance of a point from a given hyperplane. So how do you find the distance?
+00:03:40 - 00:04:39
+Perpendicular distance and unit vector assumption
+You take this from this point, you draw a perpendicular to this plane and this. The length of this perpendicular is the distance of this data point from the separating hyperplane, and that perpendicular distance happens to be just. This dot product is indeed the perpendicular distance between the data point Y and the and the hyperplane defined by the coefficients W 1. Little caveat I need to add here. We typically assume that the the coefficients form a unit vector. What does that mean?
+00:04:41 - 00:06:03
+Geometric interpretation of scaling hyperplanes
+It's easy to explain using an example. So suppose I say in 2D, If I give you an equation of this form X + 2 Y plus 3 equal to 0. As we know, this represents a line for various values of X&Y. If you plot this, you will basically get a line right? Now, if I take a different equation, this also represents a line, but I'm sure some of you would have already noticed these two lines geometrically, though algebraically they look different. The coefficients are different, but these two geometrically mean exactly the same straight line. There's no difference, it's just that I've scaled this by two. So scaling line or a hyperplane in general by a constant is not going to make any difference geometrically, it remains exactly the same object. So it makes sense to not worry about these constants and write the equation in a normalized form.
+00:06:03 - 00:07:01
+Normalized form of hyperplane equation
+So we say that this is the normalized form if the the sum of the squares of the corresponding coefficients is exactly equal to 1. So going forward, we will assume that the coefficient vector that we will come up with is always a normalized vector, because any amount of scaling is not going to make any difference to the actual hyperplane that you get. So subject to the assumption that the coefficients form a unit vector, it is true that the distance between any given data point Y and the hyperplane is nothing but the dot product between the coefficient vector and the data point treated as a vector.
+00:07:03 - 00:08:02
+Distance and margin in SVM
+And so now we we can rewrite this by including this condition. And since this is just the distance between this data point and West, and what is MMM is the least among these distances. So you give me any such data point Yi among the north that I have. The distance of that data point from West must indeed be more than M because M is the least among these data points. So now everything falls in place. I can go ahead and write my final SVM formulation as follows.
+00:08:02 - 00:09:28
+Final SVM formulation
+I want to maximize the margin among all possible choices of West. I want to maximize M subject to these conditions. 1st I want to ensure that the WS form a unit vector and for. So let me make these as J's just to be clear. So we are talking about the D coefficients along with the constant W naughty. All this is 1 and for every data point ili into West. Into the vector W multiplied by the dot product of West with Yi is greater than or equal to, so this is the final SVM formulation.
+
+
+The mathematical formulation requires two major constraints that need to be taken into account while maximising the margin. They are 
+ 
+
+The standardisation of coefficients such that the summation of the squares of the coefficients of all the attributes is equal to 1. For example, if you have 20 attributes, then the summation of squares of the coefficients should be  Equation
+ 
+Along with the first constraint, the maximal margin hyperplane should also follow the constraint given below:
+ 
+
+Equation
+
+where, 
+
+li = label (1, -1)
+Wi = coefficient of attributes
+Yi  = data points of all the attributes in each row 
+ 
+
+Let's understand these constraints through an example, since you already know how to write an equation for a hyperplane in 2D. Now say that the hyperplane is represented as Equation. So what you need to do is apply both constraints in this equation such that you get a maximal margin hyperplane equation that maintains an equal distance from both the labels, as shown in the figure below.
+
+ 
+
+The first constraint should be valid if Equation
+
+ 
+
+For the second constraint, the hyperplane should be a safe distance of more than or equal to the margin 'M' from both the labels. If you look at figure (A), all the red dots are below the hyperplane that is labelled (-L). Here, the multiplication of (-L), with the dot product of Y(p,q) and the expression Equation, will give you a positive value that is greater than or equal to  'M'.
+
+ 
+
+Similarly, if you look at figure (B), all the blue dots are above the hyperplane that is labelled (+L). Here, the multiplication of (+L), with the dot product of Y(p,q) and the normalised vector, Equation, will also give you a positive value that is greater than or equal to 'M'.
+
+ 
+
+
+
+ 
+
+This is how the constraints help in formulating the maximal margin hyperplane. 
+
+ 
+
+The maximal margin line (hyperplane), although it separates the two classes perfectly, is very sensitive to the training data. This means that the Maximal Margin Classifier will perform perfectly on the training data set. But on the unseen data, it may perform poorly. Also, there are cases where the classes cannot be perfectly separated.
+
+ 
+
+For example, if you look at the figure below, do you think the maximal margin can classify the data points perfectly?
+
+ 
+
+
+
+ 
+
+It seems that the maximal margin line (hyperplane) is not even possible in this case. In this case, if you want to create a linear hyperplane, you will inevitably need to misclassify a few data points. In other words, some points will need to fall on the wrong side of the hyperplane.
+
+ 
+
+You will learn how to build such a classifier next - the Soft Margin Classifier.
+
+ 
+
+First, attempt the upcoming questions to test your understanding.
+
+Maximal Margin Classifier - Recall Quiz
+
+
+In the figure below, which hyperplane makes the maximum margin hyperplane?
+
+Which are the points that are considered while constructing a margin?
+
+Closest points to the hyperplane--A margin is calculated by considering only the points closest to the hyperplane.
+
+Which points are used in constructing the maximal margin hyperplane in the figure?
+
+Since points 2 and 5 lie closer to the hyperplane than all the other points, they are the only points considered while constructing it.
+
+Among the multiple possible hyperplanes, why is one being called 'better' than the others?
+
+The better one is a 'safe' distance away from both the classes and thus, will minimise the chances of incorrect identification.
+The Maximal Margin Classifier is better than the others because it maintains an equal distance from both the classes; this performs better on the test set.
+
+State whether true or false. The maximal margin hyperplane is equidistant from both the classes, where 'distance' implies the distance of the closest point to the hyperplane.
+
+
+Yes. The margin should be selected in such a way that it has the maximum distance from both the classes. For example, if you want to categorise spam and ham by a plane, then the plane should be drawn in such a way that it is equally set apart from both the classes, i.e. 'spam' and 'ham'.
+
+Comprehension - Maximal Margin Classifier
+
+Please note that the following questions are not graded.
+
+ 
+
+Consider a data set with two independent variables, say X1 and X2, and one dependent binary variable, Y, with two class labels denoted by +1 and -1. The data set is plotted, along with a separating hyperplane (h) in the figure below.
+
+
+
+If you compare the given hyperplane X1 = X2 with the general equation of a 2D hyperplane i.e Equation, you would have noticed that the given hyperplane can also be written as Equation.
+
+ 
+Consider the hyperplane shown in the figure above. What are the coefficients of this hyperplane?
+
+
+
+Now, if you compare it with the general form of the equation, you will get W0 =0, W1 = 1 and W2 = -1. Imposing the condition that the weights should form a unit vector, i.e. the squares of W1 and W2 should add to 1, Equation and Equation.
+
+
+
+

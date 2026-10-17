@@ -1,0 +1,223 @@
+Baseline Model for Imbalanced Data
+
+In the upcoming video, you will learn how to build a basic classification model on your data set without handling any class imbalance and see what the results are.
+
+00:00:00 - 00:06:07
+Introduction to Logistic Regression and Model Evaluation Metrics
+So, so now let's let's dive into some model building society. And so here, if you see, we'll start with building the basic model of logistic regression and, and I'm sure you might have already gone through the concepts of logistic regression. So this is a model which is used to model the probability of a certain class, maybe even where I'm trying to predict binary outcome or multivariable multivariate outcome. But but we'll stick to binary because our data set is binary. So we'll talk about binary outcome here. So when we are trying to predict say for example, whether the person is will pass, fail on on certain exam, whether they are in a game of cricket, whether India will win or lose. Similarly, if a person whether is healthy or is sick. And in our case, we are trying to predict whether the policy holder will file a claim or will not file a claim. So therefore this is where we use the logistic regulation. So, so here what I'm trying to do is I'm loading some of the libraries, important libraries which will help us run the model. So first one, if you see from collections we have I'm importing counter. So this will help me during the resampling phase where where I'll use this counter, which is a container which holds the account of each elements present in that container. And so this container is typically it's a part of the module called collections and it's a subclass of a dictionary. And what it does is it, it, it tracks, it tracks how many times the values were added to it. So it will give us the total number of values added in that particular container. So we'll we'll see when we do the resampling. So then I'm importing from SQL linear model, I'm just importing logistic regression and then I'm importing from a scalar metrics scores where we'll be tracking all the performance like precision scores, recall score, confusion metrics, classification report, accuracy score and F1 score. As we discussed these classification report is where we'll get a good report which will have all the metrics on precision recall and it will also give us predictions, measurements on our zeros and one separately. Confusion matrix is where I'll have those actual and predicted 0 ones. So we'll see that. So now here if you see I have I'm calling the logistic regression model here. And then after I call logistic regression, I am fitting that with my training data set. So you remember we created the split of our data set into train and test. So whenever we try to train the model, we try to train the model in our training data set. So I'm fitting my logistic regression model in my train data set. And now if you see I am trying to predict in my test set. So how is my training set? The model that I trained let me predict on my test set. So once I predict on my test set, here is where I am trying to predict all my print, all my scores, the performance scores, the evaluation metric that we talk about. So if you see I'm trying to predict here accuracy and accuracies, I'm calling the function of accuracy score where I'm trying to predict from the white test and the white pred that we predicted. So it will compare the white test, the actuals and it will compare the white pred that prediction that we did. So. So if you see the base logistic regression model where we didn't do any kind of imbalance treatment or we haven't done any kind of you know, methodology we have added to handle that class imbalance. So if you see here, we do have accuracy of 96.355 but we are not having any other metrics of say F1 score, recall or precision. Those are like zeros. And if you see here in the classification report, so we see a good predictions for zeros. As I mentioned earlier, whenever we have a problem of class imbalance, the model itself tries to predict for all the zeros or the majority classes. And for once, we see a terrible model. And as you can see here, we have zero precision recall in F1 score. So when you see here confusion matrix, we can easily the zeros they present. So So what do we do when we have this model? So now, as we talked about, let's start exploring our class imbalance handling techniques.
+
+
+As you saw in the video, a logistic regression model with no class imbalance treatment yielded 96% accuracy and 0 values for precision, recall and F1 score. As you can clearly see, these results are quite misleading. Hence, you need to treat the class imbalance problem in order to derive genuine results from the model.
+
+ 
+
+Note that before going into different imbalanced class techniques, install the package imbalanced learn so that you don't face any difficulty in running the subsequent codes.
+
+ 
+
+pip install imbalanced-learn
+ 
+
+Now, we will discuss some sampling techniques which may help in making the dataset a bit more balanced.
+
+Undersampling Techniques
+
+
+We will now learn how to apply different class imbalance-handling techniques on different classification models and see how they help in making correct predictions of the minority class.
+
+ 
+
+First, we will discuss undersampling techniques, where we sample a fraction of the majority class to reduce its proportion.
+
+00:00:00 - 00:04:37
+Introduction to Random Under Sampling Technique
+So the first technique that we'll discuss here is random under sampling. So in random under sampling, it tries to remove randomly the samples which are in majority class. So, so as as you see here like we randomly remove majority class in observations and that in turn will help to balance the data set. This again may have some kind of a drawback where we might actually lose important information and it can also lead to bias. So what we are trying to do here is but we will try to see how if we are trying to remove the majority classes observation because since our data set is highly imbalanced and we see that we in majority class we have 96% which close to some 570,000 cases. So we will try to reduce those observations. And therefore what we do here is we are we are loading a package from from IMB learn. So imblearn is a Python package that offers number of resampling techniques which are like commonly used in in data set which has class imbalance. Therefore, if you see here from imblearn under sampling, I am importing random under sampler and so this random under sampler is what I'm passing it. Here I'm calling random under sampler and I'm just giving a random dates random stages generator seed where it will try to save all the samples with this seed number present. So if I run again next time I'll have the similar set with the same seed that I pass it. So random state of five here I mentioned can be any number and so so once I call my random under sampler, what I do here is then I create my new X&Y sampled training sets. So which I am calling it as X resampled under Sam under sampling and then Y resampled under sampling. And this is I'm passing it as under sampler here you see and then I'm trying to fit the resample method. So fit resample method is where it will run this under sampler method and then it it will run in X train and Y tree to get to a resampled set of my training set of X&Y. If you see here my XD sampled under sampled I got it as 30,000 rows which means that I have now reduced my size from like huge 500,000 rows to limited to 30,000 rows. And if I try to understand my split of my Y, the target variable. So now if you see if here it is like very evenly balanced. And as I talked about earlier, the counter methods you can see here and right now I'm using this counter. So I'm printing the method counter where it will collect all the items in Y resampled undersampled. It it it takes a count, it takes account of the items that are saved as zeros and that is saved as one. When I try to print this, I get this zero of 15,000 and ones of 15,000 on at six. So now it's, you can see that it's very balanced data set now. So we don't have any more problem of class imbalance. So now going back again, I do logistic regression. So what I'll do is I'll now try to run in my resample set.
+00:04:38 - 00:06:23
+Implementing Random Under Sampling with Imbalanced-learn
+So resample set is I'm calling it again logistic regression. And the sample called logistic regression and from logistic regression under sample I am fitting it as the earlier when I was trying to run the logistic regression I was fitting in my X train and Y train. Right now I am just replacing that with my X resampled under sample and then Y resampled under sample. So, so once I fit my model, testing model, I'm trying to predict that in my test set. So and in test set, if you remember, I have highlighted that the text test set remains the same. We are not doing any kind of sampling or any kind of another transformation in my test set. So test set remains same. However, what we are trying to do is we are trying to use the under sampled new model that we have built on the resampled set. We are trying to test in my, predicting in my test set. So that's what I have done here. So I am saying why Pred undersampled and run run the model that we have just trained logistification undersampled and predict in my using X test which is my test set and again as I mentioned earlier. So this is my printing all my performance metrics on accuracy, F1 score, recall, precision, classification report and confusion matrix.
+00:06:23 - 00:08:52
+Evaluating Model Performance After Random Under Sampling
+What we can see here we now have the output. So we can quickly recollect that when we tried running the model base model without doing any kind of resampling, we did not had any scores on F1 score. We could score or precision score. So those were still zeros and we only had accuracy of 96%. But right now if you see accuracy is close to 59 and we have F1 score of 8% and we call of 50 close to 54% like a 3.7. So which means that this is like kind of a decent model right now that we have built and we have tried to solve the problem of class imbalance. And then we are getting a good predictions on my actual actual yes or actual positive cases. So recall value of 53.4 tells me like 54 percentage of the times I'm able to correctly predict my ones. So which is which is what we look for right now. We are looking for that in this case, what is the right people that we are getting. So, yeah, so this this particular we can see it's a very, very decent model. And then we can see confusion matrix also here earlier when we we didn't do any kind of imbalance treatment or resampled our data set, we didn't had the confusion matrix which were like populated for all the four boxes were true positive, true negative and false positive, false negative. Right now we could see we do have confusion matrix that is populated and therefore we calculate all the matrix here based on the confusion matrix. So cool. So now what we can do is we have we let's try and go ahead some other techniques as well. So we will try exploring other techniques to to understand how best we can use those techniques and whether which kind of imbalance treatment helps our model to perform better.
+00:08:53 - 00:10:52
+Introduction to Alternative Under Sampling Techniques
+So in under sampling we do have a lot of other methods. So one is also around cluster centroids. The cluster Synthroid is a method that actually replaces the cluster of samples by the cluster Synthroid of a K means algorithm where the number of clusters is set by the level of under sampling. So that is again one of the method but. But right now we are not going through the entire list of under sampling methods. So we'll pick few of them which are like popularly known and used across the industry. So we'll go ahead and use atomic links. So atomic links is again one of the under sampling technique and in Tomic links, what happens here is we we try to reduce the size we try to under sample based on the distance measure. So, so so atomic links actually tries to remove unwanted overlap between classes where majority classes class links are removed until all the you know all minimally distance nearest neighbor pairs are of the same class. So what it tries to do is it tries to find the nearest neighbors of the majority class and tries to resample or tries to remove most of the similar or very close nearest neighbors which is kind of overlaps each other. So therefore we try to remove most of the, you know, majority cases and try to resample the data set.
+00:10:55 - 00:14:15
+Implementing and Evaluating Tomek Links Under Sampling
+So which means that it it's only few of the cases where we see very, very close, you know, a similarity or resampled the nearest neighbors, we try to remove those from our data set. So let's go ahead and load our under sampling techniques. So from I and we learn under sampling we import atomic links and right now we'll try to call domic links here and domic links here. We have to pass my strategy wherein strategy we are calling it as majority. So in majority we want to, you know, find the very close samples wherein we can easily try to get rid of those samples. Therefore I'm passing a sampling strategy of majority here. And if you see we are creating X resample domic and Y resample domic and trying to fit domic sample and the extreme and Y train so. So now we have created a new sample resampled data set and we can see here we have like close to 409 total free sample, which again means that we there are not many observations in the majority class which are like very, very close. Therefore we couldn't reduce to the level that we did in a random under sampling. So we still have like cases where we're still majority classes like height and that we can see after printing our wirey sample TOMAC. So we can see we still have zeros of 393 and two and the ones the positive cases of 15,000. But let let us run the model of logistic regression using the Tomic resample data set and we will try to see how our model is performing. So here again I am calling logistic regression. I am trying to fit in my new resample data set which is Tomic, X resample, Tomic and Y resample and I am trying to predict in my ex test using the the trained model on the Tom and Peterson. And therefore again here I am trying to print all my performance matrix and we see that this typically behaves similarly as we haven't done any kind of treatment. So also the reason here is again the atomic resampling method. We there isn't a case where Tomic has resampled into a size which will make our data set balanced data set the way we saw in our random under sample. Therefore we see the similar confusion matrix where we have we can see zeros and zeros which are like kind of. We are not able to predict any of the ones here.
+
+As you learnt, there are various methods of mitigating the problem of class imbalance. They are as follows:
+
+
+Random undersampling: In this method, you have the option of selecting fewer data points from the majority class for your model-building process. In case you have only 500 data points in the minority class, you will also have to take 500 data points from the majority class; this will make the classes balanced.
+
+However, in practice, this method is not effective because you will lose over 99% of the original data containing important information, which may lead to bias.
+
+ 
+
+ 
+
+Tomek links is one of the undersampling techniques that is based on distance measures. It removes unwanted overlaps between classes and the majority class links are removed until all the minimally distanced nearest neighbour pairs are of the same class. It tries to find the nearest neighbours of the majority class and resamples/removes most of the nearest neighbours that overlap each other.
+
+ 
+
+ 
+
+So, as you saw in the previous video, a logistic regression model built after applying random undersampling resulted in a fairly better model with 59% recall value. However, applying the tomek links technique did not provide satisfactory results. In the next video, you will apply other resampling techniques and see how the model performs.
+
+Oversampling Techniques
+
+00:00:00 - 00:03:37
+Introduction to Random Oversampling Method
+OK, so now we can understand and explore few of the areas on oversampling. So there is something we have are the method of random oversampling. In random oversampling, what we try to do is we try to randomly add more minority observations. And this is by typically we try to replicate our minority classes and create more increase the size of our minority classes so it can be done. So maybe we can increase it twice or twice or five times. So this is kind of one of the mostly used method and it is also has been, you know, most of the times that has proved to be robust method. But there is chances of, you know, getting prone to overfitting due to, you know, we try to replicate our data set which which which eventually gives us the same information and it's just a copy copying of our data set and increasing the size. So therefore it leads us to overfit the data. So from. So let's try and load and check how our routing sample data set is performing. So random oversampling here from IMB learn. You see from oversampling I am importing random oversampler and oversample is random oversampling and sampling strategy. Here I'm passing it as one. So one is the case where I want to do the oversampling technique and one is the positive class. So. So now then again I pass create my new resampled set of ** and Y and I pass my oversample. Where I have called the random oversampler method and I try to fit my oversample in the X train and the Y train model. So when I do that I have a set of like close to 800 and 800,000. So which means that if you remember we had like total set of close to 570 around for our their observations 570 thousands. And right now if you see here is so when we have resampled, it has increased the size of 1 and we haven't done anything on the majority class. So therefore the entire size of one has also increased. So therefore our total size, if you see here has been resampled to the zeros, zeros of 400,000. Similarly we have ones of 400,000. So which is really kind of a balanced set that we have. So now again, we call logistic regression, we run it, we train our model in our own sample data set.
+00:03:39 - 00:09:18
+Explanation of SMOTE Technique for Synthetic Sampling
+And yeah, and then we try to predict that in my test set and then we will see how my performance is across the various metrics. Again, we see that when we did a random oversampling, we still have a decent model. We still have a recall value of close to 53%. So 53 percentage of the times I am able to capture my recall value. So and we can see that confusion matrix as well. So again using over sampling, we still are overcoming the problem of class imbalance and we are trying to see that we have a recall value of 53%. There is one more few more. There are a lot of techniques in resampling methods. One of the again very recently it has been like very popular method, it's called smooth. So this actually tries to overcome the problem of random oversampling that we have where we talked about that it's just the resampling of creating the same sets. Therefore, there was a case of overfitting. So we will not try to create increase the R positive classes which will be a simple, you know, creating which application of those classes. Rather, what is more talks about is it is actually a technique which will actually create the minority class with a synthetic. So synthetic sample. So which means is it will not, it is not the exact replica of the of our minority class, but it is like pretty similar close to minority class. So let's try to understand this. So what the process is like, first what we try to we identify the feature vector and its nearest neighbor, and then we take the difference between the two, multiply the difference with a random #0 and one, identify a new point in the line segment, and add the random number to the feature. And then we repeat the process for identified feature vectors. So again simplifying this here is like just just try to visualize this plot here where we have a lot of values which are majority class and we have this red dots here which are the minority class. So now if so, here is what we will be focusing for our oversampling method. We want to increase the size of this red dots and we so let us zoom it. So when we zoom it, we see here the dots present here and and and what we try to do here is we try to kind of add add some points. If you see here a few circles are added here. So these are the synthetic circle. So how the synthetic circles are created? So these are created based on the nearest neighbors K nearest neighbors algorithm which actually tries to find the distance between the two elements and and then based on the distances and the maximum voting we we calculate the we put you know nearest neighbor kind of the two nearest neighbor or three nearest neighbor. So, so whatever maximum nearest neighbor, it finds the particular values who goes to the point. So here again, let me let me explain with this particular example. If you see here, some red dots are there and in this red dots I'm trying to find out some nearest neighbor. So if you see my nearest neighbor is around. So this red dot here and a red dot here and and within this red dot I create a line and then within this line I am just trying to multiply that with a random number this feature and create a one more synthetic samples. This this fashion is kind of repeated and we generate random samples by picking a point in the minority class and computing the K nearest neighbors for those point. So this is how we come up with the generation of the new synthetic points of our minority class. So coming back here again.
+00:09:18 - 00:11:17
+Implementation of SMOTE and Logistic Regression
+So right now I am importing my from IMB overland. I'm importing smooth which is the technique that we want to use right now. So for smooth I'm using a random state of 45 to generate a seed of 45 and K nearest neighbors is where I'm using 5. So based on a nearest neighbor algorithm it will try to identify 5 nearest neighbors and with that five nearest neighbors it will try to create the resample set. So then I am creating my resample set here of X&YI am trying to fit my smooth resample and on my X strain Y train. And then you see here is where I got my resample data set of 802,000. So again, I print here to see my wirey sampled set. And what we see here is again 0 or 409 one of 401. So which means that we have a balanced data set now. And then once we have the balanced data set, we run the similar logistic regression here. And on that logistic regressions mode, it's we pass that in the data set which is resampled or resampled. And then we predict from our model that we have trained to the test set. And therefore we see right now we after we print all the performance metric, we see that the model is still pretty decent and we are able to predict 50 percentage of times, we are able to predict the actual ones.
+
+
+Random oversampling: Using this method, you can add more observations from the minority class by replication. Although this method does not add any new information, there is no information loss. It may also exaggerate the existing information to a certain extent, leading to the problem of overfitting.
+
+ 
+
+
+
+Undersampling and Oversampling
+
+ 
+
+ 
+
+Synthetic minority oversampling technique (SMOTE): Using this technique, you can generate new data points that lie on the vector between two data points that belong to the minority class. These data points are randomly selected and then assigned to the minority class. This method uses the K-nearest neighbours to create random synthetic samples.
+
+ 
+
+The steps involved in this method are as follows:
+
+Identifying the feature vector and its nearest neighbour
+Taking the difference between the two
+Multiplying the difference by a random number between 0 and 1
+Identifying a new point on the line segment by adding a random number to the feature vector
+Repeating the process for identified feature vectors
+ 
+
+SMOTE
+
+ 
+
+New synthetic sample points are added between the two homogeneous class points.
+
+ 
+
+As you saw in the previous video, fitting a logistic regression model after applying the random oversampling technique and SMOTE gave us a recall value of nearly 53% and 50% respectively.
+
+ 
+
+Let's look into the next video to understand another technique, ADASYN.
+ADASYN and Combining Oversampling-Undersampling
+
+
+Now we will discuss another method, ADASYN, and see how we can also combine under- and oversampling.
+
+
+00:00:00 - 00:02:52
+Introduction to Addison: Adaptive Synthetic Sampling
+Right now then we have another technique called Addison. So Addison is Addison is nothing but like adaptive synthetic sampling approach. And what it does is actually this. This is built on top of smooth methodology and the only difference that Addison adds on to it is like it it kinds of uses a weighted distribution to different minority class examples. And it so that it is according to the level of the difficulty learning so that the model has some kind of, you know, difficulty in training and learning through those samples. So it generates those kind of samples which are based on the density distribution. Yeah. And as I mentioned, so most synthetic data are generated from minority class samples that are harder to learn as compared with those of the minority samples that are easier to learn. So the only difference here is like from SMART, we're creating samples here it's just adding some weightage weighted distribution, which makes it little harder for the model to understand and learn. So Sushir and Addison, we are over sampling, we are importing Addison and and we are trying to run random Addison methodology by calling a random sample for five and then and reverse here is again 5. So as I mentioned like in K nearest neighbor we create, we pass it the K nearest neighbors of five. Here again as a Addison we are passing like take a sample of five neighbors and then create the samples. Then we create X&Y resampled Addison samples and we fit the Addison that we have passed 2X train and Y train. And then we are here we got a set of 808,000. So right now if we see here, it's not the exact match that we could see in Addison approach, but we can see a little bit of increase in our ones, which is again, we will call it as a balance data set.
+00:02:55 - 00:03:55
+Logistic Regression on Resampled Addison Data
+And then we have our we'll run the logistic regression on our resample data set of Anderson and then we'll try to see predict in our X test and then we'll try to see the evaluation metrics. But this again is kind of a pretty decent model wherein I'm able to predict 51 percentage of the times of my total actual ESS so. So again, now after resampling and after balancing the data set using Addison, I'm still having a decent model. So this however has performed little better with small so. So there is one another approach which actually combines both the technique of under sampling, over sampling and under sampling.
+00:03:56 - 00:06:11
+Combining Under Sampling and Over Sampling: Smotomic Approach
+And for under sampling, what we use is domic links and for over sampling we use smart. So if you remember we talked about domic links where where it was trying to over sample our data set. And so right now what we'll try to do here is we'll try to create a combination of ports mode and, and Tomic. So Tomic, what it tries to do will be to try to reduce our majority class and using smoke will try to increase our minority class. So from smoke Tomic here, I'm from imblearn dot combine. I'm I'm loading smoke Tomic here and it's smoke Tomic. I'm passing a random state again of 45 and then I'm creating a sampled X samples motomic, Y samples motomic and then I'm trying to put in my X train and Y train data set which will give us a resample data set of X&Y which will be a smotomic resample data set. So once I do that, I have a data set which which is like totally balanced and then I try to run logistic regression and it's the same way that we have been doing in the past. I'm just trying to run through the logistic regression model and then I'm trying to predict using small atomic methodology. I'm trying to predict here my X text and then printing all my values, sorry performance values, performance metrics to see how it is.
+00:06:11 - 00:07:01
+Comparison of Sampling Techniques and Conclusion
+So it we can see here is like it is close to again 49.6 which is like 50 percentage. So it is again OK, but they didn't perform as good as our earlier approaches of random sampling, under sampling and smooth and Radisson. So this is how we kind of talked about all the five different type of approaches where we talked about random under sampling, random over sampling and in the random under sampling we talked about atomic links and then over sampling we talked about smooth Addison and combination of both over sampling and under sampling, which is more Tomic.
+
+
+ADAptive SYNthetic (ADASYN): This method is similar to SMOTE, with a minor change in the generation of synthetic sample points for minority data points. For a particular data point, it will add a number of synthetic samples that will have a density distribution, whereas for SMOTE, the distribution will be uniform. Here, the aim is to create synthetic data for minority samples that are harder to learn, rather than the easier ones. 
+
+ 
+
+To sum it up, the ADASYN method offers the following advantages:
+
+ It lowers the bias introduced by the class imbalance
+ It adaptively shifts the classification decision boundary towards difficult samples
+ 
+
+
+There is another approach that combines both the undersampling and the oversampling techniques. Tomek links and SMOTE were used for the undersampling and the oversampling techniques, respectively. Tomek links can be used as an undersampling method or a data cleaning method. So, Tomek links to the oversampled training set as a data cleaning method. Thus, instead of just removing the majority class examples using Tomek links, SMOTE tries to increase the minority class to balance the data set.
+
+ 
+
+So far, we have built a logistic regression model by applying different class imbalance techniques. Let’s summarise our results in the table below:
+
+ 
+
+
+
+ 
+
+In the next segment, we will build other classification models on the given dataset and see how the models perform.
+
+Identify the statements that are true.(Note: More than one option may be correct.)
+
+
+Undersampling adds minority class observations. --incorrect 
+
+Undersampling is a biased approach.Correct! Removing majority class observations from the data makes undersampling technique biased.
+
+Undersampling leads to information loss.Correct! Removing majority class observations by undersampling may lead to loss of important information.
+
+TOMEK is a technique based on undersampling.Correct! TOMEK is an undersampling technique that works on distance measure.
+
+Which of the following class imbalance techniques generates synthetic minority samples that are harder to learn and are based on a density distribution?
+
+ADASYN
+SMOTE
+TOMEK links
+
+Which of the following undersampling techniques work as a data cleaning method in a class imbalance problem?
+
+ADASYN
+SMOTE
+TOMEK
+
+In the car insurance claim prediction dataset, you observed that there were very few class 1 data points (approximately 4%). What could be a possible reason for this?
+
+
+The data collection process was flawed and hence, could not capture all the data.
+
+The dataset has duplicate entries of the class 0 causing an imbalance.
+
+In real life, the number of fraudulent transactions is few compared to the non-fraudulent ones and this data accurately represents it.Correct! Real-life datasets for credit card transaction would always look something like this as the number of genuine transactions is much higher than the fraudulent ones. Hence, we need to deal with such imbalance accordingly by using appropriate class imbalance methods.
+
+Select all that apply.
+
+SMOTE generates synthetic samples by placing points vectorially between two data points of the minority class.
+
+Unlike SMOTE, ADASYN helps create synthetic data for minority examples that are harder to learn, rather than the easier ones.
+
+For a particular data point, the number of synthetic samples that ADASYN will add will have a density distribution, whereas, for SMOTE, the distribution will be uniform.
+
+Select all that apply.
+
+Oversampling doesn't add any new information to the dataset.
+
+Oversampling leads to information loss from the dataset.
+
+Undersampling leads to information loss from the dataset.
+
+
+
+Both 1 & 2
+
+
+
+
+
+
+
+
+
+
