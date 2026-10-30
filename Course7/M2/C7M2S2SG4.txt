@@ -1,0 +1,445 @@
+Mathematics Behind Transformers
+
+
+You will now understand the mathematics underlying transformers, continuing the earlier discussion on attention mechanisms.
+
+00:00:00 - 00:00:19
+Introduction to mathematical concepts behind Transformers
+Now having this basic knowledge of, you know, high level understanding of Transformers, you will dive deep and understand the mathematics that goes behind the transforms. Now we have seen the intuition behind how attention works.
+00:00:19 - 00:01:02
+Matrix operations in attention mechanism
+Right now we need to understand mathematically what's happening. And this is just a fun line that I've added. Whenever we refer about, you know, deep learning models or in fact GPT's or Transformers, we tend to we see the people who tend to say that it is kind of a magic, right? I mean, I would like to refer this magic as a matrix, right? In these models, the magic essentially amounts to matrix because it is all matrix operations. It is all matrix multiplications when if not 2 matrixes multiplying, but a matrix multiplied with a vector and so on. South, you would see that the whole concept of attention mechanism that we intuitively discussed will come down to matrix multiplications.
+00:01:03 - 00:02:05
+Input sequence and vector representation
+So let us set up some notations and let the length of the input sequence be N that is, there are North words. When we say Python statement to print hello world, it is 123456 words. So that is the length of input sequence and the vector of each input is D1. That is very naive representation. The initial representation of these words, right? As we discussed earlier, the language that the computers understand is mathematics. So each word that we represent is using a input vector representation, which need not be. And obviously is not richer because the whole objective is to make them richer, right? So initial representation will be a very, you know static representation of a given token or a word and desired model size. That is as we know we have this Z1Z2 S and so on, right? So what is the desired length of these vectors? And we are representing it with D2, right? These are D2 cross one vectors, right?
+00:02:05 - 00:03:04
+Key matrices: query, key, and value
+That is the notation that we have. So now what we do is we construct this matrix called X input matrix which is size N cross D1. What does it mean? It means that we are stacking each input. Let's say X1 is the input. So we are keeping the X1 along its row, X2 along its row so on and so forth. XN along its row. So this becomes an north because N rows corresponds to north data points that is length of the input and columns correspond to the length of the input vector which is D1. So this is north cross D1 vector. Now matrices what are the key matrices in this setup? What are the matrix? So as we discussed it is all matrices right? You all know that we are getting these three things query key and value. How are they obtained? They are obtained using these three learnable parameters. So what does it meant by learnable parameter?
+00:03:05 - 00:04:11
+Learnable parameters in Transformers
+It means that these are what the transformer networks learn overtime period. Over training, the Transformers try to learn and best representation of WQWKWV such that the query key and values which are obtained using these matrices are optimal. If the query key and value obtained from these matrices are optimal, attention weights will be optimal. If attention weights are optimal, representation will be goodwill be optimal. If we get good representation, we get good result. So it all goes back traces back to optimally finding out or tuning or training these three matrices called WQ WKWV, each corresponding to query weight matrix, key weight matrix and value weight matrix. Given these three matrices, one obtains queries the query list for each input by simply multiplying X into WQ. This is what I referred when I said it's all matrix multiplication.
+00:04:12 - 00:05:06
+Matrix multiplication for queries, keys, and values
+We get queries of all the data points, that is all the input sequence by just multiplying X into WQ. What will be the dimension of X into West? QX is north cross D1 and WQ is D1 cross T2. So we end up with N cross D2 matrix. So along the rows we are having the data points, along the columns we are having query of each group member. That's our intuition, right? So here it is the query of each input element, right? So it is a query of each word. Similarly, you will have keys, again a matrix of size N cross T2, where along the rows you have the data points first word, second word, third word, and along the columns for each word you are having what are the key, what is the keys, what are the?
+00:05:06 - 00:06:18
+Attention mechanism and weighted combination
+Going back to our example analogy, it's what are the intuitions developed by each word. Similarly, VV is again a value matrix again of size N cross T2 along the rows. You are having the examples, Sorry, you are having data points, that is each element in the input sequence along the columns you are having what are the values obtained by these particular words? So now we got QK and V, we got query K and value. What is the next step? Next step is obtaining the attention. That's the next step. So attention given this query key and values is. So we discussed. What did we discuss in our analogy? Forget about softmax for now. It's a combination of all the values, right? We use this analogy of word called. We go back with collective wisdom, collective knowledge. So each representation is some combination of values of all the words, right? That's why you see at the end multiplied by V and then you have how much weight to be attended, how much weight to be assigned to each value vector, right?
+00:06:18 - 00:07:20
+Softmax function in attention weights
+For example, I am there is one word and the word attends to each value differently, right? How does that you know attention way to obtain? We know that query into K transpose. That is, you have some queries, others have some keys, how much they match. So Q into K transpose will give you how much importance an element I will give to each and every element in the matrix J. We will see an example so where things will get clear, but this is the first level of understanding the mathematics where all our intuitions will start coming, start falling in place. We know that it is a combination. It is a weighted combination of all the values of all the words that have been obtained and the attention weights are obtained through this notation. Q into K transpose that is the Q that is the Q vector of each query vector of each element gets multiplied, that is dot product with each and every key that will tell me how much it is important.
+00:07:21 - 00:08:18
+Transforming input to richer representation
+And the softmax as we discussed we want all the weights to sum up to 1, so we do the softmax operation. Softmax of any vector Z is essentially east power ZI divided by summation of east power ZI. That is, let us say you have 1-2 and three which you got as an output. Then you do E power one by east power one plus E power 2 plus E power 3, E power 2 by east power one plus E power 2 plus E power 3, E power 3 by east power one plus E power 2 plus E power 3. So as you would know, these three sum up to one, right? And so you have this. So this also allows us that you know these numbers to be negative and so on because exponential will convert any given number into a positive real line. So you do have this, you know, softmax function which converts the numeric numbers, the real numbers into a distribution.
+00:08:18 - 00:09:20
+Example of computations in attention mechanism
+That is given some numbers, which of course represents what are the weights, it translates them into, into the into a combination which sums up to 1 and which will say that, you know, this is what I am going to attend most to. So by doing this operation, we would have successfully transformed our input data set N cross T1 into a richer representation of size N cross T2, right? Because D2 is our desired model size. And by performing this operation right, we would have ended up with a matrix of size N cross T2, where along the rows you are having, you know the words in the input sequence, Along the columns you are having the richer representation, which is a collective knowledge of all the values of the other words. Depending on how important it is and depending on how much attention we give to each of the words, right, all these computations will become pretty clear when we see an example. And that is exactly what we are going to do.
+
+
+You learnt that deep learning models, such as transformers and GPTs, are often described as magical. However, this perceived magic is grounded in matrix operations. In transformers, all operations essentially involve matrix multiplications, whether between two matrices or between a matrix and a vector. The attention mechanism discussed earlier is fundamentally a series of these operations.
+
+
+Consider an input sequence of length Equation, meaning there are Equation words. Each word is initially represented by a vector of dimension Equation, which is a basic, static representation. The objective is to transform these initial vectors into richer representations of dimension Equation​. 
+
+
+This is achieved by constructing an input matrix Equation of size Equation​, where each row represents a word, and the columns represent the vector dimensions.
+
+
+From this input matrix, three key matrices: Query (Q), Key (K), and Value (V), are derived using learnable parameters Equation​, Equation​, and Equation​, each of size Equation × Equation. These parameters are learned during training to optimise Q, K, and V. 
+
+
+The Query matrix Q is obtained by multiplying Equation by Equation​, resulting in a matrix of size Equation​. The Key and Value matrices are similarly derived, each of size Equation.
+
+
+The attention scores, which determine how much focus each word should have on others, are calculated by taking the dot product of the Query matrix Q and the transpose of the Key matrix K. These scores are then normalised using the softmax function, which ensures that they sum to one and can be interpreted as probabilities.
+
+
+These attention weights are then used to compute a weighted sum of the Value matrix V, producing a transformed representation of the input sequence sized  Equation​, with richer vectors for each word.
+
+ 
+
+In summary, through these matrix operations, the model transforms the input from its original form Equation to a more informative representation Equation​, leveraging the entire sequence to assign appropriate attention to each word. 
+
+
+Next, you will explore this further with the help of a Python demonstration.
+
+Mathematics Behind Transformers: Python Demonstration
+
+
+You will now explore a Python-based demonstration of the attention mechanism. This demonstration explores the core operations behind an attention mechanism, showing how initial data points are transformed into queries, keys, and values and how attention scores are computed and normalised.
+
+
+00:00:00 - 00:00:19
+Introduction to mathematical concepts behind Transformers
+Now having this basic knowledge of, you know, high level understanding of Transformers, you will dive deep and understand the mathematics that goes behind the transforms. Now we have seen the intuition behind how attention works.
+00:00:19 - 00:01:02
+Matrix operations in attention mechanism
+Right now we need to understand mathematically what's happening. And this is just a fun line that I've added. Whenever we refer about, you know, deep learning models or in fact GPT's or Transformers, we tend to we see the people who tend to say that it is kind of a magic, right? I mean, I would like to refer this magic as a matrix, right? In these models, the magic essentially amounts to matrix because it is all matrix operations. It is all matrix multiplications when if not 2 matrixes multiplying, but a matrix multiplied with a vector and so on. South, you would see that the whole concept of attention mechanism that we intuitively discussed will come down to matrix multiplications.
+00:01:03 - 00:02:05
+Input sequence and vector representation
+So let us set up some notations and let the length of the input sequence be N that is, there are North words. When we say Python statement to print hello world, it is 123456 words. So that is the length of input sequence and the vector of each input is D1. That is very naive representation. The initial representation of these words, right? As we discussed earlier, the language that the computers understand is mathematics. So each word that we represent is using a input vector representation, which need not be. And obviously is not richer because the whole objective is to make them richer, right? So initial representation will be a very, you know static representation of a given token or a word and desired model size. That is as we know we have this Z1Z2 S and so on, right? So what is the desired length of these vectors? And we are representing it with D2, right? These are D2 cross one vectors, right?
+00:02:05 - 00:03:04
+Key matrices: query, key, and value
+That is the notation that we have. So now what we do is we construct this matrix called X input matrix which is size N cross D1. What does it mean? It means that we are stacking each input. Let's say X1 is the input. So we are keeping the X1 along its row, X2 along its row so on and so forth. XN along its row. So this becomes an north because N rows corresponds to north data points that is length of the input and columns correspond to the length of the input vector which is D1. So this is north cross D1 vector. Now matrices what are the key matrices in this setup? What are the matrix? So as we discussed it is all matrices right? You all know that we are getting these three things query key and value. How are they obtained? They are obtained using these three learnable parameters. So what does it meant by learnable parameter?
+00:03:05 - 00:04:11
+Learnable parameters in Transformers
+It means that these are what the transformer networks learn overtime period. Over training, the Transformers try to learn and best representation of WQWKWV such that the query key and values which are obtained using these matrices are optimal. If the query key and value obtained from these matrices are optimal, attention weights will be optimal. If attention weights are optimal, representation will be goodwill be optimal. If we get good representation, we get good result. So it all goes back traces back to optimally finding out or tuning or training these three matrices called WQ WKWV, each corresponding to query weight matrix, key weight matrix and value weight matrix. Given these three matrices, one obtains queries the query list for each input by simply multiplying X into WQ. This is what I referred when I said it's all matrix multiplication.
+00:04:12 - 00:05:06
+Matrix multiplication for queries, keys, and values
+We get queries of all the data points, that is all the input sequence by just multiplying X into WQ. What will be the dimension of X into West? QX is north cross D1 and WQ is D1 cross T2. So we end up with N cross D2 matrix. So along the rows we are having the data points, along the columns we are having query of each group member. That's our intuition, right? So here it is the query of each input element, right? So it is a query of each word. Similarly, you will have keys, again a matrix of size N cross T2, where along the rows you have the data points first word, second word, third word, and along the columns for each word you are having what are the key, what is the keys, what are the?
+00:05:06 - 00:06:18
+Attention mechanism and weighted combination
+Going back to our example analogy, it's what are the intuitions developed by each word. Similarly, VV is again a value matrix again of size N cross T2 along the rows. You are having the examples, Sorry, you are having data points, that is each element in the input sequence along the columns you are having what are the values obtained by these particular words? So now we got QK and V, we got query K and value. What is the next step? Next step is obtaining the attention. That's the next step. So attention given this query key and values is. So we discussed. What did we discuss in our analogy? Forget about softmax for now. It's a combination of all the values, right? We use this analogy of word called. We go back with collective wisdom, collective knowledge. So each representation is some combination of values of all the words, right? That's why you see at the end multiplied by V and then you have how much weight to be attended, how much weight to be assigned to each value vector, right?
+00:06:18 - 00:07:20
+Softmax function in attention weights
+For example, I am there is one word and the word attends to each value differently, right? How does that you know attention way to obtain? We know that query into K transpose. That is, you have some queries, others have some keys, how much they match. So Q into K transpose will give you how much importance an element I will give to each and every element in the matrix J. We will see an example so where things will get clear, but this is the first level of understanding the mathematics where all our intuitions will start coming, start falling in place. We know that it is a combination. It is a weighted combination of all the values of all the words that have been obtained and the attention weights are obtained through this notation. Q into K transpose that is the Q that is the Q vector of each query vector of each element gets multiplied, that is dot product with each and every key that will tell me how much it is important.
+00:07:21 - 00:08:18
+Transforming input to richer representation
+And the softmax as we discussed we want all the weights to sum up to 1, so we do the softmax operation. Softmax of any vector Z is essentially east power ZI divided by summation of east power ZI. That is, let us say you have 1-2 and three which you got as an output. Then you do E power one by east power one plus E power 2 plus E power 3, E power 2 by east power one plus E power 2 plus E power 3, E power 3 by east power one plus E power 2 plus E power 3. So as you would know, these three sum up to one, right? And so you have this. So this also allows us that you know these numbers to be negative and so on because exponential will convert any given number into a positive real line. So you do have this, you know, softmax function which converts the numeric numbers, the real numbers into a distribution.
+00:08:18 - 00:09:20
+Example of computations in attention mechanism
+That is given some numbers, which of course represents what are the weights, it translates them into, into the into a combination which sums up to 1 and which will say that, you know, this is what I am going to attend most to. So by doing this operation, we would have successfully transformed our input data set N cross T1 into a richer representation of size N cross T2, right? Because D2 is our desired model size. And by performing this operation right, we would have ended up with a matrix of size N cross T2, where along the rows you are having, you know the words in the input sequence, Along the columns you are having the richer representation, which is a collective knowledge of all the values of the other words. Depending on how important it is and depending on how much attention we give to each of the words, right, all these computations will become pretty clear when we see an example. And that is exactly what we are going to do.
+
+
+We began the setup process by importing the numpy library, which is essential for performing the matrix operations required in the attention mechanism.
+
+
+Next, we created a sample input_matrix using a random number generator. This matrix represents the initial data points that we will work with in our attention mechanism. The code demonstrating this is mentioned below.
+
+input_matrix = np.random.uniform(-1,1,size = (5,4))
+ 
+
+Here, input_matrix is a 5x4 matrix, representing 5 examples, each with 4 features. These are the initial representations of our data points.
+
+
+The next step involves initialising the weight matrices for the query (wQ), key (wK), and value (wV), which are essential for transforming the input data into the corresponding queries, keys, and values.
+
+wQ = np.random.uniform(-1,1,size = (4,8)) #d_2 = 8
+wK = np.random.uniform(-1,1,size = (4,8))
+wV = np.random.uniform(-1,1,size = (4,8))
+ 
+
+These matrices, randomly initialised to a size of 4x8, will convert the 4-dimensional input data into 8-dimensional queries, keys, and values.
+
+ 
+
+Now, to calculate the queries (Q), keys (K), and values (V), matrix multiplication is performed between the input_matrix and the respective weight matrices.
+
+Q = np.matmul(input_matrix,wQ) #X.W_Q
+K = np.matmul(input_matrix,wK) #X.W_K
+V = np.matmul(input_matrix,wV) #X.W_V
+ 
+
+The resulting matrices Q, K, and V each have a shape of 5x8, which indicates that there are now 5 queries, 5 keys, and 5 values, each represented by an 8-dimensional vector.
+
+ 
+
+The next operation involves computing the attention scores (QK) by multiplying the query matrix (Q) with the transpose of the key matrix (K).
+
+QK = np.matmul(Q,K.T) #Q.K^T
+ 
+
+This results in a 5x5 matrix, where each element represents the attention score between pairs of data points.
+
+ 
+
+The attention scores (QK) are then normalised using the softmax function to ensure they sum up to 1 across each row. This normalisation is crucial for converting the scores into probabilities.
+
+normalise_QK = []
+for i in range(5):
+    temp = [np.exp(QK[i,j])/sum(np.exp(QK[i])) for j in range(5)]
+    normalise_QK.append(temp)
+normalise_QK = np.array(normalise_QK)
+ 
+
+The resulting matrix, normalise_QK, is a 5x5 matrix, where each row contains normalised attention weights.
+
+ 
+
+Finally, the output representation is generated by multiplying the normalised attention weights with the value matrix V. This step combines the values in a weighted manner based on the normalised attention scores.
+
+Attention = np.matmul(normalise_QK,V)
+ 
+
+The resulting Attention matrix is a 5x8 matrix, which provides a richer representation of the original input data, reflecting the learned importance of each data point.
+
+ 
+
+This demonstration explores the core operations behind an attention mechanism, showing how initial data points are transformed into queries, keys, and values and how attention scores are computed and normalised. By gaining an understanding of these steps, you can gain insights into how attention mechanisms function within transformers, particularly in applications such as natural language processing.
+
+ 
+
+Feel free to experiment with different input sizes or modify the weight matrices to understand how the attention mechanism adapts to various scenarios.
+
+ 
+
+Next, you will learn about layers involved in the computation and training of the transformers.
+
+
+
+# Mathematics Behind Transformers — Step-by-Step Explanation
+
+The main idea of this lecture is:
+
+A Transformer converts the input words into richer representations using matrix multiplication, attention scores, Softmax, and weighted sums.
+
+You already understand the intuition behind Query, Key, and Value. Now let's connect that intuition to the actual mathematics.
+
+Think of it this way:
+
+- Query (Q): What information am I looking for?
+- Key (K): What information does each word offer for matching?
+- Value (V): What information should I contribute?
+- Attention: How much should I use each word's information?
+
+The mathematics performs these operations for all words together, rather than calculating them one by one.
+
+## 1. Start with the input matrix X
+
+The lecture uses this sentence:
+
+> Python program to print Hello world
+
+For simplicity, it treats this as six input tokens:
+
+Input sequence
+
+#### 1
+
+Python
+
+#### 2
+
+program
+
+#### 3
+
+to
+
+#### 4
+
+print
+
+#### 5
+
+Hello
+
+#### 6
+
+world
+
+Six tokens, so the sequence length N = 6.
+
+A computer cannot directly perform mathematical operations on words. Each token is first represented by a numerical vector.
+
+For example, imagine these simplified vectors:
+
+| Token   | Numerical representation |
+| ------- | ------------------------ |
+| Python  | [0.2, 0.5, 0.1, 0.8]     |
+| program | [0.3, 0.6, 0.4, 0.2]     |
+| to      | [0.1, 0.2, 0.7, 0.3]     |
+| print   | [0.8, 0.1, 0.2, 0.5]     |
+| Hello   | [0.4, 0.9, 0.3, 0.1]     |
+| world   | [0.5, 0.2, 0.6, 0.4]     |
+
+These are illustrative numbers, not actual embeddings from a trained model.
+
+Each vector has four numbers. Therefore:
+
+- Number of tokens = \\(N=6\\)
+- Initial vector dimension = \\(D_1=4\\)
+
+We stack all six vectors as rows to create the input matrix \\(X\\).
+
+\\[ X = \begin{bmatrix} - & X_1 & -\\\ - & X_2 & -\\\ - & X_3 & -\\\ - & X_4 & -\\\ - & X_5 & -\\\ - & X_6 & - \end{bmatrix} \\]
+
+Matrix dimension
+
+\\[ X \in \mathbb{R}^{6 \times 4} \\]
+
+How to read this: 6 rows represent six tokens; 4 columns represent four numerical features per token.
+
+## 2. Why do we need WQ, WK and WV?
+
+The initial vectors are not yet the contextual representations that attention needs.
+
+The Transformer applies three separate learnable weight matrices to the input:
+
+- \\(W_Q\\): Query weight matrix
+- \\(W_K\\): Key weight matrix
+- \\(W_V\\): Value weight matrix
+
+Suppose we want the model's internal representation dimension to be 8.
+
+Then each weight matrix has dimensions:
+
+\\[ W_Q,W_K,W_V \in \mathbb{R}^{4\times8} \\]
+
+Why 4 × 8?
+
+- 4 = input vector dimension \\(D_1\\)
+- 8 = desired output dimension \\(D_2\\)
+
+Dimension transformation
+
+Input matrix X
+
+# 6 × 4
+
+6 tokens × 4 features
+
+Three learnable matrices
+
+# 4 × 8
+
+WQ, WK and WV
+
+
+# Lecture Notes: Mathematics Behind Attention & Transformers
+
+Transformers convert static input tokens into rich, context-aware representations entirely through matrix operations: linear projections, dot products, row-wise softmax normalization, and weighted value aggregation.
+
+---
+
+## 1. Core Intuition: The Q, K, V Triad
+
+Before matrix algebra, each concept maps to an intuitive role in retrieval:
+
+| Component | Intuition | Functional Role |
+| --- | --- | --- |
+| **Query ($Q$)** | *"What information am I looking for?"* | Search query posed by token $i$ |
+| **Key ($K$)** | *"What information do I offer?"* | Matching key advertised by token $j$ |
+| **Value ($V$)** | *"What content do I contribute?"* | Actual semantic payload delivered to the output |
+| **Attention** | *"How much should token $i$ attend to token $j$?"* | Relevance score weighting the value vectors |
+
+---
+
+## 2. Input Sequence Representation
+
+Given an input sequence of length $N$ tokens (e.g., `"Python program to print Hello world"`, where $N = 6$):
+
+1. **Initial Vector Embedding:** Each token $i$ is converted into an initial embedding vector $x_i \in \mathbb{R}^{1 \times D_1}$, where $D_1$ is the input dimension.
+2. **Input Matrix $X$:** Stacking all token vectors row-wise forms the input matrix:
+
+$$X = \begin{bmatrix} — & x_1 & — \\ — & x_2 & — \\ & \vdots & \\ — & x_N & — \end{bmatrix} \in \mathbb{R}^{N \times D_1}$$
+
+* **Rows ($N$):** Number of sequence tokens.
+* **Columns ($D_1$):** Initial feature dimensionality per token.
+
+---
+
+## 3. Projection Matrices: Deriving $Q$, $K$, and $V$
+
+Initial embeddings are static and lack sequence-aware context. The model projects $X$ into three distinct spaces using learnable parameter matrices:
+
+* $W_Q \in \mathbb{R}^{D_1 \times D_2}$ (Query weights)
+* $W_K \in \mathbb{R}^{D_1 \times D_2}$ (Key weights)
+* $W_V \in \mathbb{R}^{D_1 \times D_2}$ (Value weights)
+
+Where $D_2$ is the target model projection dimension.
+
+### Linear Projections
+
+$$Q = X W_Q \in \mathbb{R}^{N \times D_2}$$
+
+$$K = X W_K \in \mathbb{R}^{N \times D_2}$$
+
+$$V = X W_V \in \mathbb{R}^{N \times D_2}$$
+
+### Dimensional Analysis
+
+$$\underbrace{(N \times D_1)}_{X} \times \underbrace{(D_1 \times D_2)}_{W} = \underbrace{(N \times D_2)}_{\text{Projected Matrix}}$$
+
+Every token now possesses an independent Query, Key, and Value vector of dimension $D_2$.
+
+---
+
+## 4. Computing the Attention Mechanism
+
+### Step 1: Raw Attention Scores ($QK^T$)
+
+The relevance (alignment) between every query $i$ and key $j$ is calculated via dot products across all tokens at once:
+
+$$S = Q K^T \in \mathbb{R}^{N \times N}$$
+
+$$\underbrace{(N \times D_2)}_{Q} \times \underbrace{(D_2 \times N)}_{K^T} = \underbrace{(N \times N)}_{S}$$
+
+* $S_{i, j} = q_i \cdot k_j^T$ represents the unnormalized affinity score between token $i$ and token $j$.
+
+### Step 2: Normalization via Softmax
+
+To convert unconstrained real values into a valid probability distribution where weights along each row sum to $1$:
+
+$$A = \text{softmax}(S) \in \mathbb{R}^{N \times N}$$
+
+Row-wise formulation for token $i$ attending to token $j$:
+
+$$A_{i, j} = \frac{\exp(S_{i, j})}{\sum_{k=1}^N \exp(S_{i, k})}, \quad \text{such that } \sum_{j=1}^N A_{i, j} = 1$$
+
+* Exponentiation ($\exp$) ensures non-negativity ($\ge 0$).
+* Denominator normalization guarantees all row elements sum strictly to $1$.
+
+### Step 3: Weighted Sum of Values
+
+The final output representation $Z$ (or $\text{Attention}$) is computed by taking a linear combination of all value vectors weighted by attention probabilities:
+
+$$Z = A V = \text{softmax}(Q K^T) V \in \mathbb{R}^{N \times D_2}$$
+
+$$\underbrace{(N \times N)}_{A} \times \underbrace{(N \times D_2)}_{V} = \underbrace{(N \times D_2)}_{Z}$$
+
+Row $i$ of $Z$ is now a contextualized representation of token $i$, incorporating relevant signals from all $N$ tokens in the sequence.
+
+---
+
+## 5. End-to-End Dimension Pipeline
+
+| Step | Operation | Input Shape | Transformation | Output Shape | Meaning |
+| --- | --- | --- | --- | --- | --- |
+| **1** | Token Embedding | Sequence of $N$ tokens | Lookup table | $X \in \mathbb{R}^{N \times D_1}$ | Static token vectors |
+| **2** | Projection | $X$ | $\times W_Q, W_K, W_V$ | $Q, K, V \in \mathbb{R}^{N \times D_2}$ | Functional vectors |
+| **3** | Alignment | $Q, K$ | $Q \times K^T$ | $S \in \mathbb{R}^{N \times N}$ | Raw pair-wise compatibility |
+| **4** | Normalization | $S$ | Row-wise Softmax | $A \in \mathbb{R}^{N \times N}$ | Attention probability weights |
+| **5** | Context Aggregation | $A, V$ | $A \times V$ | $Z \in \mathbb{R}^{N \times D_2}$ | Enriched contextual vectors |
+
+---
+
+## 6. Python Reference Implementation (NumPy)
+
+```python
+import numpy as np
+
+# 1. Hyperparameters
+N = 5   # Sequence length (tokens)
+D1 = 4  # Initial embedding dimension
+D2 = 8  # Projected representation dimension
+
+# 2. Input matrix X (5 tokens x 4 features)
+np.random.seed(42)
+X = np.random.uniform(-1, 1, size=(N, D1))
+
+# 3. Learnable projection weights
+W_Q = np.random.uniform(-1, 1, size=(D1, D2))
+W_K = np.random.uniform(-1, 1, size=(D1, D2))
+W_V = np.random.uniform(-1, 1, size=(D1, D2))
+
+# 4. Generate Queries, Keys, Values
+Q = np.matmul(X, W_Q)  # Shape: (5, 8)
+K = np.matmul(X, W_K)  # Shape: (5, 8)
+V = np.matmul(X, W_V)  # Shape: (5, 8)
+
+# 5. Raw alignment scores
+QK_T = np.matmul(Q, K.T)  # Shape: (5, 5)
+
+# 6. Row-wise Softmax normalization
+# Vectorized implementation: subtract max along axis=-1 for numerical stability
+exp_scores = np.exp(QK_T - np.max(QK_T, axis=-1, keepdims=True))
+A = exp_scores / np.sum(exp_scores, axis=-1, keepdims=True)  # Shape: (5, 5)
+
+# 7. Final contextual output
+output = np.matmul(A, V)  # Shape: (5, 8)
+
+print("Input shape: ", X.shape)
+print("Attention weights shape: ", A.shape)
+print("Enriched output shape: ", output.shape)
+
+```

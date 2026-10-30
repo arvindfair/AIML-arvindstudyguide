@@ -1,0 +1,1542 @@
+Module Overview
+
+
+Welcome to the module titled 'Transformers for Language Models'. 
+
+
+Language modelling has evolved from the usage of fixed word representations and sequential neural architectures to models that can represent meaning using full sentence context. Earlier approaches, including classical feature-based models and recurrent neural networks, process language in a step-by-step manner and rely on limited contextual windows, making it difficult to capture long-range dependencies and complex interactions between words. 
+
+
+In this module, we will explore how attention-based architectures overcome these limitations by enabling direct interactions between all parts of a sequence. It traces the progression from word-level representations and sequence-to-sequence models to fully attention-based Transformer architectures, which now form the foundation of most modern language technologies. 
+
+
+In this module, you will: 
+
+Understand how word embeddings represent semantic relationships between words 
+
+Study encoder–decoder architectures used for sequence-to-sequence tasks 
+
+Understand how attention mechanisms improve information flow during decoding 
+
+Learn about the structure and working of Transformer architectures 
+
+Compare different Transformer variants and their task suitability 
+
+Apply pre-trained Transformer models to practical NLP tasks using Python 
+
+Session Overview
+----------------
+
+Welcome to the session titled 'Context Behind Transformers'. 
+
+ 
+
+In this session, we will build the complete conceptual and practical foundation required to understand how sequence-to-sequence models work, how attention improves these models and why further architectural changes were needed to model language effectively. 
+
+ 
+
+In this session, you will: 
+
+Understand how word embeddings represent words as dense numerical vectors 
+
+Understand how encoder–decoder architectures perform sequence-to-sequence mapping 
+
+Learn how attention-based encoder–decoder architectures address fixed-context limitations 
+
+Understand the mathematical formulation behind attention score computation 
+
+Examine how attention models are trained within the sequence-to-sequence framework 
+
+Analyse the remaining drawbacks of encoder–decoder models even after introducing attention 
+
+ 
+
+By the end of this session, you will be able to explain how attention improves sequence-to-sequence learning and why further architectural changes were needed beyond attention-based recurrent models. 
+
+ 
+
+Let's get started by learning about word embeddings.
+
+
+Word Embeddings
+---------------
+
+Previously, you saw that machines cannot work directly with text and that words must be converted into numbers before carrying out modelling. However, simple counting-based methods do not capture relationships between words or similarities in meaning.
+
+ 
+
+You will now learn about word embeddings, which represent words as dense numerical vectors learnt from data. These representations allow models to capture semantic similarity based on how words are used across large text corpora. 
+
+
+00:00:05 - 00:01:07
+Introduction to Word Embeddings and Their Importance
+So in this session, let us delve deep into the word embeddings. So to understand the modern natural language processing, we first have to solve a fundamental problem which is like computers don't understand the words they understand just the numbers here what you are going to pass, right. So historically we can go those numbers by using A1 hot encoding where every word was a giant vector of zeros with just a single one present in the entire vector. But that method has a number soul for example, it will it does not know the relationship between the coffee and tea, right. So if you can see here the word embeddings are the solution. Further like instead of sparse massive vectors, we use dense fixed length vectors of the real numbers here, right? So think of this as the coordinates in a high dimensional space South if you let the visualization here.
+00:01:08 - 00:02:00
+Understanding High-Dimensional Space in Word Embeddings
+So in this 2D projection, you will notice something magical where the vector distance between the man and woman is almost identical to the distance between the king and the queen. So this is because the meaning is distributed across the dimensions here, like if one dimension represents the royalty and another represents the gender here. So basically the model can actually perform the linguistic algebra here. Like you know you can say that the king minus man plus woman equal to queen here. So these are in manually program. The model learns these representations automatically by looking at millions of the sentences and seeing which words will hang out together, right?
+00:02:01 - 00:03:07
+Word2Vec Framework and Distributional Hypothesis
+So let us see the word embedding where you know it is introduced in 2013 where this word embedding is not a single algorithm but a framework using shallow 2 layer neural networks. So the core philosophy of OTOVEC is called the distributional hypothesis. So for example you shall know the word by the company it keeps right? So for example if pizza on the hamburger, they both frequently appear near the word like delicious or eat. So in that case the model concludes they must be a similar entities, right? So this word work offers 2 main architectures where you know the 1st is a continuous bag of words where we look at the surroundings to guess the missing word in the middle of the context, right? I am in middle of the sentence. And the second is the skipgram where we take one word and try to guess what the surroundings look like here.
+00:03:07 - 00:05:03
+Continuous Bag of Words (CBOW) Model
+So basically both assumes the local context is the key to the semantic meaning, right? So let us delve into the continuous bag of words where think of, you know this CBO as a fill in the blank exercise, right? So look at the diagram here. So where we have our input words represented as you know, W t -, 2 to W t + 2, right? So these are our context words. These context words will pass into the projection layer. One critical thing to notice here is the word sum or we will also often do as an average here, right? So this continuous bag of words take all the vectors of the context words and combine them into single representations here. So basically it does not care about the order of the context word. That's why it is called bag of words. So takes the combined blur of a context and tries to output the specific target word, which is a WT here that fits in the centre. So it's essentially asking, given these four neighbors, what is the most likely word in the middle, right? So let us see how we need to prepare the data for this model. To prepare this data, we use a sliding window. So let's look at the sentence here. The quick brown fox jumps over the lazy dog, right? So if our window size is 2 and the target word is brown, here my context will be the quick fox jumps, right? These 4 words will be the my context, right? And let us say if the target word is quick, so my context is the brown fox.
+00:05:03 - 00:06:32
+Data Preparation for CBOW Model
+So basically for the target, we take the target word. That context, the words surrounded the target word will be your context, right? So basically the models receive this context as the input features and the target word as a label. So it does this millions of times and every time it gets a prediction wrong, it will adjust the words vector slightly so that next time the context vectors point more strongly towards the correct target vector. This is how we will prepare the training samples. Let us see the approach here which we already discussed where we take the contest window which surrounds a target word and then each context window is mapped to the vector using an embedding matrix here. And these vectors are then averaged or sum to get the final representation. And we pass this through the output layer to predict the target word here. In our case, it is sad, right? So this approach is very fast and works greater for the frequent words because it averages the context, right? It effectively smooths over a lot of the noise in the data here.
+00:06:33 - 00:08:42
+Skip-gram Model and Its Advantages
+So now let us see about the skip RAM where we will flip the script with the skip RAM. Meaning like while this continuous bag of words use the crowd to predict the individual, the skipgram uses the individual to predict this crowd. So if you look at here like the input we are passing is a single word which is WT. From this word, the model is trying to predict from West TT to West T2. So this sounds much harder, right? Like how can you know that what 4 words surrounds, let's say apple just by looking at the word apple here, right? It could be at a red apple or the apple fell from Oregon, many more, right? So because this task is harder, the model is forced to learn much more nuanced and detailed world representations to be the successful. So now let us look into the how to, you know, prepare the training samples for the skip graph, right? So in the skip RAM, we will basically create the page like from the word quick, we create a page like quick, the quick brown and the quick fox, right? And similarly, the brown is an input will create brown, the brown quick brown, fox and brown gems, right? So each of this is a separate training instances here. So basically the model takes this brown and asks is fox likely to be nearby and is though likely to be nearby, right? So this focus on individual pairs allows the skip dam to perform exceptionally well even with a small amount of data and is particularly good at presenting the real words because it does not average them away like continuous pack of voltas, right? So now let us quickly see the approach here where.
+00:08:43 - 00:10:12
+Comparison of CBOW and Skip-gram Models
+So we pick the SAT as in a target and we map SAT to its vector and the model then tries to independently predict the cat, The Dirty hair, right? So through millions of interactions, the vector of SAT learns that it is highly associated with the nouns like cat and the articles like the hair. So this creates a very rich embedding that captures not just what the word means, but the various types of environment it can survive in as well, right? So let us compare this continuous bag of words on the script gram, where here our focus is in the red box in the middle. So basically we are converging the information here whereas here the focus is the blue box in the middle where we are diverging the information. We are converging here and we are diverging information here. So just a rule of thumb, use continuous bag of words if you want something fast and you have the massive data set where you care most about frequent words in other way like use the skipgram if you have smaller data set or if you need the model to be very accurate with the rare or unusual words. Here let us move to the another word embedding which is called the glove.
+00:10:13 - 00:11:10
+Introduction to GloVe Word Embedding
+So the word to make you know it's about local context, meaning the words nearby, whereas the glove adds the global statistics. So basically the glove look at the cocurrence matrix of the entire corpus. So it looks at how often the ice appears with the water versus how often steam appears with the water, right? So by looking at the ratios of these probabilities, Glau captures global relationships more explicitly than the O2 way. So both models give us the same result, meaning a powerful mathematical way to represent the meaning of a human language here. So whether you use continuous bag of words or skip RAM or glove, you are turning a language into a map. And once you have that, you can navigate to any NLP tags from translation to the sentimental analysis. Right?
+00:11:11 - 00:12:56
+GloVe's Approach to Global Relationships in Language
+Now let us understand how this glove will work, right. So while word to like, you know, slides through the text like a magnifying glass, Glau takes a bird's eye view of the entire library library at once. So if you see here, this is the word cochrace matrix. So this table counts how many times the words like king queen appear, you know, near each of other across the whole data set here, right? This cloud does not just look at the counts, it looks at the ratio of the Co occurrences for example. So if you think about the ratio of I's appearing with the solid versus steam appearing with the solid, this tells the models a lot about the properties of those words, right? So the main training objective here is to fit this word vector so that their dot product equals the logarithm of their Co occurrence probability here. So through cost function minimization, the model shapes the embedding space like you know, as you can see in the graph here, this results in a space where similar words cluster together. And I mean analogy reasoning like as we discussed before, like king man plus woman is queen here, right? So this becomes mathematically possible because the global relationships are preserved here, right? Now, let us understand the fast text, which is another word embedding here.
+00:12:56 - 00:14:24
+FastText and Handling Rare Words
+So think of, you know, fastest fast text as a major upgrade to the upgrade to the Word 2X skid gram model here, right? So the biggest limitations of the Word 2X are you know the Glau is that they treats word as a atomic units, meaning they see apple and apples as 2 completely different and unrelated things, right? But fastest solve this by representing word as a bag of character of north grams here. Why does this matter at all? The thing is it allows the model to capture the internal word structure like the prefixes and the suffixes here. So let us say if the model knows that what pre and ING mean, it can understand a word that it has never seen before, right? So this makes Fastex incredibly powerful for rare words which does do not appear, you know, often enough to get their own vector. And it is also powerful for morphologically rich languages like, you know, German or Turkish, where the words change form the constantly, right? So it improves overall generalization compared to the whole word embeddings, right? Let us quickly understand the approach here.
+00:14:25 - 00:17:08
+Comparison of Word2Vec, GloVe, and FastText Models
+So where here if you see the word is split into the overlapping character N grams here. So for example if you see here this is split into multiple N grams here like where single single one of these tiny subword units has its own embedding vector here. So to get the final vector of the word, the model simply takes the sum of all its N gram embeddings. So by doing this if you encountered any unseen word or you know the out of vocabulary word during the texting, fast text model or embedding does not break right? So it just look at the subword units it does know and builds the representations from them right? So the training still follows continuous bag of words or the stick RAM objectives we discussed earlier, but now it has these deep subword features as well to draw the information from. Let's see the differences between the go to wear glow and the fastest, right? So if you see the word go to wear, this is predictive and focus on local context and it is highly efficient on the large data set. But strictly use whole words, meaning it cannot represent the unseen words coming to the glove. It's a count based and it is the best for capturing the global word patterns and statistics across the entire corpus that we provided. However, like Vortuvic, it is also limited to a fixed vocabulary. Meaning like if a word which is not present in the training set, the model is blind to it, right? And now coming to the fastest, this fastest is the modern powerhouse for flexibility. So by using the subword N grams, it is the only one here that handles out of vocabulary words effectively, right? So basically it will understand the parts of the words better given it a deeper unit of learning that it predecessors, right? So each of these models change the way we do an NLP like moving us from simple keyword matching to a word where machines can truly navigate the meaning and the structure of the human language here.
+
+
+
+ 
+
+You learnt that word embeddings represent each word as a fixed-length vector, where semantic relationships are reflected through geometric closeness in the embedding space. Words that appear in similar contexts tend to receive similar vector representations. 
+
+ 
+
+You explored several widely used methods for learning such embeddings: 
+
+Word2Vec, which learns embeddings using prediction-based training objectives: 
+
+Continuous Bag of Words (CBOW) predicts a target word from the surrounding context words. This encourages the model to learn how groups of related words jointly indicate meaning. 
+Skip-gram predicts surrounding context words from a given target word. This helps the model learn strong representations even for less frequent words.
+ 
+GloVe, which uses global word co-occurrence statistics to learn embeddings that reflect overall distributional patterns across the corpus.
+ 
+
+FastText, which represents words using character n-grams, allowing it to model internal word structure and handle rare or unseen words more effectively. 
+
+ 
+
+Although all these approaches capture useful word-level semantics, they assign only one fixed vector to each word, regardless of how that word is used in different sentences. This leads to important limitations that affect how meaning is modelled in real language use, which we will cover next. 
+
+
+
+# Transformers for Language Models — Visual Learning Guide
+
+Let's understand this module as if we're learning it together on a whiteboard. I'll turn the concepts into diagrams, examples, and simple visualizations rather than just repeating textbook definitions.
+
+The most important thing to understand is this:
+
+How do we teach a computer to understand the meaning of words, sentences, and eventually entire paragraphs?
+
+We'll build the understanding step by step.
+
+# 1. The big picture: How language models evolved
+
+Imagine you ask a computer:
+
+"What is the meaning of the word bank?"
+
+A computer doesn't naturally understand the word. It needs to convert language into numbers.
+
+Over time, NLP evolved through several stages.
+
+## Evolution of language models
+
+1. One-hot encoding
+   Words become large vectors containing mostly zeros.
+   Simple numerical representation
+2. Word embeddings
+   Words become meaningful, dense numerical vectors.
+   Semantic relationships
+3. RNN / Encoder–Decoder
+   Process words sequentially, one after another.
+   Sequence learning
+4. Attention mechanism
+   The model learns which words are important to other words.
+   Better context handling
+5. Transformers
+   Use attention to process relationships across the entire sequence.
+   Foundation of modern LLMs
+
+Think of it this way:
+
+- One-hot encoding: Knows the word's identity.
+- Word embeddings: Understands relationships between words.
+- RNN: Reads words one by one.
+- Attention: Looks at relevant words directly.
+- Transformer: Uses attention as its main mechanism to understand context efficiently.
+
+Now let's understand the first building block.
+
+# 2. Why do we need word embeddings?
+
+Computers understand numbers, not English words.
+
+For example:
+
+- King
+- Queen
+- Apple
+- Banana
+
+We need to convert these words into numbers.
+
+There are two major ways to do that.
+
+## A. One-hot encoding
+
+Imagine we have a vocabulary of only five words.
+
+| Word | Vector |
+| --- | --- |
+| King | \[1,0,0,0,0\] |
+| Queen | \[0,1,0,0,0\] |
+| Apple | \[0,0,1,0,0\] |
+| Banana | \[0,0,0,1,0\] |
+| Car | \[0,0,0,0,1\] |
+
+Visualize it:
+
+## One-hot representation
+
+King
+
+1
+
+0
+
+0
+
+0
+
+0
+
+Queen
+
+0
+
+1
+
+0
+
+0
+
+0
+
+Apple
+
+0
+
+0
+
+1
+
+0
+
+0
+
+Banana
+
+0
+
+0
+
+0
+
+1
+
+0
+
+Green represents 1; grey represents 0.
+
+What's the problem?
+
+The computer thinks King and Queen are just as different as King and Apple.
+
+It doesn't understand that King and Queen are related.
+
+One-hot encoding also creates very large, sparse vectors when the vocabulary is huge.
+
+## B. Word embeddings — the solution
+
+Instead of representing a word using thousands of zeros, we represent it using a small, dense vector.
+
+For example (illustrative values):
+
+| Word | Dimension 1 | Dimension 2 | Dimension 3 |
+| --- | --- | --- | --- |
+| King | 0.9 | 0.8 | 0.2 |
+| Queen | 0.9 | 0.7 | 0.3 |
+| Apple | 0.1 | 0.2 | 0.9 |
+| Banana | 0.2 | 0.2 | 0.8 |
+
+Now similar words can have similar vectors.
+
+## Imagine words as points on a map
+
+Dense Vectors: Capturing Meaning with Code | Pinecone
+
+[pinecone.io](<https://www.pinecone.io/learn/series/nlp/dense-vector-embeddings-nlp/?utm_source=chatgpt.com>)
+
+Conceptual visualization: semantically related words tend to be closer together.
+
+Think of it like Google Maps:
+
+- Similar locations are geographically close.
+- Similar words are numerically close in embedding space.
+
+Important: The actual embeddings usually have many dimensions, such as 100, 300, or more. We visualize them in 2D only to make them easier to understand.
+
+## C. The magic of word embeddings: Word relationships
+
+Consider this relationship:
+
+$$
+King-Man+Woman\approx Queen
+$$
+
+Visualize the relationship:
+
+## Word analogy
+
+Embedder — BGE documentation
+
+[bge-model.com](<https://bge-model.com/Introduction/embedder.html?utm_source=chatgpt.com>)
+
+This is a conceptual illustration of vector relationships, not a literal 2D measurement.
+
+What does this mean?
+
+The model learns relationships such as:
+
+- King and Queen share a royalty relationship.
+- Man and Woman share a gender relationship.
+
+Nobody manually programs these rules.
+
+The model learns them from patterns in millions of sentences.
+
+Remember: Word embeddings convert words into dense numerical vectors that capture semantic relationships.
+
+# 3. How does a model learn word embeddings?
+
+Now comes an important question.
+
+Who tells the computer that King and Queen are related?
+
+We train it using the surrounding words.
+
+This idea is called the Distributional Hypothesis.
+
+## Distributional Hypothesis
+
+"You shall know a word by the company it keeps."
+
+For example:
+
+- Pizza is delicious.
+- Burger is delicious.
+- Pizza is tasty.
+- Burger is tasty.
+
+What can the computer learn?
+
+Pizza and Burger often appear in similar contexts.
+
+Therefore, they probably have similar meanings or semantic roles.
+
+## Learning from surrounding words
+
+Pizza
+
+deliciouseatcheesetasty
+
+Burger
+
+deliciouseatmeattasty
+
+Similar surrounding contexts
+
+# Similar embeddings
+
+Two famous Word2Vec architectures use this principle:
+
+1. CBOW
+2. Skip-gram
+
+Let's understand them carefully.
+
+# 4. CBOW — Continuous Bag of Words
+
+Imagine I give you this sentence:
+
+"The quick brown fox jumps over the lazy dog."
+
+But I remove one word:
+
+"The quick \_\_\_ fox jumps."
+
+Can you guess the missing word?
+
+Probably "brown".
+
+That's exactly what CBOW does.
+
+CBOW = Surrounding words → Predict the middle word.
+
+## Visualizing CBOW
+
+## CBOW architecture
+
+Input context words
+
+Thequickfoxjumps
+
+Embedding layer
+
+Convert each word into a vector
+
+Average / Sum vectors
+
+# One combined vector
+
+Predict target word
+
+# brown
+
+Predicted word
+
+### How does CBOW work?
+
+Step 1: Take surrounding words.
+
+Step 2: Convert each word into an embedding vector.
+
+Step 3: Average or sum all the vectors.
+
+Step 4: Pass the combined representation through an output layer.
+
+Step 5: Predict the missing word.
+
+### What does Bag of Words mean?
+
+CBOW does not consider the order of context words when combining their vectors.
+
+For example:
+
+"The quick brown fox"
+
+and
+
+"The fox quick brown"
+
+would have the same combined representation if they contain the same context words.
+
+That's why it is called a Bag of Words.
+
+## Let's try CBOW yourself
+
+Practice questionFill in the missing word:
+
+"The quick \_\_\_ fox jumps over the lazy dog."
+
+brown Brown
+
+Car
+
+Water
+
+Correct\!CBOW uses the surrounding words to predict "brown".
+
+When is CBOW useful?
+
+- Fast training.
+- Large datasets.
+- Frequently occurring words.
+
+# 5. Skip-gram — The reverse of CBOW
+
+Now let's reverse the process.
+
+Instead of giving the computer surrounding words and asking it to predict the middle word, we give it one word and ask it to predict surrounding words.
+
+Skip-gram = Middle word → Predict surrounding words.
+
+For example:
+
+Input: Brown
+
+Predict:
+
+- The
+- Quick
+- Fox
+- Jumps
+
+## Visualizing Skip-gram
+
+## Skip-gram architecture
+
+Input word
+
+# Brown
+
+Embedding layer
+
+Convert Brown into a vector
+
+Predict surrounding words
+
+TheQuickFoxJumps
+
+### How does Skip-gram work?
+
+Step 1: Take one target word.
+
+Step 2: Convert it into an embedding.
+
+Step 3: Predict words that appear nearby.
+
+Step 4: Calculate prediction errors.
+
+Step 5: Update the embedding to improve future predictions.
+
+Unlike CBOW, Skip-gram creates multiple input-output training pairs from one target word.
+
+For example:
+
+| Input | Output |
+| --- | --- |
+| Brown | The |
+| Brown | Quick |
+| Brown | Fox |
+| Brown | Jumps |
+
+### Why is Skip-gram useful?
+
+Because it learns individual word-context relationships, it often performs well for rare words.
+
+# 6. CBOW vs Skip-gram
+
+This is a very important comparison for exams and interviews.
+
+## CBOW
+
+CBOW Model: Architecture, Gradients, and Word Embedding Training - Interactive | Michael Brenndoerfer | Michael Brenndoerfer
+
+# Many → One
+
+Context predicts target
+
+- Faster
+- Good for frequent words
+- Averages context
+
+## Skip-gram
+
+Word Embeddings - Complete NLP Series Part 4 - Wasil Zafar
+
+# One → Many
+
+Target predicts context
+
+- Often slower
+- Good for rare words
+- Learns individual pairs
+
+Remember this simple trick:
+
+- CBOW: Context Before Output Word.
+- Skip-gram: Single word predicts surrounding words.
+
+# 7. GloVe — Global Vectors
+
+Now let's learn another embedding technique.
+
+Word2Vec learns by predicting words using nearby context.
+
+But GloVe takes a different approach.
+
+It looks at how frequently words appear together across the entire dataset.
+
+Imagine we have a collection of 1 million sentences.
+
+We create a co-occurrence matrix.
+
+## What is a co-occurrence matrix?
+
+It counts how often two words appear near each other.
+
+For example:
+
+| Word | Ice | Steam | Water |
+| --- | --- | --- | --- |
+| Solid | 50 | 2 | 20 |
+| Gas | 1 | 40 | 15 |
+| Liquid | 20 | 15 | 50 |
+
+## Co-occurrence visualization
+
+Imagine this as a frequency heatmap
+
+Ice
+
+50
+
+2
+
+20
+
+Steam
+
+1
+
+40
+
+15
+
+Water
+
+20
+
+15
+
+50
+
+Illustrative values only. Actual co-occurrence counts depend on the corpus and context window.
+
+GloVe uses these global statistics to learn word vectors.
+
+The central idea:
+
+Words that have similar co-occurrence patterns tend to have similar representations.
+
+### Word2Vec vs GloVe
+
+- Word2Vec: Learns through local context prediction.
+- GloVe: Learns through global co-occurrence statistics.
+
+An easy analogy:
+
+Imagine Word2Vec is a student reading sentences one by one.
+
+GloVe is a student looking at a statistical summary of the entire library.
+
+# 8. FastText — Understanding parts of words
+
+Now imagine the computer encounters a new word:
+
+"Playing"
+
+But the model has only seen:
+
+- Play
+- Played
+- Player
+
+A traditional whole-word embedding model might not know "Playing" if it was absent from its vocabulary.
+
+FastText solves this by breaking words into smaller character groups called character n-grams.
+
+For example:
+
+Word: Playing
+
+Some character groups:
+
+- pla
+- lay
+- ayi
+- yin
+- ing
+
+## How FastText sees a word
+
+# playing
+
+Original word
+
+Break into character n-grams
+
+pla
+
+lay
+
+ayi
+
+yin
+
+ing
+
+Combine subword embeddings
+
+# Word vector
+
+The model combines the embeddings of the character n-grams to construct a word representation.
+
+This helps it understand:
+
+- Rare words.
+- Unseen words.
+- Prefixes and suffixes.
+- Morphologically rich languages such as German and Turkish.
+
+For example:
+
+If it knows "play", it can use the shared subword structure to help represent "playing".
+
+Important: FastText still needs to learn useful subword patterns during training. It does not automatically understand every new word perfectly.
+
+# 9. Word2Vec vs GloVe vs FastText
+
+Let's put everything together.
+
+| Feature | Word2Vec | GloVe | FastText |
+| --- | --- | --- | --- |
+| Approach | Predictive | Count-based | Predictive + subwords |
+| Context | Local | Global statistics | Local + subword units |
+| Word structure | Whole words | Whole words | Character n-grams |
+| Rare words | Can struggle | Can struggle | Better handling |
+| Unseen words | Limited | Limited | Can construct vectors |
+
+## Which one should you choose?
+
+Word2Vec in NLP - Scaler Topics
+
+Word2Vec
+
+When you want to learn word relationships through prediction.
+
+GloVe: Word Embeddings via Co-Occurrence Matrix Factorization - Interactive | Michael Brenndoerfer | Michael Brenndoerfer
+
+GloVe
+
+When you want to use global word co-occurrence patterns.
+
+Arithmetic Properties of Word Embeddings | by Hicham EL BOUKKOURI | data from the trenches | Medium
+
+FastText
+
+When word morphology and rare or unseen words matter.
+
+# 10. The biggest limitation of traditional word embeddings
+
+Now comes the most important concept because it explains WHY Transformers became necessary.
+
+Consider the word:
+
+BANK
+
+Sentence 1: I deposited money in the bank.
+
+Sentence 2: I sat near the river bank.
+
+Does BANK mean the same thing in both sentences?
+
+No\!
+
+- Sentence 1: Financial institution.
+- Sentence 2: Side of a river.
+
+But traditional Word2Vec, GloVe, and FastText assign one fixed embedding to the word "bank".
+
+## The contextual meaning problem
+
+Sentence 1 I deposited money in the BANK.
+
+Financial institutionTraditional embedding: BANK → Vector A
+
+Sentence 2 I sat near the river BANK.
+
+River sideTraditional embedding: BANK → Vector A
+
+Problem
+
+## Same vector, different meanings
+
+This is called the limitation of static word embeddings.
+
+They cannot dynamically change a word's representation based on the sentence.
+
+## How do Transformers solve this?
+
+Transformers use contextual representations.
+
+Instead of giving BANK one permanent meaning, they examine the surrounding words.
+
+## Static vs contextual embeddings
+
+Traditional embeddings
+
+BANK
+
+# Vector A
+
+Same representation everywhere
+
+Transformer contextual representations
+
+"Money in the bank"
+
+# Vector A
+
+Financial meaning
+
+"River bank"
+
+# Vector B
+
+River-side meaning
+
+That's the fundamental difference\!
+
+The Transformer learns the meaning of a word from its context.
+
+And the mechanism that makes this possible is called Attention.
+
+We'll explore it in the next part of your module.
+
+# 11. Check your understanding
+
+Let's test whether you've understood the important concepts.
+
+Knowledge check
+
+6 / 6 answered
+
+1. What is the main purpose of word embeddings?
+
+0 Convert words into meaningful dense vectors
+
+Convert words into images
+
+Remove words from sentences
+
+Correct
+
+Word embeddings represent words as dense numerical vectors that capture semantic relationships.
+
+2. Which Word2Vec architecture predicts the target word from surrounding words?
+
+Skip-gram
+
+1 CBOW
+
+GloVe
+
+Correct
+
+CBOW combines surrounding context vectors to predict the middle word.
+
+3. Which architecture predicts surrounding words from one target word?
+
+CBOW
+
+GloVe
+
+2 Skip-gram
+
+Correct
+
+Skip-gram takes one word and predicts its nearby context words.
+
+4. Which embedding model uses global co-occurrence statistics?
+
+FastText
+
+1 GloVe
+
+CBOW
+
+Correct
+
+GloVe learns word vectors using global word co-occurrence statistics.
+
+5. Which embedding model uses character n-grams?
+
+Word2Vec
+
+GloVe
+
+2 FastText
+
+Correct
+
+FastText builds representations from character n-grams, helping with rare and unseen words.
+
+6. What is the main limitation of traditional word embeddings?
+
+They cannot represent words as numbers
+
+1 They give a word one fixed vector regardless of context
+
+They cannot learn from sentences
+
+Correct
+
+Traditional static embeddings assign one fixed representation to a word, even when its meaning changes with context.
+
+ Check my answers # 6 / 6 correct
+
+ Try again
+
+# 12. Your complete mental map
+
+Before moving forward, remember this entire flow:
+
+## From words to Transformers
+
+Raw text
+
+# "The king is powerful"
+
+Word representations
+
+One-hot encoding → Dense embeddings
+
+Embedding learning techniques
+
+- Word2Vec (CBOW and Skip-gram)
+- GloVe
+- FastText
+
+Limitation
+
+One fixed vector cannot represent every contextual meaning.
+
+Attention mechanism
+
+Understand relationships between words using context.
+
+# Transformers
+
+Context-aware language modelling
+
+My recommendation for studying this module: Don't memorize all the algorithms first. Understand the problem each algorithm solves, how it works, and what limitation remains.
+
+The most important transition to remember is:
+
+Word embeddings teach computers what words are related. Attention teaches computers which words are related in a particular sentence.
+
+That's the bridge between traditional NLP and Transformers.
+
+Limitations of Word Embeddings
+-----------------------------
+00:00:00 - 00:02:00
+Limitations of Context-Agnostic Word Embeddings
+While classical models like Word to Word, Glove and the Fastix revolutionized NLP by representing word as a dense vector, they are very far from perfect right? So they operate under set of constraints that often Causeway them to fail in the real world linguistic scenarios here. So we are going to explore 4 critical areas where these embeddings fall short, and let's start with the first one, which is a context agnostic nature. So the core design of this model is to assign one fixed vector per word. Like. Think of this as you know some permanent ID card for a word that never changes, regardless of where that word appears in the entire context. So in a dictionary a word can have five different meanings, but in a word to word model it only has one set of coordinates in space S Because the same word has a exact same representation in all the sentences. The model is unable to handle the polysemy here, which is when one word has a multiple meanings. So let us consider an example of the word bank here, right? So if you see this, the bank, it can be used in the financial institution or it can be the river edge, right? So let us to consider quickly an example like I need to go to the bank to deposit a cheque. The word refers to your financial institution here. And similarly, we sat on the river bank to watch the right. The world refers to the edge of the body of water here. So in traditional word embedding space, the vector for the bank doesn't pick one side or the.
+00:02:01 - 00:04:09
+Grammatical and Entity Role Distinction Issues
+Instead, during training, the vector is pulled in both the directions, so the resulting vectors comes a mathematical average of the both the meanings, right? So mathematically, this average vector actually represents neither meaning well, right? So it ends up, you know, sitting in a number man's land between the finance and the geography here. So this is a massive limitation because a human language context is what gives a word its specific identity. Without context awareness, the model is essentially guessing the middle ground here, right? So now moving on to our second one, which is unable to distinguish grammatical or entity roles here. So basically these models focus on semantic similarity, like how often words appear near to each other, but they do not adapt to the syntax or the sentence structure here. So even if word changes its role from a noun to a verb or from a common object to a specific brand name, the vector remains static here. So consider the example here. Apple is a fruit here. Apple is a common noun belong to the category of the food here right? And consider another one apple released in new iPhone here. Apple is a proper noun is a specific organization or the entity here. So we are human. These are completely different concepts, right? But to a vote to web model the token Apple is just one entry in the lookup table. So it will always give the same vector irrespective of the meaning of the word, right? Because of this, the model cannot distinguish the common nouns versus company name or the category versus organization. So this create the significant issues for the task like named into recognition.
+00:04:10 - 00:06:06
+Limited Context and Long-Range Dependencies
+Like if you if your system is trying to extract the companies from the news feed, it might get confused when it sees words that have the dual roles leading to higher error rates in downstream applications because the under representation is simply too rigid here, right? And the another limitation is limited context and the long range dependencies here, right? To understand this we have to look at how these models are trained right? So most word embeddings use a small local context window. So usually it will be like 2 to 5 words to the left and the right right. This means that when a model is learning a word, only nearby words influence that learning right? But it is not always local, right? I mean, language is not always local. We often use long range dependencies where a word at the beginning of a paragraph determines the meaning of the word at the very end, right? So because relationships between distant words are not captured, the model lacks the global coherence here and the paragraph level and the discourse level meaning is completely ignored here. The model is near sighted and it sees the trees but never sees the forest here, right? For example, if you take if you take the text, let's start with let's say the scientist conduct an experiment and so and so and you give 5 sentences and later uses the word it a traditional embedding has no mechanism to link it back to the experiment or the scientist here, right? So these language dependencies cannot be modeled explicitly.
+00:06:08 - 00:07:48
+Implicit and Sarcastic Meaning Challenges in Word Embeddings
+So This is why these models struggle with summarization or the long form reading comprehension. They simply cannot remember what happened more than a few words before, right? So there is an another limitation where it fails with the implicit and sarcastic meaning here. So word embeddings usually focus on the word level semantic polarity meaning. If the word good appears, the vector for good is generally associated with the positive sentiment. However, these models do not explicitly model the sentence level mapping here, right? So let us consider the example. The movie is good. So here the model says good, assigns a positive vector, and correctly predicts a positive sentiment, which is good. Now the movie is so good it cured my insomnia. To a human, this is clearly sarcastic and negative. It's saying the movie was boring enough to put someone to sleep, right? But look at what happens in the model. The positive word embeddings like good and cured dominate the calculation. And the model doesn't understand the twist in the logic here. So it says good, cured and concludes the sentence is glowing praise, right? So the because the model lacks A holistic understanding of how words interact to create the irony of the sarcasm, it fails in sentimental analysis for any text that isn't literal here. So it cannot read between the lines because it is only reading the individual words in isolation here.
+
+You learnt that traditional word embeddings assign the same vector to a word across all contexts, which leads to several limitations; these are described below: 
+
+Context insensitivity: A word receives the same representation even when its meaning changes, such as 'bank' referring to a financial institution or a river edge.
+
+ 
+
+Inability to capture grammatical and entity roles: The same word vector is used whether a word appears as a common noun, a named entity or in different syntactic positions. 
+
+ 
+
+Limited the modelling of long-range dependencies: Training relies mainly on local context windows, which makes it difficult to capture relationships across longer spans of text. 
+ 
+
+Poor handling of sentence-level meaning: Subtle meanings involving negation, emphasis or sarcasm are not captured at the word level alone. 
+
+ 
+
+These issues arise because meaning is influenced by surrounding words and sentence structure, not just by individual word usage. Addressing these challenges requires models that generate context-dependent representations, where the embedding of a word changes based on its usage within a sentence.  
+
+ 
+
+This motivates models that produce representations that change based on surrounding words and sentence-level interactions, which will be covered in upcoming sessions. 
+
+# Limitations of Traditional Word Embeddings – Explained Visually
+
+Let's understand this as if we are building an NLP application.
+
+First, remember the three traditional word embedding techniques:
+
+1. Word2Vec
+2. GloVe (Global Vectors)
+3. FastText
+
+All three revolutionized NLP by converting words into numerical vectors.
+
+But they have one fundamental limitation:
+
+They assign one fixed vector to a word, irrespective of the sentence in which it appears.
+
+This is the starting point for understanding all four limitations.
+
+## 1. First understand how Word Embeddings work
+
+Computers cannot directly understand words like `Apple`, `Bank`, or `King`.
+
+So we convert words into numerical vectors.
+
+For example, imagine Word2Vec generates these vectors:
+
+| Word  | Vector (simplified) |
+| ----- | ------------------- |
+| King  | [0.8, 0.9, 0.2]     |
+| Queen | [0.7, 0.9, 0.3]     |
+| Apple | [0.1, 0.3, 0.9]     |
+| Bank  | [0.4, 0.6, 0.2]     |
+
+These numbers represent learned semantic relationships.
+
+Words with similar meanings tend to have vectors closer together in the embedding space.
+
+[From Words to Vectors: Understanding Word2Vec in NLP](https://images.openai.com/static-rsc-4/Pm4Zyx1Md5fGR_eBp_4lNoZh2e6SJyROeN68EBG3fyGrbTzCukRDK7TLdgNoldchLdl36LC4wM2VSohrKlbUTkgknY5GUl_dQWKvz1Zwtb7AEJ0sbV3d6TzLxNqbLqQ1-Yx-0veDThw07sdZQwm4emZl9rn9OdGK_6ZH3IGcpZ8?purpose=inline)
+
+[zilliz.com](https://zilliz.com/glossary/word2vec?utm_source=chatgpt.com)
+
+Think of every word as having a permanent address in a mathematical space.
+
+The problem? That address never changes, even when the meaning changes.
+
+## 2. Limitation 1: Context insensitivity (Polysemy)
+
+One word → One fixed vector
+
+First, understand a concept called Polysemy.
+
+Polysemy means one word can have multiple meanings.
+
+Consider the word BANK.
+
+[PSU banks must prioritise different sectors to avoid concentration risk - The Economic Times](https://images.openai.com/static-rsc-4/-cyTL82o5vfCYx2inOTsI1McItXK2u9NsBYdol7q6Eek0it-c5kpBhv4CXAiQAp6HK64jSJzrWfFEiUf3195jKqf3yYejFqBS72NrzmCT-2dxtKeBuWHCBjN-FbciWqdKD90eGxRrddEY3TV8Gv_lMl9E26Z1u68JR9F_TA7rm0?purpose=inline)
+
+Bank – Finance
+
+"I deposited money in the bank."
+
+Financial institution
+
+[nakolekmori — Petr Jan Juracka](https://images.openai.com/static-rsc-4/fWd6VNJ2wqgdZzM1JBufUgVxFZsGogJmizW4tmXVSneavPVylP5Y_Qd65DGoC9i6Gp7T1B1AmKge-DonRwOgxFCmgCPjeWTy5b_o-6l_CODupKoEPReUitFpzMm5PQpTYugUJcRRSxFY3xqcNifDj41QumCkyUw3F5XcTel82yE?purpose=inline)
+
+Bank – Geography
+
+"We sat on the river bank."
+
+River edge
+
+What does Word2Vec do?
+
+It gives the word `bank` exactly the same vector in both sentences.
+
+SAME WORD VECTOR
+
+# BANK
+
+## [0.45, 0.62, 0.31]
+
+Money context
+
+River context
+
+Illustrative representation of competing contexts, not actual Word2Vec training values.
+
+Why does this happen?
+
+During training, the model learns from surrounding words.
+
+- In financial sentences, BANK appears near money, deposit, cheque, loan.
+- In geographical sentences, BANK appears near river, water, shore, edge.
+
+Both sets of contexts influence the same bank vector.
+
+The vector may encode a mixture of the two usages. It is not necessarily a literal mathematical average, but it cannot create two separate representations for the same word.
+
+The problem: The model cannot dynamically decide which meaning of BANK is being used.
+
+### How contextual embeddings solve this
+
+Modern models such as BERT generate different representations depending on surrounding words.
+
+## Context-dependent representation
+
+"I deposited money in the bank."
+
+BANK → Financial meaning
+
+[0.82, 0.15, 0.64]
+
+"We sat beside the river bank."
+
+BANK → River meaning
+
+[0.12, 0.87, 0.35]
+
+Illustrative vectors: BERT calculates context-dependent representations rather than using a single fixed lookup vector.
+
+Remember for exams: Word2Vec, GloVe and FastText are context-independent embeddings. BERT is a contextual embedding model.
+
+## 3. Limitation 2: Unable to distinguish grammatical and entity roles
+
+Same word → Different roles → Same vector
+
+Let's understand this using APPLE.
+
+[Fresh red apple isolated on white. With clipping path](https://images.openai.com/static-rsc-4/6OTKmmAPIFT33dg5WYyBKOUq17b79US1mYxpBCwBKTGDYKh9DbAKiFIarDa5o6rZj53MzOoE2WsuaUhORL6chMNzQIxQ3Xz06E34O9FTcJchP_O8xpvo8-GLlKzynHqsTX5y2jQ1M8wEop2VvMjYWLEIAbXuNfJLJq5eDMOZpzam9PlqL8Q-XosODCIgDU5S?purpose=inline)
+
+Sentence 1
+
+Apple is a fruit.
+
+- Apple = Common noun
+- Category = Food
+
+[iPhone sales drop 19% in China as Huawei demand soars: Counterpoint](https://images.openai.com/static-rsc-4/unoPOG52LBwTBJIr22kL5J9nIQFLWmH-vB5XINB8W2C8ZFvggCT7d5cJRVMzMZKwyVdrPkV_-Pw1ikgi6jQU1alXNAY-SDICc4k-6INeYxR2eIdbHuIeQbvD6jL6mhXbGP9mNhuP13HWLdiJ8uhHbkL3sHIwSrokmjKxTVqdtpo?purpose=inline)
+
+Sentence 2
+
+Apple released a new iPhone.
+
+- Apple = Proper noun
+- Entity = Company
+
+A human immediately understands the difference.
+
+But traditional Word2Vec has one dictionary entry:
+
+## Embedding lookup table
+
+APPLE
+
+# [0.32, 0.71, 0.24]
+
+One fixed vector
+
+Fruit
+
+Common noun
+
+Company
+
+Named entity
+
+Both sentences retrieve the same vector for the token APPLE.
+
+Why is this a problem?
+
+Imagine you are developing an NLP application that extracts company names from news articles.
+
+Input:
+
+"Apple released its new product. I ate an apple yesterday."
+
+Your application needs to identify:
+
+- Apple → Company
+- apple → Fruit
+
+Traditional embeddings alone cannot distinguish these roles reliably.
+
+This affects tasks such as:
+
+- Named Entity Recognition (NER)
+- Part-of-speech tagging
+- Information extraction
+- Text classification
+
+Important distinction: The issue is not that Word2Vec has no semantic knowledge. It learns useful associations. The limitation is that its vector does not change according to the word's grammatical or entity role.
+
+## 4. Limitation 3: Limited context and long-range dependencies
+
+Can capture nearby words, struggles with distant relationships
+
+This is one of the most important limitations to understand.
+
+First, what is a context window?
+
+Traditional Word2Vec models often use a small window of nearby words to learn relationships.
+
+For example:
+
+" The scientist conducted an experiment in the laboratory."
+
+Suppose the context window is 2.
+
+Example: Context window = 2
+
+TARGET WORD: EXPERIMENT
+
+The
+
+scientist
+
+conducted
+
+an
+
+experiment
+
+in
+
+the
+
+laboratory
+
+← Nearby contextNearby context →
+
+Illustration: two words on either side are used as the local context.
+
+The model learns from nearby words.
+
+But consider this paragraph:
+
+> The scientist conducted an experiment in the laboratory. The experiment involved several chemical compounds. After collecting the samples, the scientist recorded the observations. The results were surprising because it revealed an unexpected reaction.
+
+Now consider the word it.
+
+What does it refer to?
+
+The intended reference is the experiment or its results, depending on the precise sentence structure.
+
+A model needs to understand relationships across multiple sentences to resolve such references.
+
+### Visualize the problem
+
+## Local context vs long-range context
+
+Traditional word embeddings
+
+Experiment
+
+Nearby words
+
+Focuses on local word relationships during training.
+
+Paragraph start
+
+Experiment
+
+Paragraph end
+
+It
+
+Long-distance relationship not explicitly captured
+
+Transformer-based models
+
+Experiment
+
+It
+
+Can learn relationships across distant tokens
+
+Self-attention allows a token to use information from other tokens in its input context.
+
+### What is a long-range dependency?
+
+It means one word's interpretation depends on another word that appears much earlier or later in the sentence or document.
+
+Examples:
+
+- Pronoun resolution: John bought a car because he needed it.
+- Subject-verb relationships: The list of items on the table is long.
+- Understanding references across paragraphs.
+- Connecting a question to information in an earlier paragraph.
+
+Why does this matter?
+
+Traditional word embeddings are not designed to understand the complete sentence or document.
+
+They are useful for learning local word associations, but they do not maintain a representation of the entire paragraph's evolving meaning.
+
+This affects:
+
+- Document summarization
+- Reading comprehension
+- Question answering
+- Coreference resolution
+
+### How Transformers improve this
+
+Transformers use a mechanism called Self-Attention.
+
+Instead of relying only on nearby words, self-attention allows each token to calculate how relevant other tokens are to it within the available input.
+
+[Attention Is All You Need - A Deep Dive into the Revolutionary Transformer Architecture | Towards AI](https://images.openai.com/static-rsc-4/b5A65KOih9ORcfOIhP6h0lYVZY5gph0Q13J0Xc4F6gAeVOI-jsGQ6oLv19yJC9GQvpwJVc51f7Jl8AZtKlTp1RCGlSlc3TF7wzgQ9IKUrtApNCR37Y24y1jEopwG5WUlEV37KfR3p_vvn21L6HmxUWEtZQ_XOdQQK6BV1WOx1to?purpose=inline)
+
+[towardsai.net](https://towardsai.net/p/machine-learning/attention-is-all-you-need-a-deep-dive-into-the-revolutionary-transformer-architecture?utm_source=chatgpt.com)
+
+For example, the word `it` can pay attention to `experiment`, `scientist`, or `results`, depending on the sentence.
+
+One important distinction: Transformers are not unlimited-memory systems. Their attention is constrained by the input context length, and ordinary BERT also processes a bounded input sequence.
+
+## 5. Limitation 4: Poor handling of implicit meaning, negation and sarcasm
+
+Word meaning ≠ Sentence meaning
+
+This is particularly interesting because humans understand things that are not explicitly written.
+
+Let's compare two sentences.
+
+Sentence A: Literal positive meaning
+
+"The movie is good."
+
+Positive sentiment
+
+Sentence B: Sarcastic meaning
+
+"The movie is so good it cured my insomnia."
+
+Negative sentiment (sarcastic)
+
+What the person really means: The movie was so boring that it made them sleepy.
+
+Look at the important words:
+
+| Word     | Typical association |
+| -------- | ------------------- |
+| Good     | Positive            |
+| Cured    | Positive            |
+| Insomnia | Negative condition  |
+
+A simplistic sentiment system that averages individual word scores may classify the second sentence as positive because of words like `good` and `cured`.
+
+But a human understands the irony.
+
+### Visualizing the difference
+
+Traditional word-level sentiment approach
+
+Good
+
+Positive
+
+Cured
+
+Positive
+
+Insomnia
+
+Negative
+
+## Potentially incorrect prediction
+
+A word-level scoring method may lean positive.
+
+Human interpretation
+
+# Sarcasm detected!
+
+"The movie was boring."
+
+The complete sentence changes how the positive words should be interpreted.
+
+### Another important example: Negation
+
+Compare:
+
+1. The food is good.
+2. The food is not good.
+
+Only one word changed: `not`.
+
+But the sentiment changed from positive to negative.
+
+A simple word embedding does not itself perform sentence-level sentiment reasoning. A downstream model might learn negation patterns, but a static embedding alone cannot dynamically change the representation of `good` based on `not`.
+
+Important: Traditional embeddings do not always fail at sarcasm or negation. A classifier trained with sufficient examples and suitable features may learn some patterns. The fundamental limitation is that the embeddings themselves do not encode the complete contextual interpretation.
+
+## 6. Let's consolidate all four limitations
+
+This table is important for your AIML examination and interviews.
+
+| Limitation                 | What goes wrong?                                     | Example                     |
+| -------------------------- | ---------------------------------------------------- | --------------------------- |
+| Context insensitivity      | Same word, different meanings, same vector           | Bank (money / river)        |
+| Grammatical & entity roles | Cannot dynamically distinguish word roles            | Apple (fruit / company)     |
+| Long-range dependencies    | Cannot inherently capture distant relationships      | Experiment → It             |
+| Sentence-level meaning     | Word-level meaning doesn't capture irony or negation | Good movie / Not good movie |
+
+## 7. The big picture: Traditional embeddings vs contextual embeddings
+
+Now connect everything you learned.
+
+## Evolution of word representations
+
+Traditional approach
+
+Word2Vec / GloVe / FastText
+
+# BANK
+
+## [0.4, 0.6, 0.2]
+
+One fixed vector
+
+The vector remains the same in different sentences.
+
+Modern approach
+
+BERT / Transformer-based contextual embeddings
+
+"Deposit money in the bank"
+
+## BANK₁
+
+Financial context representation
+
+"Sit beside the river bank"
+
+## BANK₂
+
+Geographical context representation
+
+The representation changes according to the surrounding context.
+
+[The Limitation of Static Embeddings Which Made Them Obsolete](https://images.openai.com/static-rsc-4/KWN5X4l3qJ9oEHsYWUPGaqJExvjMaGAcMTjfGo9AlCRW8QPKbRjg1UORS8xtsssoDVA0xjrphNV8_RHi6_dGcdgWF_3s2PmISpYWwc5yPKjd56ZcAXAVOzYZumXR8kVfI1eRM1qBcujAgx0xwW0QEAONhTLDx8FVCGcIn1EoD6E?purpose=inline)
+
+[blog.dailydoseofds.com](https://blog.dailydoseofds.com/p/the-limitation-of-static-embeddings?utm_source=chatgpt.com)
+
+### One important technical distinction
+
+| Model    | Embedding nature                 |
+| -------- | -------------------------------- |
+| Word2Vec | Static                           |
+| GloVe    | Static                           |
+| FastText | Static, uses subword information |
+| ELMo     | Contextual                       |
+| BERT     | Contextual                       |
+| GPT      | Contextual, transformer-based    |
+
+FastText is worth remembering: it improves handling of rare and unseen words by learning character n-gram representations. However, it still generates a fixed representation for a word rather than a context-dependent representation.
+
+## 8. Check your understanding – AIML exam practice
+
+Let's test whether you have understood the concepts rather than just memorized definitions.
+
+Knowledge check
+
+6 / 6 answered
+
+Q1. In Word2Vec, what happens when the word BANK appears in two different sentences?
+
+Two separate vectors are automatically generated
+
+The same fixed vector is used
+
+The model ignores the word
+
+A random vector is generated
+
+Correct
+
+Word2Vec learns one static vector per vocabulary word, regardless of its usage.
+
+Q2. Which problem is associated with the word Apple referring to both fruit and a company?
+
+Overfitting
+
+Long-range dependency
+
+Context insensitivity and entity-role ambiguity
+
+Vanishing gradients
+
+Correct
+
+The same word has different meanings and entity roles, but traditional embeddings use one vector.
+
+Q3. Why do traditional word embeddings struggle with long-range dependencies?
+
+They only represent numbers
+
+They rely heavily on local context during training
+
+They cannot tokenize sentences
+
+They only work with images
+
+Correct
+
+Small local context windows do not explicitly capture distant relationships across a document.
+
+Q4. What mechanism allows Transformers to connect distant words in their input?
+
+One-hot encoding
+
+Min-max scaling
+
+Self-attention
+
+K-means clustering
+
+Correct
+
+Self-attention lets tokens use information from other tokens in the input sequence.
+
+Q5. Why might a simple sentiment model misclassify 'This movie is so good it cured my insomnia'?
+
+It cannot recognize vowels
+
+Positive word scores may dominate without understanding sarcasm
+
+It cannot identify the word movie
+
+It always predicts neutral
+
+Correct
+
+Individual word polarity does not necessarily reflect the intended meaning of the complete sentence.
+
+Q6. Which of the following is a contextual embedding model?
+
+GloVe
+
+Word2Vec
+
+FastText
+
+BERT
+
+Correct
+
+BERT produces contextual token representations using Transformer encoders.
+
+# 6 / 6
+
+Your score
+
+Try again
+
+## 9. What should you learn next?
+
+The most important takeaway from this lecture is:
+
+Meaning is not just determined by an individual word. Meaning depends on the surrounding words, grammatical structure and complete sentence context.
+
+This is why NLP evolved from static embeddings to contextual embeddings.
+
+Your next learning sequence should be:
+
+1. ELMo: Introduced deep contextual word representations using bidirectional LSTMs.
+2. Attention mechanism: How a model identifies important words in a sentence.
+3. Transformers: How self-attention captures relationships between words.
+4. BERT: How bidirectional context helps generate contextual embeddings.
+5. GPT: How Transformer-based models use context to predict and generate language.
+
+If you understand why Word2Vec fails with BANK, APPLE, long-range dependencies and sarcasm, you already understand the motivation behind contextual embeddings.
+
+

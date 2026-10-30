@@ -1,0 +1,1901 @@
+Introduction to Encoder-Decoder Architecture
+
+Previously, you learnt why fixed word representations struggle to capture contextual meaning. To model entire sequences rather than individual words, language tasks are treated as input–output transformations. You will now learn about the encoder-decoder architecture, which was designed for this purpose, where an input sequence is encoded and then decoded into an output sequence, forming the basis of many sequence-to-sequence applications.
+
+
+00:00:00 - 00:00:23
+Introduction to sequence-to-sequence architecture
+Now I'll discuss one of the popular architectures which uses the sequence to sequence handling, which can essentially understand the context and give us quality kind of assessments or answers to the task that we like to do. So let's look at one of the popular architecture in this paradigm of encoder decoder.
+00:00:23 - 00:04:04
+Recurrent Neural Networks (RNN) and context preservation
+And let's consider the same example of sentiment analysis, right? So architecture will look like this. So it's uses typically what is called as a recurrent neural network. I request those who are not familiar to go and see what recurrent neural network works, how it works and what it does. It essentially preserves the context of a given sentence in the context of natural language processing. It has time dependency, so the sequence, it is a sequential model. So of course it has time dependency and processes sentences in in a sequence, right? So the way it works is as follows. And you have this. All recurrent units of course, as you would know, will share the same weights and so on, right? So let's say the movie is good, right? The first, a simple representation of the word called the is given and it processes, it computes, it takes it does what we all know as matrix operations and gives the context, right? It sends the context that has been obtained so far. OK. And the next cell, RNN cell, this is called an RN recurrent neural network cell, right? I mean, in fact, we are not limited to using just RNNS. You are free to use many other recurrent neural networks like LSTMS, bidirectional LSTMS, so on and so forth. But for the sake of discussion, let's you know, restrict ourselves to RNNS, RNN cells. And so the second block, the second RNN cell takes the new input. It is movie in its vector form, of course, along with the context, right? There are two inputs. Please note the difference. There is this context coming as an input and the current word, right? This is the current word. This is the current word, and this is the context. And what does this cell do? This cell takes the previous context, takes the current word, improves the context, and gives the new context to the next word, right? It's like you process an information, right? We take some prior information from our colleagues or friends, get the new information, make sense out of it and pass that context to the next word. And then we have ease as the next word. Again, the pro, the procedure is repeated. This is the current word. Now this is the current word and this is the context word. That is the context which captures what is happening so far. So this context has information about D and move in some vector representation and the current word is is. Again the same thing happens and we have new connection to our final word called good. And thanks to the parameter sharing that is the weights here in all the cells are being shared for all words. It can handle sentences of any length. We don't have to restrict our self to fixed length input and so on and so forth, right? So all these cells, RNN cells essentially share the weights between them. And as a result a sentence length is not an is not a problematic for us in this architecture. And finally, again the same procedure, the current word context and it emits a rich representation. Again, it emits A vector which is a which can be thought of as good representation of this sentence.
+00:04:05 - 00:06:05
+Training RNNs for sentiment analysis
+This vector represents the sentence. Of course the RNNS has some sort of limitations that the recent words are given more priority compared to earlier way earlier words. Which is understandable because by the time, imagine a sentence which is very long and by the time you reach the end of the sentence, the earlier representations might have been manipulated because matrix operations are happening and so on and so forth, right? So, but that can be overcome by using richer architectures like bidirectional LSTMS, LSTMS and so on, right? So we end up with this vector and then we take this vector, right? And we take this vector as an input to a simple feed forward neural network and try to classify whether it is a, a positive emotion or negative emotion negative. How do we do it? Again, it's because of data. Everything happens because of the data. So initially what would happen is if the model is not trained, this the movie is good is passed through. And then you get a vector, which initially might not be a good representation, of course, because the training hasn't happened yet. And then when it is fed to the feed forward neural network, it might say, hey, this sentence looks to me like a negative with .9 probability. Then we say that you are wrong, please go back and change all your weights. These weights the West and also the weights of FNN. So we can call this is W1 and the weights of FNN as W2 and the weights are optimized or the weights are changed so that eventually over training. Then by the end of the training this learns to say what we wanted to say. That is, if our data captures essentially all the components that is sarcasm, positive emotion, negative emotion. It's very important, of course, right?
+00:06:05 - 00:08:06
+Encoder-decoder mechanism in NLP
+Let's say you don't have sarcasm at all in our reviews. And how will the model learn? It's as good as the previous use case where word to work. If you deploy word to work without any additional training, it says the movie is so good that it cured, right? So it says positive. So even here, if we don't train it to do sarcasm, train it to identify sarcasm, even this model will essentially say that you know, it will not be learnt properly, it will not be trained properly and fails to identify certain modalities, right? So it's very important that our training data is robust and essentially captures all kind of important features that we want the model to achieve. So this is one of the models probably, you know, this is a very basic model. Of course, there are many more richer, very good models in the literature which you can go and look. As I said, there are many research papers that discusses this kind of sequence to sequence handling. I discussed a small, tiny bit of, you know, this architecture of encoder decoder. And here you would see that this portion is called an encoder, right? This is called an encoder architecture. You can treat this as an encoder. Why is it encoder as a name says right? It is encoding this given sentence into a vector, correct. So this is the movie is good is a sentence. This is being encoded in a form of vector and then this vector is being decoded. We can think for this application of this model as a decoder model. So this the job of the decoder is to decode as a name says given the input from the encoder, this model decodes that hey this is a sarcasm so it is negative, this is positive and so on and so forth. So this is a very popular encoder decoder mechanism where encoder is responsible for encoding the given sentence into a vector representation into a numerical vector representation.
+00:08:06 - 00:09:47
+Contextual word representation in NLP
+And the decoder takes this vector representation and tries to do the downstream task that you wanted to do translation essentially the same here, instead of having one simple FNN, FNN, you might again have an RNN which translates the given sentence into different target sentence. We will see this example in fact. So we will go there and we will discuss it in its entirety there. But this is a small concept of encoder decoder mechanism, which has now the power of now identifying the context of a word, right? If it is trained well, when we talk about the word called good in the word to work, it has only single representation there. It's a function which says good has this vector. But now depending on the context. So you can see how context is helping us in, you know, coming up with a good and better representation. The context here will help the model identify or qualify what is the actual meaning of code. What is an actual representation of code Correct. So that is an added advantage. The earlier word to work was a kind of a static model. The one which we discussed is a static model where for every given word it has one single vector representation. But here, along with the word, when we input this a representation of this word, it also has the help of. It can take the help of a context and come up with an associative or good representative vector that captures the semantics as well as the context of a given sentence, which is very crucial in many natural language tasks.
+
+
+ 
+
+You learnt that the encoder-decoder architecture is a popular framework for sequence-to-sequence tasks such as sentiment analysis. As the name suggests, the encoder-decoder architecture consists of two components - the Encoder and Decoder. The Encoder converts a sentence into a vector representation. The decoder uses this vector to perform the desired task, such as sentiment classification or translation.
+
+ 
+
+This architecture uses a recurrent neural network (RNN) to handle context and generate accurate assessments. An RNN processes the context of a sentence sequentially. 
+
+
+You then learnt how this model works with the help of the example sentence “The movie is good.”
+
+ 
+
+
+
+ 
+
+In the Encoder, RNN processes the word “The,” performs matrix operations, and generates a context. 
+This context is passed along with the next word "movie" to the next RNN cell. 
+Each RNN cell takes the previous context and the current word to generate a new context. 
+This process continues for each word in the sentence, with all RNN cells sharing the same weights, allowing the model to handle sentences of any length.
+The final output is a rich vector representation of the sentence, capturing its context and meaning.
+This vector is then fed into the Decoder, which uses a feed-forward neural network to classify sentiment, such as positive or negative.
+ 
+
+Initially, the model might not be accurate, but through training and adjusting weights based on feedback, it learns to improve its predictions. While RNNs can struggle with long sentences because recent words might overshadow earlier ones, more advanced architectures such as LSTMs or bidirectional LSTMs can help mitigate this issue.
+
+
+This encoder-decoder setup provides a more dynamic and context-sensitive representation of words than the static representations used in Word2Vec, enhancing performance in natural language tasks.
+
+ 
+
+Next, you will see an example which will help you in understanding this architecture. 
+
+
+
+# Encoder–Decoder Architecture in NLP – Learn Visually
+
+This lesson is the next step after understanding the limitations of Word2Vec, GloVe and FastText.
+
+The central idea is:
+
+Instead of understanding each word independently, let's process the entire sentence, build its context, and then use that context to perform a task.
+
+We'll use the example from your lecture:
+
+> "The movie is good."
+
+Imagine you are developing a machine learning application that reads movie reviews and predicts whether the review is positive or negative.
+
+Let's build the architecture step by step.
+
+## 1. First, understand the big picture
+
+An Encoder–Decoder architecture has two major components:
+
+1. Encoder: Reads the input and converts it into a numerical representation containing information about the sentence.
+2. Decoder: Uses that representation to produce the required output.
+
+Think about a translator.
+
+You give an English sentence:
+
+"How are you?"
+
+The encoder understands and represents the input. The decoder generates the translated sentence:
+
+"आप कैसे हैं?"
+
+The same architecture can perform different tasks:
+
+| Application        | Input              | Output              |
+| ------------------ | ------------------ | ------------------- |
+| Sentiment analysis | Movie review       | Positive / Negative |
+| Translation        | English sentence   | Hindi sentence      |
+| Text summarization | Long paragraph     | Short summary       |
+| Question answering | Question + context | Answer              |
+
+The encoder–decoder is a framework. The exact decoder depends on the task.
+
+## 2. Understand the Encoder using an RNN
+
+Let's take our example:
+
+"The movie is good."
+
+How can a machine understand this sentence?
+
+It cannot read the entire sentence like a human. An RNN processes it one word at a time.
+
+RNN stands for Recurrent Neural Network.
+
+The important concept is that an RNN carries information from the previous word to the next word.
+
+Imagine reading a sentence and remembering what you have read so far.
+
+## How an RNN reads a sentence
+
+INPUT WORD SEQUENCE
+
+The
+
+Word 1
+
+movie
+
+Word 2
+
+is
+
+Word 3
+
+good
+
+Word 4
+
+Each RNN cell receives the current word and the previous hidden state, then produces a new hidden state.
+
+Let's understand exactly what happens inside each cell.
+
+## 3. What happens inside an RNN cell?
+
+This is the most important concept in this lesson.
+
+Every RNN cell receives two inputs:
+
+- Current word (X): The word currently being processed.
+- Previous hidden state (H): Information remembered from all previously processed words.
+
+It combines both and produces a new hidden state.
+
+## Inside one RNN cell
+
+Mathematical representation
+
+\\[ h_t = \tanh(W_x x_t + W_h h\_{t-1}+b) \\]
+
+Don't worry about memorizing the formula yet. Understand what goes in and what comes out.
+
+| Symbol         | Meaning                         |
+| -------------- | ------------------------------- |
+| \\(x_t\\)      | Current word vector             |
+| \\(h\_{t-1}\\) | Previous context / hidden state |
+| \\(h_t\\)      | Updated context / hidden state  |
+| \\(W_x,W_h\\)  | Learned weights                 |
+| \\(b\\)        | Bias                            |
+| tanh           | Activation function             |
+
+Let's simulate this with our sentence.
+
+### Step-by-step processing
+
+Step 1
+
+Word: THE
+
+THE
+
+Current word
+
+RNN
+
+Process input
+
+H₁: Initial context
+
+Information processed so far
+
+Step 2
+
+Word: MOVIE
+
+H₁
+
+Previous context
+
+MOVIE
+
+Current word
+
+H₂: Updated context
+
+Information from THE + MOVIE
+
+Step 3
+
+Word: IS
+
+H₂
+
+IS
+
+H₃: Updated context
+
+Information from THE + MOVIE + IS
+
+Step 4
+
+Word: GOOD
+
+H₃
+
+GOOD
+
+## H₄: Final hidden state
+
+Representation of the complete sentence
+
+Notice the important pattern:
+
+- First word produces H₁.
+- Second word uses H₁ and produces H₂.
+- Third word uses H₂ and produces H₃.
+- Fourth word uses H₃ and produces H₄.
+
+This is how the RNN gradually builds context.
+
+Think of it like reading a book: You remember what happened in the previous sentences while reading the next sentence.
+
+The final hidden state is used as a summary representation of the input sequence in this basic architecture.
+
+## 4. What does weight sharing mean?
+
+Your professor specifically mentions that all RNN cells share the same weights.
+
+This is an important interview question.
+
+Imagine we have four words:
+
+The → Movie → Is → Good
+
+We unroll the RNN into four cells for visualization.
+
+## Same weights in every RNN cell
+
+THE
+
+RNN
+
+W
+
+MOVIE
+
+RNN
+
+W
+
+IS
+
+RNN
+
+W
+
+GOOD
+
+RNN
+
+W
+
+W₁ = W₂ = W₃ = W₄
+
+Same learned parameters reused at every time step.
+
+Important: These are not four independently trained networks.
+
+They are the same RNN applied repeatedly to different words.
+
+Why is this useful?
+
+Suppose you have:
+
+- Sentence 1: 4 words
+- Sentence 2: 20 words
+- Sentence 3: 100 words
+
+The same RNN cell and weights can process all these sequences. The number of processing steps changes, not the number of model parameters.
+
+This is called parameter sharing.
+
+## 5. Now comes the Decoder: How does the model predict sentiment?
+
+We have completed encoding.
+
+Our encoder has generated the final vector H₄.
+
+But how do we convert that vector into a meaningful answer?
+
+We use a Feed Forward Neural Network (FNN) as the decoder in the sentiment-classification example from your lecture.
+
+## Complete sentiment analysis architecture
+
+Input sentence
+
+# "The movie is good."
+
+## ENCODER
+
+RNN
+
+Reads each word sequentially and builds context.
+
+The → Movie → Is → Good
+
+Final context vector H₄
+
+## [0.72, 0.83, 0.21, ...]
+
+Illustrative numerical representation
+
+## DECODER
+
+Feed Forward Neural Network
+
+Uses the vector to predict sentiment.
+
+Positive
+
+# 95%
+
+Negative
+
+# 5%
+
+Illustrative probabilities, not actual model output.
+
+One clarification: In this example, the decoder is a classification network, not an RNN generating another sentence.
+
+For machine translation, the decoder can itself be a recurrent network that generates output words sequentially.
+
+## 6. How does the model learn? (Training process)
+
+This is where Machine Learning comes into the picture.
+
+Initially, the model does not know how to classify reviews.
+
+Let's imagine the model receives:
+
+"The movie is good."
+
+But initially, it predicts:
+
+Initial prediction – Before training
+
+Input: The movie is good.
+
+Positive
+
+# 10%
+
+Negative
+
+# 90%
+
+The prediction is incorrect because the correct label is Positive.
+
+Compare prediction with actual label
+
+Actual answer: POSITIVE
+
+Predicted answer: NEGATIVE
+
+Backpropagation
+
+Calculate the error and adjust the model's weights.
+
+After sufficient training
+
+Positive
+
+# 95%
+
+Negative
+
+# 5%
+
+### Which weights are updated?
+
+There are two sets of learned weights in this example:
+
+| Weights | Belong to            | Purpose                                         |
+| ------- | -------------------- | ----------------------------------------------- |
+| W1      | RNN Encoder          | Learn how to process words and preserve context |
+| W2      | Feed Forward Decoder | Learn how to classify the sentence              |
+
+The training process calculates the loss and uses backpropagation through time (BPTT) to update the RNN weights, along with backpropagation for the classification network.
+
+This process repeats across many labelled examples.
+
+### Very important: What about sarcasm?
+
+Your professor makes an important point here.
+
+Suppose your training data contains only:
+
+- This movie is good. → Positive
+- This movie is excellent. → Positive
+- This movie is fantastic. → Positive
+
+But it never contains sarcastic sentences.
+
+Then you give it:
+
+"This movie is so good it cured my insomnia."
+
+Can the model reliably identify sarcasm?
+
+No. Not necessarily.
+
+Even though an RNN can preserve context, it still needs suitable training examples to learn the patterns associated with sarcasm.
+
+This is an important distinction:
+
+- Architecture provides the capability to learn.
+- Training data provides the examples from which it learns.
+- Training optimizes the model's parameters.
+
+A powerful architecture with poor training data can still produce poor predictions.
+
+## 7. What are the limitations of RNNs?
+
+Now you might ask:
+
+"If RNNs can remember previous words, why do we need LSTM, BiLSTM and Transformers?"
+
+Good question!
+
+The problem is that ordinary RNNs can struggle to preserve information from very early words in long sequences.
+
+Consider:
+
+> The movie, which was released several months ago and received many reviews from different critics, was surprisingly good.
+
+When the RNN reaches `good`, it has processed many words.
+
+Information from the beginning may become weaker as it repeatedly updates its hidden state.
+
+This is related to the vanishing gradient problem during training.
+
+## The memory problem in a basic RNN
+
+Earlier information
+
+The
+
+movie
+
+was
+
+released
+
+months
+
+ago
+
+Repeated recurrent processing
+
+Earlier information
+
+Possible loss of influence
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Conceptual illustration of fading influence, not measured RNN values.
+
+Final word: GOOD
+
+The network may not adequately preserve all earlier information.
+
+### How do LSTM and BiLSTM help?
+
+LSTM (Long Short-Term Memory)
+
+LSTM is an improved type of RNN that uses gates to control what information should be remembered, updated or forgotten.
+
+Think of it as a smarter memory system.
+
+It has three important gates:
+
+| Gate        | Responsibility                           |
+| ----------- | ---------------------------------------- |
+| Forget gate | Decides what information to discard      |
+| Input gate  | Decides what new information to store    |
+| Output gate | Decides what information to pass forward |
+
+BiLSTM (Bidirectional LSTM)
+
+A normal RNN processes words from left to right.
+
+A BiLSTM processes the sentence in two directions:
+
+- Forward: Left → Right
+- Backward: Right → Left
+
+Why is this useful?
+
+Consider:
+
+"I went to the bank to deposit money."
+
+The word `bank` can use information from both its preceding and following words. The word `money` provides a strong clue about its meaning.
+
+BiLSTM can combine information from both directions.
+
+## 8. Encoder–Decoder: Classification vs Translation
+
+One more important concept from your lecture.
+
+The same general architecture can solve different problems by changing the decoder.
+
+## One encoder, different decoders
+
+COMMON ENCODER
+
+## RNN / LSTM
+
+Reads and encodes the input sentence.
+
+Context representation
+
+## Numerical vector
+
+Decoder A: Classification
+
+Positive
+
+Predicts a class label.
+
+Decoder B: Translation
+
+Hindi output
+
+Generates a sequence of words.
+
+For translation:
+
+Input: "How are you?"
+
+Output: "आप कैसे हैं?"
+
+The decoder generates the output sequence one token at a time, using the encoded information and its previously generated tokens.
+
+This is why it is called a Sequence-to-Sequence (Seq2Seq) architecture.
+
+## 9. Compare everything you learned
+
+This is a useful interview and examination revision table.
+
+| Architecture | How it works                 | Main advantage                             |
+| ------------ | ---------------------------- | ------------------------------------------ |
+| Word2Vec     | One fixed vector per word    | Learns semantic similarity                 |
+| RNN          | Processes words sequentially | Maintains previous context                 |
+| LSTM         | RNN with memory gates        | Better long-term memory                    |
+| BiLSTM       | Processes in both directions | Uses past and future context               |
+| Transformer  | Uses self-attention          | Captures relationships across input tokens |
+
+## 10. Test your understanding
+
+Six practice questions
+
+6/6 completed
+
+1\. What are the two inputs received by an RNN cell?
+
+Two different sentences
+
+Current word and previous hidden state
+
+Only the previous word
+
+Only the final output
+
+Correct
+
+The RNN combines the current word vector with the previous hidden state.
+
+2\. Why do all RNN cells share the same weights?
+
+To make all words identical
+
+To reduce the number of trainable parameters and process variable-length sequences
+
+To avoid training
+
+To remove context
+
+Correct
+
+The same learned RNN operation is reused at every time step.
+
+3\. What is the final hidden state used for in the lecture's sentiment example?
+
+To delete the sentence
+
+To represent the sentence and feed the classifier
+
+To tokenize the words
+
+To translate the sentence
+
+Correct
+
+The final hidden state acts as a sentence representation for classification.
+
+4\. What is the purpose of the Forget Gate in LSTM?
+
+Generate output words
+
+Discard unnecessary information
+
+Convert text into images
+
+Calculate sentiment directly
+
+Correct
+
+The forget gate controls which information from the previous cell state should be retained or discarded.
+
+5\. What is the main advantage of BiLSTM?
+
+It uses only future words
+
+It uses only past words
+
+It processes context in both directions
+
+It removes all neural network weights
+
+Correct
+
+Forward and backward LSTMs provide information from both sides of a token.
+
+6\. If an RNN is trained only on literal positive reviews, what happens with sarcasm?
+
+It automatically understands all sarcasm
+
+It may fail because the training data lacks sarcastic examples
+
+It always predicts negative
+
+It does not require training
+
+Correct
+
+The architecture needs representative training data to learn sarcasm patterns.
+
+# 6/6
+
+Retry quiz
+
+## Final takeaway – Remember this flow
+
+## How NLP moved towards contextual understanding
+
+Word Embeddings
+
+Represent individual words numerically
+
+RNN Encoder
+
+Read words sequentially and preserve context
+
+Context Vector
+
+Numerical representation of the input sequence
+
+Decoder
+
+Classify, translate or generate output
+
+Useful NLP application
+
+The central concept to remember:
+
+Encoder = Understand and represent the input.
+
+Decoder = Use that representation to produce the required output.
+
+One final technical detail: the basic RNN encoder in your lecture compresses the sentence into one final vector. This can become a bottleneck for long sentences. Later Seq2Seq architectures introduced attention to let the decoder access different encoder states instead of relying only on one fixed vector.
+
+Your lecture's key points are supported by the supplied material.&#x20;
+
+Encoder-Decoder Model: Example
+------------------------------
+00:00:00 - 00:00:29
+Introduction to language translation using encoder-decoder model
+Now let us use the encoder decoder model for a different task called language translation, right? So what is an objective here? The objective here is to translate a sentence given in language A into language B. So that is the objective of language translation. More mathematically, we are given this sequence of words in a sentence of a sentence in language AX one till XTX, where TX is the length of the sentence.
+00:00:30 - 00:01:03
+Objective of language translation and word count differences
+And our objective is to translate this input sentence into language B consisting of these tokens. And these tokens are not just the words in the language B, but also the corresponding and correct translation of the sentence X. One important thing I want you to look at is the number of words in the source language. That is, language A is TX and number of words in language B when translated is Ty. And this is natural. You.
+00:01:03 - 00:02:23
+Encoder-decoder mechanism for language translation
+All of you will agree that the number of words to represent the same thing in two different languages can be different. Therefore, we use TX to represent the number of words to represent the sentence X in language A and Ty to be number of words that can capture the sentence in its translated language, P in a translated language again. So we know the encoder decoder mechanism that we have seen for sentiment analysis. Now let us use this popular mechanism for language translation task. Intuitively, what does this module do? There are two things here. 1 is encoder module. So the objective of this encoder module, as you can recall, is to encode this source language into a context into this concept called a context that represents this source language. Subsequently, the decoder will utilize this context and generate the target sentence. That is, translates this sentence given to us into a language B. So that is the high level intuition behind encoder decoder using used for your natural language task in general. But here the language translation. So let us diagrammatically see how this can be put into use.
+00:02:24 - 00:03:48
+RNN architecture for encoder-decoder model
+We will use a popular architecture called RNN for the encoder decoder purpose. So what happens in RNN? We first have an encoder for this sentence X given to us consisting of these vectors X1X2 till XPX. So the first cell of this RNN will take two things. What is my initial context? H1 represents the initial context initially you know this. You can randomly initialize it or take any 0 vectors and so on and so forth, right? H1 is current context because we haven't started any process. This current context is a trivial vector and I know you pass the first input X1 and what happens in the RNN cell, a function is being applied on this these two inputs X1 and H1 and it improves the context from H1 to H2. That is an objective of this particular RNN cell, right? A function is being applied on this inputs X1 and initial context H1 to generate an updated context H2 and the name recurrent right? So this process does not end here. We are processing all words in a sentence in a recurrent fashion, that is one step at a time.
+00:03:49 - 00:05:08
+Function and nonlinearity in RNN cells
+So again we have another RNN cell which ** 2 as an input and H2 is the context coming from the previous cell. And as you all know the most important component here is the same function is being applied on these two inputs X2 and H2. The same function that we use to process the input and the context in the first state is same as the function that we use to process the second input and the second state and then we get our updated context H3 right and so on and so forth. This process is repeated until the last X input vector XTX is processed and we end up with a context vector HTX. So to go in more details, you might be wondering what this function is. One example of this function is applying a matrix operation. So you can treat of this treat this function as some nonlinearity being applied on West transpose concatenation of these two inputs, that is XI and HI, right?
+00:05:09 - 00:06:02
+Decoder process and initial context
+So this nonlinearity can be for example, your Relu non activation or tan H activation and so on. And this is a vector that this module is supposed to learn optimally to in order to generate my next improved context at each state at each time point in this process. Now having obtained HTX, the decoder will start working now. So now what happened is the encoder has successfully understood or realized or extracted the important context of this particular input sentence that is X1 till XTX vectors and passes this information to the decoder. So decoder will start doing its work.
+00:06:02 - 00:07:13
+Decoder inputs and translation process
+Now again what is the objective of the decoder in order to generate right, correct and appropriate translation for this input sentence X1 till XTX and how does it do it again one word at a time. It generates one word at a time like in natural way that we humans translate a sentence. We do also translate one word at a time and then provide it as our output of your given input sentence. But what are the things that we look at in order to make this decision or translate a sentence is an important question to ask, right? So currently, what are the information that this decoder has? It has absolutely nothing. That is, it has some initial trivial context of the decoder. We can call it as S one, right? Again, as I said, S 1 can be a random vector or all a vector initialized everything to 0 and so on. South Forth and we pass saying hey, please start decoding. So we start providing the first input as saying hey, this is the time you start decoding and start generating the output.
+00:07:14 - 00:08:08
+Translation process and context importance
+Now can I just say this cell is executed and you get an output Y one the first output Y1 there is a missing component. I hope you can see it right. The missing component is, Please look at the context of the sentence, right? What sentence are you supposed to decode, right? That information has to be passed to the decoder, isn't it? Right. So you cannot just randomly translate it to any meaningless or an inappropriate sentence in a language B, right? The translation has to adhere to whatever is being asked as a translation in language A. So therefore even this information is being passed as an input to this particular cell. As a result, this particular cell will have 3 inputs #1A token which says start the translation #2.
+00:08:08 - 00:09:03
+Decoder state and translation steps
+What is the initial state of this decoder? Currently nothing. Its is a trivial vector. And then what is the context of the sentence that the decoder is supposed to translate, which is HDX? Wonderful. And taking these three things, the decoder will emit a first word called Y1 along with it. Because this is an RNN and a recurrent process, it also improves the state of the decoder from South one to S 2. Now what is South 2? S 2 is the current context of the decoded sentences. Decoded words. Sorry so far. So we have Y1. S 1 is your initial context. By emitting Y1 the state, we can call it. That is why I have to use the word S here. Use the letter S here. It represents the state of the decoder. Currently is S 2.
+00:09:04 - 00:10:03
+Translation entities and process repetition
+Now the same process repeats. So you have the second state of the decoder because the RNN same function is being applied and it takes the previous generated output which is Y1. Of course it needs the context, right? This is being supplied and it generates Y2, that is my next word and an improved or enhanced context called S 3. Now for a moment, let us think about it intuitively, right? If I ask you a question, if I give you a sentence in, let us say, a language English, and ask you to translate it into a different language, Hindi, right, At each process of the decoding translation, right? What are the entities that you look at? Suppose you have started the process of translation. You have given me the first word or let us say 2 words so far in order to generate the third word in your language, Hindi.
+00:10:03 - 00:11:04
+Translation completion and end token
+What are the entities that you look at? Please pause for a moment and think right and match and see whether it matches with the architecture that we are doing. So the entities that you typically look at are first thing, what is the previously generated word? Yes, we need to look at that to in order to comprehend or translate or give me the next word, third word. You look at this, correct? And you look at what is the context of this words that have been decoded so far, right? That is given by S 2. Now S 2 represents the current context. What is the context that has been obtained of from the decoder so far? And is that it no one important thing? What is the context of the sentence that I am supposed to translate which is coming from the encoder, which is HTX right? So these are the three critical things that we would look at when we are making this translation one step at a time.
+00:11:05 - 00:13:03
+Nonlinear operation in decoder function
+The previous output, the context of the decoder so far, the context of the encoded sentence, right? In order to generate 2 things, that is the next word and in improved context. So this process repeats until we finish translating all the words in the translation. So it takes the previous word that is yty -1 and it generates the final word yty. Now you might be wondering how do I know when to stop or how does decoder knows when to stop? So as we have seen here, the start is a token that is supposedly starting this process. You can assume that when you receive the final token or a word from this decoder which represents end, it means that the decoding has finished, the translation is done. And then whatever the sentence that is sitting between these two tokens, that is start and end is the translation that you are looking for for this given input sequence X. And again to recollect what is this G? This is a function that is being applied on two things, sorry, three things here, unlike encoder where it is being applied on two things, G is again a nonlinearity being applied to a matrix operation, a different matrix weight matrix. On three things, you have the previously generated word Y, you have the S that is representing the state of the decoder, and you are having HTX which is kind of representing the context of the input sequence. So this is our non linear operation being applied on this West matrix.
+
+ 
+
+You learnt that the goal is to translate a sentence from one language into another using the encoder-decoder architecture. To phrase it mathematically, you are given a sentence in Language A, represented by a sequence of wordsEquation. The task is to translate it into Language B, producing a corresponding sequence of words Equation, where:
+
+Equation is the number of words in the source sentence 
+Equation is the number of words in the translated sentence
+ 
+
+In language translation, the number of words in the source sentence (Equation) may differ from the number of words in the translated sentence (Equation). The encoder-decoder architecture effectively handles this by encoding the source language sentence into a context vector using an RNN. This context is then passed to the decoder, which generates the translated sentence one word at a time.
+
+
+You then learnt how this architecture works.
+
+ 
+
+
+
+ 
+
+The encoder starts with an initial trivial vector (Equation) and processes each word in the source sentence sequentially while updating its context state (Equation, etc.) at each step.
+The final context vector (Equation) encapsulates the meaning of the entire sentence and is used by the decoder to generate the translation. 
+Using a nonlinear function (g), the decoder starts with an initial trivial context (Equation) and, using the final context from the encoder (Equation), generates the translation word by word, updating its state (Equation, etc.) at each step.
+This process continues until the decoder produces a final token (Equation) indicating the end of the translation. The nonlinearity function applied during this process ensures the correct translation of each word in the sequence.
+ 
+
+The encoder-decoder model thus allows for effective translation by sequentially processing words while maintaining the context from the source sentence and translated output.
+
+ 
+
+Next, you will learn about the BLEU score, a metric used to evaluate the quality of machine-translated text.
+
+
+
+Encoder–Decoder Architecture for Language Translation
+This lesson explains how a machine translates a sentence from one language into another, one word at a time, while remembering both the original sentence and the words it has already generated.
+
+Let's use this example throughout:
+
+English: I love learning
+
+Hindi: मुझे सीखना पसंद है
+
+Notice something important: the English sentence has 3 words, but the Hindi translation has 4. The encoder–decoder architecture can handle this because the input and output sentences do not need to have the same number of words. Pasted text.txt
+
+1. The big picture
+Think of the architecture as two people working together:
+- Encoder: reads and understands the original sentence.
+- Decoder: uses that understanding to generate the translated sentence.
+INPUT
+English sentence
+I → love → learning
+
+ENCODER — reads the words one by one
+
+CONTEXT VECTOR
+A compressed representation of the input sentence
+Hₜₓ
+The information passed from encoder to decoder
+
+DECODER — generates translated words
+
+OUTPUT
+Hindi translation
+मुझे → सीखना → पसंद → है
+
+
+2. Encoder: how does it understand the sentence?
+The encoder is an RNN. It reads the sentence sequentially, one word at a time.
+
+For example: "The movie is good."
+Word-by-word processing
+THE
+RNN 1
+
+H1
+
+
+MOVIE
+RNN 2
+
+H2
+
+
+IS
+RNN 3
+
+H3
+
+
+GOOD
+RNN 4
+
+H4
+
+
+
+Conceptual sequence: each RNN cell updates the context and passes it to the next cell.
+
+Imagine reading the sentence yourself:
+1. You read THE — you have very little information.
+2. You read MOVIE — you know the sentence is about a movie.
+3. You read IS — you expect a description.
+4. You read GOOD — now you understand the overall meaning.
+The RNN does something similar mathematically: it updates its hidden state after processing each word.
+What happens inside an RNN cell?
+Each RNN cell receives two things:
+- Current word vector: \(X_t\)
+- Previous hidden state: \(H_{t-1}\)
+It produces a new hidden state: \(H_t\).
+Previous context
+Hₜ₋₁
+
+Current word
+Xₜ
+
+RNN CELL
+
+Combines both inputs using learned weights and an activation function
+
+Updated context
+Hₜ
+
+
+\[
+H_t = \tanh(W_xX_t + W_hH_{t-1}+b)
+\]
+
+
+Don't worry about memorizing the formula yet. Understand this:
+
+New context = current word information + previous context information, processed by a learned function.
+Why is it called a Recurrent Neural Network?
+Because the same operation is repeated for every word.
+
+The RNN cells share the same weights. They don't need a completely new set of weights for every word.
+
+This allows the network to process sentences of different lengths. Pasted text.txt
+
+3. What is the context vector?
+After the encoder processes all the input words, it produces its final hidden state.
+
+The lecture calls this \(H_{T_x}\).
+Encoder's final output
+The
+
+movie
+
+is
+
+good
+
+
+Final context vector
+Hₜₓ
+A numerical representation carrying information about the input sentence
+
+
+Think of the context vector as a compressed summary of what the encoder has processed.
+
+It is passed to the decoder so that the decoder knows what sentence it needs to translate.
+4. Decoder: how does it generate the translation?
+This is the most important part of the lesson.
+
+The decoder also uses an RNN, but its job is different:
+- Encoder reads the source sentence.
+- Decoder generates the target sentence.
+The decoder starts with an initial state \(S_1\) and a special token called START (often written as <BOS>, beginning of sequence).
+
+It also receives the encoder's context vector \(H_{T_x}\).
+Step-by-step decoding
+Suppose the decoder needs to generate:
+
+Hindi: "यह फिल्म अच्छी है"
+How the decoder generates words
+Step 1 — Start
+Inputs
+
+START + initial state S₁ + encoder context Hₜₓ
+
+यह
+
+
+
+
+Step 2 — Next word
+Inputs
+
+Previous word यह + updated state S₂ + encoder context
+
+फिल्म
+
+
+
+
+Step 3 — Next word
+Inputs
+
+Previous word फिल्म + updated state S₃ + encoder context
+
+अच्छी
+
+
+
+
+Step 4 — Next word
+Inputs
+
+Previous word अच्छी + updated state S₄ + encoder context
+
+है
+
+
+
+
+Final translation
+यह फिल्म अच्छी है
+
+
+This is a teaching example of the decoder's sequence. The actual translation depends on the model's learned parameters and may use different valid wording.
+5. Why does the decoder need three inputs?
+This is a likely exam question.
+
+At every decoding step, the decoder uses three important things:
+Input	Meaning	Why needed?
+Previous output \(Y_{t-1}\)	Previously generated word	To know what it has already generated
+Decoder state \(S_t\)	Context of generated words so far	To maintain continuity
+Encoder context \(H_{T_x}\)	Representation of original sentence	To remain faithful to the input
+
+Three inputs → one decoder cell
+Yₜ₋₁
+Previous word
+
+
+Sₜ
+Decoder state
+
+
+Hₜₓ
+Input context
+
+
+
+Decoder RNN cell
+
+Applies a learned function G
+
+Next word
+Yₜ
+
+
+New state
+Sₜ₊₁
+
+
+
+
+The decoder updates its state and generates the next word repeatedly. This is why it is recurrent too. Pasted text.txt
+
+6. How does the decoder know when to stop?
+It generates a special token called END (often written as <EOS>, end of sequence).
+Translation sequence
+START
+यह
+फिल्म
+अच्छी
+है
+END
+
+When the decoder produces END, it stops generating the translation.
+
+This also explains how it handles different sentence lengths: it continues until the end token appears, rather than assuming the output has the same number of words as the input.
+7. What does the model learn during training?
+The model has learnable weights in both the encoder and decoder.
+- Encoder learns how to represent the source sentence.
+- Decoder learns how to generate the correct target sentence.
+- Training compares the predicted output with the actual translation and adjusts the weights to reduce the error.
+The lecture describes the encoder and decoder using different learned weight matrices and nonlinear functions. Pasted text.txt
+
+8. Test your understanding
+Quick knowledge check
+4/4 answered
+
+1. What is the main responsibility of the encoder?
+
+Generate translated words
+
+Represent the input sentence as context
+
+Calculate the BLEU score
+
+Correct
+
+The encoder processes the source words and produces a context representation.
+
+
+
+2. Why can the input and output have different word counts?
+
+The decoder generates words until END
+
+The encoder removes extra words
+
+Both sentences must have equal length
+
+Correct
+
+The decoder generates its own sequence and stops when it emits the end token.
+
+
+
+3. Which three inputs does the decoder use at each step?
+
+Current source word, loss, weights
+
+Previous output, decoder state, encoder context
+
+Start token, end token, loss
+
+Correct
+
+These three pieces of information help it generate the next word in context.
+
+
+
+4. What does the END token indicate?
+
+Start decoding
+
+The encoder has failed
+
+The translation is complete
+
+Correct
+
+The decoder stops when it generates the end-of-sequence token.
+
+
+Check my answersScore: 4/4
+Try again
+9. Remember these five things for your exam
+1. Encoder: reads the source sentence word by word.
+2. Context vector: carries the encoded information to the decoder.
+3. Decoder: generates the translated sentence one word at a time.
+4. Three decoder inputs: previous output, decoder state, and encoder context.
+5. END token: tells the decoder to stop.
+One important limitation: This lecture describes the basic RNN encoder–decoder architecture, where the final encoder context is passed to the decoder. Later, attention mechanisms improve this by allowing the decoder to refer to different encoder states instead of relying only on one fixed context vector.
+
+The next topic in your course is BLEU score, which measures the quality of machine-translated text.
+
+
+BLEU score
+---------
+
+
+When working with tasks such as machine translation, we need a way to automatically evaluate how closely a model’s output matches correct human translation. A widely used metric for this purpose is BLEU, which stands for Bilingual Evaluation Understudy. 
+
+ 
+
+BLEU compares the model-generated sentence with one or more reference sentences written by humans and measures how much the two overlap in terms of words and short phrases. 
+
+Instead of checking only individual words, BLEU checks n-grams, which are short sequences of consecutive words. It computes the following: 
+Unigram precision (1-gram): How many individual words in the model output appear in the reference 
+
+Bigram precision (2-gram): How many pairs of consecutive words match the reference 
+
+Similarly, longer n-grams (3-gram and 4-gram) can also be used 
+ 
+
+Matching longer n-grams is important because it reflects the correct word order and phrase structure, not just the correct vocabulary. 
+ 
+BLEU then combines these n-gram precisions using a geometric mean and applies a brevity penalty if the model output is much shorter than the reference. This prevents the model from getting a high score by outputting only a few correct words. 
+ 
+
+Let’s understand this with the help of an example where we compare one model’s output with a reference sentence using n-grams from 1 to 4. 
+
+ 
+
+Reference sentence: “the cat is on the mat” 
+
+Model output: “the cat is on mat” 
+
+ 
+
+Step 1: Unigram Precision (1-gram) 
+
+Model words: the, cat, is, on, mat → 5 words 
+Since all five appear in the reference, therefore Equation.
+ 
+
+Step 2: Bigram Precision (2-gram) 
+
+Model bigrams: the cat, cat is, is on, on mat 
+Reference bigrams: the cat, cat is, is on, on the, the mat 
+Matching bigrams: the cat, cat is, is on → 3 matches 
+Equation
+ 
+
+Step 3: Trigram Precision (3-gram) 
+
+Model trigrams: the cat is, cat is on, is on mat 
+Reference trigrams: the cat is, cat is on, is on the, on the mat 
+Matching trigrams: the cat is, cat is on → 2 matches 
+Equation
+ 
+
+Step 4: Four-Gram Precision (4-gram) 
+
+Model 4-grams: the cat is on, cat is on mat 
+Reference 4-grams: the cat is on, cat is on the, is on the mat 
+Matching 4-grams: the cat is on → 1 match 
+Equation  
+ 
+
+Step 5: Geometric Mean of Precisions 
+
+BLEU combines all n-gram precisions using the geometric mean.
+
+Equation  
+
+ 
+
+As the n-gram length increases, mismatches reduce the overall score more strongly. 
+
+ 
+
+Step 6: Brevity Penalty 
+
+Reference length = 6 
+Model output length = 5 
+Since the output is shorter: Equation
+ 
+
+Therefore, final BLEU score:
+
+Equation
+
+ 
+Although most individual words are correct, the missing phrase structure and shorter length significantly reduce the BLEU score. 
+
+ 
+
+BLEU is useful because it rewards correct words and correct phrase ordering, and allows fast, automatic evaluation over large data sets. 
+
+ 
+
+However, BLEU also has limitations such as these: 
+
+It does not directly measure semantic equivalence (same meaning with different wording) 
+
+Valid paraphrases may receive low scores if phrasing differs from the references 
+
+It does not explicitly check grammatical correctness or fluency 
+
+ 
+
+So, BLEU is often used along with human evaluation or more semantic evaluation metrics. 
+
+ 
+
+Next, we will cover a Python demonstration of how encoder-decoder models are applied to machine translation. 
+
+# BLEU Score — understanding how machines are evaluated in translation
+
+Imagine you build a machine translation model. You give it an English sentence and it generates a Hindi sentence.
+
+But how do you know whether the translation is good?
+
+You need to compare the machine's output against a translation written by a human. BLEU is one way to do this automatically.
+
+BLEU stands for Bilingual Evaluation Understudy.
+
+The central idea is:
+
+> BLEU checks whether the machine generated the same words and short phrases, in the same order, as a human translation.
+
+Let's understand it visually using your lecture's example.
+
+## 1. First, understand the problem
+
+Human reference
+
+The cat is on the mat
+
+the
+
+cat
+
+is
+
+on
+
+the
+
+mat
+
+Machine output
+
+The cat is on mat
+
+the
+
+cat
+
+is
+
+on
+
+mat
+
+The machine forgot the second "the".
+
+At first glance, the machine output looks almost correct.
+
+But BLEU does not simply ask, "Are most of the words correct?"
+
+It checks several levels of matching:
+
+1. Individual words — Unigrams
+2. Pairs of consecutive words — Bigrams
+3. Groups of three consecutive words — Trigrams
+4. Groups of four consecutive words — Four-grams
+
+These are called n-grams.
+
+## 2. What exactly is an n-gram?
+
+An n-gram is simply a group of `n` consecutive words.
+
+Let's take this sentence:
+
+The cat is on the mat
+
+1-gram: Individual words
+
+the
+
+cat
+
+is
+
+on
+
+the
+
+mat
+
+2-gram: Pairs of consecutive words
+
+the cat
+
+cat is
+
+is on
+
+on the
+
+the mat
+
+3-gram: Groups of three
+
+the cat is
+
+cat is on
+
+is on the
+
+on the mat
+
+4-gram: Groups of four
+
+the cat is on
+
+cat is on the
+
+is on the mat
+
+Notice that as n increases, BLEU checks larger phrases. This helps it check word order, not just whether the correct vocabulary appears somewhere.
+
+## 3. Calculate BLEU step by step
+
+We will compare the machine output with the human reference.
+
+Reference: `the cat is on the mat` — 6 words
+
+Machine: `the cat is on mat` — 5 words
+
+### Step 1 — Unigram precision (1-gram)
+
+Question: How many individual words generated by the machine appear in the reference?
+
+Machine words:
+
+`the | cat | is | on | mat`
+
+All five appear in the reference.
+
+Unigram matches
+
+5 out of 5
+
+the
+
+cat
+
+is
+
+on
+
+mat
+
+\\[ P_1 = \frac{5}{5}=1.0 \\]
+
+# 100%
+
+All generated words are found in the reference.
+
+Important: This does not mean the sentence is perfect. It only means all individual words match.
+
+### Step 2 — Bigram precision (2-gram)
+
+Now we check pairs of consecutive words.
+
+Machine bigrams:
+
+- the cat
+- cat is
+- is on
+- on mat
+
+Reference bigrams:
+
+- the cat
+- cat is
+- is on
+- on the
+- the mat
+
+Let's compare:
+
+Machine bigrams
+
+the cat ✓
+
+cat is ✓
+
+is on ✓
+
+on mat ✗
+
+Green = found in reference. Red = not found.
+
+\\[ P_2 = \frac{3}{4}=0.75 \\]
+
+# 75%
+
+The missing word "the" has now caused a mismatch in the pair `on mat`.
+
+### Step 3 — Trigram precision (3-gram)
+
+Now we compare groups of three consecutive words.
+
+Machine trigrams:
+
+- the cat is
+- cat is on
+- is on mat
+
+Reference trigrams:
+
+- the cat is
+- cat is on
+- is on the
+- on the mat
+
+Machine trigrams
+
+the cat is
+
+cat is on
+
+is on mat
+
+\\[ P_3 = \frac{2}{3}\approx0.67 \\]
+
+# 67%
+
+### Step 4 — Four-gram precision (4-gram)
+
+Now we check groups of four consecutive words.
+
+Machine four-grams:
+
+- the cat is on
+- cat is on mat
+
+Reference four-grams:
+
+- the cat is on
+- cat is on the
+- is on the mat
+
+Machine four-grams
+
+the cat is on
+
+cat is on mat
+
+\\[ P_4 = \frac{1}{2}=0.50 \\]
+
+# 50%
+
+### Compare all four results
+
+N-gram precision
+
+Matching proportion at each n-gram level for this example.
+
+0%25%50%75%100%UnigramBigramTrigram4-gram
+
+What should you understand from this?
+
+The individual words are all present, but as we look at longer phrases, the missing word affects more of the phrase matches.
+
+That is why BLEU checks longer n-grams.
+
+## 4. Geometric mean — why does BLEU combine all four?
+
+We have four precision scores:
+
+| N-gram    | Precision |
+| --------- | --------- |
+| Unigram   | 1.00      |
+| Bigram    | 0.75      |
+| Trigram   | 0.67      |
+| Four-gram | 0.50      |
+
+BLEU combines these using the geometric mean.
+
+\\[ GM=(P_1 \times P_2 \times P_3 \times P_4)^{1/4} \\]
+
+Substitute the values:
+
+\\[ GM=(1 \times .75 \times .67 \times .50)^{1/4} \\]
+
+\\[ GM\approx0.71 \\]
+
+Why geometric mean instead of ordinary average?
+
+Because BLEU wants all the n-gram precision scores to be reasonably good. A low score for longer phrases should pull down the overall result.
+
+Think of it this way: a sentence with correct individual words but badly arranged phrases should not receive an excellent score.
+
+## 5. Brevity Penalty — why does BLEU punish very short translations?
+
+This is another important concept.
+
+Look at the two sentences again:
+
+- Human reference: 6 words
+- Machine output: 5 words
+
+The machine omitted a word. What if a machine generated only:
+
+`the cat`
+
+Both words are correct, but the translation is incomplete!
+
+Without a length penalty, a model could generate just a few common correct words and still get a high precision score.
+
+BLEU solves this using Brevity Penalty (BP).
+
+The formula is:
+
+\\[ BP = \begin{cases} 1 & c \geq r\\\ e^{(1-r/c)} & c < r \end{cases} \\]
+
+Where:
+
+- \\(c\\) = number of words in the candidate (machine output)
+- \\(r\\) = number of words in the reference (human translation)
+
+In our example:
+
+\\[ c=5,\quad r=6 \\]
+
+Since the machine output is shorter:
+
+\\[ BP=e^{(1-6/5)} \\]
+
+\\[ BP=e^{-0.2}\approx0.82 \\]
+
+Visualise the length penalty
+
+Each block represents one word.
+
+Human reference — 6 words
+
+the
+
+cat
+
+is
+
+on
+
+the
+
+mat
+
+Machine output — 5 words
+
+the
+
+cat
+
+is
+
+on
+
+mat
+
+Brevity penalty
+
+# 0.82
+
+Because the candidate is shorter than the reference, its score is reduced.
+
+If the machine output is at least as long as the reference, BP is 1. It does not apply a penalty for being longer, although extra or incorrect words can still reduce n-gram precision.
+
+## 6. Final BLEU score
+
+Now we have both components:
+
+- Geometric mean = 0.71
+- Brevity penalty = 0.82
+
+The final formula:
+
+\\[ BLEU = BP \times GM \\]
+
+\\[ BLEU = 0.82 \times 0.71 \\]
+
+\\[ \boxed{BLEU\approx0.58} \\]
+
+FINAL BLEU SCORE
+
+# 0.58
+
+Approximately 58 on a 0–100 scale
+
+One small mathematical correction to your lecture notes: the brevity-penalty formula should be \\(e^{(1-r/c)}\\), not \\(e^{(1-6)/5}\\). The numerical result of approximately 0.82 in the lecture is correct.
+
+Also, the calculation above uses rounded values for the geometric mean. Using the exact fractions gives approximately 0.7071 for GM and approximately 0.579 for BLEU.
+
+## 7. Limitations of BLEU — what can go wrong?
+
+BLEU mainly measures word and phrase overlap. It does not truly understand the meaning of a sentence.
+
+Consider this example:
+
+Human reference
+
+The child is happy.
+
+Machine translation A
+
+The child is happy.
+
+High word overlap
+
+Machine translation B
+
+The kid feels joyful.
+
+Potentially low word overlap
+
+Both translations express nearly the same meaning, but the second uses different words. BLEU may give it a lower score.
+
+Three important limitations:
+
+1. Semantic meaning: BLEU does not directly understand whether two sentences mean the same thing.
+2. Paraphrasing: Different but valid wording can receive a low score.
+3. Grammar and fluency: It does not independently verify whether the sentence sounds natural or is grammatically correct.
+
+That is why BLEU is often combined with human evaluation and other semantic evaluation metrics.
+
+## 8. Check your understanding
+
+BLEU mini-test
+
+5/5 answered
+
+1\. What does BLEU compare?
+
+Only sentence length
+
+Machine-generated text against human reference translations
+
+Only grammar rules
+
+Correct
+
+BLEU measures n-gram overlap between candidate and reference translations.
+
+2\. What is a bigram?
+
+One word
+
+Two consecutive words
+
+Four consecutive words
+
+Correct
+
+For example, 'the cat' is a bigram.
+
+3\. Why do we use 3-grams and 4-grams?
+
+To check longer phrase and word-order overlap
+
+To count characters
+
+To calculate sentence length only
+
+Correct
+
+Longer n-grams check whether consecutive phrases match.
+
+4\. Why is brevity penalty used?
+
+To reward shorter translations
+
+To penalize translations that are too short
+
+To check spelling
+
+Correct
+
+It prevents a model from getting a high score by generating only a few matching words.
+
+5\. Can a correct paraphrase get a low BLEU score?
+
+Yes
+
+No
+
+Correct
+
+BLEU measures surface overlap, not semantic equivalence.
+
+Submit answers
+
+# Your score: 5/5
+
+Retry
+
+## 9. Exam revision — remember this flow
+
+Machine-generated translation
+
+Compare with human reference
+
+Calculate 1, 2, 3 and 4-gram precision
+
+Calculate geometric mean
+
+Apply brevity penalty
+
+Final BLEU score
+
+| Concept         | Remember                          |
+| --------------- | --------------------------------- |
+| BLEU            | Automatic translation evaluation  |
+| Unigram         | Individual word                   |
+| Bigram          | Two consecutive words             |
+| Trigram         | Three consecutive words           |
+| 4-gram          | Four consecutive words            |
+| Geometric mean  | Combines n-gram precision         |
+| Brevity penalty | Penalizes overly short output     |
+| Limitation      | Does not truly understand meaning |
+
+One final distinction: A BLEU score of 0.58 does not mean the translation is exactly 58% correct. It is a mathematical overlap score, not a direct measurement of human-perceived translation quality.
+
+The next lecture's Python demonstration will help connect these concepts to actual machine translation models.
+
+
+Encoder-Decoder: Python Demonstration
+
+Previously, you learnt how encoder–decoder models are designed to transform one sequence into another, such as in machine translation. To better understand how sequence-to-sequence modelling works in practice, it is useful to start with a simpler neural implementation before adding more advanced mechanisms. 
+
+ 
+
+You will now see a Python demonstration focused on a basic sequence-to-sequence encoder–decoder model, applied to machine translation between Indian languages. You will learn how text is prepared, how the model is constructed and how predictions are generated using a trained network. 
+
+
+00:00:00 - 00:00:09
+Introduction to sequence to sequence model for language translation
+In this notebook we are going to deal with sequence to sequence model particularly used for translating from English to Hindi.
+00:00:09 - 00:00:16
+Using Hindi NLP library and Tensorflow for translation
+Now here we are going to use the Hindi NLP library and using Tensorflow we are going to do language translation.
+00:00:17 - 00:00:28
+Dataset for English to Hindi translation and adaptation for other languages
+Now the data set used is particularly for English to Hindi translation. However, we can easily adopt this for other ten major Indian languages which are available in this particular link.
+00:00:29 - 00:00:35
+Required libraries and installation instructions
+These are the libraries that we will require. First we would need to install the indig NLP library using the pip installer.
+00:00:36 - 00:00:50
+Tensorflow version and runtime setup for GPU
+We would use Tensorflow as our primary deep learning framework and apart from that we will use these other libraries. Now for this one, we are going to primarily use Tensorflows 2.19 version.
+00:00:50 - 00:01:09
+Downloading and extracting Indic language corpus dataset
+So make sure that you are changing the runtime of this particular notebook to GPU if you are running this on your local environment. GPU is always recommended in case if you do not have a GPU with CPU, it will actually take a very long period of time to train.
+00:01:09 - 00:01:50
+Data preprocessing steps including tokenization and sentence preparation
+Now we can get the Indic language corpus data set using this West get command and it will download in this format. So since it is being downloaded in a tar format, we can use the star file library and basically extract the original data. Once it is extracted, we will get the message. We can also quickly check by running these commands which will give us an idea of how the data looks like. By running these commands we can see a quick look into how the data looks like. So this is our data set. Now once we have loaded the data set, we preprocess the data using the following steps.
+00:01:51 - 00:02:57
+Unicode normalization and preprocessing pipeline
+We need to add a start and then end token to each sentence. We need to in the sentences by removing the special characters. We need to create a word index and reverse word index. Basically these are dictionaries spapping the word to ID and ID to word and then add each sentence to a maximum length. Let's restrict the total number of sentences to 70. Oh, oh, oh, oh and then we will try to do the steps that we have discussed. First we would need to load this Indic tokenized model or a module from this particular library. We would need to open the file, the training file and then based on that we would need to prepare the data. Similarly, we would need to prepare the Hindi sentences which is our target language whereas in case of source language it was the English sentences and we would need to do a similar set of steps. After we have done the tokenization part, we can add the start and the end tags. We probably tokenize the sentences. The start and the end tags are typically used for like denoting a proper sentence and it helps us to, you know, make the model much better.
+00:02:57 - 00:03:18
+Tokenization and padding of sequences
+This is how our output structure would also look like. So the input will be a sequence and even the output will be a sequence. And after the tokenization part, this is how it will look like. So the input sentences can be in English. With this, the output will have the special tags and the corresponding translated value.
+00:03:19 - 00:03:46
+Loading dataset and converting text to numerical values
+Now in some cases since we are doing language translation, we might need to do some kind of encoding. So here we will try to convert the Unicode file to an ASCII value. While as the model is dealing with multilingual test so it will be important for us to standardize the input text so Unicode normalization splits the accented characters and replace the compatibility characters with that ASCII equivalent.
+00:03:46 - 00:04:22
+Splitting data into training and test sets
+Once this is done, we will try to preprocess it as part of the entire preprocessing pipeline. You first convert the Unicode to ASCII, then do the regex substitutions like. This is particularly done to replace some kind of punctuations or some special characters. Even if we have multiple white spaces, we try to remove that or rather substitute that with a single white space, replace everything with a space except these characters. And then we do a strip to avoid any kind of extra, let's say spaces towards the beginning or even towards the end.
+00:04:23 - 00:05:02
+Mapping index to word and decoding
+And finally, since for the target text, we would need to add the special token, which is the start and the end token. In fact, we do it for both the source language as well as the target language because this is the same kind of preprocessing that we need to perform. And this is an example for that, which is the source language that we have in English with the clear preprocessing and the tags being added. And this is the corresponding output or the output sentence. Now let us create a function to tokenize and fit the words into numeric sequences and pad them with zeros to the largest sentence of that vocabulary.
+00:05:03 - 00:05:48
+Setting hyperparameters for model training
+So it takes us input the output and the input output vocabulary and the padding type. And this is how we can create that as an overall function. In this function we tokenize and pad the sequences. It takes the list of the sentences which can be string or even token list and it takes the padding type whether a pre padding needs to be done or a post padding. We can use Kira's tokenizer which is actually available in versions above 2.0. We can use this to do the tokenization part. Then we need to convert the text into sequences and pad the sequences sequences to the same length and the return is a tensor and language tokenizer.
+00:05:49 - 00:06:46
+Preparing dataset for Tensorflow format and GPU utilization
+Then we can create a function called as load data set where we can actually load the, you know the input language and the target language and we can do the tokenization for that. When we are loading we have the raw input sentences and output sentences. But after using this function, we get the input tensor, the target tensor, the input language and the target language which are in the tokenized form. So this is the overall length, the maximum length of the input and the output that we keep. And if we check the tensor values, this is how it looks like. The raw string is converted to numerical values like this. Once we have done this, we need to divide the entire data into a training and a test set. We use a split ratio of 80 is to 20 and based on that we divide the data into a training set and a test set.
+00:06:47 - 00:07:19
+Sequence to sequence model architecture with encoder and decoder
+So this division is done for both the input and the target sentences. And this is an example value which also includes the padded outcome. The zeros represent the padded value. So now we can basically do a convert operation which tries to do a mapping between the index to the word. So when we are actually tokenizing, we are first converting the raw string value into a token ID which is nothing but a number.
+00:07:19 - 00:08:11
+Encoder model construction and initialization
+But then we also need to keep a mapping of that. A mapping which will help us to even decode from the index value to the word value. And this is where we have this convert function which does the decoding part correctly. And this is how it looks like. So after that we need to specify some hyper parameter value which allows us to train the model well. So we can select a buffer size. A buffer stores the number of training points. Then we have the batch size. So since we do a batch training, we divide the data into smaller set of batches which we use it for the training and then based on that based on the buffer size and the batch size we select or we calculate the steps per epoch and then we have the embedding dimension which is nothing but the length of the embedded vector.
+00:08:11 - 00:09:02
+Decoder model construction and embedding layer
+So here it is 256 and then we will use gated recurrent units or you know basically we are not going with an attention based approach. This is a typical RNN or a recurrent neural network based approach where we are using the Gru models over here. So here we use almost 1024 Gru units for doing the sequence to sequence task. Once we have done that, we need to just prepare the data set into our Tensorflow data set format because it allows us to do additional things like shuffling or batch processing or even prefetching or a better GPU utilization. And then we kind of have to repeat the same step for the validation data set. And this is how it looks like. So we have around 56,000 training samples.
+00:09:03 - 00:10:03
+Training model with optimizer and loss function
+We have around 875 steps per epoch. Then input vocabulary size is 17,620 and the target vocabulary size is 22,225. And this is an example of the shape of the input batch. Now in this case, as we discussed, we will use a sequence to sequence model, which is nothing but an encoder decoder model. The encoder model consists of an embedding layer and the Gru layer with 1024 units. That's the dimension of the number of GRE units that we will be using. And the decoder model consists of an embedding layer, a Gru layer and a 10S layer. So first, let us make the encoding layer. This is how we can make the encoder model. For the sequence to sequence architecture, we have the construct where we have specified these dimensions and the values and then we can make a call function.
+00:10:03 - 00:11:02
+Inference and prediction using greedy search approach
+So in the call function we will actually do the the training part and then we can do an initialized hidden state where we specify the batch size and create tensorflow dot zeros basically for initializing the hidden state based on the batch size and the encoder unit. So if we call the encoder block, this is how it looks like, We can see the encoder output shape and the encoder hidden page shape based on it. Then we have the decoder block where we initialize it with hyper parameters. Then we have a function. So this call function again is similar to the encoder call function which does forward pass. So in this case it does forward pass through the decoder. It takes the input token of shape match size 1. It has the hidden state information, previous hidden state of the shape and the training part. It's a boolean field for the training mode.
+00:11:03 - 00:12:08
+Evaluating translation quality using BLEU score
+But first it kind of has an embedding layer. So it takes the raw input token and creates an embedding out of it. And then it applies the Gru model and once it gets the output, it passes to the next state and this is where we get the output. And finally, we check the vocabulary size for here. And this is how the overall working of the decoder looks like for a sample token ID. If we run these, this is how we will get the dimension, the sample dimension. Now let's train it as we had discussed before. And it's better to train the model on the GPU so that the training is faster. We can start with limited number of epochs first to overall, you know to test the overall working of it and then we can increase the number of you. So when we are training the model, we would also need an optimizer. Here we will use the atom optimizer and then we would also need a loss function where we will use this sparse categorical cross entropy loss which is the loss function.
+00:12:10 - 00:15:04
+
+We can make our generic loss function like this and then we can do the training part. So when we are training it, it is recommended that we also save checkpoints just in case if the training gets interrupted in the midway, we can actually continue from the checkpoints that we are saving. This is the training step where we are doing the training and this is the validation step where we are doing the validation part. And then we can start with again a smaller number of epoch even like instead of 10 recommendation is to start with maybe something as small as one and then we perform the training. When we are doing the training, we are also calculating the loss function for the training as well as the validation part and we would check that the loss is actually decreasing as we go into like multiple epochs of training. Once this is done, we would need to write the inference part. So here we will do prediction using a greedy search approach. Greedy search is used for decoding of the text. In this evaluate method we will take an input sentence and translate the single sentence using greedy decoding. So this is how we do it. We have to run for every word. We would need to then run the translation loop and then do the translation part. And then when we make this into a function we just have to take the input sentence. We need to call this evaluate function and it will return the result, the translated result and the corresponding sentence. So we can, you know, check the output over here as well. We can check the input sentence which are first, you know kind of preprocess and then we can see the corresponding translated outcome. This is how the overall output looks like. Now how do we evaluate in these cases where we are doing machine translation and where where we have test data set, we can actually use a matrix called as blue or bilingual evaluation under study which is a matrix which is typically used for comparing the generated text with the reference text. And it is typically used for evaluating the quality of the translation. For that we need to 1st pass the test input sentences and the test output sentences. So it basically initially reads the English test sentences, makes the necessary preprocessing. It also does it for the Hindi sentences. And then we kind of run it for the number of samples and do the translation based on the blue score. We would get a set of output like this. So we have the sentences, the predicted translation and the reference part and based on that we can calculate the blue scores.
+
+
+To train a translation model, the data set must consist of aligned sentence pairs, where each source sentence corresponds to a target translation. These sentence pairs form the supervised learning signal that allows the model to learn how one sequence maps to another. 
+
+ 
+
+Before the model can process the data, all text is converted into numerical forms, such as the following: 
+
+Sentences are tokenised into integer sequences 
+
+Vocabularies are built separately for source and target languages 
+
+Sequences are padded so that all inputs in a batch have the same length 
+
+ 
+
+Padding is necessary because neural networks operate on fixed-size tensors, whereas natural language sentences vary in length. 
+
+ 
+
+The encoder processes the full input sequence and transforms it into internal hidden representations. These representations capture information about the entire source sentence and are passed to the decoder as the initial state. 
+
+ 
+
+The decoder generates the output sentence step by step. At each time step, it uses the internal state received from the encoder (or from the previous decoding step) and the previous target token to predict the next word in the target sequence. This process continues until an end-of-sequence token is generated. 
+
+ 
+
+This design allows the model to convert a complete input sequence into a complete output sequence, even when the two sequences have different lengths. 
+
+ 
+
+After defining the encoder and decoder networks, the full training pipeline is set up using the following components: 
+
+An optimiser (such as Adam) 
+
+A suitable loss function for multi-class word prediction 
+
+Checkpoint paths to periodically save model weights 
+
+ 
+
+During training, batches of input and target sequences are passed to a training step function that performs the following operations: 
+
+The input sequence is processed by the encoder to obtain hidden states. 
+
+The decoder is initialised using the encoder’s final hidden state. 
+
+Predictions are generated one time step at a time for the target sequence. 
+
+ 
+
+Teacher forcing is applied during training, that is, at each decoding step, the correct target word from the data set is provided as the next input to the decoder rather than using the model’s own prediction. This stabilises training and allows the model to learn sequence patterns more efficiently. 
+
+ 
+
+Loss is computed at each time step, averaged across the sequence length and used to update encoder and decoder parameters through backpropagation. Checkpoints are saved periodically so that training progress can be recovered if needed. 
+
+ 
+
+Once training is complete, a separate evaluation procedure is used to generate translations. 
+
+ 
+
+During inference, the decoder no longer receives the correct target words. Instead: 
+
+The input sentence is first tokenised and padded. 
+
+The encoder processes the sentence and produces initial hidden states. 
+
+The decoder begins generating words starting from a special start token. 
+
+ 
+
+At each step, the model selects the most probable next word and feeds it back as the input for the next prediction. This strategy is called greedy decoding. The process continues until an end-of-sequence token is produced or a maximum length is reached. 
+
+ 
+
+This step-by-step generation process reflects how sequence models operate during real-world prediction. 
+
+ 
+
+To measure translation quality, predicted sentences are compared with reference translations using the BLEU score. This metric evaluates the extent of overlap that exists between predicted and reference n-grams. 
+
+ 
+
+To avoid cases where no n-gram overlap leads to zero scores, smoothing techniques can be applied during BLEU calculation. Although BLEU does not fully capture semantic correctness, it provides a useful quantitative indicator of translation performance during experimentation. 
+
+ 
+
+Next, you will explore the challenges associated with standard encoder-decoder models when dealing with long sentences. 
+

@@ -1,0 +1,301 @@
+An Analysis of Deep Learning Models - Part 1
+
+
+While deploying deep learning models in practice, you usually have to consider multiple other parameters apart from just accuracy. 
+
+ 
+
+For example, say you've built a mobile app which uses a CNN for real-time face detection. Since it will be deployed on smartphones, some of which may have low memory, etc., you might be more worried about it working 'fast enough', rather than the accuracy.  
+
+ 
+
+In this segment, we will discuss a paper that appeared in 2017 - 'An Analysis of Deep Neural Network Models for Practical Applications'. This paper compares the popular architectures on multiple metrics related to resource utilisation, such as accuracy, memory footprint, number of parameters, operations count, inference time and power consumption. 
+--https://arxiv.org/pdf/1605.07678
+ 
+
+Although the paper is older, it offers an explicit discussion on CNN evaluation around deployment-oriented metrics, highlighting trade-offs between accuracy and resource constraints that are still central to modern model selection. 
+
+ 
+
+Let's begin our discussion.
+
+00:00:05 - 00:00:57
+Introduction to empirical comparison of neural network parameters
+In this session we will take a quick walkthrough of recent paper. This appeared in 2017. This is a nice empirical comparison of several parameters in a neural network. It compares many of the popular neural net, particularly the CNN based neural net architectures. The reason we we're doing this is because I think it'll give us a nice intuition about the trade off between the various parameters and it'll also give you enough ideas about how to pick the appropriate network for your problem depending on the specific use case that you are dealing with.
+00:00:58 - 00:02:31
+Overview of neural network parameters and their trade-offs
+Yeah, so there is, there is not much theory here, but it is a nice empirical comparison involving multiple parameters that define each of these architectures. So the parameters that we are talking about are the number of parameters involved, the model parameters involved in each of these architectures, the the amount of time these architectures take for an inference, the number of operations involved in carrying out an inference. So by an inference we mean a feed forward essentially. So once you have a trained model, all the weights and the biases have been trained. After that, if you want to use the network to make a decision about a new image, how long would it take or how many operations involving the weights will you need to carry out before you can get the final decision out of the other end of the network? Right. And it also talks about things like the power consumption, the the relationship with the batch size and so on. South, let's let's quickly walk through this paper and look at some of these interesting trade-offs that are apparent from the graphs that they have plotted based on their analysis.
+00:02:33 - 00:03:58
+Summary of neural network architectures and accuracy comparison
+So this is an overall summary of of the different architectures that they have covered. So you can see that they have compared the accuracy of all these models. So the ones that are listed here in the in the picture on the left are the architectures that they have considered. So you have Elexnet, various versions of Elexnet, then you have Enet, Google Net, various versions of Resnet, various versions of VGG and two versions of the Inception architecture. So those are the the networks that they have considered and the picture on this right is a nice comparison of the accuracy versus the number of operations for each of these architecture. So when they say number of operations it means the number of typically floating point operations that you need to do to go from the input to the output of the network.
+00:03:58 - 00:05:48
+Understanding model parameters and operations in CNNs
+So essentially one full feed forward. So in this in this picture they have used 2 axes, 1 for accuracy, one for the number of operations and the size of the BLOB indicates the number of model parameters. So they have three different parameters that they are comparing and all three are shown simultaneously in this picture. So what they mean by the number of model parameters is just the number of weights on the biases. So what they mean by the number of operations is just the number of floating point operations. You require to go from the left to right, one entire feed forward. So the first thing that we need to get a bit of a handle on is the relationship between the number of parameters and the number of operations. Now it seems a little counter intuitive here because if you have more model parameters meaning more weights and biases, you should also have more operations. Because for every weight, you will be carrying out that many more floating point operations, right? Because every weight will get multiplied with all the inputs coming from the previous layer. And hence every additional parameter is going to cost you in terms of the number of operations required to get an inference. So if you look at this picture, the LX net is at the bottom left end of the picture, and that means it has very few operations compared to the other models.
+00:05:48 - 00:07:11
+Relationship between parameters and operations in CNNs
+But then the size of the BLOB is big, which means it has lots of parameters, right? So the number of parameters and the number of operations don't seem to be directly correlated with each other. And yeah, the reason why this is happening is that all these are basically talking about CNN architectures. And in a in a CNN architecture, when you have a kernel and you convolve using a kernel on an image, if you have a large kernel, you can immediately see that the number of parameters is going to be large, right? Because the the number of parameters in every convolution layer will be directly proportional to the size of the kernel. So if you have AK cross K then you basically have K ^2 parameters and the parameters are shared right? So you so you directly have the the number of parameters depending on the kernel size. But what about the number of operations The?
+00:07:12 - 00:08:51
+Impact of kernel size and stride on operations
+So I need to carry out one set of operations on these weights for one position of the kernel of the filter, right? And for, so the total number of operations to carry out the full convolution is going to be the number of parameters involved in one snapshot of the kernel multiplied by the number of different convolution positions at which you are trying to evaluate the kernel. Right now it so happens that in LX net it uses a large kernel, so it actually uses something like 11 by 11, but it uses a large stride as well. So it uses a stride of four, which means I am going to take a big kernel and then I am going to move it by large steps. So that means the number of times I am computing the the convolution using the kernel is is that many times smaller, right? So if I had done a stride of one, I would have actually had to do 4 times as many computations using the same set of parameters, right? I would have had to do 4 times as many computations as I would do if I had used a step size of four. Now Allexnet actually uses a stride of four.
+00:08:51 - 00:10:31
+Comparison of depth and stride in different architectures
+Whereas take something here right the the something like the Inception architecture these uses. So all all these cluster of architectures, in fact all of them use very small kernels. And that explains why the the number of parameters is small. So you you can see that these blobs are much smaller than these, but they use much smaller stride. In fact most of them use a stride of one. That means you're going to carry out lot more computations using the same set of weights. So that that explains why the number of operations is more. It is also true that all these architectures have far greater depth than LX net. So these two together, the depth and the the fact that the stride length is much smaller for each convolution explains why the number of operations for these is larger, though the total number of parameters is much smaller than an X net. It will be a good exercise for all of you to translate all these sort of qualitative statements that I'm making into numbers.
+00:10:31 - 00:11:14
+Calculating operations and parameters in neural networks
+So the the actual architecture including the the kernel size, the if there are any fully connected layers, what their size is, what is the size of pooling, etcetera, etcetera. Using these, we can actually calculate the total number of operations required for you to go from one end of the network to the other. And you can obviously also calculate the total number of parameters. So it's only a question of multiplying the appropriate numbers for each layer and then adding them all.
+
+
+ 
+
+An important point to notice here is that although the VGGNet (VGG-16 and VGG-19) is used widely, it is by far the most expensive architecture — both in terms of the number of operations (and thus computational time) and the number of parameters (and thus memory requirement). 
+
+ 
+
+We will continue this in the next video.
+
+An Analysis of Deep Learning Models - Part 2
+
+
+00:00:00 - 00:03:43
+Comparison of model architectures based on size, accuracy, and inference time
+A few other trends are also noticeable here. So you can see that some of these architectures are actually very attractive for certain kinds of use cases. These are very, very small. That means their footprint in terms of the amount of computational power needed to make an inference, the amount of memory required to store these models, etcetera, etcetera is going to be small because the number of parameters involved are very, very small, right. So these are, they are very small blobs. On the other hand, they have a fairly high accuracy. Yeah, obviously if you increase the number of parameters, your accuracy is going to go up. But these do as well as you can get using the number of parameters that you're using, right? But compared to something like Allexnet, this is huge in terms of its size. But accuracy is very, very low compared to these right though these architectures give you reasonably high accuracy, but with a very small footprint, they also have very few operations. So it these are also at the left end of the scale. So that actually means a lot, right? First, the the the fact that these are small and have a small footprint means these models can actually be used in say mobile devices, OK. Second thing, because the number of operations is small, these can also be used for real time inference. You wouldn't be able to use something like a VGG net for real time inference simply because the number of operations is too big, right? It's it is way too slow for you to be able to make real time decisions. Whereas these models can actually be used for real time inferences, right? And these models are a nice trade off between the model size, the inference time and accuracy. So if you want a higher accuracy, then you sort of pay the price in terms of the model size as well as the inference time. So you can see that as you go this way, as the accuracy increases, the model size also goes up, the number of operations also goes up, which means the model is going to become slower, is going to become bigger, but then it will give you higher accuracy, right. So the the trade off is really between these two classes of models. So you have one class of models which are high on accuracy, relatively high on inference time and also relatively higher on the model size. Whereas here you have a cluster of architectures which give you a very low footprint fast inference models. So that's the kind of trade off that you're going to get. But then it also suggest something for you to be able to design the right kind of architecture for your own problem, right? So if you are looking for an architecture which you intend to use in a low footprint situation like an embedded device or something of that kind, then you should be looking at architectures which resemble this.
+00:03:43 - 00:05:14
+Designing networks for specific use cases based on model size and accuracy trade-offs
+Which means you must have not that many layers. You must have a small kernel because that means lower number of parameters, you must try to increase the stride a little bit if possible and so on. So these are the kind of tweaks you must be doing to your model to get it to this end of the scale. And if you want better accuracy, then you must invest in terms of layers. You also must decrease the stride length. You should try to keep a smaller kernel, maybe a mixture of kernels like what the Inception architectures do and so on. So, so that gives us some idea about how we should be designing our networks depending on the kind of use case that we intend to use the network for. Let us look at a few other graphs that that are there in this paper. So except LX net, which is the yellow line, this one, you can see that there is a marginal reduction in the forward time per image.
+00:05:15 - 00:07:18
+Impact of batch size on forward time and power consumption in neural networks
+So if you take an image and you see how long does it take for the network to process that image and give you the final answer the the classification or whatever that you're looking for, there is a marginal reduction in that. If you increase the batch size. Now this marginal reduction is happening because if you try to process multiple images together at once, then you can actually push through the entire batch. We have seen how we can do processing of an entire batch for the feed forward and by doing that you actually cut down on the the feed forward time per image. But it also says that the improvement you get because of the batch size is not reminders, there is definitely a marginal improvement, right. So all of these slightly go down as the batch size increases. In terms of power consumption, there seems to be not much of a difference. So the so the batch size does not seem to have any great influence on the power consumption. We can look at a few other trends which are again interesting, and these are actually useful to keep in mind when we design and execute our own networks for training and inference. This shows the memory footprint of these architectures with respect to the batch size and it it shows clear linear relationship between the batch size and the memory footprint beyond a certain threshold.
+00:07:21 - 00:08:29
+Memory footprint and batch size relationship in network training
+So up to a certain batch size the memory footprint is hardly anything but after that there is a clear linear increase in the memory footprint. So when we do our own training of our networks, often the question we ask ourselves is what is the batch size I should be using? And this trend clearly hints that. Well, if your decision on the batch size should take into account the amount of memory you have and, and of course, the, the, the time that you expect both for inference and your training time. So that's the kind of analysis that you should be, you should be doing. And the, the, the key thing to keep in mind here is that as your batch size goes up beyond a threshold, your memory footprint is going to shoot up. Yeah. And that is something you must take into account when you decide your batch size, depending on amount of memory you have at your disposal.
+
+To summarise, some key points we have discussed are:
+
+ 
+
+Architectures in a particular cluster, such as GoogleNet, ResNet-18 and ENet, are very attractive since they have small footprints (both memory and time) as well as pretty good accuracies. Because of low-memory footprints, they can be used on mobile devices, and because the number of operations is small, they can also be used in real-time inference.
+ 
+
+In some ResNet variants (ResNet-34,50,101,152) and Inception models (Inception-v3,v4), there is a trade-off between model accuracy and efficiency, i.e. the inference time and memory requirement. 
+ 
+
+ 
+
+Comparison Chart
+
+ 
+
+There is a marginal decrease in the (forward) inference time per image with the batch size. Thus, it might not be a bad idea to use a large batch size if you need to. 
+Forward Time Per Image vs Batch Size
+
+ 
+
+Up to a certain batch size, most architectures use a constant memory, after which the consumption increases linearly with the batch size.
+ 
+
+Memory Utilisation vs Batch Size
+
+ 
+
+In the next video, we will continue our discussion.
+
+
+An Analysis of Deep Learning Models - Part 3
+
+In the following lecture, we will continue our discussion on some other results related to inference time and 'accuracy density'. 
+
+00:00:00 - 00:01:09
+Relationship between operations and inference time
+This graph is kind of obvious, but it's it's interesting to notice. So the number of operations and the time taken for you to make an inference on a on a single image. We initially when we were interpreting the word operations, we said it gives you the number of operations required to do a feed forward. That also seems almost directly related to the amount of time it would take for you to make an inference about the input image, right? If you have to do more operations, then you need to spend more time doing those operations. This graph shows an almost direct linear relationship between the number of operations in one feet forward with the amount of time required for making an inference on one input image.
+00:01:09 - 00:02:01
+Inverse relationship between operations and images per second
+So if we can look at justice the last couple of charts, they are quite interesting. So here it shows the relationship between the accuracy and images per second. So images per second is the the rate at which one can process images which clearly directly relates to the the time required for one feed forward and also the number of operations. So as the number of operations goes up, the time required for a feed forward will go up, which means number of images you can process per second will come down South. There is a direct inverse relationship between these two, right?
+00:02:01 - 00:04:03
+Trade-off between accuracy and images per second
+And this shows very interestingly that there is an almost clear linear trend as you make these networks faster and faster, which means your operations are smaller. That means you can make inferences about more images per second. You see that the accuracy comes down and it comes down almost linearly. So you can see that there is a clear linear relationship between the number of images you are able to process per second and the accuracy. The the models like Resnet and inception etc are all clustered in the top left corner. So that is the high accuracy and low images per second region which so low images per second which means high latency right? So you have, so it means you want to take lot more time to make an influence about any given image, but then you have very high accuracy. So that's where all these networks are. And as you come down, you can see that you are able to increase the number of images you can process per second by compromising on the accuracy. And you can see that Alex Net is sitting somewhere here and so is East net, right E Net and Alxnet. If you notice the first chart had both of them at the left end of the picture. And on the other hand, Alxnet gives very low accuracy, but it has very high images per second.
+00:04:04 - 00:05:15
+Concept of accuracy density and parameter efficiency
+And the last interesting chart is this. So this this plot has the accuracy density as the authors of this paper call it. So accuracy density essentially means how efficiently are we using the parameters, right? So it is, it is something like am I getting the bang for my buck in terms of the amount of parameters that I have put into the model? Am I getting commensurate results? So if I increase my my model parameters 1 hundredfold, am I actually getting one hundredfold increase in the performance? So that's the sort of trade off that this picture is trying to look at. And you you can see that this is clearly not a linear relationship. It is indeed a sort of diminishing returns kind of situation.
+00:05:19 - 00:07:20
+Diminishing returns in model parameter increase
+Beyond a point you only get incremental performance with a huge increase in the number of parameters. So you can see the the trend going up like this and the right end which is the most efficient in terms of how well it uses all the parameters that are available. And that clearly happens to be the east net, right, which if you remember was at the left end, right? It actually gave very good accuracy with very few parameters and very small number of operations, right? And clearly the efficiency is extremely high. That is the the accuracy density is highest accuracy density is the smallest for VGG 19. Again, if you go back to the earlier picture, if you remember VGG 19 was at the right end. It, it wasn't very accurate and it was a huge BLOB, which means the humongous number of parameters. But the accuracy that you get from the model is definitely not commensurate with the number of parameters that this model had. And that is why it is at the lowest end of this picture, right? So this, this again gives you a sense of of how much improvement you can expect to get by making the network bigger, right? So if you increase the network size beyond a point, you should not be expecting commensurate improvement in performance, and you should clearly expect something like the law of diminishing returns kicking in.
+
+Let's conclude the important points from the latter part of the paper:
+
+Accuracy and inference time are in a hyperbolic relationship: a little increment in accuracy costs a lot of computational time.
+Power consumption is independent of batch size and architecture. 
+The number of operations in a network model can effectively estimate inference time.
+ENet is the best architecture in terms of parameter space utilisation.
+ 
+
+Next, we will summarise the learnings from this session.
+
+An Analysis of Deep Learning Models - Part 3
+
+In the following lecture, we will continue our discussion on some other results related to inference time and 'accuracy density'. 
+
+00:00:00 - 00:01:09
+Relationship between operations and inference time
+This graph is kind of obvious, but it's it's interesting to notice. So the number of operations and the time taken for you to make an inference on a on a single image. We initially when we were interpreting the word operations, we said it gives you the number of operations required to do a feed forward. That also seems almost directly related to the amount of time it would take for you to make an inference about the input image, right? If you have to do more operations, then you need to spend more time doing those operations. This graph shows an almost direct linear relationship between the number of operations in one feet forward with the amount of time required for making an inference on one input image.
+00:01:09 - 00:02:01
+Inverse relationship between operations and images per second
+So if we can look at justice the last couple of charts, they are quite interesting. So here it shows the relationship between the accuracy and images per second. So images per second is the the rate at which one can process images which clearly directly relates to the the time required for one feed forward and also the number of operations. So as the number of operations goes up, the time required for a feed forward will go up, which means number of images you can process per second will come down South. There is a direct inverse relationship between these two, right?
+00:02:01 - 00:04:03
+Trade-off between accuracy and images per second
+And this shows very interestingly that there is an almost clear linear trend as you make these networks faster and faster, which means your operations are smaller. That means you can make inferences about more images per second. You see that the accuracy comes down and it comes down almost linearly. So you can see that there is a clear linear relationship between the number of images you are able to process per second and the accuracy. The the models like Resnet and inception etc are all clustered in the top left corner. So that is the high accuracy and low images per second region which so low images per second which means high latency right? So you have, so it means you want to take lot more time to make an influence about any given image, but then you have very high accuracy. So that's where all these networks are. And as you come down, you can see that you are able to increase the number of images you can process per second by compromising on the accuracy. And you can see that Alex Net is sitting somewhere here and so is East net, right E Net and Alxnet. If you notice the first chart had both of them at the left end of the picture. And on the other hand, Alxnet gives very low accuracy, but it has very high images per second.
+00:04:04 - 00:05:15
+Concept of accuracy density and parameter efficiency
+And the last interesting chart is this. So this this plot has the accuracy density as the authors of this paper call it. So accuracy density essentially means how efficiently are we using the parameters, right? So it is, it is something like am I getting the bang for my buck in terms of the amount of parameters that I have put into the model? Am I getting commensurate results? So if I increase my my model parameters 1 hundredfold, am I actually getting one hundredfold increase in the performance? So that's the sort of trade off that this picture is trying to look at. And you you can see that this is clearly not a linear relationship. It is indeed a sort of diminishing returns kind of situation.
+00:05:19 - 00:07:20
+Diminishing returns in model parameter increase
+Beyond a point you only get incremental performance with a huge increase in the number of parameters. So you can see the the trend going up like this and the right end which is the most efficient in terms of how well it uses all the parameters that are available. And that clearly happens to be the east net, right, which if you remember was at the left end, right? It actually gave very good accuracy with very few parameters and very small number of operations, right? And clearly the efficiency is extremely high. That is the the accuracy density is highest accuracy density is the smallest for VGG 19. Again, if you go back to the earlier picture, if you remember VGG 19 was at the right end. It, it wasn't very accurate and it was a huge BLOB, which means the humongous number of parameters. But the accuracy that you get from the model is definitely not commensurate with the number of parameters that this model had. And that is why it is at the lowest end of this picture, right? So this, this again gives you a sense of of how much improvement you can expect to get by making the network bigger, right? So if you increase the network size beyond a point, you should not be expecting commensurate improvement in performance, and you should clearly expect something like the law of diminishing returns kicking in.
+
+Let's conclude the important points from the latter part of the paper:
+
+Accuracy and inference time are in a hyperbolic relationship: a little increment in accuracy costs a lot of computational time.
+Power consumption is independent of batch size and architecture. 
+The number of operations in a network model can effectively estimate inference time.
+ENet is the best architecture in terms of parameter space utilisation.
+ 
+
+Next, we will summarise the learnings from this session.
+
+I will help you understand the practical trade-offs involved in deploying deep learning models, focusing on the relationship between accuracy, parameters, and operations as discussed in the 2017 paper by Canziani et al.
+
+When deploying a CNN (like your example of a real-time face detector on a mobile phone), raw accuracy is only one piece of the puzzle. You must balance it against how much memory the model requires (parameters) and how fast it can run (operations).
+
+### The Three Core Metrics
+
+To evaluate a model for deployment, we look at three main variables:
+
+1. **Top-1 Accuracy:** How often the model correctly predicts the exact right class on the first try.
+2. **Model Parameters (Memory Footprint):** The total number of weights and biases the network has learned. This dictates how much RAM/VRAM is required just to load the model into memory.
+3. **Operations (Inference Time/Speed):** The number of floating-point operations (FLOPs) required to pass one single image through the network to get a prediction. This dictates how much battery power is consumed and how many frames per second (FPS) the model can process.
+
+### The "Accuracy vs. Operations vs. Parameters" Plot
+
+The paper you referenced relies on a very specific type of plot to visualize these trade-offs simultaneously.
+
+Here is how to read this visualization:
+
+* **Y-Axis (Accuracy):** Higher is better.
+* **X-Axis (Operations):** Further left is better (faster inference).
+* **Bubble Size (Parameters):** Smaller is better (less memory required).
+
+### Key Architectural Insights
+
+The plot reveals several counter-intuitive truths about how different CNN architectures balance these metrics:
+
+**1. Parameters $\neq$ Operations**
+You might assume that a model with more parameters automatically requires more operations. This is false.
+
+* **AlexNet** has a massive number of parameters (large bubble) but requires very few operations (far left on the x-axis).
+* Why? Because AlexNet uses large convolutional kernels ($11 \times 11$) which create many parameters, but it also uses a very large *stride* (stride of 4). Because it moves the kernel in such large jumps across the image, it performs far fewer total calculations per inference.
+
+**2. The VGG Trade-off**
+**VGG-16** and **VGG-19** are notoriously expensive.
+
+* On the plot, they are the massive bubbles sitting on the far right.
+* They require huge amounts of memory (over 138 million parameters) and take the longest time to run (over 30 G-Ops). Despite this massive resource cost, their accuracy is actually lower than newer, smaller models like Inception or ResNet.
+
+**3. The Efficiency of Inception and ResNet**
+Architectures like **GoogLeNet (Inception)** and **ResNet** are the sweet spots for deployment.
+
+* They sit in the top-left quadrant of the plot (high accuracy, low operations).
+* Their bubbles are very small because they drastically reduced parameters (GoogLeNet by removing fully connected layers, ResNet through skip connections).
+* They use small $3 \times 3$ kernels with a stride of 1. While a stride of 1 increases the number of operations compared to AlexNet, their overall efficiency and lack of dense layers keep them incredibly fast and lightweight.
+
+---
+
+Below is an interactive widget that lets you explore these exact trade-offs. You can adjust the sliders to see how prioritizing speed over accuracy (or vice versa) changes which architecture is optimal for your specific deployment needs.
+
+
+In Part 2 of this analysis, we move beyond just looking at the architecture itself and examine how operational choices—specifically **Batch Size**—affect real-world deployment.
+
+The primary takeaway from this section is that choosing the right model depends entirely on your target hardware, and how you configure that model (batch size) will dictate your memory usage and inference speed.
+
+### 1. The Two Extremes of Model Selection
+
+The paper categorizes the architectures we've discussed into two primary clusters based on their deployment viability:
+
+* **Low Footprint & Fast (The Edge / Mobile Cluster):** Architectures like GoogLeNet, ResNet-18, and ENet. They have very few parameters (low memory) and require few operations (fast inference). Because of this, they are the only viable options for real-time inference on mobile or embedded devices. To design a network for this cluster, you should use fewer layers, smaller kernels, and a larger stride.
+* **High Accuracy & Slow (The Server Cluster):** Architectures like ResNet-50/152, VGGNet, and Inception-v3/v4. You pay the price in memory size and inference speed to gain top-tier accuracy. These are meant for server-side processing where VRAM and compute power are plentiful.
+
+### 2. The Impact of Batch Size
+
+When you deploy a model or train it, you don't always pass one image through it at a time. You can pass a "batch" of images. The paper highlights three crucial trends regarding batch size:
+
+* **Inference Time (Forward Time Per Image):** As you increase the batch size, there is a *marginal* decrease in the time it takes to process each individual image. This happens because the GPU can process the images in parallel. Therefore, using a larger batch size is generally a good idea if you want to maximize throughput (processing many images quickly).
+* **Power Consumption:** The batch size does *not* significantly impact the power consumption of the hardware.
+* **Memory Footprint:** This is the most critical constraint. Up to a certain threshold (a small batch size), memory usage remains relatively constant. However, once you cross that threshold, **memory consumption increases linearly** with the batch size. If you set your batch size too high, you will run out of VRAM and the system will crash.
+
+---
+
+The widget below allows you to interactively explore this crucial relationship between batch size, memory footprint, and inference time based on the trends described in the paper.
+
+This final part of the analysis focuses on the direct linear relationships between computational operations, time, and how efficiently models use their parameters (accuracy density).
+
+Here are the key takeaways regarding these performance metrics:
+
+### 1. Operations vs. Inference Time
+
+There is a direct, linear relationship between the number of operations (FLOPs) required for one feed-forward pass and the time it takes to make an inference on a single image.
+
+* If a model requires more operations, it will definitively take more time to run.
+
+### 2. Accuracy vs. Images Per Second (Throughput)
+
+Because operations dictate inference time, they also dictate throughput—the number of images the model can process per second. There is an almost perfect inverse linear relationship between speed and accuracy:
+
+* **High Accuracy / Low Speed (Top-Left):** Models like ResNet and Inception-v4 sit here. They are highly accurate but suffer from high latency, meaning they process fewer images per second.
+* **Low Accuracy / High Speed (Bottom-Right):** Models like AlexNet and ENet sit here. They sacrifice accuracy to achieve very high throughput (many images per second), making them suitable for real-time video processing on weaker hardware.
+
+### 3. Accuracy Density (Parameter Efficiency)
+
+"Accuracy Density" measures how efficiently a model uses its parameters. It asks the question: *Are we getting proportional performance gains for the memory cost we are paying?*
+The paper reveals a strong law of **diminishing returns**: beyond a certain point, massively increasing the number of parameters yields only tiny, incremental improvements in accuracy.
+
+* **Lowest Efficiency (VGG-19):** VGG-19 is at the very bottom of this metric. It is a massive model (huge parameters), but its accuracy is relatively low compared to its size. It is highly inefficient.
+* **Highest Efficiency (ENet):** ENet is the most efficient. It achieves a respectable accuracy with an incredibly small number of parameters and operations.
+
+### Summary of Deployment Truths
+
+1. **Hyperbolic Trade-off:** A tiny increase in top-tier accuracy costs a massive amount of computational time and memory.
+2. **Operations = Time:** You can accurately estimate a model's inference time simply by looking at its total operation count.
+3. **Power Consumption is Static:** Neither the architecture choice nor the batch size significantly affects the raw power consumption rate of the hardware during active inference.
+
+ 
+
+Let's conclude the important points from the latter part of the paper:
+
+Accuracy and inference time are in a hyperbolic relationship: a little increment in accuracy costs a lot of computational time.
+Power consumption is independent of batch size and architecture. 
+The number of operations in a network model can effectively estimate inference time.
+ENet is the best architecture in terms of parameter space utilisation.
+ 
+
+Next, we will summarise the learnings from this session.
+
+Session Summary
+
+In this session, you compared the architectures of some popular networks which had achieved state-of-the-art results in ImageNet: AlexNet, VGGNet, GoogleNet and ResNet. 
+
+ 
+
+Until the VGGNet, most of the major innovations had appeared in the form of increased depth, smaller filters, etc. In 2014, GoogleNet introduced an unconventional idea in the form of the Inception module, which performs multiple parallel convolutions (1 x 1, 3 x 3, 5 x 5, pooling etc.) on the input. This enabled GoogleNet to increase both the depth and the 'width' of the network (it has 22 layers with multiple inception modules stacked one over another).  
+
+ 
+
+In the quest for training deeper networks, the ResNet team introduced another novel idea - skip connections, which enabled training extremely deep networks by 'by-passing the additional layers if they do not learn anything useful, else keeping them'.    
+
+ 
+
+Since these models have already been trained on millions of images, and therefore are good at extracting generic features, they are well-suited to solve other computer vision problems (with no or little re-training). This is the main idea of transfer learning. 
+
+ 
+
+In transfer learning, a pre-trained network can be repurposed for a new task depending on how much the new task differs from the original one.  
+
+ 
+
+Finally, we compared various popular CNN architectures in terms of metrics (other than accuracy) which are important considerations for deployment (inference time, memory requirements etc.) 

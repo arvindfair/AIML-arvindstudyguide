@@ -1,0 +1,987 @@
+Context Vectors
+
+
+Previously, you learnt that the model adjusts weights at each time step to generate a unique context vector Equation. You will now explore the mathematics behind this process.
+
+00:00:00 - 00:00:17
+Introduction to model flexibility and context generation
+So now let us get get back to this figure where we said that now the model at each time step has the flexibility to learn the weights and then appropriately combine them to generate its own context, a different context at each time step T.
+00:00:17 - 00:01:04
+Mathematics behind decoder context generation
+Now let us with the example that you had and the intuition that you obtained, let us dive deep into the mathematics behind it. So we are going to of course focus only on the decoder because encoder has done its job. It has given you all context vectors corresponding to the each word in the sentence. So it has successfully did its job. Now the changes will happen only in the decoder. Again. This formula you would have seen earlier. For a moment, can you please pause and think what is the difference between the formula that you are seeing here and the one that you have seen earlier. Right, you will agree that the only thing changed is this particular component.
+00:01:04 - 00:02:00
+Decoding process and context interpretation
+Earlier you would have seen that this was exactly just C Now what is it? It is ACI that is at each step that each step that is I equal to 123 till the end of the generation process where the decoder is using a new context vector it is generating. In fact selecting is the right word right? What is the context that I require at this time and using that for the generation process. Rest of all are same. The three basic tenets of decoding process. The previous output a state of the decoder context coming from the encoder. So these two remain same. There is no change there. But the change main important change is the interpretation of this word called context which can change from time step to time step. Across this time step I equal to 123 and so on.
+00:02:01 - 00:03:02
+Computation of current context CI
+Great. So as a result, what happens is the way we compute the state also changes. So the moment we are getting enriched context, why not we use it for enriching the state of the decoder as well. So typically si the state of the decoder will take into consideration what was my previous state of the decoder, what was the previous input of the decoder and what is the current context. Current context. This is not just the context, it is the current context at time step T, right? So now the most important question that I saved for the last is how is CI computed, isn't it? And we know the intuitive answer to it. But mathematically, how is this current context CI computed, right? Again, I request you to pause for a moment and think.
+00:03:02 - 00:03:11
+
+Put all the concepts that we have seen in the example and visual interpretation together and see if we can come up with this formulation of CI.
+
+
+Note: There is an error in the video at 1:05. The professor mistakenly refers to Equation as c. This was in reference to the following formula, which he used for comparison with the subsequent formula.
+
+
+Equation
+
+ 
+
+We focused on the decoder since the encoder has already completed its task by providing the context vectors for each word in the sentence and then talked about the formula given below and discussed the difference between the formula shown below and the one you learnt previously.
+
+Equation
+
+ 
+
+Then you learnt that in the decoder, the key change lies in the interpretation of the context. Previously, the context was static (denoted as Equation). Now, it varies at each step (Equation), meaning that at each time step Equation the decoder selects a new context relevant to that particular moment in the generation process.
+
+ 
+
+The decoding process relies on three main components:
+
+the previous output Equation
+state of the decoder Equation
+context from the encoder Equation
+ 
+
+However, the context is now dynamic, changing with each time step. 
+
+ 
+
+As a result, the way the state of the decoder (Equation) is computed also changes. The state at each time step incorporates the previous state, the previous input, and the current context Equation, which is specific to that time step.
+
+ 
+
+Now the important question is: How is Equation computed mathematically? You will learn this next.
+
+Computation of Context Vectors
+
+
+00:00:00 - 00:01:02
+Convex Combination of Encoder Context Vectors
+So one thing is pretty clear, the context is obtained as a convex combination, convex combination, convex combination of all the encoder context vectors. That part is clear isn't it? We said that in the diagram. You can see that once this a IJ's in that particular diagram or alpha IJ's that are being used, these one get confused. Earlier we had a IJ which said what is an attention weight that we have to assign at time step I for this context vector J. So here we are using this alphabet curl alpha right? So this denotes the relative importance at time step I for this vector called J right? Where are this H1H2H3 is coming from?
+00:01:02 - 00:03:30
+Computation of Attention Weights Using Softmax
+From the encoder please. So that does not change. So you have this H1H 2H3 till HTX coming from the encoder and then A1A2, A11 in fact and A12 and A13 are the weights that represent how important these context vectors are at the time step called I. So this is good. So now the question boils down to how do I compute these alphas, right? Yes, it is understood that we take convex combination of the their respective importance which are represented by alphas. But how are they computed? How are the attention weights computed? As we mentioned the word called convex combination. The first important thing is whatever numbers that we end up giving to this attention scores, they have to somehow converted back into a number between zero to 1 and not. Not just that, they have to sum up to 1 as well, right? Because we are taking a convex combination of all these vectors. So therefore here in this figure E IJ's represents the scores scores that have been obtained. Again, how do we get it? We are going to come to it in a second. I mean the answer is just below this. But ignoring that once you obtain the score at time step I for this vector called J right? What are we going to do is apply what is called a softmax operation such that we convert all the weights are the scores into numbers between zero to 1. And not just that those numbers will also add up to one, right? Those numbers will also add up to 1. So in order to do that, an efficient trick is to do this softmax operation where we take exponential of each E IJ and divide by a normalizing factor which is sum over all exponential of the scores. So as you can recall, this exponential helps us in making sure that even the scores which are negative or converted to being a positive numbers. And then if you really look at what is the summation over alpha over, sorry, over J of this alpha IJ, they sum up to one, right? Because the denominator is a normalization factor. Great.
+00:03:30 - 00:05:00
+Learnable Alignment Function for Attention Scores
+Now again, the question boils down to how do I compute these attention scores, right? How to compute them? And here is where I want to put a lot of focus on that is we are not going to statistically, statically determine it, right? So if we say that here, at time Step 1, you have to focus on this. At time Step 2, you have to focus on that. It's not plausible, right? At each statement in each translation, the positions that you want to look at and dynamically change. So it is in fact impossible for a human to sit and label or at each time steps say that you focus on this, you focus on that and so on and so forth. It has to be learnt. That is the most important part. So what to focus on is also something that the model has to learn, infer, understand from this training paradigm. Therefore, what we are going to do, we are going to say that this E IJ's that is your attention scores. Attention scores is again a function. This is a learnable function. Learnable function. The function that the architecture or the model learns overtime, right? This is called alignment function A is an alignment function that the architecture or the model learns overtime period over its training paradigm, right? How does it learn?
+00:05:01 - 00:07:03
+Decoder's Context and Attention Score Learning
+What does it look into to learn is as follows. So at time step T. So at time step T, the first thing that decoder has to do is understand what is the score corresponding to or time step I. Let us be very consistent with this notation. At time step I, the decoder has to look first understand and infer what is the weight that it needs to associate to each vector H1H2H3. But what is the information that it has? It has what is the current context, current context of the decoder of the decoder which is South I -1 at time step I, it has SI -1. Now it is going to look at South I -1 and each of this context vectors of the encoder H1H2 S 3 and apply a function on it, a function which is being learnt overtime and in this way it gains the ability to learn these attention scores called Eij. I am going to repeat this again at each time step I the decoder currently has access to the context of the decoder which is si -1. That is the context that the currently the decoder possess. Now it is going to match this context si -1 against each of H1H2H3H4 and apply this learnable function called A. Again, this can be a matrix operation, a matrix that the model learns from the examples and training paradigm. So it applies this and learns these attention scores E IJ which represents the relative importance of this context with their HJ at this time called I. So how does this particular model learn?
+00:07:03 - 00:07:05
+
+So that is what we are going to see next.
+
+
+ 
+
+You learnt that the context vector Equation is obtained as a convex combination of all the encoder's context vectors. In the following formula, you can see that the weights, represented as Equation, denote the relative importance of each context vector Equation at time step Equation. These context vectors (Equation, etc.) come from the encoder, and the weights (Equation, and Equation etc.) indicate the importance of each context vector at a particular time step.
+
+Equation
+
+ 
+
+Now, how do you compute these attention weights (Equation)? Since you are dealing with a convex combination, the weights must be converted to numbers between 0 and 1, and they must sum to 1. To achieve this, a softmax operation is performed. Here is how it works. 
+
+ 
+
+Equation
+ 
+
+Calculate a score (Equation) for each context vector at time step Equation. 
+Then, convert these scores into positive values by applying the exponential function, and then, normalise by dividing each exponential by the sum of all exponentials to get weights (Equation) between 0 and 1.
+Ensure the weights sum to 1, allowing for a proper convex combination of context vectors.
+
+This way, even if the scores are negative, the softmax operation converts them into positive weights.
+
+ 
+
+But how are these attention scores (Equation) computed? This is where the model’s learning process comes into play. The scores are not predetermined; they are learned by the model during training. The model learns an alignment function Equation, that determines the attention scores at each time step.
+
+
+                                                                       Equation
+
+ 
+
+At each time step Equation, the decoder considers its current state (Equation) and compares it with each of the encoder’s context vectors (Equation, etc.). It applies the alignment function to determine how much attention (or weight) to give to each context vector. This process is dynamic, that is, the model learns to adjust these weights based on the context it is dealing with, making the attention mechanism powerful and adaptable.
+
+ 
+
+In summary, the model learns where to focus its attention at each step, ensuring it effectively processes and translates the information it receives from the encoder.
+
+ 
+
+Next, you will explore the limitations of attention-based encoder-decoder model.
+
+
+Attention Mechanism in Deep Learning — understand it visually
+This is one of the most important concepts in NLP. It solves a major limitation of the basic encoder–decoder architecture that you just learned.
+
+Let's first understand the problem, then see how attention solves it, and finally understand the mathematics in your lecture.
+1. Why do we need attention?
+Remember our previous encoder–decoder architecture?
+- Encoder reads the entire input sentence.
+- Encoder produces a final context vector.
+- Decoder uses that context vector to generate the translated sentence.
+The problem is that the basic architecture tries to compress the entire input sentence into one fixed-size context vector.
+
+Imagine translating this long sentence:
+
+English:
+
+"The boy who is standing near the red car is playing cricket."
+
+The encoder reads all the words and creates one final representation.
+Traditional encoder–decoder
+Input sentence
+The | boy | who | is | standing | near | the | red | car | is | playing | cricket
+Encoder
+
+Processes all input words
+
+One fixed context vector
+C
+Carries information about the entire sentence
+
+Decoder
+
+Uses the same fixed context to generate every output word
+
+
+Think about what happens when the decoder generates the word corresponding to "cricket".
+
+It needs to understand the input word "cricket".
+
+When generating the word corresponding to "boy", it needs to focus on "boy".
+
+But in the traditional architecture, the decoder receives the same fixed context vector at every step.
+
+This is the limitation that attention addresses.
+2. What is attention?
+Imagine you are translating a sentence from English to Hindi.
+
+You don't look at the entire English sentence with equal importance every time you generate a Hindi word.
+
+Instead, you focus on the relevant English words.
+
+For example:
+While generating Hindi word	English words to focus on
+लड़का	boy
+खड़ा	standing
+लाल	red
+कार	car
+क्रिकेट	cricket
+
+This is exactly the intuition behind attention.
+
+Attention allows the decoder to dynamically focus on different parts of the input sentence while generating each output word.
+
+Instead of using one fixed context vector, it calculates a new context vector at every decoding step.
+Attention-based encoder–decoder
+Input sentence
+The | boy | who | is | standing | near | the | red | car | is | playing | cricket
+Encoder produces a context vector for every input word
+H₁
+
+
+H₂
+
+
+H₃
+
+
+H₄
+
+
+…
+
+
+H₁₂
+
+
+
+Attention mechanism
+
+Decides which encoder states are important now
+
+Dynamic context Cᵢ
+
+A different weighted combination at each decoding step
+
+Decoder generates the next word
+
+The key difference:
+- Traditional encoder–decoder: one fixed context vector.
+- Attention-based encoder–decoder: a new context vector for each output step.
+
+3. Visualise how attention changes at each decoding step
+Let's use a smaller example so you can see exactly what happens.
+
+Input English: I love apples
+
+Output Hindi: मुझे सेब पसंद हैं
+
+The encoder processes the English sentence and produces three hidden-state vectors:
+- \(H_1\) represents information from "I".
+- \(H_2\) represents information from "love".
+- \(H_3\) represents information from "apples".
+The decoder generates Hindi words one by one. At each step, it decides how much importance to give to each encoder vector.
+
+For learning purposes, imagine the following attention weights. These numbers are illustrative, not actual model output.
+Attention heatmap
+Darker cells represent greater attention. Each row adds up to 1.
+Hindi output	I	love	apples
+मुझे	80%	15%	5%
+सेब	5%	10%	85%
+पसंद	10%	80%	10%
+हैं	20%	60%	20%
+
+This is a simplified illustration of how different output steps can attend to different input words. Real translations can have more complex alignments.
+
+Look at the first row:
+
+When generating "मुझे", the model gives 80% attention to "I".
+
+When generating "सेब", it gives 85% attention to "apples".
+
+When generating "पसंद", it gives 80% attention to "love".
+
+See what happened?
+
+The decoder changes its focus depending on which word it is generating.
+
+This is the central idea of attention.
+4. How does attention calculate the context vector?
+Now let's understand the mathematics from your lecture.
+
+The encoder has already produced:
+\[
+H_1,H_2,H_3,\ldots,H_{T_x}
+\]
+
+These are the hidden-state vectors for the input words.
+
+The decoder needs to decide how important each one is at the current output step.
+
+It does this in three stages.
+Stage A — Calculate attention scores
+Suppose the decoder is currently generating the second output word.
+
+It has a previous decoder state \(S_{i-1}\).
+
+It compares this decoder state with every encoder hidden state:
+Current decoder state
+Sᵢ₋₁
+What the decoder currently knows
+
+Compare with all encoder states
+H₁
+
+Alignment
+eᵢ1
+
+
+H₂
+
+Alignment
+eᵢ2
+
+
+H₃
+
+Alignment
+eᵢ3
+
+
+
+The alignment function calculates a score for each encoder state.
+
+The lecture calls this learned function the alignment function, represented by \(A\).
+
+Its job is to calculate how relevant an encoder state is to the decoder's current state.
+\[
+e_{ij}=A(S_{i-1},H_j)
+\]
+
+Understand the notation:
+Symbol	Meaning
+\(i\)	Current decoder time step
+\(j\)	Position of an input word
+\(S_{i-1}\)	Previous decoder state
+\(H_j\)	Encoder state for input word j
+\(e_{ij}\)	Attention score
+
+For example, the decoder might calculate:
+Input word	Attention score
+I	1.0
+love	2.0
+apples	3.0
+
+These are just example scores. Higher scores indicate greater relevance.
+
+Important: The scores are learned by the model during training. A human does not manually decide which word should receive attention at each step.
+Stage B — Apply Softmax to calculate attention weights
+Here is a problem.
+
+The attention scores can be any real numbers. They are not necessarily between 0 and 1, and they don't necessarily add up to 1.
+
+But we want weights that represent relative importance.
+
+This is why we use Softmax.
+\[
+\alpha_{ij}=
+\frac{e^{e_{ij}}}
+{\sum_{k=1}^{T_x}e^{e_{ik}}}
+\]
+
+Let's calculate it with our example scores:
+Word	Score	Exponential
+I	1	2.718
+love	2	7.389
+apples	3	20.086
+Total		30.193
+
+Now divide each exponential by the total.
+\[
+\alpha_1=\frac{2.718}{30.193}=0.09
+\]
+
+\[
+\alpha_2=\frac{7.389}{30.193}=0.24
+\]
+
+\[
+\alpha_3=\frac{20.086}{30.193}=0.67
+\]
+
+Attention weights after Softmax
+I
+9%
+
+
+
+
+love
+24%
+
+
+
+
+apples
+67%
+
+
+
+
+
+Total
+100%
+
+
+Notice two important properties:
+1. Every attention weight is between 0 and 1.
+2. All attention weights add up to 1.
+This is why they can be used to calculate a weighted average, also called a convex combination.
+Stage C — Calculate the new context vector
+Now we have attention weights.
+
+We use them to combine the encoder hidden states.
+
+The formula is:
+\[
+C_i=\sum_{j=1}^{T_x}\alpha_{ij}H_j
+\]
+
+For our three-word example:
+\[
+C_i=0.09H_1+0.24H_2+0.67H_3
+\]
+
+What does this mean?
+- Give 9% importance to the representation of "I".
+- Give 24% importance to the representation of "love".
+- Give 67% importance to the representation of "apples".
+Combine these weighted vectors to obtain the current context vector.
+How the context vector is formed
+H₁
+9%
+
+
+H₂
+24%
+
+
+H₃
+67%
+
+
+
+Weighted combination
+
+Multiply each vector by its attention weight and add the results
+
+Current context vector
+Cᵢ
+
+
+This is called a convex combination because the weights are non-negative and sum to 1.
+
+5. What happens after calculating the context vector?
+We now have the current context \(C_i\).
+
+The decoder uses it along with its previous state and previous generated word to generate the next word and update its state.
+Complete attention-based decoder
+Previous generated word
+Yᵢ₋₁
+
+Previous decoder state
+Sᵢ₋₁
+
+Current attention context
+Cᵢ
+
+Decoder RNN
+
+Combines the three inputs
+
+Next output
+Yᵢ
+
+
+New state
+Sᵢ
+
+
+
+
+Compare this with the traditional decoder:
+Traditional decoder	Attention-based decoder
+Uses fixed context \(C\)	Uses dynamic context \(C_i\)
+Same context at each output step	Context recalculated at every step
+Limited ability to focus on individual input positions	Can give different importance to different input positions
+
+6. Try the attention mechanism yourself
+Let's make the concept interactive. Suppose the decoder has calculated three attention scores for the words "I", "love", and "apples".
+
+Change the scores and see how Softmax changes the attention weights.
+Attention score playground
+Adjust the scores. Higher scores generally receive higher attention weights.
+I
+4
+
+
+
+
+love
+4
+
+
+
+
+apples
+4
+
+
+
+
+
+Softmax attention weights
+I
+
+33.3%
+
+
+
+
+love
+
+33.3%
+
+
+
+
+apples
+
+33.3%
+
+
+
+
+Total
+100%
+
+Reset scores
+Try setting the score of "I" to 5 and the other two scores to 0.
+
+You'll see that the model gives most of its attention to "I".
+
+This is the intuition behind the attention weights.
+7. Important: Don't confuse attention with Transformers
+Your current lecture is explaining attention in the RNN encoder–decoder architecture.
+
+This is an important foundation for understanding Transformers later.
+RNN encoder–decoder with attention	Transformer
+Uses RNN encoder and decoder	Uses attention-based architecture without recurrent RNN layers
+Decoder calculates attention over encoder states	Uses self-attention and, in encoder–decoder Transformers, cross-attention
+Processes sequences recurrently	Can process sequence positions in parallel during training
+
+The attention concept is related, but the exact mechanisms and architecture differ.
+8. Exam revision — the complete flow
+Remember these five steps
+1. Encoder generates hidden states
+   
+   \(H_1,H_2,\ldots,H_{T_x}\)
+2. Alignment function calculates scores
+   
+   \(e_{ij}=A(S_{i-1},H_j)\)
+3. Softmax converts scores into weights
+   
+   \(\alpha_{ij}=\operatorname{softmax}(e_{ij})\)
+4. Weighted combination creates context
+   
+   \(C_i=\sum_j\alpha_{ij}H_j\)
+5. Decoder generates next word and updates state
+   
+   Uses previous output, previous state and current context.
+
+Five terms you must know:
+- Attention score: How relevant an encoder state is to the current decoder state.
+- Alignment function: Learned function used to calculate attention scores.
+- Softmax: Converts scores into weights between 0 and 1 that sum to 1.
+- Attention weight: Relative importance assigned to an encoder state.
+- Context vector: Weighted combination of encoder hidden states.
+The most important sentence to remember:
+
+Attention allows the decoder to decide what to focus on in the input sentence at each output-generation step, rather than depending on one fixed context vector.
+
+Your next lecture covers limitations of attention-based encoder–decoder models. Before that, make sure you can explain the difference between \(e_{ij}\), \(\alpha_{ij}\), and \(C_i\): score, weight, and context vector respectively.
+
+Limitations of Attention-Based Encoder-Decoder Models
+
+00:00:00 - 00:00:28
+Potential drawbacks of encoder-decoder model
+Now let us discuss what are the potential drawbacks of the model that we have seen or in other words, is there any flexibility to further improve whatever that we have seen so far? Can we make some paradigm shift from the encoder, decoder mechanism that we have seen of course with attention into something bigger or better, right? So one drawback that you can see immediately is we are making use of the recurrent models.
+00:00:29 - 00:01:30
+Sequential computation in recurrent models
+So by that we mean that these are the models that are operating in a sequential fashion. If you look at all the figures that we have been drawing so far for encoder for example, you have X1 and then you have getting first context vector H1 and then X2, second context vector, X3 third context vector and so on and so forth. So what is happening there? It is a sequential computation and I do not have to tell you that if the number of words in sentences are very very large, the time that you require to get all the context vectors H1H2H3 till H capital TX right? So if number of words TX is very large, it would take lot of time to sequentially process 1 by 1 and get these vectors HTX. So that is what we are saying when we say the sequential computation is slow. And as I said, this impacts the processing of very long sentences.
+00:01:30 - 00:02:23
+Parallel computation for faster processing
+If the number of words in the sentence is very large and you are doing a sequential computation, this will have a impact. Now again pause for a moment and think what is your desired and ideal way of getting these vectors? In other words, if I tell you that I am going to discuss a mechanism where all these vectors H1, H2H3 till HXHTX are all obtained at once in parallel, wouldn't that be such a faster and still an efficient mechanism to obtain this context vectors? So that is the question that I am going to ask now that can we somehow come up with a mechanism which not does this operations in a sequential fashion but in a parallel fashion, right. So that's is what we are going to go towards.
+ 
+
+You learnt that a key issue with this model is the reliance on recurrent models, which operate sequentially.
+
+ 
+
+For example, in the encoder, you process words one by one to generate context vectors: Equation​ gives Equation, Equation gives Equation, Equation gives Equation, and so on. This sequential processing can be time-consuming, especially when dealing with long sentences, as it requires processing each word individually before obtaining all context vectors.
+
+ 
+
+Imagine if we could obtain all these vectors: Equation simultaneously, in parallel. This approach would be much faster and more efficient. So, can we develop a mechanism that processes these vectors parallelly rather than sequentially? You will explore this in the next session.
+
+ 
+
+Next, we will summarise your learnings from this session.
+
+# Limitations of Attention-Based Encoder–Decoder Models
+
+The main limitation in your lecture is very important:
+
+Even after adding attention, the encoder and decoder still use RNNs, and RNNs process words sequentially — one word after another.
+
+Attention helps the decoder focus on the relevant input words, but it does not remove the sequential processing limitation of RNNs.
+
+Let's understand why this is a problem and how it leads to Transformers.
+
+## 1. First, remember what we built in the previous lesson
+
+Suppose the input sentence is:
+
+"The boy is playing cricket"
+
+The encoder processes each word and generates a hidden-state vector.
+
+RNN encoder
+
+## Sequential processing
+
+Input words
+
+The
+
+boy
+
+is
+
+playing
+
+cricket
+
+1. Process The
+
+   \\(X_1 \rightarrow H_1\\)
+2. Process boy
+
+   \\(X_2 + H_1 \rightarrow H_2\\)
+3. Process is
+
+   \\(X_3 + H_2 \rightarrow H_3\\)
+4. Process playing
+
+   \\(X_4 + H_3 \rightarrow H_4\\)
+5. Process cricket
+
+   \\(X_5 + H_4 \rightarrow H_5\\)
+
+Each step depends on the previous step
+
+Notice something important:
+
+- To calculate \\(H_1\\), we need the first word.
+- To calculate \\(H_2\\), we need \\(H_1\\).
+- To calculate \\(H_3\\), we need \\(H_2\\).
+- To calculate \\(H_4\\), we need \\(H_3\\).
+
+This is called sequential computation.
+
+## 2. Why can't an RNN process all words simultaneously?
+
+Look at the RNN equation:
+
+\\[ H_t=f(X_t,H\_{t-1}) \\]
+
+Here:
+
+- \\(X_t\\) = current input word representation.
+- \\(H\_{t-1}\\) = previous hidden state.
+- \\(H_t\\) = newly calculated hidden state.
+
+The problem is the dependency on \\(H\_{t-1}\\).
+
+For example, you cannot calculate \\(H_3\\) until \\(H_2\\) is ready.
+
+The dependency chain
+
+H₁
+
+H₂
+
+H₃
+
+H₄
+
+H₅
+
+The next hidden state must wait for the previous one.
+
+Imagine you are calculating five values, but each calculation depends on the previous result.
+
+Even if you have a powerful computer with many processors, you cannot calculate all five dependent steps at the same time.
+
+That's the fundamental problem.
+
+## 3. Why does this become slow for long sentences?
+
+Consider two input sentences.
+
+Short sentence
+
+"I love machine learning"
+
+I
+
+love
+
+machine
+
+learning
+
+4 sequential processing steps
+
+Long sentence
+
+A sentence containing 100 words
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+10
+
+11
+
+12
+
+13
+
+14
+
+15
+
+16
+
+17
+
+18
+
+19
+
+20
+
+100 sequential processing steps (shown as 20 groups of 5)
+
+The more words in the sentence, the more recurrent steps the model must perform.
+
+For a very long document containing thousands of words, this sequential dependency becomes a bottleneck.
+
+The lecture's key point: Sequential computation is slow, particularly when processing very long sentences.
+
+## 4. What is the solution? Parallel computation!
+
+Now imagine a different architecture.
+
+Instead of waiting for the previous hidden state, what if we could calculate all the word representations simultaneously?
+
+Parallel processing idea
+
+## All input positions processed together
+
+Input sentence
+
+The
+
+boy
+
+is
+
+playing
+
+cricket
+
+Parallel computation
+
+All positions can be processed together
+
+X₁
+
+H
+
+X₂
+
+H
+
+X₃
+
+H
+
+X₄
+
+H
+
+X₅
+
+H
+
+All output representations
+
+## H₁, H₂, H₃, H₄, H₅
+
+Computed without waiting for the previous position's recurrent state
+
+This is the idea behind the next big architectural change: the Transformer.
+
+Transformers use attention mechanisms to allow information from different positions in a sequence to interact, without relying on an RNN's word-by-word recurrence.
+
+## 5. Sequential vs parallel — compare them
+
+| RNN-based encoder                                      | Transformer encoder                             |
+| ------------------------------------------------------ | ----------------------------------------------- |
+| Processes positions sequentially                       | Processes positions in parallel during training |
+| Each hidden state depends on the previous state        | No recurrent hidden-state dependency            |
+| Long sequences can take longer due to sequential steps | Can use parallel hardware more effectively      |
+| Uses recurrent computation                             | Uses self-attention and feed-forward layers     |
+
+A simple everyday analogy
+
+RNN: One person doing a queue of tasks
+
+1. Finish task 1
+2. Then task 2
+3. Then task 3
+4. Then task 4
+
+Sequential
+
+Transformer: Multiple workers
+
+- Worker 1 handles task 1
+- Worker 2 handles task 2
+- Worker 3 handles task 3
+- Worker 4 handles task 4
+
+Parallel
+
+Analogy: parallelism works when the computations can be performed independently or expressed as parallel matrix operations.
+
+## 6. One important clarification: Doesn't attention already solve this?
+
+This is a common exam and interview question.
+
+You just learned that attention calculates scores between decoder states and encoder hidden states.
+
+So why is the model still slow?
+
+Because attention and parallel computation solve different problems:
+
+- Attention solves the problem of deciding which input information is relevant to the current output.
+- Parallel computation solves the problem of processing sequence positions without waiting for previous recurrent steps.
+
+Adding attention to an RNN does not remove the RNN's sequential dependency.
+
+That is why attention-based RNN encoder–decoder models still have this limitation.
+
+## 7. What should you remember about the next architecture?
+
+The next topic is the Transformer architecture.
+
+## Evolution of NLP architectures
+
+1\. Traditional RNN encoder–decoder
+
+Sequential processing, fixed context vector.
+
+2\. RNN encoder–decoder with attention
+
+Dynamic context at each output step, but still sequential RNN computation.
+
+3\. Transformer
+
+Uses attention without recurrent RNN layers, enabling parallel processing of input positions during training.
+
+Next topic
+
+One technical nuance: Transformers remove recurrent processing in the encoder, but an autoregressive decoder still generates output tokens one at a time during normal translation or text generation. Parallelism does not mean every part of a Transformer runs simultaneously.
+
+## 8. Test your understanding
+
+Quick quiz
+
+4/4 answered
+
+1\. What is the main limitation discussed in this lecture?
+
+RNNs cannot process words
+
+RNNs process sequence positions sequentially
+
+Attention cannot calculate weights
+
+Correct
+
+The dependency between consecutive hidden states forces sequential computation.
+
+2\. Why must an RNN wait before calculating H₃?
+
+It needs H₂ first
+
+It needs the final output sentence
+
+It needs Softmax
+
+Correct
+
+H₃ depends on H₂, which depends on H₁.
+
+3\. Does adding attention to an RNN remove sequential computation?
+
+Yes
+
+No
+
+Correct
+
+Attention improves information selection, but the RNN still processes recurrent states sequentially.
+
+4\. What is the main motivation for Transformer architecture in this lecture?
+
+To remove word embeddings
+
+To enable parallel processing of input positions
+
+To eliminate the need for training
+
+Correct
+
+Transformers remove recurrent dependencies and allow parallel sequence processing during training.
+
+Check answers
+
+# Score: 4/4
+
+One-line exam answer:
+
+The major limitation of attention-based RNN encoder–decoder models is sequential computation. Since each recurrent hidden state depends on the previous hidden state, processing long sequences becomes time-consuming. This motivates Transformer architectures, which enable parallel processing of input sequence positions using attention mechanisms.
+
+In this session, you learnt how language modelling evolved from fixed word representations to sequence-to-sequence architectures and why the modelling context is critical for understanding and generating language. You began by revisiting word embeddings and examining how dense vectors capture semantic relationships while identifying the limitations of assigning the same representation to a word across all contexts. 
+
+ 
+
+You then studied encoder–decoder architectures used in sequence-to-sequence tasks, learning how input sequences are encoded into internal states and how output sequences are generated step by step by the decoder. You observed how relying on fixed-size context representations leads to performance degradation on longer sentences. 
+
+ 
+
+We introduced attention mechanisms as a way to overcome this limitation by allowing the decoder to dynamically focus on different parts of the input sequence at each prediction step. You learnt how attention scores are computed and how context vectors are formed. You also learnt how attention-based models are trained and how alignment between input and output sequences is learnt during optimisation. 
+
+ 
+
+Finally, we discussed the drawbacks of recurrent encoder–decoder models even after introducing attention, particularly their sequential computation and limited scalability, which motivates the transition to fully attention-based architectures. 
+
+ 
+
+Next, you will answer some questions to test your understanding of this session.
+
+
+How does the RNN in the encoder-decoder architecture handle context in a sentence?
+
+Correct! The RNN processes each word in the sentence sequentially, updating the context state at each step, which helps in capturing the context of the entire sentence.
+
+In the context of language translation, what is the role of the decoder in the encoder-decoder architecture?
+To generate the translated sentence word by word using the final context vector from the encoder.
+
+Correct! The decoder takes the final context vector from the encoder and generates the translated sentence word by word, maintaining the context.
+
+What is the main issue that standard encoder-decoder models face when dealing with long sentences?
+
+The model struggles to compress all relevant information into a single fixed-length vector.
+
+Correct! The main challenge is that standard encoder-decoder models struggle to compress all relevant information from long sentences into a single fixed-length vector, which can lead to loss of context.
+
+
+What advantage does the attention mechanism provide in sequence-to-sequence tasks like translation?
+
+It allows the decoder to adaptively select the most relevant context vectors during the translation process.
+
+Correct! The primary advantage is that the attention mechanism allows the decoder to adaptively select the most relevant context vectors at each step, improving translation accuracy.
+
+
+How does the decoder determine the most relevant encoder-generated vector at each time step when generating a word?
+
+By calculating attention weights for each encoder-generated vector.
+
+Correct! The decoder calculates attention weights for each encoder-generated vector to determine their relevance for generating the next word.
+

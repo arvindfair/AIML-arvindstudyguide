@@ -1,0 +1,445 @@
+Skip Connections
+
+
+The previous segment helped you with the understanding of the encoder-decoder architecture used to implement the image segmentation algorithm. It also introduced you to the U-Net framework which differs from the basic structure as it uses skip connections. 
+
+ 
+
+Let's try to revisit the concept in a bit more detail.
+
+00:00:00 - 00:00:09
+Introduction to skip connections in neural networks
+So let us go a little bit deeper into the concept of skip connections. The concept in itself was originally introduced together with Resnet.
+00:00:09 - 00:00:53
+Resnet architecture and residual blocks
+Resnet is a convolutional neural network architecture that is made-up of a series of what is known as residual blocks or res blocks that are interconnected with cross connections between selected layers. And an example is shown in the image here at the centre where we've got the conventional CNN type of network where everything is connected sequentially. While in the case of Resnet, we've got these cross connections that jump over blocks of convolution layers. The reason why this was done was because CNNS that are particularly deep tend to have a problem with the vanishing gradient.
+00:00:53 - 00:01:39
+Vanishing gradient problem and skip connections
+It is known as the vanishing gradient problem, and they are prone to errors due to suboptimal error optimization. So from the diagram of the previous slide, you saw that it's rest block has essentially 2 connections from its input. We're having the first one that is going through a series of convolutions as you see here, batch normalization and linear functions. And the second one starting from the input, goes directly into the output, skipping over that series of convolutions and functions. The latter is known as the identity cross or skip connection, and what we're seeing at the very end of this architecture or type of interconnectivity is that the tensor outputs of both connections are added together.
+00:01:41 - 00:02:09
+Identity cross or skip connection in Resnet
+The effect of introducing skip connections can be seen at the lost surfaces. And in case of the Resnet 56, we're having an example being visualized in the screen where you see the loss surface in the absence of skip connections and on the right you see the loss surface with the presence of skip connections. Obviously one can appreciate that for such a surface as you see on the left, the optimization problem becomes a lot harder.
+00:02:09 - 00:02:48
+Impact of skip connections on loss surfaces
+We're having a lot of local minima, a lot of up trending errors, and the essentially reaching the absolute minimum which is required through the training process becomes a particularly hard task. While in the case of the same architecture, with the introduction of skip connections, we're having a very, very smooth lost surface, making the detection of the global minima a rather straightforward process. The implication of this is that we reach the optimal set of weights for our neural network a lot faster, a lot sooner in the training process.
+
+
+As the name suggests, skip connections help in establishing the connection by skipping the adjacent layers. 
+
+ 
+
+
+
+ 
+
+Skip connections were first introduced in the ResNet framework to overcome the problem of vanishing gradient. To describe in simple terms, as the network becomes deeper, the initial layers tend to lose their importance in the process of backpropagation. Hence, skip connections helped in overcoming this problem by offering an alternate path for the architecture to optimise the loss function.
+
+ 
+
+
+
+ 
+
+The loss surfaces of ResNet56 without (left) and with (right) skip connections.
+Source: Visualizing the Loss Landscape of Neural Nets
+https://arxiv.org/abs/1712.09913
+ 
+
+Now, you must have a clear understanding of the purpose of the skip connections in a deep network. However, in the case of U-Net, its application is not limited to optimising the architecture in terms of the loss function. Moving to the next video, you will now explore the concept of upsampling.
+
+
+Upsampling
+
+
+The U-Net (and encoder-decoder) architecture is based on two key processes of downsampling and upsampling. 
+
+The U-Net (and encoder-decoder) architecture is based on two key processes of downsampling and upsampling. 
+
+ 
+
+ 
+
+
+
+ 
+
+The encoder is responsible for the process of downsampling which is the same as the convolutional neural network. The pooling layers used in the architecture reduce the size of the input at each level, resulting in a spatially reduced output. However, the concept of upsampling is new. This segment will help you understand the need for upsampling and also focus on the technique used in the U-Net framework.
+
+ 
+
+The upcoming video talks about the first part, that is, the need of upsampling the feature maps obtained from the encoder.
+00:00:00 - 00:00:23
+Introduction to Upsampling and Transpose Convolution in UNet Architecture
+Let us now discuss the concept of upsampling and the concept of the transpose convolution and how this is used in the unit architecture. Coming back into this diagram that we showed earlier, one can see now what the downsampling in the encoder decoder type networks corresponds to and what the upsampling is responsible for doing.
+00:00:23 - 00:01:01
+Downsampling in Encoder-Decoder Networks and Bottleneck Section
+We are having the input image as you see on the left, which is progressively reduced in size in the process of applying convolutional layers and then pulling layers till where it's the bottleneck section. And from there on we are going up the up sampling path where the output is. The output segmentation mask is being reconstructed with the aid of the skip connections that we have just discussed. The encoder part of the network, as you so in the previous diagram is essentially using nothing more than a regular convolutional neural network without the output layers.
+00:01:02 - 00:01:39
+Encoder Network and Loss of Spatial Information
+So this process because of the reduction of the special extent of the feature maps is providing sufficient information as to what is being shown in the image. But progressively it loses the where information where is that thing that we are or object that we are observing is to be found in the image with high icons. And this is a natural consequence of the down something that we are applying progressively through the use of the pulling layers.
+00:01:40 - 00:02:00
+Challenges in Image Segmentation: Need for Upsampling
+This is obviously not sufficient for the purpose of image segmentation whether it is semantic or instance. And at the same time that we are improving the answer to the what, we also need to do the same for the where. And this is where the need for upsampling comes.
+00:02:01 - 00:02:25
+Methods of Upsampling and Introduction to Transpose Convolution
+Upsampling of the feature maps in an iterative manner in order to recover the where information. There exists several upsampling methods in literature, such as the bilinear interpolation, cubic interpolation, nearest neighbor interpolation, and unpooling. Yet by far the most popular one is known to be the transpose convolution, which we will discuss next.
+
+
+As mentioned in the video, the semantic segmentation algorithm focuses on two parts:
+
+What: Classes that the architecture is expected to identify
+Where: Position (pixels) of the object in the image
+ 
+
+The encoder answers the ‘what’ component as it is able to extract the features to identify the classes, however, the architecture loses the spatial information in the process. Therefore, the process of upsampling is required to map the identified features back to their position in the image. As mentioned in the video, the following upsampling techniques can be used:
+
+Bi-linear interpolation
+Cubic interpolation
+Nearest neighbour interpolation 
+Unpooling
+Transposed convolution
+ 
+
+We will focus only on transposed convolution as the U-Net framework uses this technique for upsampling. Let's understand this next.
+
+Transposed Convolution
+
+
+Let’s hear about transposed convolution from Georgios in the upcoming video.
+
+00:00:00 - 00:00:21
+Introduction to Transpose Convolution
+The concept of transpose convolution is very much the exact opposite process of the normal convolution. It takes as an input a low resolution inbox and the output is an up sampled version of it or a high resolution inbox. Let us see an example of how the conventional convolution works.
+00:00:21 - 00:03:11
+Example of Conventional Convolution Process
+Consider the pixel map on the left that is an input of 4 by 4 pixels, and consider a kernel map as the one shown in the middle, which is of size 3 by three. Now the convolution of these two delivers a result that is of dimensions two by two, and it's shown on the right. So let us walk through a simple example where we will convolve the pixel map that we presented earlier with the kernel that is at the middle to produce the output that you see on the right. The kernel in itself is of different dimensions than the input, which means that we will shift it. It is the sliding window approach to the over the input. And since we're using a stride of one, we will see essentially 4 different outputs being created. So in the first position, we will mask these nine elements of the input because we have 9 elements of the kernel. Then we will mask the next block of nine elements in the input and then the third one is going to start from the second line, go to the third column and down. And lastly we will start from the second column, reach the last column and all the way down. So let us start for the first element of the input which is to be multiplied by the 1st element of the kernel. It is going to go into the first position of the output vector that consists of 16 values, out of which only 9 are obviously valid. Everything else is going to be set to 0. So 4 * 1 goes here, next is 5 * 4, it goes in the second place, next is 8 * 1 that goes in the 3rd place, and next is 7 * 0. You don't have a fourth element. That's why we're multiplying by zero. Now we go to the next line where we have one times one 8 * 4 and 8 * 3, and once again we have the immediately next element set to 0. We do this for the third line as well, and we have the last element set to 0 plus the last line is a is a is a line that is not matched by the kernel, plus all elements will be set to 0. And we do this for all the translations of the kernel over the input image. And we are producing the output vectors that you see on the screens. In order to compute this efficiently, we need to transform the convolution into a simple matrix multiplication.
+00:03:12 - 00:06:49
+Matrix Multiplication for Efficient Convolution
+For this purpose, we require that the kernel in itself becomes a kernel matrix. We see this at the bottom of this slide, where we're having the kernel matrix shaped up in a way to match the dimensions of the input, and we're having the first three elements of the kernel matrix placed at the beginning of the first row of the kernel matrix, followed by a zero because the dimensions of the kernel do not match that of the input. Then we have the second line of the kernel that follows up again, followed by a zero. The third line and everything else is parted by zero. In the next line, we're having the translation of the kernel by stride 1 towards the right. Thus we have the first element set to 0, and then again the first line of the kernel copied over, followed by another 0 padding the second line, followed by zero padding the third line, and five and four elements set to 0. And because now we are moving an entire line, it means that everything above the kernel translation towards the bottom of the image will require that the first four entries are set to zero. That is, these four elements up here. And then we're having the first line of the kernel being copied again, followed by zero padding, second line of the kernel being copied, followed by zero padding, the third line followed by zero padding. And lastly, we're having once again the top line of the input masked by zeros. And one more 0 because the kernel has now shifted to map this part of the image for this first entry to this line needs to be parted by zero, and that is this extra 0 that you see here. And then once again, we're having the first line of the kernel being copied here, 0 parting second line, 0 parting third line. And this is how we save up our kernel matrix. But in order to utilize that in the form of a matrix multiplication operation, we need to also flatten the input into a single column matrix or otherwise vector. And this transformation is illustrated here on the right. The resulting vector is of dimensions 16 by 1. Now if one is to do the to compute the multiplication between the two matrices, the resulting output will be of dimensions 4 * 1. Why? Because we are having this line multiplied by this column and all the numbers that are being generated are summed together to give one value. We do the same of the second line of the kernel matrix by the input vector, and that produces the second value 1/3 and the 4th of generate the 3rd and the 4th output value here. So we're having an output that is 4 * 1 in dimensions and this can be resaved into a two by two output, which is essentially what one would expect from the convolution. Now this process will be inverted.
+00:06:49 - 00:08:08
+Transpose Convolution Process and Output Expansion
+In the transposed composition. The matrix that is derived from the filter values is transposed and multiplied to the down sample values that we provide as input. So here is the transposed filter matrix, and here is an example of a down sample input matrix that is of dimensions 2 by 2. This is flattened to become a vector of dimensions 4 * 1, and doing the matrix multiplication between the two will generate an output vector of dimensions 16 by 1. This in turn can be wrapped up into a output matrix of 4x4 values. As you can see on the right, this is described as a one to many relationship from the input to the output. Because we have an input of four values that is being expanded into an output of 16 values. It's one of these values at the input will be represented by a total of four values at the output.
+
+This upsampling technique is the reverse of the convolution process. The convolution process results in the reduction of the size of the input, whereas, the transposed convolution method is used to upscale the image. As explained in the video, the filter matrix used is transformed and then multiplied with the downsampled values to obtain the upsampled output. 
+
+ 
+
+Important: Note that the architecture uses the filter matrix to learn the shape of the transformed matrix used for transposed convolution. The values in this matrix are the same as weights as they are learnt using the process of backpropagation.
+
+ 
+
+The next video will deal with one of the loss functions that can be used to optimise the performance of the segmentation model.
+
+
+Dice Coefficient
+-----------------
+
+You are already aware that building a machine learning model is always accompanied by different evaluation metrics to validate the performance of the model. The start of the session covered how pixel-wise cross-entropy loss can be used to evaluate the image segmentation models. This segment will cover another metric, the Dice coefficient. It is similar to the Intersection over Union (IoU) metric but uses a different formula for estimating the performance of the model.
+
+ 
+
+Let’s hear more about this new metric in the upcoming video.
+
+00:00:00 - 00:00:29
+Introduction to loss functions for image segmentation
+We will now review some of the typical loss functions used for image segmentation. Regarding the loss function, we've seen before that in the case of semantic segmentation we have it's pixel being segmented into one label and the most obvious type of loss function that one can think of is the pixel wise loss for its class. In case of multiple classes then we are having the pixel wise cross entropy loss.
+00:00:29 - 00:01:19
+Pixel-wise cross entropy loss and class imbalance
+But this has a drawback and that is that of class imbalance meaning that each pixel is examined individually and equal weighted is assigned for each pixel. Now the unequal representation of classes enabled can result in domination of a specific class in the training process over others. One example is shown here where we're having this label 2 which is represented only in four pixels and as thus it will be under represented. That is exactly what we mean by class imbalance. Solutions have been proposed that are variants essentially of the pixel wise cross entropy loss and perhaps one of the best known ones is the weighted loss for its segment as they are being stored in separate channels anyway.
+00:01:20 - 00:01:45
+Weighted loss and border emphasis in segmentation
+And other similar schemes that assign higher weights to the pixels at the border of the segmented objects such that. We emphasize that there is a different region that is being detected and segmented unit is employing a rather different loss function and that is referred to as the Dice coefficient. And the Dice coefficient is a measure of overlap between any 2 Subs.
+00:01:45 - 00:03:09
+Dice coefficient as a loss function
+It is similar to the IOU where for the numerator of this fraction, we're having two times the area of the intersection between any 2 samples in the image over the combined area of the two. And an example is shown in this image where we're having the ground truth represented with whites, and that will be one of the two samples, and the predicted area that is represented by red, which is going to be the second sample. So we need to compute the area of the intersection of these two, that is the common area between them. Over the combined area. The value range of the Dias coefficient is between zero to 1 and 1 denotes the perfect and complete overlap between the ground truth and the prediction. That is when our prediction is just perfect and 0 denotes the fact that we have absolutely no overlap between the two, We have a multiplier of two at the numerator, and that is because we need to compensate for the fact that we have the sum of 2 areas of the denominator while a single value at the top. So mathematically, the Dias coefficient corresponds to the formula that you see here.
+00:03:10 - 00:03:39
+Mathematical representation of Dice coefficient
+So we're having the matrix A and the matrix B and each one of these can be represented by a simple sum or squared sum of their values. And the matrix of A intersected with B is given by the element wise multiplication between the prediction and target mask and then summing all the values gives us the resulting matrix. Let us see an example.
+00:03:39 - 00:05:08
+Example calculation of Dice coefficient loss
+On the left we are having 4 by 4 prediction matrix and on the right we have the ground truth. The sum of all the A elements together is yielding 7.8482 and doing the sum for the ground truth delivers a result of eight. Computing the intersection between the prediction on the target is essentially weighing out the weak predictions. So we are zeroing all those elements at the 1st 2 lines of the prediction matrix and everything else is retained as it was. So the summation of the element wise multiplication between these two matrices is yielding 7.41 as the output value. Now the Dias coefficient loss function is delivered in the form of 1 minus the Dias coefficient and it is done so so that it can be minimized and it is being defined as you see here at the bottom. For this specific example, we have 1 minus the value that is being computed in this term here, which is 0.94. The difference of the two is 0.06. That is the loss for this specific loss function.
+
+
+As highlighted in the video, the pixel-wise cross-entropy loss has different challenges associated with it. Since each pixel is examined individually, the function doesn’t seem to perform well in the case of class imbalance due to unequal representation of the classes in the image. All these challenges gave rise to the Dice coefficient.
+
+ 
+
+The dice coefficient is similar to the IoU metric which tries to measure the overlap between the actual mask and the mask predicted by the architecture.  As highlighted in the video, the value of the metric ranges from 0 to 1.
+
+1 denotes perfect and complete overlap between the ground truth and the model prediction. (Best case)
+0 denotes that there is no overlap between the two. (Worst case)
+ 
+
+The dice coefficient loss function is defined as 1-DC. Therefore, if the dice coefficient loss is used, the final model will try to minimise the given metric.
+
+# Dice Coefficient — understand it visually, step by step
+
+The easiest way to understand the Dice coefficient is to imagine that a model draws a mask around an object, and we compare its drawing with the correct answer.
+
+In image segmentation, the model predicts which pixels belong to an object, such as a tumor, a car, or a road. The Dice coefficient measures how much the predicted region overlaps with the actual region.
+
+## 1. First, understand the two masks
+
+Imagine we have a 4 × 4 image. Each cell represents one pixel.
+
+- Ground truth: the correct mask prepared by a human or another trusted source.
+- Prediction: the mask produced by our model.
+
+Ground truth
+
+Blue = object pixels
+
+Model prediction
+
+Red = predicted object pixels
+
+In this illustration, four pixels overlap. The model correctly identifies four of the five actual object pixels, but it also predicts one extra pixel.
+
+The important question is:
+
+How much of the predicted object matches the actual object?
+
+That is what Dice measures.
+
+## 2. The Dice coefficient formula
+
+\\[ \boxed{\text{Dice}=\frac{2|A\cap B|}{|A|+|B|}} \\]
+
+Here:
+
+- \\(A\\) = ground-truth object pixels.
+- \\(B\\) = predicted object pixels.
+- \\(|A|\\) = number of object pixels in the ground truth.
+- \\(|B|\\) = number of object pixels predicted by the model.
+- \\(|A\cap B|\\) = number of pixels shared by both masks.
+
+In plain English:
+
+\\[ \text{Dice}= \frac{2\times\text{overlapping pixels}} {\text{actual pixels}+\text{predicted pixels}} \\]
+
+Why multiply the overlap by 2? Because the denominator counts the size of both masks. The multiplier makes the score reach 1 when the two masks match perfectly.
+
+## 3. Calculate Dice using our example
+
+From the two masks above:
+
+| Measurement             | Count |
+| ----------------------- | ----- |
+| Actual object pixels    | 5     |
+| Predicted object pixels | 5     |
+| Overlapping pixels      | 4     |
+
+Substitute into the formula:
+
+\\[ \text{Dice}=\frac{2\times4}{5+5} \\]
+
+\\[ =\frac{8}{10}=\boxed{0.8} \\]
+
+So, our model gets a Dice score of 0.80, or 80%.
+
+It is not simply the percentage of individual pixels classified correctly. It measures the overlap between the two object regions.
+
+## 4. What do different Dice scores mean?
+
+Try changing the number of overlapping pixels
+
+For this example, both masks contain 5 object pixels.
+
+Overlapping pixels
+
+## 5 / 5
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+Dice coefficient
+
+# 1.00
+
+100% Dice score
+
+Perfect overlap
+
+The formula is \\(2I/(5+5)\\), where \\(I\\) is the number of overlapping pixels.
+
+The key interpretation:
+
+- Dice = 1: perfect overlap.
+- Dice = 0: no overlap, assuming the masks contain object pixels.
+- Dice between 0 and 1: partial overlap; closer to 1 is better.
+
+## 5. What is Dice loss?
+
+During training, a model usually adjusts its weights to minimize a loss function.
+
+But Dice is a score that we want to maximize. To turn it into a loss that we want to minimize, we use:
+
+\\[ \boxed{\text{Dice Loss}=1-\text{Dice}} \\]
+
+For our example:
+
+\\[ \text{Dice Loss}=1-0.8=\boxed{0.2} \\]
+
+Dice score
+
+## Higher is better
+
+Dice loss
+
+## Lower is better
+
+Perfect segmentation: Dice = 1, Dice loss = 0.
+
+No overlap: Dice = 0, Dice loss = 1, assuming a nonempty target and prediction.
+
+As training improves the predicted mask, its overlap with the ground truth should increase. The Dice score rises, and the Dice loss falls.
+
+## 6. Dice coefficient vs. Intersection over Union (IoU)
+
+Your course says Dice is similar to IoU. Both measure overlap, but their formulas differ.
+
+\\[ \text{IoU}=\frac{|A\cap B|}{|A\cup B|} \\]
+
+Here, the union means all pixels belonging to either mask, counting shared pixels only once.
+
+Using our example:
+
+- Actual pixels = 5
+- Predicted pixels = 5
+- Shared pixels = 4
+- Union pixels = \\(5+5-4=6\\)
+
+Therefore:
+
+\\[ \text{IoU}=\frac{4}{6}\approx0.667 \\]
+
+\\[ \text{Dice}=\frac{8}{10}=0.8 \\]
+
+| Metric | Formula         | Example score |
+| ------ | --------------- | ------------- |
+| Dice   | \\(2I/(A+B)\\)  | 0.800         |
+| IoU    | \\(I/(A+B-I)\\) | 0.667         |
+
+For the same masks, Dice is numerically higher than IoU. They are related by:
+
+\\[ \text{Dice}=\frac{2\text{IoU}}{1+\text{IoU}} \\]
+
+Don't compare their numerical scores as if they were the same metric.
+
+## 7. Why is Dice useful when classes are imbalanced?
+
+Imagine an image containing 10,000 pixels:
+
+- 9,900 pixels are background.
+- Only 100 pixels belong to a small tumor.
+
+A model that predicts every pixel as background gets 99% pixel accuracy, but completely misses the tumor.
+
+Pixel accuracy can be misleading
+
+# 99%
+
+Pixel accuracy
+
+# 0
+
+Tumor pixels detected
+
+The model looks accurate because background dominates the image, but it fails at the task that matters.
+
+Pixel-wise cross-entropy evaluates each pixel's class prediction individually. With class imbalance, the abundant background can dominate the aggregate training signal.
+
+Dice directly measures overlap between the target object and the predicted object. This makes it particularly useful for segmentation tasks involving small or underrepresented regions.
+
+Important: Dice does not automatically solve every class-imbalance problem. In practice, models may combine Dice loss with cross-entropy, use class-specific Dice scores, or apply class weighting.
+
+## 8. One more important concept: Soft Dice
+
+Your video also describes a prediction matrix where values are probabilities, rather than just zeros and ones.
+
+This is important because neural networks typically produce probabilities before the final segmentation mask is created.
+
+Suppose the ground truth is:
+
+\\[ A=[1,1,0,0] \\]
+
+And the model predicts:
+
+\\[ B=[0.9,0.8,0.2,0.1] \\]
+
+The ground truth uses:
+
+- `1` = object pixel
+- `0` = background pixel
+
+The model's values represent its confidence that each pixel belongs to the object.
+
+For this example:
+
+\\[ \sum A=2,\qquad \sum B=2.0 \\]
+
+The overlap term is calculated by multiplying corresponding elements and adding the results:
+
+\\[ \begin{aligned} \sum(A_iB_i) &=(1)(0.9)+(1)(0.8)\\\ &\quad +(0)(0.2)+(0)(0.1)\\\ &=1.7 \end{aligned} \\]
+
+Therefore:
+
+\\[ \text{Soft Dice}=\frac{2(1.7)}{2+2} =\boxed{0.85} \\]
+
+What happened to the probabilities?
+
+Actual object
+
+## 0.9, 0.8
+
+Good predictions
+
+Actual background
+
+## 0.2, 0.1
+
+Low object probabilities
+
+Soft Dice rewards high probabilities on actual object pixels and penalizes probability assigned to the object where the target is background.
+
+This is the same general idea as binary Dice, but it uses continuous prediction values instead of first converting every prediction into a hard 0 or 1. Some implementations add a small smoothing constant to the numerator and denominator to avoid division by zero.
+
+## 9. Check your understanding
+
+Suppose a segmentation model has a Dice score of 0.92. What is its Dice loss, using \\(1-\text{Dice}\\)?
+
+0.92
+
+0.08
+
+1.92
+
+Check answer
+
+Correct!
+
+\\[ 1-0.92=0.08 \\]
+
+Remember: Dice score goes up when overlap improves; Dice loss goes down.
+
+### Final summary
+
+- Dice coefficient: measures overlap between the actual mask and predicted mask.
+- Dice loss: \\(1-\text{Dice}\\), used to train the model by minimizing the loss.
+- IoU: another overlap metric, with a different formula.
+- Soft Dice: calculates overlap using prediction probabilities, allowing the loss to be differentiable during training.
+- Class imbalance: Dice can be more useful than pixel accuracy when the object occupies only a small part of the image.
+
+The one thing to remember is: Dice asks how well the predicted object region overlaps the real object region.
+ 
+
+Now, you have a theoretical understanding of the concepts associated with semantic segmentation. The next segment will focus on a demonstration of U-Net for segmentation.

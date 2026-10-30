@@ -1,0 +1,349 @@
+Correct answer: Option 3 — The weighted sum of neighbouring pixel values defined by the kernel. ✅
+
+### Why?
+
+During convolution, the kernel (filter) slides across the image. At each position:
+
+1. Each neighbouring pixel value is multiplied by its corresponding kernel weight.
+2. All the multiplication results are added together.
+3. The sum becomes the output pixel value (for a basic convolution operation, before any bias or activation).
+
+Example:
+
+Image region:
+
+\\[ \begin{bmatrix}1&2\\\3&4\end{bmatrix} \\]
+
+Kernel:
+
+\\[ \begin{bmatrix}1&0\\\0&-1\end{bmatrix} \\]
+
+Calculation:
+
+\\[ (1\times1)+(2\times0)+(3\times0)+(4\times-1) = -3 \\]
+
+So, the output value is −3 before any additional processing.
+
+Remember: Convolution uses the kernel's weights to calculate a weighted sum, not the maximum, median, or original centre pixel.
+
+
+
+Correct answer: The normalisation factor ensures that all kernel weights add up to 1, so the Gaussian blur smooths the image without unintentionally changing its overall brightness.
+
+### Example
+
+A common 3×3 Gaussian blur kernel is:
+
+\\[ K=\frac{1}{16} \begin{bmatrix} 1&2&1\\\ 2&4&2\\\ 1&2&1 \end{bmatrix} \\]
+
+The sum of the weights before normalisation is:
+
+\\[ 1+2+1+2+4+2+1+2+1=16 \\]
+
+Multiplying by \\(\frac{1}{16}\\) makes their total equal to 1.
+
+Why is this important?
+
+- Without normalisation: pixel values may increase, making the image brighter.
+- With normalisation: the kernel calculates a weighted average, smoothing noise and details while generally preserving brightness in uniform regions.
+
+Remember: Gaussian blur smooths the image; the normalisation factor prevents the kernel weights from unnecessarily scaling pixel intensities.
+
+
+**Question:**
+A 3x3 Gaussian blur kernel includes a normalisation factor (e.g., 1/16). Why is this factor necessary?
+
+**Answer:**
+To preserve the overall brightness of the image after filtering.
+
+**Explanation:**
+When applying a filter like a Gaussian blur, the new value of a pixel is calculated by taking a weighted sum of its neighboring pixels. The weights are defined by the kernel matrix. If the sum of all the values in this kernel is greater than 1, the resulting pixel values will systematically increase, causing the output image to become brighter than the original. By multiplying the kernel by a normalisation factor (such as 1/16 for a standard integer-based 3x3 Gaussian kernel), it ensures that the sum of all weights equals exactly 1. This guarantees that regions of uniform intensity remain unchanged, effectively preserving the original overall brightness of the image.
+
+
+
+**Question:**
+Edges, corners, and lines are categorised differently from regions of interest or shapes. What distinguishes the former group in feature extraction?
+
+**Answer:**
+They represent low-level features derived directly from pixel intensity variations.
+
+**Explanation:**
+In computer vision, features like edges, lines, and corners are considered "low-level" features. They are detected by looking for sudden, sharp changes or gradients in the raw pixel intensity values across the image (for example, transitioning from a dark pixel to a light pixel indicates an edge). They do not require any high-level "understanding" of what the object actually is. Conversely, regions of interest and shapes are considered higher-level features that are often built by grouping these low-level pixel variations together to form meaningful semantic structures.
+
+
+Correct answer: Edges, corners, and lines are low-level, local features that describe changes in pixel intensity or image structure.
+
+- Edges: Sudden changes in intensity, often marking object boundaries.
+- Corners: Points where edges change direction or intersect.
+- Lines: Elongated structures with a distinct intensity pattern.
+
+In contrast, regions of interest and shapes generally describe larger, more meaningful structures formed from combinations of local features.
+
+Remember: Edges, corners, and lines capture local image details; shapes and regions describe broader structures.
+
+
+**Question:**
+A pre-trained CNN is used for a medical image classification task with a small labelled dataset. Only the final classification layers are trained, while earlier layers are frozen. What underlying assumption justifies this approach?
+
+**Answer:**
+The early layers capture general visual features that remain useful across different image domains.
+
+**Explanation:**
+This scenario describes a common transfer learning technique called feature extraction. Convolutional Neural Networks (CNNs) learn hierarchically. The early layers of a CNN learn to detect very basic, generic visual elements like edges, curves, colors, and simple textures. These foundational features are universally present in almost all images, whether they are pictures of dogs and cats or medical X-rays. Because the target medical dataset is small, trying to train an entire deep network from scratch would likely lead to severe overfitting. By freezing the early layers, we reuse their ability to extract these generic, foundational features without altering their weights, and we only spend our limited data training the final classification layers to interpret those features for our specific medical task.
+
+
+**Question:**
+During transfer learning, a practitioner decides to unfreeze all layers and retrain the entire network using a very low learning rate. In which situation is this strategy most appropriate?
+
+**Answer:**
+When the target task differs significantly from the original pre-training task.
+
+**Explanation:**
+This technique is known as full fine-tuning. When a target dataset or task is substantially different from the original dataset the model was trained on (for example, transferring from natural images to satellite imagery), the specific high-level features—and sometimes even the mid-level features—learned during pre-training may not be suitable. By unfreezing all layers, the model is allowed to adapt its feature extractors to the new, distinct domain. A very low learning rate is critical during this process; it ensures that the network makes small, gentle updates to the weights, preserving the foundational knowledge it already has without completely destroying or overwriting the pre-trained weights (a phenomenon known as catastrophic forgetting). If the dataset were very small and noisy, unfreezing all layers would instead lead to severe overfitting.
+
+**Question:**
+Suppose a model produces embeddings where small visual perturbations in the input cause large, unpredictable changes in the embedding values. Which downstream issue is most likely to occur?
+
+**Answer:**
+Semantically similar inputs may appear far apart in the embedding space.
+
+**Explanation:**
+A well-trained embedding space maps inputs to continuous vectors such that semantically similar items (e.g., two pictures of a cat from slightly different angles) are located close to one another. If a model is overly sensitive to tiny visual changes (perturbations or noise), a picture of a cat and that same picture with a few altered pixels will produce drastically different embedding vectors. Consequently, these highly similar inputs will end up far apart in the embedding space, ruining the model's ability to reliably classify, cluster, or retrieve similar images downstream.
+
+
+**Question:**
+A decoder attempts to reconstruct fine object boundaries but produces blurred outputs, even though the encoder is deep and expressive. Which explanation best accounts for this outcome?
+
+**Answer:**
+Spatial detail lost during encoding cannot be fully recovered by decoding alone.
+
+**Explanation:**
+In a standard encoder-decoder architecture, the encoder progressively downsamples the input image to extract deep, abstract semantic features. While this makes the network "expressive" in understanding *what* is in the image, it inherently destroys fine spatial resolution—meaning it forgets exactly *where* the sharp edges and boundaries are. When the decoder attempts to reconstruct the image from this compressed, low-resolution latent representation, it has to "guess" where those fine details belong, which typically results in blurred boundaries. This exact limitation is why architectures like U-Net use "skip connections" to pass high-resolution spatial information directly from the early layers of the encoder to the decoder.
+----------------
+
+
+Description
+
+The questions below are graded. All the best!
+
+ 
+
+Earlier you solved a comprehension where you were provided with the bounding box vertices and you were required to compute the IoU, loss, etc. In the upcoming questions, you will be given the bounding box vector from which you will first compute the vertices of the bounding box. Recall that a bounding box vector is given by:
+
+
+
+where -
+
+bx = The x coordinate of the centroid, 
+by = The y coordinate of the centroid,
+bh = The height of the bounding box and
+bw= The width of the bounding box.
+ 
+
+Comprehension
+
+Let us take this simple example, where you are provided with the ground truth and predicted bounding boxes:
+
+ 
+
+Predicted bounding box = 
+
+Ground truth bounding box = 
+
+ 
+
+Let us denote the vertices of the predicted bounding box with this notation.
+
+
+
+ 
+
+You are also provided with the coordinates of the first point for both the predicted and the ground truth bounding box as mentioned below:
+
+Predicted bounding box - A1 coordinates: (200,255)
+Ground truth bounding box - A2 coordinates: (207,250)
+ 
+
+Coordinate System and Vertex Convention
+
+
+
+All coordinates in this assignment follow a Cartesian coordinate system:
+
+The origin is assumed at the bottom-left.
+
+
+The x-axis increases from left to right.
+
+
+The y-axis increases from bottom to top.
+
+
+Bounding Box Interpretation
+
+
+
+The bounding box is defined using the vector [bx, by, bh, bw], where (bx, by) is the centroid, bh is the height, and bw is the width.
+
+
+
+For vertex-based calculations in this comprehension:
+
+A represents the bottom-left corner of the bounding box.
+
+
+B represents the top-left corner.
+
+
+C represents the top-right corner.
+
+
+D represents the bottom-right corner.
+
+
+ 
+
+Similarly, for the ground truth box, the notation will be A2, B2, C2 and D2, in the same order. This notation will be applied while answering the following questions, which are based on this comprehension. 
+
+
+**Question:**
+Select the correct coordinates from the options given below.
+
+**Answer:**
+
+* C1 = (525, 525)
+
+
+* D1 = (525, 255)
+
+
+* D2 = (527, 250)
+
+
+
+**Explanation:**
+Based on the defined Cartesian coordinate system, the origin is at the bottom-left, the x-axis increases from left to right, and the y-axis increases from bottom to top. The vertex conventions state that A is the bottom-left corner (xmin, ymin), C is the top-right corner (xmax, ymax), and D is the bottom-right corner (xmax, ymin).
+
+Although the exact bounding box vectors were omitted in the prompt text, the correct answers can be logically deduced by aligning the given A coordinates with the rules of the bounding box geometry:
+
+* For the predicted bounding box, the bottom-left coordinate is given as A1 = (200, 255). This establishes that the bottom edge of the box rests on the y-coordinate 255. Because vertex D represents the bottom-right corner, it must share this exact same y-coordinate. Option D1 = (525, 255) correctly matches this requirement.
+
+
+* Following that logic, if D1 dictates that xmax is 525, then the top-right corner C1 must also have an x-coordinate of 525. Option C1 = (525, 525) is mathematically consistent with this structure. Conversely, the option C1 = (525, 255) is incorrect because a top-right corner cannot have the exact same y-coordinate as the bottom-left corner unless the bounding box has a height of zero.
+
+
+* For the ground truth bounding box, the bottom-left coordinate is given as A2 = (207, 250). This establishes that the bottom edge of the ground truth box rests on the y-coordinate 250. Vertex D2, being the bottom-right corner, must share this y-coordinate. Option D2 = (527, 250) correctly matches this condition.
+
+
+
+
+**Question:**
+Select the correct coordinates of B2 for the ground truth bounding box?
+
+**Answer:**
+(207, 517)
+
+**Explanation:**
+According to the vertex convention established in the problem description, vertex B represents the top-left corner of the bounding box. Therefore, the top-left corner (B2) must share the exact same x-coordinate as the bottom-left corner (A2) of the ground truth bounding box. We are given that the coordinates for A2 are (207, 250). Because the x-coordinate of A2 is 207, the x-coordinate for B2 must also be 207. Looking at the available options, only (207, 517) fulfills this geometric requirement.
+
+
+
+**Question:**
+Select the correct predicted and ground truth bounding boxes from the options given below. Note: Black denotes the predicted bounding box and red denotes the ground truth bounding box.
+
+**Answer:**
+The correct option is the first image.
+
+**Explanation:**
+Based on the coordinates provided and derived in the previous questions, we can map out the exact vertices for both bounding boxes:
+
+* **Predicted Bounding Box (Black):**
+* The problem stated the bottom-left corner ($A_1$) is (200, 255).
+
+
+* In question 1, we determined the top-right ($C_1$) is (525, 525) and the bottom-right ($D_1$) is (525, 255).
+* This makes the top-left ($B_1$) (200, 525).
+
+
+
+
+* **Ground Truth Bounding Box (Red):**
+* The problem stated the bottom-left corner ($A_2$) is (207, 250).
+
+
+* In question 1, we determined the bottom-right ($D_2$) is (527, 250).
+* In question 2, we determined the top-left ($B_2$) is (207, 517).
+
+
+* This makes the top-right ($C_2$) (527, 517).
+
+
+
+
+
+Looking at the options, only the first image correctly assigns these specific coordinates to the respective black and red boxes. The second image swaps the top y-coordinates between the boxes, and the third image swaps the red and black color assignments entirely.
+
+
+
+**Question:**
+Compute the coordinates for the centroid $(b_{cx}, b_{cy})$ of the predicted bounding box.
+
+**Answer:**
+(362.5, 390)
+
+**Explanation:**
+To find the centroid, we use the opposite points of the predicted bounding box established in the previous questions. The bottom-left corner $(x_1, y_1)$ is (200, 255) and the top-right corner $(x_2, y_2)$ is (525, 525).
+
+Applying the provided formula for the centroid of a rectangle:
+
+* $b_{cx} = \frac{x_1 + x_2}{2} = \frac{200 + 525}{2} = \frac{725}{2} = 362.5$
+* $b_{cy} = \frac{y_1 + y_2}{2} = \frac{255 + 525}{2} = \frac{780}{2} = 390$
+
+Therefore, the coordinates for the centroid of the predicted bounding box are (362.5, 390).
+
+
+
+**Question:**
+Compute the IoU for the bounding boxes in this comprehension. Use the correct bounding box representation from the previous question for reference. Hint: First, compute the coordinates of the intersection box and the union box and then compute the area of the two boxes to compute the IoU. Round off your answer to the nearest one's place.
+
+**Answer:**
+93%
+
+**Explanation:**
+To find the Intersection over Union (IoU), we follow the steps outlined in the hint:
+
+1. **Calculate the area of both bounding boxes** using the coordinates provided in the diagram:
+
+
+* **Predicted Box (Black):** The width is 525 - 200 = 325, and the height is 525 - 255 = 270.
+* Area = 325 * 270 = 87,750
+
+
+* **Ground Truth Box (Red):** The width is 527 - 207 = 320, and the height is 517 - 250 = 267.
+* Area = 320 * 267 = 85,440
+
+
+
+
+2. **Calculate the area of the Intersection Box:**
+* Find the bottom-left corner of the intersection by taking the maximum of the x and y minimum coordinates: max(200, 207) = 207, and max(255, 250) = 255.
+* Find the top-right corner of the intersection by taking the minimum of the x and y maximum coordinates: min(525, 527) = 525, and min(525, 517) = 517.
+* The intersection width is 525 - 207 = 318, and the height is 517 - 255 = 262.
+* **Intersection Area** = 318 * 262 = 83,316
+
+
+3. **Calculate the area of the Union Box:**
+* The Union Area is the sum of the two individual box areas minus the Intersection Area.
+* **Union Area** = 87,750 + 85,440 - 83,316 = 89,874
+
+
+4. **Compute the IoU:**
+* IoU = (Intersection Area) / (Union Area)
+* IoU = 83,316 / 89,874 = 0.92703...
+* Expressed as a percentage, this is 92.7%.
+* Rounding off to the nearest one's place, as instructed, yields 93%.
+
+
+
+
+

@@ -1,0 +1,810 @@
+Transformers: Architecture
+
+You will now explore how the transformer architecture uses attention mechanisms to generate sequences, integrating input context and previous outputs to produce accurate and coherent results.
+
+00:00:00 - 00:00:14
+Introduction to Transformer Architecture
+So this is an architecture I want to expose you to the architecture of the of the Transformers before we go and look at each detail very carefully and you know, in in a detail man fashion.
+00:00:14 - 00:00:40
+Input Embeddings and Attention Models
+So these are the initial input embeddings, right? In the earlier example, you can say print a Python program for saying hello world. So that is that goes as an input and this these are your attention models, correct? These are your attention models. This will give you a richer representation of all the words in your input sentence. And using this, this is your encoder.
+00:00:41 - 00:01:11
+Encoder Functionality and Richer Representation
+The job of encoder is given the input, get the richer representation. How does how did this richer representation come about? Go back to the analogy of group projects. All these words are essentially trying to do a group project of, you know, improving their own context, getting much richer representation, right? We will see the math, but intuition is that they kind of come up with richer vectors which accurately represent them and that is taken in decoder. So as I discussed earlier, decoder will have two attention models.
+00:01:11 - 00:01:27
+Decoder and Attention Models
+This is first, this is what we call as a self attention model, attention model. And then this is your encoder decoder that is the attention model which attends to the outputs of encoder. That is why you will have you have the sequence coming here.
+00:01:27 - 00:02:05
+Output Sequence Generation Process
+So this is we can refer to it as an encoder, decoder, attention model, attention model, right? So and then you have the output. So how does this output look? First let's say program to print the input S 1, which we have seen, right, the entire words, the sequence of words, the program to print hello world, then first it takes it. This will give a richer representation of each word in the sentence. This richer representation is being taken here. And then one first output is given. That is, first print is given and then the print becomes an input to the decoder.
+00:02:05 - 00:02:38
+Inference Process in Transformers
+Now, right, current output, current output. Now it goes ahead and prints a bracket because that is your next token. Now print and bracket will become your second two inputs to this model. And then you would get quote, single quote, and then this becomes an input. And this process repeats until you get the entire piece of code. And you know, this is what we are discussing during inference training is of course parallelized and so on. But during inference, this is how it works.
+00:02:38 - 00:03:13
+Encoder-Decoder Attention Model Explanation
+First output that comes as an input because as I said, go back to the intuition, when we are translating, we not just need the context of the input, but we need the context of what has been spoken so far. And that's equally important as well. So this component tries to enrich the representation of the current outputs and this attention model which we are referring to as an encoder decoder attention model will try to understand this is what has been translated so far and the encoder is telling me this is what they want. So what is missing?
+00:03:14 - 00:03:24
+
+It tries to understand using matrix operations and then try to push this output and give you respective next correct word in the context.
+
+
+ 
+
+You learnt that the architecture of transformers begins with initial input embeddings. For example, if the input is a task to generate a Python program to print ‘Hello, world!’ This request is processed through attention models, which create richer representations of all the words in the input sentence, commonly called contextual embeddings, since each word’s representation depends on the surrounding words.
+
+ 
+
+The encoder generates these contextual embeddings, which are then used by the decoder, which employs two types of attention models:
+
+The first one is self-attention, which enables the decoder to focus on various parts of the current output sequence.
+The second one is encoder-decoder attention, where the decoder attends to the encoder's outputs to incorporate context from the input sequence.
+ 
+
+You understood this process using an example: "generating a Python program to print ‘Hello, world!’".
+
+ 
+
+
+
+ 
+
+Encoder
+This input Equation is transformed into a contextual embedding for each word in the sentence, using self-attention across all input tokens.
+Decoder
+The decoder starts with the first output token, such as ‘print’.
+The token ‘print’ is then used to generate the next token in the sequence, such as a bracket ‘(’.
+The sequence of tokens builds as "print" "(", followed by tokens such as "'", "Hello", ",", "World", "!", "'" and ")".
+ 
+Iterative Generation
+Each generated token, such as ‘print’, becomes the input for generating the next token, ‘(’.
+ 
+
+This process continues until the entire code, “print(‘Hello, world!’)”, is generated.
+
+ 
+
+During inference, each output token is fed back into the decoder to generate the next token, taking into account the input context and the previously generated tokens. This ensures that the model maintains coherence and aligns the final output with both the input context and the sequence generated so far.
+https://arxiv.org/pdf/1706.03762
+ 
+
+Next, you will go through a high-level overview of the working of transformers with the help of the same example discussed above.
+
+Working of Transformers: Encoder Part
+
+00:00:00 - 00:00:35
+Introduction to Python Program Case Study
+Solving the case study. So I want to give you glimpse of, you know, we haven't entered the details of it. We are just looking at a glimpse of how this transformer in high level. So let's go ahead and solve it, right. I'll take the same example of South one, which is a program or Python program, essentially Python program to print Hello world. This is the task. So first, let's focus on encoder, right?
+00:00:36 - 00:02:30
+Encoder's Role in Program Representation
+Encoder. So the job of encoder is to come up with representations of Python representation of a program, representation of A to print hello and world, right? So there are 123456. The objective of this encoder, whatever it does, we are going to see is to give me 6 vectors, let us call it Z1Z2Z3Z4Z5 and Z6. The objective of the encoder that which we are going to investigate in detail is to give these vectors called Z1Z2Z3Z4Z5 and Z6, which accurately represent right this particular program. Now let's go one step deeper because we have seen the intuition of attention mechanism. Let us try to analyze using that. So again, these words will replace the the group here, right? Imagine these words are doing the group project. The project, the objective of this group is to understand themselves, that is get richer representation so that it can be helped in a translation task. What is the first step? If you recollect, each word will come up with its own query and key, correct? So it will have its own Q1K1V1, it will come up with Q2K2V2, this will come up with Q3K3V3, so on and so forth. You will have QK, sorry 123456, sorry Q6K6 and V6. How they are going to come up with it. We are going to see when we discuss the math behind Transformers, we are essentially going to see how each word essentially comes up with this query key and value objects. Right now, what is important is what is going to happen with these things.
+00:02:31 - 00:05:04
+Attention Mechanism in Transformers
+As we discussed earlier, if you know if the queries of a given person in our discussion are a word here are being answered or are being captured accurately by the keys of other words, then it will pay a lot of attention to lot of attention to those ways. For example, let's take a word called program, right? See, we can do the mistake of understanding the word program in its independent sense, but of course not, right? Program is being classified heavily by what it is that is Python, right? The query of the program probably matches a lot with keys of Python, right? That is what when we took the analogy of your queries being answered by keys of other same scale in the same spirit, the queries of program probably is how do I classify myself? What program am I? What is this program about? Because program can mean many, many things. It can mean an occasion, program can be a celebration or it is, you know, in this case it's essentially, you know, code. It essentially meet code. And what is the word that essentially qualifies this word called program is the Python correct? So the word that it pays the word program pays a lot of attention, lot of attention to a word called Python, correct? And probably it pays very less attention to word called to right? So what I would like to do is right. I would like to tell that this is much higher attention. The weights, the attention that it gives to this word called Python is very high because Python is qualifying. It qualifying audit means to be a program and probably it will give very less attention, right? Very less small attention to the word called to, right? It is like, if you go back to the analogy, it is like your friend who is probably not answering lot of your queries to the word called to it will have very less attention. Similarly, it might have some attention to print, it might have some attention to hello, some attention to world and of course to itself, right? A program has, you know, a representation of itself, a value which is equally important to it, right? So of course it will attend well to itself. Program is of course one of the important word that it will attend to. It's what we call as you are attending to yourself and so on.
+00:05:04 - 00:07:18
+Computing Attention Weights and Query-Key-Value
+Now the Z2, which is essentially what you have seen, as you know the representation of the word called program is a linear combination, essentially, right, is a linear combination of A1 into V1 plus A2 into V2 plus, so on and so forth, A6 into V6 and how are these computed? We will get there, we will get there. But we know for a fact that probably right? Probably you know the A1 and A2 are bigger and it is not just a linear combination. In fact it is a convex combination. That is this alphas will sum up to one that is summation of alpha I is one right. So that is, if A1 is bigger, A2A1 and A2 are very high, other weights have to be small because as we know, the weight that it assigns to 2 is probably smaller compared to the weights of other weights of other attentions that paste, right? And this happens for all the weights. So Z1 probably to qualify Python, the word Python itself is important. But Python can also mean, you know, a kind of snake and so on and so forth, right? So it qualifies, it needs to, you know, attend to the word called program as well as print and so on and so forth. These are of course very important words for, you know, to understand or to get richer representation out of the Python. So the analogy nicely works out here. These words are kind of doing a group project where they are trying to get richer representations of themselves which can be aided in the language translation that is translating them to the target language. In this case it is a Python language. So that is what happens in the encoder. So one piece which we are missing is how do I compute alphas? How do I compute this query key values? So that is the mathematics. But at the higher level each word computes these three quantities of query keys and values and use them to attend to others. And the analogy is the group project analogy.
+
+ 
+
+To understand how this works, think of each word as participating in a group project to enhance its own representation. Each word creates its own query (Q), key (K), and value (V) vectors. For example, the word ‘program’ will have Equation; ‘to’ will have Equation;​ and so on.
+
+ 
+
+
+
+ 
+
+The encoder’s role is to generate representations for each word of the program. For this task, the encoder produces six vectors, denoted as  Equation, where each vector represents a word after attending to all other words in the sentence. These vectors are therefore the contextual embeddings of the input words.
+
+
+In this setup, the word ‘program’ might find that its query matches well with the key of ‘Python’ because ‘Python’ helps clarify what type of program it is. 
+                                        
+
+
+
+ 
+
+Hence, ‘program’ will pay more attention to ‘Python’ and less attention to words such as ‘to’, which provide less contextual information. This is represented by higher attention weights (Equation) for relevant words and lower weights for less relevant ones.
+
+
+The attention weights are used to compute the final representation for each word. For example, the representation Equation for ‘program’ is a weighted combination of all the values, which is calculated as follows. 
+
+Equation
+
+
+Here, the weights (Equation) sum up to 1, reflecting the proportion of attention given to each word’s value. The same process applies to each word, allowing them to collaboratively refine their representations for better translation. Next, you will see the decoder part of this example.
+
+
+Working of Transformers: Decoder Part
+
+
+You will now explore the decoder part of the architecture with the same example discussed previously.
+
+00:00:00 - 00:00:14
+Introduction to Decoder Architecture
+Now let's go back to decoder, right? Let's go to decoder. Now what happens, This is my architecture of decoder. This is my decoder.
+00:00:16 - 00:03:17
+Decoder Attention Mechanism and Output Generation
+It says, OK, Currently nothing has been translated. So let's go one step at a time like how we do in inference, right? Initially nothing is there. You just say that start, please start. It's a token which essentially represents, hey, please start decoding. Now what happens? This is very interesting as well as very important. There are two kinds of attentions, right? Currently, we don't need to attend to any input because there are no inputs. Well, we haven't translated anything so far, right? But now what happens is in order to output its first word, it looks which of these encoder outputs are important to me, right? We know that the first word is print, right? What do you think, right? You know the word print has to focus more on. I would assume that the word that you are going to output print will have lot of attention on Python program and print with with with a lot of focus on a word called print. Because to output print, you would probably don't need lot of attention on what you are going to print. And that comes when that is not as important as the first word print itself, right? And then you have the second, sorry, let's not go to the second, but at least hope that you understand this, right. So in order to output the first word called print, the model will attend again will attend to probably the Z4 the most and then Z1 and Z2 next and then probably the least weight attention is given to Z3Z5 and Z6. If you notice I have been saying probably more attention, probably less attention and so on. Reason here is even I do not know this is learnt by the program from the data that we give. You know if I am the attention model, I would probably do that. But here we are training a model to do the attention. So what the attention model actually learns at the end, what it actually attends to can be completely different. Right here I said the word program attends to Python most. That is my assessment. It might so happen that the program or the model or the Transformers which you are building can attend to a completely different word. And that is OK as long as it performs the task that you assigned to, right? So the kinds of attention that it learns is not entirely in our control. It depends on the data set that you give the task that we have and how well we train it, right? So please keep this in mind that you know when you go ahead and implement it and you see that oh, the program is not attending to the word called Python. If it attends, it's great. It essentially explainable to how we kind of imagine it to be, but even if it is not, it does not mean that it is doing wrong as long as you know you are getting desired outputs and better generalization in your task. So that is why I always use this word called probably right. If I am the one who who is doing the attention, I would probably attend to this.
+00:03:17 - 00:05:03
+Group Project Analogy for Attention
+And again, this is for illustration. OK, let us go back to you know what is happening in the decoder. Now it focuses on Z4Z1Z2 and gives you print. Awesome. Now what will happen? The current output is taken as an input correct? So now the print word is the input to the decoder. Now the second attention model comes into picture. It will say hey you both are doing a group projects. Now group project. Now I want a richer representation of both of you. And then these 2 words will get richer representation, right? Which qualifies them well and so on. And then now to output this bracket, right? The next output is bracket using these representations. These representations will have some queries. They'll ask, hey, I have printed, print so far. What should I print next? That is the query of this particular model, right? They'll have query saying hey I have printed a word called print, but I am querying you. What is the next thing that I need to print in the model which is trained well will probably tell that you need to focus more on word called Python, right? And then you are going to print word called hello world. And from there it might understand that, hey, to be syntactically correct, I need to output this [that is the next output, right? So please understand the sequence current outputs will do our analogy of group project and come up with richer representation. And then they ask a query, they say, hey, so far I have printed, print.
+00:05:04 - 00:07:14
+Sequence of Outputs in Decoder
+What do you want me to do next? Then the other attention model, which is encoder, decoder attention model will tell. I think your answer can be found if you attend most to this word called program Python And you know hello world and so on and it says this is your most probable output. Now what happens? This is taken as an input. The next input is [[to the decoder and then you will have your next output which is quotes. And again, how does it happen? 1st is self attention. There are two attentions #1 is a self attention which says currently I have start and print and [Please do a group project that is come up with a richer representation. They come up with it and then they start asking query, hey, I have printed, print, [so far. What should go next, right? And then the encoder, decoder attention will tell you, I think you need to attend again to the same things that is Python program to come up with this [ what happens next? Same. So this again becomes the input. Now the current inputs of decoder are the start token which says please get started. The word called print [and then curly brackets the opening curly bracket. This procedure is repeated until you get the whole program which is print hello world, right until this is being outputted. You will keep running this decoder until this output is obtained, right? So this is what happens in the decoder. So the important point I want you to note here is there are two kinds of attentions, one which attends to the one which attends to the current outputs of the decoder, which are essentially the previous, sorry previous outputs. And then it essentially learns a representation of it and they start asking queries.
+00:07:15 - 00:08:52
+Training Encoder and Decoder Attention
+And then you know the answers can be found from the outputs of encoder because it is also rich enough. These Z1 till Z6 are rich enough representations and using them they attend to them and then try to print this out. Now I will answer one question to you, that is how do this encoder and decoder learn optimally whom to attend to? Again, the answer is data. We are training it. So when we say that, I mean initially it will not do it. It will print very, very random, very wrong answers. Then we say that hey you are doing wrong and why are you doing wrong. You are doing wrong because probably your attention model is not well built. That is, your query key and values are not well computed. That is, the matrices that you are using to generate this QK and V are not correctly generated for both decoder and encoder. It is not. If something is wrong from decoder, it does not mean decoder is the only component at who is doing incorrectly, right? It involves both encoder as well. Because unless you encode a given statement or a given sentence well, you cannot decode it well, right? It's like no answering a wrong question. If you don't understand the question itself, then how can we answer the correct, you know, correct answer corresponding to that question? It's like this, right? So over lot of training, over lot of data, the model will try to learn the attention weights in such a way that it attends correctly, it attends perfectly and then gives you the right answer to it. So this is what goes behind the higher level architecture of transformer.
+00:08:53 - 00:09:41
+Summary of Transformer Architecture
+To summarize, there are encoder and decoder, There is the self attention for both encoder and decoder. That is, encoder will have just self attention model which qualifies or gives richer representation of input. Decoder does the same for its own inputs which are previous outputs. And then there is an additional component called encoder decoder attention mechanism which tries to understand or correlate the dependency between the all outputs of encoder, all positions of the input of the sentence and then the current outputs of the decoder. And this is the way that the Transformers work. As you would all know, this is parallelizable because QK and we are computed parallelly and at the same time it is highly contextual. That is it.
+00:09:42 - 00:09:50
+
+It captures the context well. It does good job of identifying the context and doing the task that we wanted to do.
+
+
+You learnt that the decoder's job is to generate the output step by step, starting from scratch. Initially, the decoder uses a ‘start’ token to signal the beginning of the translation process. 
+
+
+At this point, the decoder does not need to focus on any input because translation has not begun yet. However, to generate the first word, such as ‘print,’ the decoder checks which encoder outputs are the most relevant. For example, the word ‘print’ might focus more on encoder outputs related to ‘Python’ and ‘program,’ giving less attention to less relevant words.
+
+ 
+
+
+
+ 
+
+The process is explained below:
+
+The decoder attends to certain encoder outputs (such as Equation, Equation, and Equation) to determine the first word ‘print.’ 
+‘print’ is then taken as input for the next step. The decoder uses self-attention to refine its understanding of ‘print’ and the start token, asking ‘What should I output next?’ 
+Based on the encoder’s information, the model suggests the next word, such as an open bracket ‘(’.
+This process repeats as each new word generated is fed back into the decoder. The decoder uses self-attention to refine these words and then consults the encoder-decoder attention mechanism to decide the next word. 
+At each step, the decoder also produces a vector representation of the current word that reflects both the previously generated words and the relevant parts of the input sentence. These vectors can be seen as contextual embeddings of the output tokens.
+ 
+
+This continues until the entire output, “print(‘Hello, world!’)”, is generated.
+
+
+The model learns where to focus through training, gradually improving accuracy as it optimises attention weights. The encoder and decoder must work together to ensure the input is well-encoded and the output is correctly generated.
+
+
+In summary, the transformer architecture involves an encoder and a decoder, each using self-attention, whereas the decoder also uses encoder-decoder attention to align outputs with encoded inputs. This approach allows transformers to efficiently generate accurate sequences.
+
+ 
+
+Next, you will explore the mathematics behind transformers.
+
+
+Working of Transformers: Encoder and Decoder
+This lecture brings together everything we have studied so far: self-attention, Query (Q), Key (K), Value (V), contextual embeddings, and encoder–decoder architecture.
+
+We'll use the professor's example throughout:
+
+Input (English instruction):
+Python program to print Hello world
+
+Expected output (Python code):
+print("Hello world")
+
+
+
+The Transformer has two major parts:
+- Encoder: Understands the input and creates rich representations of its words.
+- Decoder: Uses those representations to generate the Python code, one token at a time during inference.
+Let's understand each part separately.
+Part 1: Working of the encoder
+1. What exactly does the encoder produce?
+The input sentence is divided into six tokens, following the professor's example:
+Input tokens
+Python
+ X1
+
+program
+ X2
+
+to
+ X3
+
+print
+ X4
+
+Hello
+ X5
+
+world
+ X6
+
+
+
+Transformer Encoder
+Each token attends to the other input tokens.
+
+Six contextual representations
+Z₁
+
+
+Z₂
+
+
+Z₃
+
+
+Z₄
+
+
+Z₅
+
+
+Z₆
+
+
+
+Six input tokens produce six encoder output vectors. Each vector contains contextual information.
+Notice something important:
+- Input has six tokens.
+- Encoder produces six output vectors.
+- Each output vector represents its corresponding token after considering the context of the entire sentence.
+For example:
+- Z₁ represents Python with contextual information.
+- Z₂ represents program with contextual information.
+- Z₃ represents to with contextual information.
+- Z₄ represents print with contextual information.
+- Z₅ represents Hello with contextual information.
+- Z₆ represents world with contextual information.
+These are called contextual embeddings or contextual representations.
+2. How does each word get a richer representation?
+Remember our group-project analogy?
+
+Each word participates in the group project to improve its own understanding.
+
+Every token creates three vectors:
+- Query (Q): What information am I looking for?
+- Key (K): What information can match another token's query?
+- Value (V): What information can I contribute?
+For six tokens, the encoder creates:
+Token	Query	Key	Value
+Python	Q₁	K₁	V₁
+program	Q₂	K₂	V₂
+to	Q₃	K₃	V₃
+print	Q₄	K₄	V₄
+Hello	Q₅	K₅	V₅
+world	Q₆	K₆	V₆
+
+The actual mathematical calculation of these vectors will be covered in your next lecture.
+
+For now, understand what happens after they are created.
+3. Example: How does the word "program" understand itself?
+This is the most important example from your professor.
+
+Consider the word:
+
+program
+
+If you look at the word independently, it can have several meanings:
+- A computer program.
+- A television program.
+- A celebration program.
+- An event schedule.
+So how does the model understand which meaning applies?
+
+It looks at the surrounding words.
+
+Here, the sentence is:
+Python program to print Hello world.
+
+The word Python gives important information about the word program.
+
+The model may learn that the word "program" should give a high attention weight to "Python".
+
+It may give less weight to the word "to".
+Illustrative attention from the token "program"
+
+These weights are conceptual examples, not actual measured Transformer attention scores.
+Python
+
+35%
+
+
+
+
+program (itself)
+
+30%
+
+
+
+
+to
+
+5%
+
+
+
+
+print
+
+15%
+
+
+
+
+Hello
+
+8%
+
+
+
+
+world
+
+7%
+
+
+
+
+Python and program receive higher illustrative weights because they help establish the meaning of the program in this example.
+The model is effectively asking:
+What other words help me understand the word "program"?
+
+The Query of "program" is compared with the Keys of all six tokens.
+
+The resulting attention weights decide how much of each token's Value should contribute to the new representation.
+4. How is Z₂ calculated?
+Here is the mathematical idea.
+
+Z₂ represents the enriched representation of the word "program".
+
+It is calculated as a weighted combination of all six Value vectors:
+\[
+Z_2 =
+\alpha_{21}V_1+
+\alpha_{22}V_2+
+\alpha_{23}V_3+
+\alpha_{24}V_4+
+\alpha_{25}V_5+
+\alpha_{26}V_6
+\]
+
+Where:
+- \(V_1\) = Value of Python.
+- \(V_2\) = Value of program.
+- \(V_3\) = Value of to.
+- \(V_4\) = Value of print.
+- \(V_5\) = Value of Hello.
+- \(V_6\) = Value of world.
+- \(\alpha_{2j}\) = Attention weight assigned by program to token \(j\).
+The attention weights are normalized using Softmax:
+\[
+\sum_{j=1}^{6}\alpha_{2j}=1
+\]
+
+This is a convex combination.
+
+What does convex combination mean?
+
+It means the weights are non-negative and add up to 1. Each Value contributes according to its assigned importance.
+
+The same operation happens for every other token.
+- Python gets its own attention weights and Z₁.
+- Program gets its own attention weights and Z₂.
+- To gets its own attention weights and Z₃.
+- And so on.
+The encoder's overall operation
+Six input tokens
+Each token creates Q, K and V
+Each Query compares with all Keys
+Softmax attention weights × Values
+Z₁, Z₂, Z₃, Z₄, Z₅, Z₆
+Contextual representations sent to the decoder.
+
+Remember: The professor's interpretation of which words should receive more attention is an illustration. The actual attention patterns are learned from training data and may differ from what a human expects.
+
+Part 2: Working of the decoder
+Now the encoder has completed its work.
+
+It has produced six contextual representations:
+\[
+Z_1,Z_2,Z_3,Z_4,Z_5,Z_6
+\]
+
+The decoder's responsibility is to generate the Python code.
+
+Unlike the encoder, which processes the input sequence as a whole, the decoder generates output tokens autoregressively — one token at a time during inference.
+5. How does the decoder start?
+Initially, the decoder receives a special token called the START token.
+
+This tells the decoder:
+Start generating the output sequence.
+
+Encoder output
+
+Z₁, Z₂, Z₃, Z₄, Z₅, Z₆
+
+
+Decoder input
+START
+
+
+First generated token
+print
+
+
+But how does the decoder know to generate print?
+
+It uses the encoder's output representations to understand the original instruction.
+
+The decoder has two attention mechanisms, and both are important.
+6. The two attention mechanisms in the decoder
+Decoder architecture — simplified
+Previously generated tokens
+
+START, print, ...
+
+
+Attention 1
+Masked self-attention
+
+Looks at previous output tokens to understand what has already been generated.
+
+
+Attention 2
+Encoder–decoder attention (cross-attention)
+
+Looks at encoder representations to understand the original input.
+
+
+Generate next token
+
+
+Let's understand these individually.
+Attention 1: Masked self-attention
+Imagine the decoder has generated:
+START, print
+
+
+It now needs to determine what comes next.
+
+It asks:
+I have already generated START and print. What should I generate next?
+
+The decoder uses self-attention over its own previously generated tokens.
+
+It uses the relationships between those tokens to understand the output sequence so far.
+
+Why is it called masked self-attention?
+
+Because the decoder must not look at future tokens that it has not generated yet.
+
+For example, when predicting the next token after print, it cannot look ahead at the correct answer and see ( or "Hello world".
+Causal masking — what the decoder is allowed to see
+Current position	START	print	(	Hello
+START	✓	×	×	×
+print	✓	✓	×	×
+(	✓	✓	✓	×
+Hello	✓	✓	✓	✓
+
+✓ = can attend; × = cannot attend to future positions. This is an illustrative causal attention mask.
+This prevents the model from cheating by looking at future answers.
+Attention 2: Encoder–decoder attention (cross-attention)
+After self-attention, the decoder also needs information from the original English instruction.
+
+For example, the instruction is:
+Python program to print Hello world.
+
+The decoder has generated:
+START, print
+
+
+It needs to know what comes next.
+
+It consults the encoder's six contextual representations:
+\[
+Z_1,Z_2,Z_3,Z_4,Z_5,Z_6
+\]
+
+It may learn to pay attention to the information associated with:
+- Python
+- program
+- print
+- Hello
+- world
+The decoder uses this information to determine the next output token.
+
+The important distinction is:
+Mechanism	Information it uses
+Masked self-attention	Previous decoder tokens
+Cross-attention	Encoder outputs
+
+Technical detail: In cross-attention, the decoder supplies the Query, while the encoder outputs supply the Keys and Values.
+
+That means:
+\[
+Q= \text{Decoder representation}
+\]
+
+\[
+K= \text{Encoder representations}
+\]
+
+\[
+V= \text{Encoder representations}
+\]
+
+This is different from encoder self-attention, where Q, K and V all come from the encoder's own input representations.
+7. Follow the complete generation process
+Now let's walk through the professor's example one step at a time.
+
+Expected output:
+print("Hello world")
+
+
+
+Decoder generation timeline
+1. Step 1 — Start
+   Input: START
+   
+   Cross-attention consults encoder output. The decoder predicts:
+   print
+2. Step 2 — Generate opening parenthesis
+   Input so far: START, print
+   
+   Masked self-attention understands the generated prefix. Cross-attention consults the instruction.
+   (
+3. Step 3 — Generate the string
+   Input so far: START, print, (
+   
+   The decoder uses the input context to generate the content that should be printed.
+   "Hello world"
+4. Step 4 — Generate closing parenthesis
+   Input so far: START, print, (, "Hello world"
+   
+   )
+5. Step 5 — End generation
+   
+   The decoder emits an end-of-sequence token (EOS) to indicate that the output is complete.
+   EOS
+
+Final generated program
+print("Hello world")
+
+
+
+
+The decoder repeats this process until the output is complete.
+
+Notice that every newly generated token becomes part of the input prefix for the next generation step.
+8. How does the encoder and decoder learn what to attend to?
+This is an important question asked by the professor.
+
+Initially, the Transformer does not know:
+- Which words are important.
+- Which encoder representations should influence each output.
+- Which output token should come next.
+The model learns these relationships during training.
+Training process
+Let's say the correct output is:
+print("Hello world")
+
+
+
+Initially, the model might generate something incorrect:
+print("Python hello")
+
+
+
+The model compares its prediction against the correct target.
+How Transformer learns
+Input instruction
+"Python program to print Hello world"
+
+Encoder + Decoder
+Generate predicted output.
+Prediction
+Incorrect code
+
+
+Target
+Correct code
+
+
+
+Calculate loss
+Measure the difference between prediction and target.
+Backpropagation and optimization
+Update the learned parameters, including Q, K and V projection weights.
+Repeat across training examples to improve predictions.
+
+An important point from the lecture:
+
+The encoder and decoder learn together.
+
+If the encoder does not understand the input correctly, the decoder may not have enough useful information to generate the correct output.
+
+Likewise, if the decoder is not generating the output correctly, the training process updates the relevant parameters throughout the model.
+
+The learned Query, Key and Value projection matrices are updated through backpropagation and optimization.
+One technical clarification: training versus inference
+The lecture demonstrates generation during inference, where tokens are fed back one at a time.
+
+During training, however, the correct target sequence is normally provided to the decoder in a shifted form. With causal masking, the decoder can calculate predictions for multiple target positions in parallel.
+
+This is called teacher forcing.
+
+So remember:
+Stage	Decoder behavior
+Training	Uses shifted correct target tokens; positions can be processed in parallel with masking
+Inference	Starts with START and generates one token at a time
+
+
+9. Complete Transformer architecture — what have we learned?
+Here is the complete high-level flow from this lecture:
+Encoder–Decoder Transformer
+Source input
+English instruction
+Encoder
+Self-attention
+Feed-forward network
+Repeated encoder layers
+Z₁ ... Z₆
+Encoder outputs
+
+Previous output tokens
+START, print, ...
+Decoder
+Masked self-attention
+Cross-attention
+Feed-forward network
+Repeated decoder layers
+Output tokens
+Generated Python code
+
+
+Conceptual architecture. Each encoder and decoder consists of multiple stacked layers.
+The professor's key summary is:
+Component	Main responsibility
+Encoder self-attention	Understand relationships among input tokens
+Decoder masked self-attention	Understand previously generated output tokens
+Decoder cross-attention	Connect generated output with encoder information
+Training	Learn the parameters and attention patterns from data
+
+10. Important clarifications for deeper understanding
+These details will help when you move into the mathematical lecture.
+
+1. Attention is learned, not manually programmed. We might expect "program" to focus on "Python", but the actual learned weights depend on training, architecture and task.
+
+2. The encoder does not generate the Python code. It generates contextual representations of the English input. The decoder generates the code.
+
+3. The encoder and decoder do not have identical attention structures. The encoder uses self-attention; the decoder uses masked self-attention and cross-attention.
+
+4. The attention output is not the entire Transformer block. The architecture also includes feed-forward networks, residual connections and normalization layers. These are important in the full mathematical explanation.
+
+5. The six encoder vectors are not six complete meanings stored independently. Each is a learned vector representation containing contextual information.
+
+11. Check your understanding
+Encoder and decoder quiz
+7/7
+
+1. What does the encoder produce for six input tokens?
+
+One vector for the whole sentence only
+
+Six contextual representations
+
+Six Python statements
+
+Six decoder outputs
+
+Correct
+
+The encoder produces one contextual representation for each input position.
+
+
+
+2. How does the word 'program' understand that it refers to computer programming?
+
+It looks only at itself
+
+It uses context from other tokens through self-attention
+
+The decoder tells it the definition manually
+
+It ignores Python
+
+Correct
+
+Self-attention allows the representation of program to incorporate information from Python and other tokens.
+
+
+
+3. What is Z₂ in the professor's example?
+
+The representation of Python
+
+The representation of program
+
+The second generated Python statement
+
+The second decoder layer
+
+Correct
+
+Z₂ is the enriched contextual representation corresponding to the second input token, program.
+
+
+
+4. What are the two decoder attention mechanisms?
+
+RNN and LSTM
+
+Self-attention and cross-attention
+
+CNN and pooling
+
+Encoder and Softmax
+
+Correct
+
+The decoder uses masked self-attention over its output prefix and cross-attention over encoder outputs.
+
+
+
+5. In cross-attention, where do the Query, Key and Value come from?
+
+All from encoder
+
+All from decoder
+
+Query from decoder; Key and Value from encoder
+
+Query from encoder; Key and Value from decoder
+
+Correct
+
+The decoder asks the question; encoder outputs provide the information to match and retrieve.
+
+
+
+6. Why does the decoder use a causal mask?
+
+To remove punctuation
+
+To prevent access to future output tokens
+
+To remove encoder outputs
+
+To make the input sentence shorter
+
+Correct
+
+The mask prevents the decoder from seeing future target tokens when predicting the next token.
+
+
+
+7. What happens when the model makes incorrect predictions during training?
+
+Only the decoder is manually corrected
+
+The model's learned parameters are optimized using the loss and backpropagation
+
+The input sentence is deleted
+
+Attention is disabled
+
+Correct
+
+Training updates parameters throughout the model, including the encoder and decoder projections.
+
+
+Score: 7/7
+Retake quiz
+What comes next: Transformer mathematics
+You are now ready for the mathematical details. I recommend understanding these in this order:
+1. Token embeddings and positional encoding.
+2. Query, Key and Value weight matrices.
+3. Scaled dot-product attention.
+4. Multi-head attention.
+5. Feed-forward neural network.
+6. Residual connections and Layer Normalization.
+7. Stacking encoder and decoder layers.
+The most important concept to carry forward: The encoder enriches every input token using self-attention. The decoder generates output tokens using both its own previous outputs and the encoder's contextual information.

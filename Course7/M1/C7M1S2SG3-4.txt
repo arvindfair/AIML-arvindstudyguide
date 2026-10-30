@@ -1,0 +1,606 @@
+Basic Concepts of Object Detection
+
+We discussed an example of object detection, which is basically the task of locating objects in an image. For example, take a look at the following image where three objects are detected. Each detected object has an associated probability or confidence.
+
+ 
+Let's go through the basic concept of object detection in the following lecture. 
+
+00:00:05 - 00:00:37
+Introduction to Object Detection using CNNs
+In this session, we will talk briefly about object detection using CNNS. This area object detection has seen tremendous progress in the last few years and this has been one of the showcase use cases for CNNS in general. And today you do have object detection systems which actually work in real time.
+00:00:37 - 00:01:25
+Real-time Object Detection Capabilities
+You, you have a video and you run an object detection algorithm on top of it and it actually produces the bounding boxes for the various objects that it detects in the video along with the labels as the video progresses. And it actually happens in real time. The the the rate at which the objects can be detected these days using the modern day algorithms like EOLO, etcetera is in fact in terms of the FPS rate, the frames per second, it is significantly faster than the standard FPS rates for most videos. So you can actually do object detection in real time today.
+00:01:25 - 00:02:03
+Overview of Object Detection Algorithms
+So in this session, we will do an overview of how object detection algorithms work in general. So what are the key ideas behind object detection algorithms? So where CNN plays a role and what are some of the tweaks that you need to do to make object detection work in general? So object detection algorithms, they work with some agreed vocabulary of objects.
+00:02:07 - 00:02:34
+Training Networks with Object Vocabulary
+So the first thing you need to realise is that these networks have to be trained on a certain dictionary or a vocabulary of objects and it's capable of detecting those objects. It is it is not possible for the network to detect something that it has not been trained to detect. OK, so you do have vocabulary of objects with you.
+00:02:36 - 00:03:15
+Building a CNN for Image Classification
+So you could have things like say cat, cycle, person, car, table and so on. Now let us start from the simple thing which we already know about South. If I give you an image which contains the picture of a cycle, let us say, or a cat or something, we can clearly build a CNN network. We can go through few convolution layers and then do the pooling on top of it.
+00:03:15 - 00:03:48
+Extending Image Classifier to Object Detector
+And you can stack these up. And finally you would have a softmax layer which would result in one of these, right? So this is your standard softmax. Now I can train the network on various images and use the usual in the cross entropy kind of of loss function, which is typical for classification right now.
+00:03:48 - 00:04:57
+Object Detection with Multiple Objects in Image
+So it is just a classification problem. Given an image, I want to classify into one of these categories. So use the standard softmax. You you do cross entropy at the other end, generate the loss back propagate, you train your weights and you have an image classifier. So this part I think we are already familiar with. It is straight forward to see. Now based on what you have already done, we can see how to build an object classifier or an image classifier into various objects. Now let us see how we are going to extend this to an object detector. Then object detector builds on the notion of a classifier, but it adds a couple of more steps to what? So in the middle you are going to have the same image or object classifier which is what we discussed just now.
+00:04:59 - 00:06:02
+Region of Interest and Region Proposals
+But then to to run the classifier I need an image. I need a candidate image. Now what we have in an object detector is that the object detector is going to see an image which has multiple objects in it, right? So there could be a cat sitting here, there is a cycle, there is a person here and so on. South there are and they could potentially be overlapping with each other. So there are these objects. If I give one of these objects as a separate image and then I give it to this classifier, it can indeed generate the classification and tell you what object it has. So this part is clear. But then what is not clear is how do I actually find where this object is sitting in this image, if at all. I do not know if a cat is there in the image.
+00:06:02 - 00:07:09
+RCNN and Region Proposal Generation
+If it is there, where exactly is the cat, How big is, how big a portion of the overall image does the cat occupy? And so on. Right? So I need a part of the image which can potentially contain the object that I am looking for and then I can go ahead with a classification. Right now this is you could call it RY region of interest, but the question still remains how am I going to generate this? The first solutions that were proposed which is the the RCNN took a very simple approach. I am going to generate regions of interest at random.
+00:07:11 - 00:09:04
+Filtering Region Proposals with Classifier
+Yes, this is this is costly. And so that was the prime motivation for the improvements that came later, which we will discuss in a while. But the initial attempts were to simply generate what are called region proposals. So you propose a region by simply picking a rectangular box from within the image. So this is completely at random. I mean, you can try more structured ways like you can think of it as a grid and then try to add adjacent regions together. You can try to be a little smart about it, but at the end of the day it is basically taking sort of wild shot at where an object could potentially lie and and then you push each of these region proposals. So you generate these rectangular sub images and you push each of them through your object classifier and whichever gives a probability above a certain threshold, you retain those region proposals and you discard the rest. So obviously what is going to happen is that a majority of the proposals you generate are actually going to get thrown away. Yeah, but that is exactly what we will try to solve a little later in the in the more sort of sophisticated versions of this algorithm that came up later. Right.
+00:09:05 - 00:10:07
+Max Separation in Object Detection
+So the first step is generating region proposal generation and then you push them through the the classifier and and from this you do. So this actually acts as a sort of filter or a sieve. And whatever falls through the sieve are your genuine candidates because they show a significant probability above the threshold of it being anyone of the objects in your vocabulary. And the last thing is what is called Max separation. So let us say I have a car.
+00:10:12 - 00:11:23
+Intersection over Union (IOU) Concept
+So this is there in the object and say there are some head lights here and so on right? So this is a windscreen. Now my region proposals could have been like this. So these are all the possible region proposals. I am just drawing some rectangles at at random. OK, so I have four of these, there could be many more and all of them show decent probability of containing the image of a car. But then so when you take this one, it found some evidence that it is possibly a car like it is a wheel and, and the tail of the car and so on. This fortunately caught the bulk of the car.
+00:11:24 - 00:12:33
+Applying IOU for Redundant Region Proposals
+This one again saw a wheel it it saw the the front with the headlights and so on. This actually saw both the wheels. So each of them, though it does not do justice to the entire car, each of them have found enough evidence to suggest that this image might indeed have something to do with a car. And and that is why when you did the object classification based on each of these rectangles, you actually got a decent probability and but then finally when you want to detect the car there, except possibly one of them, all others are kind of redundant because they are all pointing to the same object. This duplication happened because I was generating these region proposals at random pretty much right?
+00:12:33 - 00:13:38
+Max Separation Process Explained
+And so there was a lot of overlap but then I need to only retain one of them at the end before I say this is car and I have detected it right. So for that we do what is called the Max separation and that is a simple operation. I pick first the one which had the maximum probability. So may be this is the one which showed the highest probability which means this is the one which captured most of the key features of this particular object that I am trying to detect. So as you can see, it captured both the wheels and the entire top of the car, the front and the back and so on. Though it does not cover the entire car, it still covers a significant portion of it. And this happens to have the highest probability.
+00:13:39 - 00:14:04
+Meta Algorithm for Object Detection
+And then what I do is take each of these other candidate proposals and I look at the IOU, which is an acronym for Intersection over Union.
+00:14:07 - 00:15:07
+Efficiency in Region Proposal Generation
+Now, if I give you 2 regions or two sets in general, let me. So if I give you 2 sets, so this is one pair of sets. There is another pair of sets which is this. You can clearly see that in this, one of these can actually be considered redundant because they have a significant overlap. In this, they do not have a. They do overlap, but the overlap is very insignificant and here I will not be able to throw away one of them both.
+00:15:07 - 00:16:01
+Later Algorithms: SSD and Faster RCNN
+I need to retain right in this. One of them kind of becomes and I can throw it away. How do I actually measure this? I measure this using the IOU measure which is simple. I just take the area of the intersection and I divided by the area of the union of the two sets. So the union is this. So this the green thing is the union, the red thing is the intersection. So clearly the the intersection is always going to be smaller than the union. So this number is something which is always less than one, but the closer it is to 1 more the overlap.
+00:16:01 - 00:17:19
+Integration of Object Detection Stages
+And that means these two are basically trying to say the same thing. So these two sets are more or less identical. That is essentially what it means, right? So and if the like in this case, the intersection is much, much smaller than the union. So the union is this. The union is much bigger because it extends far beyond the intersection. So in this case IOU is much less than one. Here IOU is almost equal to 1. So we use the IOU measure and the Max separation essentially does very something very simple. It just picks all the region proposals which are talking about the same object and if pick the one which has the maximum probability among them and then if any of the others has a large IOU with the region proposal that has the largest probability, then I am going to throw the other one away.
+00:17:19 - 00:18:18
+End-to-End Trainable Object Detection Models
+The one which had large IOU with the Max probability region, that other region I am going to basically throw it away saying it is redundant. Most of what it is trying to say is already captured by this Max probability region. So that is essentially what the Max separation stages, right? So the overall sort of meta algorithm for object detection is essentially this. I generate region proposals, classify each of the regions into the objects that are there in my vocabulary, filter the region proposals out based on the threshold that you set on whether the object detection thinks this region proposal has a decent probability of containing some object.
+00:18:19 - 00:21:14
+Faster RCNN Algorithm Overview
+And then once you have all the candidates which can potentially contain an object, then you go through a Max separation to remove the ones that are redundant and let the others remain. So this is in general how an object detection algorithm will work. So these two is pretty straight forward. So the second one we have already discussed, this is no different from a standard image classifier Max separation we just talked about South. Most of the variation in object detection algorithms is essentially in this and and this is where you can actually generate a lot of efficiency by making the region proposals far more targeted than simply generating some region proposals at random, OK. And that is essentially what the later algorithms like SSD and faster RC and etcetera try to do. So they try to make the region proposal lot more efficient and targeted. There is one other sort of subtle difference between the way the original object reduction algorithms worked and the ones that came later. It almost looks like these These three stages, in fact, are completely sort of independent of each other. You you create a region proposal through some mechanism and it does not matter what mechanism you use to create the region proposals. After you generate the region proposals, you push it through an image classifier almost independently and then you do a Max separation. So it almost sounds like you are solving 3 independent problems and you are sort of pasting them together to create one whole object detection system. So one of the significant things that happened later on was, yeah, I mean apart from making the region proposal more targeted and efficient, they also synergized all these three and made it into an end to end trainable model. So you give an image and there is one single network, Yeah. I mean you can identify these roles implicitly for different parts of the network still.
+00:21:14 - 00:21:55
+
+But then it is one integrated unit and the whole thing is trained together. So it is one end to end differentiable network which is trained using the usual back propagation scheme. So these are not three different independently working algorithms anymore. It is one object detection network. So let us quickly look at how one of the popular algorithms for this, Faster RCNN, works and you should be able to relate to what they are doing using this broad framework that we have laid out for object detection.
+
+
+To summarise, an object detection problem can be divided into 3 subtasks: 
+
+ 
+
+Region proposal generation: Here, we find the possible areas/regions, their shapes and sizes, which potentially contain an object. This task is where most object detection algorithms try to find novel ideas to improve state-of-the-art object detectors. You saw the example of the region proposals of a car. You could have region proposals, such as the one shown in the image below.
+
+
+Object classification: The next task is to feed all the regions to an image classifier, which is a CNN network.  The CNN outputs a class along with a probability of the class for every region. The regions with a probability less than a threshold value are discarded.
+ 
+
+Non-maximum suppression: There is a negligible chance that a region generated in the first step will capture the object entirely. Each region will contain a part of the object. In the end, we just want one region, which captures the object entirely. This is where the non-maximum suppression technique is used. Consider the four region proposals of the car, each of which is classified as containing a car above the stipulated threshold.
+
+Please note that the professor had mistakenly referred to this technique as maximum suppression instead of non-maximum suppression
+ 
+
+
+
+ 
+
+In the above picture, you can see that only the 3rd box captures most of the car, and the other boxes are redundant.  We will do non-max suppression to remove those by calculating the metric - IoU (intersection over union). It is the ratio of the area of intersection to the area of union between two given regions.
+
+ 
+
+
+
+We find the IoU metric between the ground truth region of interest and all the generated regions of interest. The ground truth region of interest is the ideal bounding box around the car, which is present in the label in the training data. The algorithm will find that the IoU is maximum for the 3rd box, as it is closest to the ideal bounding box of the car. We will remove (or compress) the other 3 boxes.
+
+ 
+
+ 
+
+In the figure below, you can see the various region proposals and the ground truth bounding box.
+
+ 
+
+Next, we will discuss another paper: 'Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Network' by S Ren. It's an improvement over the R-CNN network.
+
+Discussion on Faster R-CNN
+--------------------------
+
+Now, we will discuss the famous paper for object detection - 'Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Network' by S Ren, which appeared in 2017. You can go through the paper here. -- https://arxiv.org/pdf/1506.01497
+
+ 
+
+We will be taking up a more structured discussion on Region-Based CNN (RCNN) models in the upcoming segment. However, understanding the concepts being explored here will be a good application of the topics we just learned.
+
+00:00:00 - 00:00:27
+Introduction to Faster RCNN Architecture
+So this is the paper that proposed the Faster RCNN architecture. And as you can see in the abstract, all the things that we mentioned, So region proposal algorithms to hypothesize object locations and they expose the region proposal computation as the bottleneck.
+00:00:27 - 00:01:11
+Region Proposal Algorithms and Bottleneck Explanation
+As you can see, if you are simply going to generate region proposals from the wild, then the number of false regions that you generate is going to be far too many. And that is essentially what slows the whole thing down. And that is precisely why they are calling it a bottleneck. And as you can see, this is a fully convolutional network that simultaneously predicts object, object bounds and objectness scores at each position. It is trained end to end to generate high quality region proposals and so on. Right?
+00:01:11 - 00:01:42
+End-to-End Network Training Concept
+So this is essentially the idea you try to put everything together into one single end to end network that can be trained. Let us quickly look at the overall architecture for this network. So here is the picture that you can see.
+00:01:44 - 00:02:14
+Overview of Network Architecture
+So you have a bunch of convolutional layers which extract the features out of the original image. And then I actually have a separate auxiliary network and they call it the region proposal network. Here I am going to do something like a convolution at multiple scales.
+00:02:14 - 00:03:39
+Region Proposal Network and Multi-Scale Convolution
+So what that means is you have an image and in convolution you basically look at things like this, right? So I am going to do something similar and I am going to also do it at multiple scales to take care of objects of different sizes and also different form factors like it does not have to be square, it could be this, it could be this and so on. And as I do it for each of these I have two things to do with this. I have an objectness score, so which is a probability which says. How likely is it that this particular part of the image contains an object? So this is like your standard classification stuff. And here you have regression which tries to predict the object coordinates.
+00:03:45 - 00:04:07
+Objectness Score and Regression in RPN
+And so the region proposal network does these two things and then all of this gets into the pool along with the original features of the image. And then I finally say this part contains this object. I put the label.
+00:04:07 - 00:05:35
+Classification and Loss Measurement
+So at here it is only an objectness core. I am not actually classifying it into a cat or a cycle or a car. I am only saying does this contain some object and if it does then I am going to actually push it through a regular classifier to say which object it actually is. And once I do that, I am finally going to measure the loss. So you can see the loss function here. And the loss function measures 2 things comparing to the ground truth. It measures the log loss with respect to the object that has been predicted in that bonding box. So this is like your regular cross entropy. So for every object that it predicts, it predicts A probability. And then I have a ground truth and I compare the two. Here I compare the bounding box dimensions that my network is generated using the regression that I did in my region proposal network.
+00:05:35 - 00:06:49
+Bounding Box Regression and Loss Function
+I am going to compare that with the ground truth. So treat the bounding box as a vector of four numbers which which denote the the two diagonally opposite corner. So 2 coordinates for this two coordinates for this I have a vector of length four and look at the difference between these two. So the the overall loss is a combination of both of these together with of course parameter Lambda that balances between the accuracy of the object classification versus the accuracy of the bounding box. And with this loss function after the classifier, you basically generate the loss. Then you do a back propagation and the back propagation flows all the way back through this, through the classifier and through the region proposal network and the CNN part of the network all the way back to the input. So all these weights are trained using the standard back propagation mechanism after generating the loss at the other end.
+00:06:50 - 00:07:31
+Back Propagation and End-to-End Learning
+So in this I simultaneously correct the loss and I learn the dimensions of the bounding box as well as the the identity of the object that is there in my image. So this actually becomes accurate in both ways. You actually get very very closely fitting bounding boxes for each of the objects that you have generated. And I also have the correct classification along with it. And this whole thing is done in an end to end learnable manner.
+00:07:33 - 00:08:26
+Comparison with SSD and Overall Algorithm Similarities
+So the so there might be subtle differences in the algorithms that for example SSD from Google users to faster RCNN that we are looking at here in in the way the region proposal network works and so on. But overall they are actually very very similar. The the broad template is still exactly the same. I have a way to generate and validate the region proposals. I also have a way to do the standard image classification. And then there is a loss function at the other end which tries to measure both the correctness in the classification part and the correctness of the bounding box dimensions. And I use the loss generator to the to do the back propagation.
+
+
+The architecture of Faster R-CNN is divided into the following subtasks:
+
+ 
+
+Feature extraction: An image is fed to the network. The initial convolutional layers generate feature maps for the image.
+
+
+Region Proposal Network (RPN):
+The feature maps are fed to the RPN, which is also a part of the entire network. 
+The RPN uses feature maps to generate regions of interest (RoI).
+Unlike the R-CNN network, which randomly generated the RoIs, the Faster R-CNN generates RoIs smartly. The region generation or region proposal is also learnt while training the network.
+The RPN scans the feature maps generated in the previous step to find potential RoIs.
+After classifying RoI, an RPN generates two things about the detected RoI.
+The first thing that it generates is an objectness score, which is a probability of the RoI box having an object or not.
+For example, the objectness score could be 0.83, which tells us that the detected RoI has a high probability of having an object inside it. It doesn't classify the object yet; it just tells whether it contains an object or not.
+The second thing generated by the RPN is a pair of coordinates that tells the location of the RoI box in the image.
+For example, the RNP can generate a pair of coordinates as shown below. The coordinates are diagonally opposite, which can uniquely identify a box.
+ 
+
+
+Next, we give the output of RPN and the features extracted by the initial convolutional layers to the classifier present at the end of the network.
+We push the output of RPN to the classifier only if the objectness score is above a certain threshold, such as 0.5, which means the RPN thinks that there is a high probability of the presence of an object inside the RoI box.
+ 
+
+The classifier performs two tasks. 
+First, it classifies the object present in the RoI box into one of the classes, such as car, cat, dog, etc. It then uses the log loss by comparing the classified object with the ground truth object.
+The second task is to calculate the regression loss, which compares the 4 coordinates generated by the RPN with the ground truth bounding box coordinates. Both of these losses are backpropagated to update the weights in the entire network, including those of the RPN.
+ 
+
+ 
+
+Next, we will learn about region-based detectors in detail.
+
+
+Region-Based Detectors - Overview
+
+We were introduced to the concept of object detection. You also learnt about some important metrics that you will be using throughout the session. Now, let's learn about the different types of algorithms for detecting objects in images and videos. There are two categories of object detection algorithms, which are as follows:
+
+Region-based detectors
+One-shot detectors
+ 
+
+Our focus first will be on region-based detectors. But before understanding these, we will discuss why fully connected neural networks are not suitable for this task. We will also understand the concept of sliding windows.
+
+ 
+
+You will then learn about RCNN, Fast RCNN and Faster RCNN, which work on a region proposal technique and are hence known as region-based approaches. You will learn about the workings, architectures and limitations of each of these techniques.
+
+ 
+
+Note that these methods are not used in the industry today due to various limitations. This segment will provide a theoretical overview of these region-based detectors. You will only learn the basics of these techniques so that you can understand the evolution of object detection models.
+
+ 
+
+In the next segment, you will learn about the basics of one-shot detectors, (newer versions of which are) used commonly in the industry. The one-shot fundamentals we are going to discuss are also not the current standard due to multiple innovations. But the concepts we will study for single-shot detectors are fundamental to real-time object detection and motivated further innovations in the techniques. However, even these have been replaced by Detection Transformers (DETRs).
+
+ 
+
+Now, let's start with understanding the limitations of FCNs for object detection.
+
+FCNs for Object Detection
+
+
+You can use fully connected convolutional neural networks (FCNs) to classify images. But can you perform the task of detecting objects using FCNs? Well, no, you cannot. 
+
+ 
+
+FCNs cannot be used as object detection algorithms because some of their properties act as limitations in the case of object detection tasks. Let’s watch the next video to understand why FCNs are not suitable for object detection. 
+
+
+
+
+
+00:00:00 - 00:00:18
+Introduction to challenges in object detection with CNNs
+Before going through these algorithms, there are a couple of facts that we need to revisit and this is due to the fact that the fully connected convolutional neural networks do not quite well as expected for the purpose of object detection. Customizations need to be made and we will explain why.
+00:00:19 - 00:01:14
+Limitations of fully connected CNNs for object detection
+As you all know, the FCNS or fully connected CNNS are widely used in the next classification. However, these networks are challenged in object detection just because the output layer is variable. The requirement for a fully connected convolutional neural network is that the the length of the output layer is fixed. In the case of object detection, we have that variable because the number of occurrences of the objects of interest is not fixed in itself. Another factor is the use of sliding layers. In the case of CNNS, the sliding windows that are set with a slide of 1 would substantially slow down the operation if they were to be used for object detection. That means that real time applications cannot be built with any such architecture. We briefly mentioned the concept of sliding windows before.
+00:01:15 - 00:02:12
+Explanation of sliding window method in CNNs
+Let us actually revisit this in this slide. The sliding window method involves the translation of a fixed size box along the X&Y dimensions of the image. The translations themselves are or fixed steps. The purpose of the sliding window is to access subsets of the image that can match the input criteria of the network. This is needed because networks normally cannot process entire images of one goal. They can handle small image patterns and these are the ones that are being provided by the sliding window itself. One way of solving the 2 is perhaps to partition the input image into several regions and then use a regular CNN in order to classify the presence of an object in each one of these regions. The drawbacks we see in these are two fold.
+00:02:13 - 00:02:43
+Challenges and solutions for object detection in CNNs
+The objects of interest may have different spatial locations within the image and different aspect ratios, and both of these are problematic. To improve this naive approach, one would need to select a very large number of regions, possibly overlapping, in order to address both of these throwbacks. The result of any such approach would be to increase substantially the computational overhead as the number of classifications using the CNN would increase dramatically.
+
+
+As you learnt in the video above, FCNs cannot be used for object detection due to certain reasons, which are as follows:
+
+ 
+
+The length of the output layer in object detection tasks is variable, as the number of objects/occurrences is unknown and varies. This unknown length of the output layer cannot be handled using FCNs.
+ 
+FCNs use sliding windows, with a stride of one, which will end up slowing down the operation.
+
+Sliding windows slide through the image in rectangular steps of equal size to extract different areas from the entire image. This windowed image is then fed to feature extractors and classifiers in the case of FCNs. Using sliding windows to extract a subset of images that have to be fed to the feature extractor will give you thousands of such images in that subset.
+ 
+Having thousands of these images being fed to the classifier will increase the time and memory requirements of the model, which is counterproductive. 
+ 
+
+Therefore, using FCNs is not the most effective way to deal with object detection problems. 
+
+
+One alternative to deal with the limitations of FCNs is to divide the input image into smaller images and then feed them to the CNN, i.e., the classifier. This technique of slicing the input image into smaller images has its own disadvantages, which are as follows:
+
+ 
+
+The objects that are of importance may have different spatial locations within the image
+ 
+The objects of interest will have different aspect ratios in the smaller images
+ 
+This technique requires you to feed a very large number of smaller images of overlapping regions, which, even though it reduces the time required for computation as compared to FCNs, still requires large computational resources
+ 
+
+Therefore, either using FCNs or feeding multiple sub-images of the input image to the CNN is not suitable for real-time object detection problems.
+
+ 
+
+So now, you will learn about region-based object detection techniques, which can be used to solve some of the problems that you have encountered so far.
+
+Region-Based CNNs
+
+As you saw, FCNNs cannot be used as object detectors because they require you to divide the input image into a subset of multiple smaller images, which, when fed to the classifier, require a lot of processing time.
+
+ 
+
+One way to solve this problem would be to partition the input image into several regions and to use a CNN to classify the presence of the object within each region. This is essentially the principle behind region-based methods, which will be covered in this session.
+
+ 
+
+As the name suggests, a region-based approach works with a region proposal that extracts the important areas/regions from the image and performs feature extraction and classification on them. There are three types of region-based methods, which are as follows:
+
+Region-based CNN (RCNN)
+Fast RCNN
+Faster RCNN
+ 
+
+As you learnt earlier, using sliding windows to extract a subset of images that have to be fed to the classifier will give you thousands of images. Do you require all of these images? 
+
+ 
+
+Let’s watch the next video to learn how to deal with this problem using the RCNN.
+
+00:00:00 - 00:01:35
+Introduction to RCNN and Region Proposals
+The first algorithm that we will study is the RCNNRCNN stands for Region Based Convolutional Neural Network. Compared to the naive method that we have just described and instead of using a huge number of equal regions, we use the selective search to extract a fixed number of 2000 regions from the units that are being called region proposals. This is done by computing an initial sub segmentation of the image resulting in many candidate regions, and then using a greedy algorithm to recursively combine these regions based on similarity pad here into larger ones. It is these larger regions that are being used to propose the final candidate regions. Assuming that the system delivers three region proposals for the image that you see on the left, each one corresponding to one of the three dogs, Then what happens next is that the network is working these region proposals into squares, as you see in this part, and then sourcing them into ACNN, which acts very much as a feature extractor. The extracted features are then being sourced into an SVM where we verify the presence of the object of interest within each of the candidate region proposals. Lastly, the very same network is computing predicting the four offset values for the bounding box endpoints.
+
+
+ 
+
+Instead of having thousands of input images fed into the feature extractor, RCNNs use region proposals. These regions are proposed using the selective search technique to extract 2,000 different regions from the given image. 
+
+ 
+
+The process of extracting region proposals occurs in three steps, which are as follows:
+
+The algorithm calculates an initial picture sub-segmentation. This results in a large number of possible regions.
+ 
+The algorithm recursively combines comparable sections into larger ones using the greedy approach.
+ 
+The algorithm proposes the final potential regions using these larger regions.
+ 
+
+Note: Understanding this approach is a bit complicated and irrelevant from the industry perspective, and hence is kept out of the scope of our current discussion. However, if you wish to read more about the selective search technique and greedy approach in RCNN, here.http://vision.stanford.edu/teaching/cs231b_spring1415/slides/ssearch_schuyler.pdf
+
+ 
+
+These regions obtained are then warped and squared and finally fed into a CNN, which functions as a feature extractor. Once the features are extracted, they are fed into an SVM to verify the presence of objects in them. Additionally, the values of the bounding box vector are given as an output by this algorithm, as shown in the image below.
+
+ 
+
+
+
+ 
+
+However, this method has certain limitations due to which it is not actively used in the industry today. We will discuss these next.
+
+
+Limitations of RCNN
+
+Let’s watch the next short video talking about limitations of RCNN.
+
+
+OK, we just got a flavour of how RCNN works, but there is a problem.RCNN is not really competitive.The reason for that is that the use of 2000 region proposals is making both training and deployment a very slow process.Further to that, the use of selective certs is producing fixed results and not based on learning.As such, it can be subject to error.Next we will discuss the evolution which is the faster RCNN and see how things improve there.
+
+As you learnt in the video above, the RCNN algorithm for object detection has certain limitations, some of which are as follows:
+
+ 
+
+Having 2,000 region proposals per image being fed into the feature extractor requires a lot of time and resources, thereby making the process extremely slow.
+ 
+Even deployment is quite slow, which makes it difficult for one to use the algorithm for real-world applications.
+ 
+The selective search algorithm does not learn, which can lead to the generation of bad proposals.
+ 
+SVMs used as classifiers do not produce highly accurate results.
+ 
+
+ 
+
+Some of the issues associated with the RCNN model can be handled using the Fast RCNN method. Next, you will learn about Fast RCNN.
+
+ 
+
+ 
+
+Additional Reading
+
+Fast RCNN and Faster RCNN
+
+
+
+You can learn more about RCNN and the other algorithms of the region-based family here.-- https://d2l.ai/chapter_computer-vision/rcnn.html
+
+You learnt about RCNN and how having 2,000 region proposals makes the algorithm slow. This problem can be solved by using Fast RCNN, which is a modified version of the RCNN algorithm. Let’s watch the next video to learn more about this new technique.
+
+
+00:00:00 - 00:01:20
+Introduction to Fast RCNN and its components
+In the case of the Fast RCNN, which is an evolution of the RCNN we just saw, we are having three different additions into the network. We're having the computation of regions of interest, the ROI pulling layer and the fully connected layer that we will just discuss the Fast RCNN and instead of using 2000 region proposals as with the RCNN, uses the entire input image. The entire input image is sourced into ACNN, which generates a feature map, a convolutional feature map from which region proposals are identified. Once again using the selective search algorithm. These region proposals are locked into squares as we saw before, and each square is being reshaped into a fixed size using the ROI pulling layer. The reason for doing so is that it can be sourced into a fully collocated layer. A softmax function is used to predict the class here of it's proposed region and then the offsets of the bounding box are done with a regression model. Region proposals remain a performance issue and that is because selective search is in place.
+00:01:20 - 00:02:27
+Introduction to Faster RCNN and regional proposal network
+The next algorithm proposed along these lines was the Faster RCMN where we saw the addition of original proposal network. The Faster RCNN is similar to Faster RCNN, but in this Case No selective certs is being used to create regional proponents that is known to be slow and as such it was purposely excluded from this architecture. Instead we use a regional proposal network to predict the regional proponents. Convolutional feature map computed by the CNN is being fed into this new regional proposal network and following this the predicted region proposals are being resaved using the ROI pull in layer as we saw before and sourced once again into the fully developed layer. The rest of the architecture remains the same. We can classify the emails within the proposed region and predict the offset values for its bounding books. This approach reduces substantially the computation time and it becomes suitable for real time applications simply because selective search is not involved.
+
+As you learnt in the video above, the Fast RCNN algorithm feeds the entire image as the input to the feature extractor, instead of feeding 2,000 region proposals. The feature extractor, CNN, then produces a feature map for the image from which the algorithm identifies the region proposals. This is done using a selective search method, similar to the one in RCNN.
+
+ 
+
+Each region proposed for a single image is of different shapes and sizes; therefore, there is a need to convert them to the same shape. Each of these region proposals is then wrapped into squares and transformed into the same shape using a region of interest (RoI) pooling layer.
+
+ 
+
+Finally, the output of the pooling layer is fed to the fully connected layer, which predicts the classes using the softmax layer and provides the bounding box coordinates for the object detected, as illustrated below.
+
+This solves the problem of having a large number of region proposals, which in turn saves a lot of time. However, in Fast RCNN, you are still using the selective search method, which does not learn and might light up incorrect region proposals, as in the case of RNN.
+
+ 
+
+Additionally, the selective search method slows down detection as it requires a lot of time. Even though the Fast-RCNN is faster than RCNN but it is not suitable for real-time applications due to its slow speed. This is one of the main limitations of the Fast RCNN technique.
+
+ 
+
+This limitation can be solved using Faster RCNN. Instead of using selective search to propose regions, Faster RCNN uses a region proposal network (RPN) to select regions from the given image. 
+
+ 
+
+The working of this algorithm is similar to that of the Fast RCNN algorithm. Additionally, Faster RCNN has one layer, which is the RPN. The feature map produced by the CNN is fed to the RPN. The RPN provides region proposals that are reshaped and fed into the RoI pooling layer. The last step is the same as it was in Fast RCNN; the output of the pooling layer is classified along with the bounding box vector. This solves the problems caused by using selective search techniques.
+
+ 
+
+The architecture of Faster RCNN is illustrated below.
+
+ 
+
+
+
+ 
+
+Even though the Faster RCNN algorithm solves the problem of using selective search, it still cannot be used for some real-time applications due to certain limitations.
+
+Limitations of Region-Based Methods
+
+
+Let’s watch the next video to learn about the limitations of region-based methods.
+
+
+00:00:00 - 00:00:27
+Two-State Process in Object Detection Algorithms
+The three algorithms we have just presented run a 2 state process. The first involves proposing regions and the second is processing them. Regions with high probability of containing an object are being utilized to identify and localize this object in the image or in the video frame. This, despite various advancements, remains slow and inefficient for video processing. In the next session we will discuss 2 very different algorithms.
+00:00:27 - 00:00:39
+Introduction to One-State Operation Algorithms
+Let's solve this by running in one state operation. These algorithms process the entire image at one goal and they deliver results in a manner that is compatible for real time applications.
+
+
+As you learnt in the video above, region-based techniques have the following properties:
+
+ 
+
+These algorithms work on a two-stage approach:
+Proposing different regions
+Processing these regions
+ 
+The proposed regions, which have a high probability of the presence of the object, are processed. The object is then localised inside the image.
+
+Even after various advancements from RCNN to Faster RCNN, these methods are still not fast enough to deal with real-time problems. Hence, they are not used actively in the industry today. 
+
+ 
+
+This brings us to the end of the RCNN discussion. This section aimed to provide you with a very high-level overview of this class of algorithms so that you can understand how object detection algorithms evolved before moving to the next class of algorithms, i.e. the one-shot detectors in the next session.
+
+ 
+
+To read about RCNNs in more detail, you can visit this page to learn more about region-based detectors.https://lilianweng.github.io/posts/2017-12-31-object-recognition-part-3/
+
+ 
+
+Before you proceed further, spend some time answering the questions next.
+
+Which of the following statement(s) is/are correct regarding FCNs? All the neurons of one layer are connected to all the neurons of the next layer.
+
+Much like CNNs, FCNs also have assumptions regarding the input image in consideration.
+
+FCNs are prone to overfitting.
+
+The first and third statements are correct.
+
+All the neurons of one layer are connected to all the neurons of the next layer: This is the exact definition of a Fully Connected Network (or Dense layer). Every single node in a given layer has a unique weight connecting it to every node in the subsequent layer.
+
+FCNs are prone to overfitting: Because every neuron connects to every other neuron, FCNs possess a massive number of parameters (weights). This huge capacity makes them highly susceptible to memorizing the training data (overfitting) rather than learning generalizable patterns, especially when dealing with high-dimensional data like images.
+
+The second statement is incorrect.
+FCNs do not make spatial assumptions about the input image. A CNN assumes that pixels close to each other are related (spatial correlation) and uses small filters to scan the image. An FCN, however, flattens the entire 2D image into a single 1D line of pixels, completely destroying and ignoring any spatial relationships or structural layout.
+
+
+FCNs use sliding windows to analyse the input image. These sliding windows move in strides. What is the stride of the sliding window in FCNs? 1, 2, It is customisable and can be adjusted.
+
+The correct answer is 1.In the naive sliding window approach using Fully Connected Networks (FCNs), the window moves with a stride of one. This means the bounding box shifts exactly one pixel at a time across the entire X and Y dimensions of the image.While a stride of 1 ensures the network doesn't accidentally skip over an object, it forces the system to crop and process hundreds of thousands of nearly identical images, which is exactly why this method is far too slow for real-time object detection.
+
+
+- Which of the following is a disadvantage of the RCNN model? A large number of region proposals increases the training time of the model.
+- 
+- Usage of the selective search algorithm.
+- 
+- The predictions made by SVM might not be of high accuracy.
+- 
+- All of the above
+
+
+The correct answer is All of the above.Here is why each of these points acts as a major limitation for the original RCNN model:Large number of region proposals: Because the network extracts and processes ~2,000 region proposals independently for every single image, it requires massive amounts of disk space and computational power, making training and deployment painfully slow.Usage of the selective search algorithm: Selective search is a rigid, traditional algorithm that does not "learn" from data. Because it cannot update or improve its logic during training, it is prone to generating poor or irrelevant region proposals.SVM predictions: RCNN uses separate Support Vector Machines (SVMs) for classification rather than a unified neural network layer. Because the SVMs are trained completely separately from the CNN feature extractor, the model cannot be optimized end-to-end, which often limits the overall accuracy.
+
+
+Which of the following are part of the Fast RCNN architecture?Pooling layer
+
+Classification layer
+
+ConvNet or CNN
+
+Region proposal network 
+
+The correct answers are the Pooling layer, Classification layer, and ConvNet or CNN.
+
+Here is exactly where each of those fits into the Fast RCNN architecture:
+
+ConvNet or CNN: The entire input image is first passed through a Convolutional Neural Network to extract a master feature map.
+
+Pooling layer: Fast RCNN introduced the ROI Pooling layer, which takes the region proposals of various sizes and mathematically squashes them into fixed-size grids (like 7x7) so they can be processed by the final layers.
+
+Classification layer: The network ends with a Softmax classification layer to label the object (e.g., "car" or "cat") and a regression layer to tighten the bounding box.
+
+The Region Proposal Network (RPN) is the incorrect option. Fast RCNN still relied on the slow, external "Selective Search" algorithm to guess the region proposals. The RPN was not invented until the next generation, Faster RCNN.
+
+
+Which of the following region-based detectors use selective search?RCNN, Fast-RCNN
+Faster-RCNN
+
+
+
+The core difference is that Selective Search is a fixed, traditional algorithm that groups pixels by color, while the Region Proposal Network (RPN) is a smart, trainable neural network that learns to find objects using math.
+
+Think of them as two different generations of technology trying to solve the exact same problem: guessing where an object *might* be in a photo before the main brain identifies it.
+
+### 1. Selective Search (The Old Way)
+
+Selective Search is what the original R-CNN and Fast R-CNN used. It acts completely independently of the neural network.
+
+* **How it works:** It looks at the raw image and breaks it down into hundreds of tiny blobs (superpixels). It then looks for neighboring blobs that have similar colors, textures, or shapes, and groups them together, drawing a bounding box around them at every step.
+* **The Problem:** It is a "dumb" algorithm. It follows hard-coded rules and never learns from its mistakes. If it makes a bad guess on day one, it will make the exact same bad guess a year later. Furthermore, it runs on the CPU, making it incredibly slow (taking about 2 full seconds per image).
+
+### 2. Region Proposal Network / RPN (The New Way)
+
+The RPN is what Faster R-CNN uses. Instead of relying on an outside algorithm, the creators built a mini neural network *inside* the main architecture to handle the guessing.
+
+* **How it works:** It doesn't look at the raw pixels or colors. Instead, it looks at the compressed **Feature Map** that the Convolutional Neural Network just created. It slides a 3x3 window across this map and drops "anchors" (boxes of different sizes). It then calculates the probability that an object is inside each anchor, and slightly shifts the box to fit better.
+* **The Advantage:** Because it is a neural network, it **learns** via backpropagation. If it guesses wrong during training, it adjusts its weights and gets smarter. Because it runs on the GPU and shares calculations with the rest of the network, it takes about 10 milliseconds per image—making real-time detection possible.
+
+---
+
+### The Direct Comparison
+
+| Feature | Selective Search | Region Proposal Network (RPN) |
+| --- | --- | --- |
+| **Used In** | R-CNN, Fast R-CNN | Faster R-CNN |
+| **How it finds objects** | Groups pixels based on color/texture | Uses sliding windows and anchor boxes on a feature map |
+| **Does it learn?** | No (fixed heuristic algorithm) | Yes (trained via backpropagation) |
+| **Hardware** | Runs on the CPU | Runs on the GPU |
+| **Speed** | Very Slow (~2 seconds per image) | Blazing Fast (~10 milliseconds per image) |
+
+
+YOLO - Analysing the Output
+
+So far, you have learnt how to train and deploy a model using the YOLOv3 algorithm. You also learnt how to compute the model output.
+
+ 
+
+Now, if you recall, in machine learning models, you computed accuracy, the F1 score, precision and recall, etc., to determine how good a prediction was. In the case of object detectors, we calculate intersection over union (IoU), which serves as an evaluation metric for model prediction, i.e., the bounding box predicted by the model. 
+
+ 
+
+You have already learnt about IoU previously. Now, we will quickly recall the concept of IoU and discuss another interesting technique, non-maximal suppression (NMS), in the forthcoming video. 
+
+00:00:00 - 00:00:22
+Introduction to Intersection Over Union (IOU) and its role in predictions
+We call the intersection over a unit. The network as it is making predictions has an evaluation step that allows for these predictions to be kept or injected on the basis of IOU. If the IOU is greater than a specific threshold then these detections are being retained, otherwise they're being discovered.
+00:00:23 - 00:01:41
+Non-Maximum Suppression in Object Detection
+Another important feature of the yellow detector is the non maximum suppression. The chances are for an object to be detected more than once. That means to have multiple bounding boxes. It's with a different value of probability of detection. In this example, the same object which is this person is being detected twice, that is in two different grid cells with two different bounding boxes. Non maximum suppression in this case would resolve this by selecting the one bounding box with highest probability of detection. In this example you see that the white bounding box is accompanied by a probability of 70% while the yellow one with probability of 60%. In this case the ILU of both bounding boxes is above 60% which can be considered good enough. Thus, they will both be retained. The objective would be to choose which of the two to keep at the end and which one to start. The answer to this it's obvious. The one with the highest probability would be the winner, and the one with the lowest probability would be the one to be discovered. That means the white bounded box will be retained, the yellow one will be red.
+00:01:43 - 00:02:41
+Example of Non-Maximum Suppression in Real Images
+Let us now see an example of no maximal suppression in real images. The image on the left contains a couple of cyclists with their bicycles and the image in the middle is showing the role object detections, that is the object detections without non maximum suppression. As you can see, it's bicycle is being detected several times by bounding boxes that are almost fully overlapping. And the same thing applies with people, with cars, with traffic lights and so forth. Applying your maximal suppression cleans up the image. And as you can see on the left you have a single bounding box for each object detected into this image. So you have a single green bounding box for this bicycle, single one for this one. And so is the case with the human, so is the case with the cars and everything else.
+
+
+The evaluation metric IoU can be used to compare bounding boxes to determine which is the most accurate for a given object. 
+
+ 
+
+You will already be given a threshold value (th) against which you can compare the IoU. If the value of IoU is above the threshold value, then the prediction is considered good. Remember, the higher the value of IoU, the better the prediction. In general, an IoU of 60% or above is considered to be acceptable.
+
+ 
+
+Take a look at the following cases of an object (orange) and a bounding box (blue). Which of these cases provides the best IoU?
+
+
+
+
+ 
+
+Image A gives the largest area of intersection among the three.
+ 
+
+Above, you saw one object accompanied by a single bounding box; this might not be the case every time you train the network. While working with complex images, you can get multiple bounding boxes for the same object, but you do not require all of them. So, how will you select the most accurate bounding box? 
+
+ 
+
+Take a look at this image and try to predict which of the two bounding boxes is more accurate for the given object.
+
+
+
+ 
+
+Each bounding box in the image above is accompanied by the probability of the object belonging to a particular class. In such cases, where you have multiple bounding boxes, you can check the IoU values. If the IoU value is less than the threshold value, then the corresponding bounding box can be rejected.
+
+ 
+
+But if there are more than one bounding boxes with IoU values greater than the threshold value, then you can make the decision using the technique of Non-Maximum Suppression (NMS). This method selects the bounding box with the highest probability (pc) and rejects the others. So, for the image above, the better prediction will be the white bounding box, as pc = 0.7 is greater than 0.6.
+
+ 
+
+The output image after performing NMS will look like this.
+
+ 
+
+
+
+ 
+
+You understood the concept of non-maximal suppression and how to select the most accurate bounding box out of the many predicted ones. In the next segment, you will be answering a very interesting question and learning about a new concept known as anchor boxes.

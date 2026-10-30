@@ -1,0 +1,976 @@
+Introduction to Transformers
+
+Session Overview
+
+
+Welcome to the session titled ‘Introduction to Transformers’. 
+
+ 
+
+In this session, we will introduce the Transformer architecture and explain how attention becomes the central mechanism for modelling relationships between tokens, replacing recurrence-based sequence processing. 
+
+ 
+
+In this session, you will: 
+
+Build intuition for how Transformers model relationships using self-attention 
+
+Learn about the full Transformer architecture and the role of each major component 
+
+Understand how data flows through the Transformer during training and inference 
+
+Examine computations performed inside a Transformer block 
+
+Understand how training is performed across stacked attention layers 
+
+Analyse how attention captures word-level context across full sequences 
+
+Study the mathematical formulation of multi-head self-attention and feed-forward layers 
+
+ 
+
+By the end of this session, you will learn how Transformer models process entire sequences in parallel and how attention enables contextual representation without recurrent structures. 
+
+
+Intuition Behind Transformers
+
+
+You will now explore how the transformer architecture uses attention mechanisms to overcome the challenge of handling long sentences and complex tasks.
+
+00:00:05 - 00:01:03
+Introduction to Transformers: Intuition and Key Concepts
+So before we dive deep into the workings of Transformers, essentially the mathematics of Transformers, let us spend some time understanding the intuition behind the Transformers, right? What is it trying to convey? What is it trying to do and how this parallelization is achieved and what is this attention that is being used? So this is the research paper which has, you know, discovered or implemented this transformer. The title is Attention is All You need and it is a research from Google Brain and Google Research along with University of Toronto. And you know this is appeared in 2017. And as we discussed, this has been extensively used now in various natural language tasks, including the popular language model of GPTS. So the further discussions, all that we are going to have are prominently taken from this particular research paper.
+00:01:05 - 00:02:03
+Attention and Parallelization in Transformers
+So we need an efficient, so we are not compromising on the efficiency or no solution and also an parallelizable, right. We need parallelizable architecture that processes very long sentences. OK. Again, this philosophy has not gone. You know, we are not throwing this philosophy away. The philosophy that a representation of a word depend on its neighboring words, that is establishing the context. We still need context. Parallelizable doesn't mean that efficiency is not taken care. Or we don't need good answers. We need sophisticated, very good answers. At the same time, we need faster computation and something which can handle very long sentences. And if you have to summarize Transformers in just two words, the 2 words that you would use is attention and parallelization. And our whole focus is to understand what is meant by attention and how this parallelization is done. And this we saw and we have been seeing that it has.
+00:02:04 - 00:03:48
+Example of Language Translation with Transformers
+This architecture of Transformers has given improved performance in many natural language processing tasks. Again, we will start with examples because currently we are trying to understand the intuition behind Transformers. I want to start with an example. Let us take a language translation and justice to break the monotonicity of the same translation task that you would see in various places like a language here to language B, English to Hindi, English to French, English to any other local language. I just want us to, you know, understand that it's not limited to language to language which are known. We can also even do to a spoken language to a programming language. So I want to just take this example so that it's very interesting to all of us who is looking at this case study. Suppose I want to build a model, right? So this is a model that you want to build. And this model is essentially transformer model. OK, is what you are going to build. And what's happening here here I want this model to take an English sentence like Python statement to print Hello world this let's call this sentence as S 1 S 1. And I want my model to output its corresponding corresponding Python code. Python is also a programming language. So it looks something like print, hello world, exactly what we specified, right? This is the output. This is the output that I expect from the transformer model which we are going to build, right? This is the task using which we motivate A transform, right?
+00:03:48 - 00:05:07
+Building a Transformer Model for Code Translation
+So this is the task. On other hand, I mean you can take a different example, right? You can even say I want for loop to print one to 100 numbers. Again, you have this model which we are going to look into and we are going to train, right, which takes the source sentence, let's call it as 2 and outputs the relevant output, right? It's essentially for and sorry, I in range of one to 100 slash N slash T and it says print I. We can say that here we can probably have the range of 1 to 101 because we want to print 100 as well, right? If you want to print 1 to 99, we can have range of one to one, right? And slash N is the next line and slash T is 1 tab space, correct? And so we go ahead and print this number. This is what we want. Our transformer want our transformer to be trained now.
+00:05:10 - 00:05:36
+
+So how do we do this? That is the question. How do we train a transformer to do the what we essentially ask it to do. That is take an English statement which can be translated. Of course, appropriate statement, I mean not every English line can be converted to into Python, right? So an appropriate and relevant English statement to a Python code. OK. So that is the task that we are looking at.
+
+We started by discussing how attention mechanisms enhance language translation in RNN-based encoder-decoder models. However, transformers use attention differently to enable parallel processing, which makes them faster and more efficient.
+
+ 
+
+In transformers, the core concept of attention remains the same, but it is applied in a way that enables the model to process data in parallel rather than sequentially. This parallelisation is key to handling long sentences and complex tasks efficiently.
+
+ 
+
+
+
+
+The transformer architecture, introduced in the research paper ‘Attention Is All You Need,’ revolutionised natural language processing by combining attention with parallelisation. This approach significantly improved the performance of the transformers in various NLP tasks, including models such as GPT. The core philosophy remains intact - context matters, and words depend on their neighbours to establish meaning. However, transformers offer faster computation and the ability to handle lengthy sentences. 
+https://arxiv.org/abs/1706.03762
+
+For example, imagine building a transformer model that translates an English sentence into Python code, such as converting the sentence ‘Python statement to print hello world’ into the correct Python code as shown below.
+                         
+
+This example illustrates how transformers can be applied beyond traditional language tasks, extending to programming languages.
+
+ 
+
+
+
+ 
+
+You may now ask this question: How do you train a transformer to accomplish these tasks? The answer lies in understanding the transformer architecture, its use of attention, and its ability to process information in parallel, which you will learn next.
+
+Encoder-Decoder in Transformers
+
+You will now understand the transformer architecture, its use of attention, and its ability to process information in parallel.
+
+00:00:00 - 00:01:06
+Introduction to Encoder-Decoder Concept in Transformers
+As we said, the encoder, decoder is not going away. It's still there. The concept of capturing the context and enriching the representation space of the inputs are still there, right? But it's essentially done in a different manner. So of course, again, Transformer has this concept of encoder and decoder, right? You can think of it like, you know, typically how humans might probably do, you know, translation task. We take an input sentence, right and try to understand or get representations of that input sentence and then we translate it one step at a time or one word at a time, correct? So that is the kind of analogy we can probably associate with this encoder decoder where the input statement is taken here. Specifically, given an input sequence that is X1 till XN, convert the sequence of words into to a rich representation, right? The current representation that is your X1 till X north might not be, you know, optimal enough. Of course it is not because it's it's something which has not been trained yet.
+00:01:06 - 00:02:04
+Rich Representation of Input Sequences
+You take a simple, let's say word to vectors of this words, right? You can give that as an input sequence, right? This is your input sequence and your objective is to convert this sequence of words to each word. You want to associate a richer representation, right? You want a representation or a vector which captures as much as possible the maximum information that can be obtained from this sequence. And again, the philosophy is same, the representation of each word depends on other words, of course, right? This is not going away. The representation of every word will depend on the words that is associated with and. In Transformer this dependency is achieved through this popular mechanism called attention mechanism. We will see what is attention mechanism and what it does and so on and so forth.
+00:02:05 - 00:03:09
+Role of Decoder in Language Translation
+But before that, let us discuss what is the role of decoder. Of course, we know that once the encoder encodes this input sequence into richer representation, the objective of the decoder is to take these inputs Z1 till Z north and produce outputs Y1 till ym, right? Please note the difference here. The outputs doesn't have to be same length as inputs, right? Which is typically true in many language translation tasks. Some languages, let's say we are translating from English to a different language to in order to accurately capture what the English statement is, we might need more or less words than number of words present in the input sentence, right? So it is very important that you know the number of words that you are going to output, not necessarily be same length as input statement to generate a new word, right? As we discussed, the words are generated one at a time, of course.
+00:03:10 - 00:04:03
+Generating Outputs with Encoder Information
+What does it look to generate this output? It looks at what is the and what is the information that it has to generate this output. It has access to the output from encoder Z1 to Z1 are encoder outputs, right? These are encoder outputs. And then what are the previously generated words, right? These are Yi is what you are about to generate and to generate Yi. What are all the information that you have? You have the output of encoder that is it gives what the input is about. It captures various intricacies and associations of input. And of course, what's happening so far. What have we translated so far? So this we can call as a previous outputs and it's true as well, right? Just imagine how we translate a given sentence. Suppose you know 2 languages, let's say, and someone tells you to translate.
+00:04:04 - 00:05:45
+Attention Mechanism in Decoder
+We first take that input sentence in our mind. Computations happen, we don't know how it happens and so on and so forth. And but we kind of a get a representation of that input. We try to assimilate it and understand what this sentence is saying. And then we try to output one word at a time and just go back and think how you are translating. When you are about to translate, you are not going to say, hey, I will take Z1Z2Z N just make the, you know, literal translation of it and give it no right. We have to follow a proper structure. It has to have proper semantics, syntax and so on. South, when we are generating one word at a time as an output, we have access to what is the target. Sorry, what is the input sentence? That is source sentence and also what has been outputted so far. Because the next word will certainly depend on what has been translated so far and what is needed to be translated. What needs to be translated is given by encoder output and what has been translated so far will be given by your previous output. And decoder will have two kinds of attentions because it needs to attend to two different things. One is your encoder as well as the previous outputs. You would see that decoder will have two kinds of attention, One what we call as a self attention block which we are going to discuss and see extensively. One that attends to current outputs, that is your Y1 to Yi -1 and another model that attends to the output of encoder Z1 till ZN -1, right? Of course. So we have two different modalities here, 1 coming from encoder outputs and 1 the outputs that have been generated so far. And hence we would assume that the decoder requires two kinds of attention models. OK.
+
+ 
+
+You learnt that the encoder-decoder model is still relevant, but it is now implemented differently to enhance context capture and representation. In transformers, the core concept of the encoder-decoder remains the same, but its approach has shifted to achieve better parallelisation, making it faster and more efficient.
+
+
+This is similar to translating a sentence. You start with an input, understand its context, and translate it step by step. This analogy applies to the encoder-decoder mechanism, where the input sequence is converted into a richer representation. This richer representation is crucial because the initial input might not capture all the necessary details.
+
+ 
+
+The core idea of capturing context, where each word’s representation depends on other words, remains the same. In transformers, this dependency is handled through a mechanism called attention.
+
+
+The encoder's role is to transform the input sequence (Equation) into a rich representation (Equation). The decoder then generates the output sequence (Equation)​ based on this representation. Unlike in many language tasks, the output length Equation may differ from the input length Equation.
+
+
+To generate each word Equation, the decoder uses these two types of attention:
+
+First, it attends to the encoder’s outputs (Equation) ​to understand the input context. 
+Second, it considers the previously generated words (Equation) ​ to maintain coherence in translation.
+ 
+
+In summary, the decoder integrates information from the encoder and previous outputs to generate each word efficiently, ensuring that the output sequence is contextually accurate and well-formed.
+
+ 
+
+Next, you will learn how this attention mechanism functions in transformers with the help of an example.
+
+Understanding Transformers Using an Example
+
+
+00:00:00 - 00:00:05
+Introduction to attention model intuition
+First, I would like to give you an intuition now behind you know what happens in a typical attention model.
+00:00:05 - 00:00:56
+Group project analogy for attention model
+For that, I want to give you an example or I want you to consider analogy of group projects. I'm sure all of us at some point in our careers have performed this group projects where we as a group are given a task, right? Let's say we are group of five or given a task, given a task to complete execute, how do we go about it? Just please go back and recollect for any successful group project that we have executed, what was the mechanism? It might roughly look like this. Each member of a group of this particular group will work on the task independently first. That is, you will decide, hey, today let's go back and read about this chapter, this book, this research paper and so on.
+00:00:56 - 00:03:07
+Independent execution and parallelization
+And then you all, we all will assemble to discuss our understanding, right? This is a probably one of the optimal ways to execute a group project, correct? So each member of the group will work on a task independently. That is, you decide that today you are going to read chapter 5 of this particular book. You all go back independently. You would read the chapter and come back tomorrow and say, what are your observations? What are your inputs and so on. Again, let's go one step deeper during independent execution, right? That is when you go back on that particular day to read, read that text Chapter 5 or perform a sector task. And remember this is happening in parallel. All of you are reading this chapter independently. All of you are reading independently between 7:00 to 8:00 PM parallely. So, it is not like one of you reads and then pass that information to second one, then they read it and then pass to the third person and so on. It is happening parallely. This is very important. That is where you are getting the power of parallelization that we are discussing, right? What is happening during this independent execution? 3 things happen according to me, right? You first attain a value by performing the task. That is when you read a chapter or understanding increases, right? We get some value out of that chapter. Let us say you read a chapter today, you are reading a chapter and transformer. You are hearing a lecture and transformer by the end of this, you know, lecture, you will have understanding, you will get a value by performing or by reading this chapter and hence you get some value out of it. Of course you will have some questions, right? So it's pretty natural. So when once we do or perform a task or read a chapter or do anything, we get a value. That's fine. But we also have some questions that we might have, we might want to get answers to. And then we also obtain some high level intuitions, isn't it? So, you know, whenever we read a chapter or some data points, some richer representations at which we have, which I am calling it as an intuition, you get some intuitions on various points of the chapter or various components of a task. And I want to call them as a keys.
+00:03:08 - 00:04:01
+Understanding, queries, and intuitions in learning
+I hope all of you agree that roughly these three things happen. When we perform a certain task like reading a chapter, first we understand it, try to assimilate it and hence by that operation we get a value and then we'll have questions which I'm calling as a queries. Then we'll obtain some intuitions by performing the task we will get. You know, for example, if you are reading a chapter on Transformer, this is a meta intuition because you are building intuitions on intuition, right? So yeah, going back, right. So you will develop certain data points or richer representations which will help you carry that thoughts or carry that information about Transformers topic or that particular task and you know, have it with you for a longer time. You know, that's what I'm calling as an intuitions and which I want to refer to them as a keys. So this happens during independent execution.
+00:04:02 - 00:05:54
+Discussion and collective knowledge formation
+Now what happens as we discussed, you would all do this independently and come together, right? And the next day you all meet and each one of you will ask others your queries. OK, you say that, hey, I've read it, I understood this. That's your value, whatever you understood. And you will say, these are my intuitions. I think this is how this chapter is structured. This task is done, but I have these questions, Q1Q2Q3Q4. Your team members whose intuition match your queries will answer. Isn't it natural? So what happens the team member, let's say you ask a question, all of you are, you know, watching this video on Transformers and next day you assimilate and say that, hey, I understood Transformers. But I have this question of what is this encoder decoder doing? How does encoder decoder works for language translation? I didn't get that point. Your friend might say that, hey, I have the intuition for it. I think in in the tutorial we saw that you know, for sentiment analysis, it happens so and so. So just extending it to language translation is just replacing that FNN by again your recurrent neural networks, right? That is the intuition that your friend might have. So essentially you get your queries answered by the intuitions of your friend by the keys of your friend, right? If the key of member I match your queries, they will answer right? If your queries highly match the intuitions of your colleague or a friend, then you know you essentially attend more to their answers. So that's when the word called attention is slowly coming forward here, right? So if the key of member I match your queries, they'll answer it and then you give higher importance.
+00:05:55 - 00:07:01
+Attention mechanism in group projects
+Everyone does that, right? You ask your queries, you get them answered from those who have answered to your queries. That is those whose keys match or kind of answer your queries. And then this process is repeated for all team members. Now, what is happening after discussion, I believe this is what happens to you. You would get, you would walk away with a collective knowledge, right? What I mean by that is you would go away with a linear combination of values of the group. Let's say you know there is only one friend of you who answers all your questions. Right now, your value will be not just the one which you acquired, but also some combination of value of your friend. I right, Let's say I TH friend is the one who has answered all your questions. It's very close to in fact, you know, he or she has helped you understand this concept much better, has enriched your representation, enriched your understanding of this subject. Then by the end of this discussion, you would have even got the value that they have acquired.
+00:07:01 - 00:09:14
+Query, key, value in attention model
+That is the beauty of working together. That is the beauty of group projects that when you convene, reconvene after reading the particular chapter, you not just have your own value but also a collective knowledge which is a weighted combination of values of the group. How does that weighted combination weight is defined? It depends on how much of your queries are answered by the respective group members. If there is a friend who answered most of your queries, your attention, your attention towards that friend is highest, isn't it? Correct. And on the other hand, let's say there is a friend who is on the same ship as you and doesn't have lot of answers or keys to your questions. Then that particular friend's value, you might not imbibe much because your questions are not being answered by that friend. So you will not get the value of that particular friend. On the other hand, if all of them contribute the contribution right? The attention that you pay to each of your respective team members will dictate what is the collective knowledge with which you walk away, right. So that is the one of the intuitions that I want to build for giving attention model attention mechanism. So the important points that you have seen here is everyone of us attains a value queries and keys and based on these things one would identify. So this is what we call as QK and V query key value combination. And then you then you start attending here is your attention and here is your parallelization. All of you are computing query keys and values independently, right? The task is similar. You have a task right? And then to the further according to the particular task, all of you are computing your query keys and values very independently. It's not happening in a sequential fashion. If I want to correlate with the sequence to sequence model, then what would happen then what would happen is on a day one all of you will decide, hey, please you go and read this chapter and come back and tell us that particular friend goes and reads and come backs and tells you. This is my understanding.
+00:09:14 - 00:10:26
+Parallelization vs sequential processing in learning
+Then you take that understanding again, go back and read it, come back with richer or probably you know, different context, different understanding, and pass it on. This is sequential, right? But that is time consuming. Let's say your project team contains 10/10 of you and your deadline is just 3-4 days. And you can't essentially go on doing this task every day. And you can't have sequence handling, sequence mechanism where your friend reads first, passes on the context and then you read it, pass it on to your next colleague or friend and then he or she reads it and improves it and so on and so forth. We need parallelization, parallely develop this query key and values and then get together and form the attentions right again. Its attentions are of course different for different of you. You might want to pay more attention to friend 3:00 and 5:00 because they have lot of answers to your keys. But your your friend or friend 2 might want to focus on one and six, one and six because they answer most of her or his queries, right. So that's essentially what we will see running when we go into actual mathematics behind the Transformers.
+
+
+ 
+
+The professor introduced the concept of attention for transformers using a group project analogy. Suppose you are part of a team of five working on a task. Each member independently reads different chapters from a book and then discusses their findings with other members.
+
+
+During your independent work, each person reads and understands their chapter, formulates questions about it, and develops key insights. In technical terms:
+
+The understanding gained is called the value (V)
+The questions you have are called queries (Q)
+The key insights are called keys (K)
+ 
+
+When the team meets, each person shares their questions and insights. The group members whose insights match the questions provide answers. This is similar to the working of the attention model. The decoder uses the keys (K) from the encoder’s outputs and the queries (Q) from the current input to find relevant information. The similarity between each query and key is computed, usually with a dot product, and the result is used to generate attention weights. This can be mathematically represented as follows.
+
+ 
+
+Equation
+
+ 
+
+The softmax function normalises the scores so they sum up to 1, reflecting the importance of each key to the query.
+
+ 
+
+Next, the attention weights are used to compute a weighted sum of the values (V), where each value represents the information or answer associated with a key. This is expressed as follows.
+
+ 
+
+Equation
+
+ 
+
+After the discussion, you end up with a detailed understanding that combines everyone’s insights. This collective knowledge is a weighted combination of values. This means that the final output for each query is a weighted combination of the values, where the weight reflects how well each query matches the keys from each group member.
+
+
+The entire process occurs in parallel for all queries and keys, which enhances efficiency by processing multiple pieces of information simultaneously.
+
+ 
+
+Next, you will gain an understanding of the architecture of the transformer model and learn how it uses attention mechanisms to generate sequences.
+
+# Introduction to Transformers — building the intuition
+
+The central idea of this lecture is:
+
+Transformers use attention to understand relationships between words, and parallel processing to avoid the sequential limitations of traditional RNNs.
+
+Remember the previous lesson:
+
+- RNN: processes words one after another.
+- RNN with attention: can look back at relevant input words, but the RNN still processes sequentially.
+- Transformer: uses attention as its central mechanism without requiring RNN recurrence.
+
+Let's build this from the ground up.
+
+## 1. Why were Transformers introduced?
+
+Imagine this sentence:
+
+> The animal didn't cross the road because it was tired.
+
+What does it refer to? The animal.
+
+To understand a word, we need information from other words in the sentence. This is called context.
+
+A model must capture these relationships, even when the related words are far apart.
+
+The earlier RNN approach has a problem: it processes words sequentially.
+
+RNN: sequential processing
+
+The
+
+1
+
+animal
+
+2
+
+didn't
+
+3
+
+cross
+
+4
+
+the
+
+5
+
+road
+
+6
+
+because
+
+7
+
+it
+
+8
+
+was
+
+9
+
+tired
+
+10
+
+Each step depends on information passed from the previous step.
+
+Transformer: parallel processing of input tokens
+
+The
+
+animal
+
+didn't
+
+cross
+
+the
+
+road
+
+because
+
+it
+
+was
+
+tired
+
+Input token representations can be processed together. Attention allows each token to use information from other tokens.
+
+This is the motivation behind the 2017 research paper Attention Is All You Need, by researchers from Google and the University of Toronto.
+
+Paper: [Read the original research paper](https://arxiv.org/abs/1706.03762?utm_source=chatgpt.com).
+
+The professor summarizes the Transformer philosophy in two words:
+
+Attention
+
+Understand relationships between tokens.
+
+Parallelization
+
+Process input positions together.
+
+## 2. What can a Transformer do?
+
+The lecture gives an interesting example: translating English instructions into Python code.
+
+Input — English
+
+"Python statement to print hello world"
+
+Transformer model
+
+Understands the instruction and generates the corresponding code.
+
+Output — Python
+
+```
+print("hello world")
+```
+
+Another example from the lecture:
+
+Input: "For loop to print numbers from 1 to 100."
+
+Output:
+
+```
+for i in range(1, 101):    print(i)
+```
+
+Notice something important: the model is not simply replacing English words with Python keywords. It must understand the meaning of the instruction and generate a valid sequence of code tokens.
+
+This is why Transformers are useful beyond ordinary language translation.
+
+## 3. Encoder–Decoder architecture in Transformers
+
+The encoder and decoder concepts have not disappeared. Their internal implementation has changed.
+
+Think of a human translating a sentence:
+
+1. Read the original sentence.
+2. Understand its meaning and relationships.
+3. Start producing the translated sentence.
+4. Use the original meaning and what has already been translated to decide what comes next.
+
+That is the basic encoder–decoder idea.
+
+## Transformer encoder–decoder flow
+
+Input sequence
+
+X₁, X₂, X₃, ... Xₙ
+
+## Encoder
+
+Builds rich contextual representations
+
+Z₁, Z₂, Z₃, ... Zₙ
+
+## Decoder
+
+Uses encoder information and previous outputs
+
+Generated output sequence
+
+Y₁, Y₂, Y₃, ... Yₘ
+
+Conceptual encoder–decoder architecture described in the lecture.
+
+### What does the encoder do?
+
+Suppose the input is:
+
+"The cat drinks milk."
+
+The input initially consists of token representations:
+
+- X₁ = The
+- X₂ = cat
+- X₃ = drinks
+- X₄ = milk
+
+The encoder enriches each token's representation using information from the other tokens.
+
+For example, the representation of "drinks" should capture that the subject is "cat" and the object is "milk".
+
+The encoder produces:
+
+\\[ Z_1,Z_2,Z_3,Z_4 \\]
+
+These are contextual representations, not simply copies of the original word vectors.
+
+### What does the decoder do?
+
+The decoder generates output tokens one at a time.
+
+For each next token, it uses two sources of information:
+
+1. Encoder outputs: What does the original input mean?
+2. Previous generated outputs: What have I generated so far?
+
+For example:
+
+Illustrative translation generation
+
+Encoder information
+
+"I love apples."
+
+Decoder generation
+
+1. Generate "I"
+2. Generate "love" using the input and previous output
+3. Generate "apples" using the input and previous outputs
+
+The output length does not have to equal the input length.
+
+\\[ \text{Input length } N \neq \text{Output length } M \\]
+
+For example, translating an English sentence into another language may require more or fewer words.
+
+### The two kinds of attention in the decoder
+
+This is an important concept for your exam.
+
+| Attention type        | What does it look at?                  |
+| --------------------- | -------------------------------------- |
+| Masked self-attention | Previously generated output tokens     |
+| Cross-attention       | Encoder outputs representing the input |
+
+Why does the decoder need both?
+
+- Self-attention helps it maintain the structure and coherence of the output.
+- Cross-attention helps it refer to the original input.
+
+We'll return to the distinction when studying the complete architecture.
+
+## 4. Understanding attention using the group-project analogy
+
+This is the most important intuition in your lecture because it introduces Query (Q), Key (K), and Value (V) — the three building blocks of attention.
+
+Imagine five people working on a group project.
+
+Each person independently reads a chapter and then the team meets to discuss what they learned.
+
+During independent study, each person develops three things:
+
+## The group-project analogy
+
+# Q
+
+Query = Question
+
+What information am I looking for?
+
+Example: "Who can explain encoder–decoder?"
+
+# K
+
+Key = Clue or identifying information
+
+What information do I have that may match someone's question?
+
+Example: "I understand encoder–decoder architecture."
+
+# V
+
+Value = Actual knowledge
+
+What useful information can I contribute?
+
+Example: The explanation of how encoder–decoder works.
+
+Let's make this more concrete.
+
+Suppose you have these five team members:
+
+| Member | Key (what they know) | Value (what they can share) |
+| ------ | -------------------- | --------------------------- |
+| A      | Encoder–decoder      | Architecture explanation    |
+| B      | Attention            | Attention explanation       |
+| C      | Python               | Code examples               |
+| D      | RNN                  | Sequential processing       |
+| E      | Transformers         | Transformer architecture    |
+
+Now imagine you have this question:
+
+"How does attention work in Transformers?"
+
+Your query should match Member B's knowledge particularly well. Member E might also contribute. Member C may not be very relevant.
+
+So you pay more attention to B and E, and less attention to C.
+
+That is the intuition behind attention.
+
+## 5. How does the model calculate attention?
+
+Let's convert the analogy into the actual mathematical process.
+
+There are four major steps:
+
+1. Step 1 — Calculate similarity
+
+   Compare the Query with each Key.
+
+   \\[ \text{Score} = QK^T \\]
+2. Step 2 — Apply Softmax
+
+   Convert the scores into attention weights that sum to 1.
+
+   \\[ \alpha_i=\frac{e^{s_i}}{\sum_j e^{s_j}} \\]
+3. Step 3 — Weight the Values
+
+   Give more importance to the Values with higher attention weights.
+4. Step 4 — Combine the Values
+
+   Produce the final context-aware output.
+
+   \\[ \text{Output}=\sum_i\alpha_iV_i \\]
+
+Let's calculate a small example.
+
+Suppose your query is compared against three keys and produces these similarity scores:
+
+\\[ Scores=[1,2,3] \\]
+
+Step 1: Softmax
+
+\\[ Softmax(x_i)=\frac{e^{x_i}}{\sum_j e^{x_j}} \\]
+
+The exponential values are approximately:
+
+\\[ [2.718,\\;7.389,\\;20.086] \\]
+
+Their sum is approximately 30.193.
+
+Therefore:
+
+\\[ AttentionWeights=[0.09,\\;0.24,\\;0.67] \\]
+
+Step 2: Visualize attention weights
+
+Member A
+
+9%
+
+Member B
+
+24%
+
+Member C
+
+67%
+
+Illustrative attention weights. The third key contributes the most.
+
+Step 3: Calculate the weighted combination of Values
+
+Suppose the three Values are simple numerical vectors:
+
+\\[ V_1=[1,0],\quad V_2=[0,2],\quad V_3=[2,2] \\]
+
+The final output is:
+
+\\[ Output=0.09V_1+0.24V_2+0.67V_3 \\]
+
+Calculate each contribution:
+
+\\[ = [0.09,0]+[0,0.48]+[1.34,1.34] \\]
+
+\\[ \boxed{Output=[1.43,\\;1.82]} \\]
+
+This is the collective knowledge from the group-project analogy: a weighted combination of everyone's contribution.
+
+The important distinction:
+
+- Query and Key determine how much attention to give.
+- Value contains the information being combined.
+
+## 6. How are Q, K and V actually created inside a Transformer?
+
+The group-project analogy explains the meaning of Q, K and V. But how does a computer generate them?
+
+This is where the actual Transformer mathematics begins.
+
+Suppose the input sentence is:
+
+> I love apples
+
+First, the sentence is converted into numerical vectors (embeddings).
+
+Each token embedding is passed through three different learned transformations.
+
+## Creating Q, K and V
+
+Input token embeddings
+
+I · love · apples
+
+Three learned linear transformations
+
+Query
+
+\\(XW_Q\\)
+
+Key
+
+\\(XW_K\\)
+
+Value
+
+\\(XW_V\\)
+
+WQ, WK and WV are learned weight matrices. Every token gets its own Q, K and V vectors.
+
+Mathematically:
+
+\\[ Q=XW_Q \\]
+
+\\[ K=XW_K \\]
+
+\\[ V=XW_V \\]
+
+Here:
+
+- \\(X\\) = input token representations.
+- \\(W_Q\\) = Query weight matrix.
+- \\(W_K\\) = Key weight matrix.
+- \\(W_V\\) = Value weight matrix.
+
+These weight matrices are learned during model training.
+
+Important: Q, K and V are not three separate pieces of information manually written by a person. They are three different mathematical representations created from the input.
+
+### How does self-attention work?
+
+Consider the word "love" in:
+
+> I love apples.
+
+The token "love" generates its own Query, Key and Value.
+
+Its Query is compared against the Keys of all the tokens:
+
+- Key of "I"
+- Key of "love"
+- Key of "apples"
+
+This helps the model decide which other tokens are relevant to understanding "love".
+
+Self-attention: one token looking at all tokens
+
+Query from "love"
+
+Compare against all Keys
+
+Key: I
+
+Compare
+
+Key: love
+
+Example match
+
+Key: apples
+
+Compare
+
+Weighted combination of Values
+
+Produces a contextual representation of "love".
+
+This is called self-attention because the Queries, Keys and Values all originate from the same input sequence.
+
+Every token performs this operation. Therefore, each token can build a representation enriched with information from the other tokens.
+
+## 7. Self-attention versus cross-attention
+
+This distinction connects the group-project example to the encoder–decoder architecture.
+
+| Feature          | Self-attention                             | Cross-attention                             |
+| ---------------- | ------------------------------------------ | ------------------------------------------- |
+| Query comes from | Current sequence                           | Decoder                                     |
+| Key comes from   | Same sequence                              | Encoder                                     |
+| Value comes from | Same sequence                              | Encoder                                     |
+| Purpose          | Understand relationships within a sequence | Connect decoder output to input information |
+
+For example, when translating English into Hindi:
+
+- Decoder Query: What information do I need to generate the next Hindi token?
+- Encoder Keys: What information is available from the English sentence?
+- Encoder Values: What information should be passed to the decoder?
+
+This is why the Transformer decoder needs two attention mechanisms:
+
+1. Masked self-attention over previous output tokens.
+2. Cross-attention over encoder outputs.
+
+## 8. How does parallelization happen?
+
+Let's return to the most important motivation behind Transformers.
+
+In an RNN:
+
+\\[ H_t=f(X_t,H\_{t-1}) \\]
+
+The next hidden state depends on the previous hidden state. This creates a sequential dependency.
+
+In Transformer self-attention, all input token embeddings can be used to calculate Q, K and V together.
+
+The model then calculates attention scores for all token pairs using matrix operations.
+
+RNN approach
+
+X₁
+
+X₂
+
+X₃
+
+X₄
+
+Each hidden state depends on the previous state.
+
+Transformer approach
+
+X₁
+
+X₂
+
+X₃
+
+X₄
+
+Parallel Q, K, V calculations
+
+Attention matrix
+
+All token-to-token attention scores are computed together.
+
+One technical detail to remember:
+
+- During Transformer training, input positions can be processed in parallel.
+- During autoregressive generation, the decoder normally generates output tokens one at a time because the next token depends on previous generated tokens.
+
+So, parallelization does not mean that every operation in the entire Transformer happens simultaneously.
+
+## 9. What you should remember from this lecture
+
+| Concept         | Remember this                                          |
+| --------------- | ------------------------------------------------------ |
+| Transformer     | Architecture based on attention rather than recurrence |
+| Attention       | Determines which information is relevant               |
+| Parallelization | Processes input positions together                     |
+| Encoder         | Creates contextual input representations               |
+| Decoder         | Generates output tokens                                |
+| Query (Q)       | What information am I looking for?                     |
+| Key (K)         | What information can match the query?                  |
+| Value (V)       | What information should be contributed?                |
+| Self-attention  | Relationships within the same sequence                 |
+| Cross-attention | Decoder attends to encoder outputs                     |
+| Softmax         | Converts scores into normalized weights                |
+| Weighted sum    | Combines Values using attention weights                |
+
+The entire attention mechanism in one formula:
+
+\\[ \boxed{\operatorname{Attention}(Q,K,V) =\operatorname{softmax}\left(QK^T\right)V} \\]
+
+This is the simplified form used in the lecture's intuition. The standard scaled dot-product attention formula used in the original Transformer is:
+
+\\[ \boxed{ \operatorname{Attention}(Q,K,V) = \operatorname{softmax} \left( \frac{QK^T}{\sqrt{d_k}} \right)V } \\]
+
+The division by \\(\sqrt{d_k}\\) is called scaling. It helps prevent large dot-product scores from making the Softmax distribution excessively concentrated.
+
+## 10. Test your understanding
+
+Transformer knowledge check
+
+6 / 6 answered
+
+1\. What are the two central ideas behind Transformers in this lecture?
+
+RNN and LSTM
+
+Attention and parallelization
+
+CNN and pooling
+
+Embedding and tokenization
+
+Correct
+
+Attention captures relationships; parallelization avoids recurrent sequential processing of input positions.
+
+2\. In the group-project analogy, what does Query represent?
+
+The knowledge you share
+
+The questions you want answered
+
+The final group result
+
+The chapter you read
+
+Correct
+
+Query represents what information you are looking for.
+
+3\. Which components determine how much attention is given to information?
+
+Query and Key
+
+Key and Value
+
+Query and Value
+
+Only Value
+
+Correct
+
+Query–Key similarity produces attention scores. Those scores determine the weights applied to Values.
+
+4\. In self-attention, where do Q, K and V come from?
+
+Three unrelated sentences
+
+Only the decoder
+
+The same input sequence
+
+Only the encoder output
+
+Correct
+
+Self-attention creates Q, K and V from the same sequence.
+
+5\. What does the weighted sum of Values produce?
+
+A new vocabulary
+
+A contextual output representation
+
+A new attention score
+
+The original sentence
+
+Correct
+
+The weighted sum combines relevant information into the attention output.
+
+6\. Does a Transformer decoder normally generate all output tokens simultaneously during autoregressive inference?
+
+Yes, always
+
+No, it generates tokens one at a time
+
+It uses an RNN for every token
+
+It does not use attention
+
+Correct
+
+Autoregressive generation is sequential even though the input processing and training computations can be parallelized.
+
+# Score: 6 / 6
+
+Try again
+
+My recommendation for your next study step: Focus particularly on how Q, K and V are calculated, how the attention matrix is formed, and how multiple attention heads work. These are the foundations for understanding the complete Transformer architecture and Multi-Head Attention.
+
+
+A Transformer is essentially a system designed to read an entire sentence all at once, figure out how every word connects to every other word, and use those connections to understand context.
+
+---
+
+### 1. The Core Problem: Why RNNs Fell Behind
+
+Before Transformers, language models used **Recurrent Neural Networks (RNNs)**.
+
+* **The RNN way (Sequential):** An RNN reads word-by-word like a person whispering down a long line. By the time it reaches word 10 in *"The animal didn't cross the road because it was tired"*, the memory of *"animal"* from word 2 has faded. Worse, you cannot process word 8 until word 7 finishes. Modern GPUs want to compute everything at once; RNNs forced them to wait in a single-file line.
+* **The Transformer way (Parallel + Direct Connections):** A Transformer takes all 10 words simultaneously. Every word gets a direct line of communication to every other word. When the word *"it"* needs to know what it refers to, it does not wait for a signal to pass through seven intermediate steps—it checks *"animal"* directly.
+
+---
+
+### 2. The Core Mechanism: Query, Key, and Value (Q, K, V)
+
+To let words communicate, every token is given three distinct roles created by multiplying its embedding by learned weight matrices ($W_Q, W_K, W_V$):
+
+* **Query ($Q$):** *"What am I looking for?"*
+*(The word "it" asks: "Who was tired?")*
+* **Key ($K$):** *"What do I offer / What is my tag?"*
+*(The word "animal" advertises: "I am a living subject that gets tired.")*
+* **Value ($V$):** *"What content do I actually pass along?"*
+*(The semantic features and meaning of "animal".)*
+
+```
+          [ Query: "What am I looking for?" ]
+                         │
+                         ▼  (Dot product similarity)
+          [ Key: "What label do I have?"    ]
+                         │
+                         ▼  (Softmax normalization)
+               [ Attention Weight % ]
+                         │
+                         ▼  (Multiply weight × Value)
+        [ Value: "Here is the actual info"  ]
+
+```
+
+#### The Math in 4 Steps
+
+1. **Match ($Q \cdot K^T$):** Compare the Query of word $A$ with the Keys of all words. Higher dot product = higher relevance.
+2. **Scale ($\div \sqrt{d_k}$):** Divide by the square root of the key dimension so numbers don't blow up and flatten gradients.
+3. **Normalize ($\operatorname{softmax}$):** Turn the raw scores into percentages that sum to 100% ($1.0$).
+4. **Mix ($\sum \text{weight} \times V$):** Multiply each word's Value vector by its percentage and add them up.
+
+$$\operatorname{Attention}(Q, K, V) = \operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+The result is a new vector for the word that now contains the context of every relevant neighbor.
+
+---
+
+### 3. Self-Attention vs. Cross-Attention
+
+The full Transformer architecture splits into an **Encoder** (which reads and understands) and a **Decoder** (which generates new text).
+
+| Feature | Self-Attention (Encoder & Decoder) | Cross-Attention (Decoder only) |
+| --- | --- | --- |
+| **Where $Q$ comes from** | Current sequence | Output being generated (Decoder) |
+| **Where $K, V$ come from** | Current sequence | Input context (Encoder) |
+| **Real-world analogy** | Roommates discussing chores among themselves | A student asking a teacher questions during an exam |
+| **Purpose** | Connects words within the same sentence | Connects the generated translation back to the original text |
+
+* **Masked Self-Attention:** Inside the decoder, future words are hidden ("masked") so the model cannot cheat by looking ahead at words it hasn't generated yet.
+
+---
+
+### 4. Parallel Training vs. Sequential Generation
+
+A common point of confusion is whether Transformers are 100% parallel:
+
+* **Training (100% Parallel):** Because the model already has the full input and target output, all attention scores and predictions across all positions are calculated in a single massive matrix multiplication pass.
+* **Inference / Generating Text (Autoregressive):** When ChatGPT or a translation model writes a response in real-time, it generates token 1, feeds token 1 back into the decoder, generates token 2, and repeats. The generation itself is sequential, but each step's internal attention still runs in parallel across all generated tokens.
+Here is the lecture in five visuals. First, a mind map of the whole lecture; click any box to ask a follow-up on that branch.
+
+Now the core motivation: press Run to compare how an RNN and a Transformer handle the same 10-word sentence.
+
+Now self-attention on "I love apples". Pick which token is asking the question and see how its attention fans out over all three tokens. The weights here are illustrative, not from a trained model.
+
+Last, the full encoder-decoder picture, showing where each of the two attention types sits and what it looks at.
+
+## How the five visuals fit together
+
+The mind map is the whole lecture on one page. The rest each zoom into one branch of it.
+
+1. **Why Transformers:** an RNN needs 10 steps for a 10-word sentence. A Transformer processes all input tokens together, which is the "parallelization" half of the lecture's two-word summary.
+2. **Q, K, V in one line:** the Query asks, the Keys say who can answer, and the Values carry the actual information. Query and Key set the weights, and the weighted sum of the Values is the output.
+3. **The calculator:** at scores 1, 2 and 3, softmax gives roughly 9%, 24% and 67%, and the output is about [1.42, 1.82]. The lecture writes [1.43, 1.82] because it rounds the weights to two decimals before multiplying. Both are right.
+4. **Self-attention:** every token builds its own Query and compares it to every token's Key, including its own, so each word's representation is enriched by the others.
+5. **Two attention types in the decoder:** masked self-attention looks at what the decoder has already written, and cross-attention looks at the encoder's Z vectors.
+
+Two caveats from the lecture are worth remembering for an exam:
+
+- Parallelism applies to input processing and training. Generation is still one token at a time, because each new token depends on the ones before it.
+- The lecture's simplified formula is softmax(QKᵀ)V. The original paper divides QKᵀ by √d_k first, which keeps large scores from making the softmax overly peaked.
+
+The lecture's own next-step hint is multi-head attention and how the attention matrix is formed. I can build the same kind of visuals for those next.
+
+

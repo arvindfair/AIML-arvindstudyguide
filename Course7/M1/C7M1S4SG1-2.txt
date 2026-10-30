@@ -1,0 +1,508 @@
+Embedding vectors
+
+In this session, we are going to focus on representation as the core idea behind modern computer vision systems. We have worked with images, features, and models, but many of the capabilities of deep learning come from how information is represented internally rather than from the final prediction itself. Your interaction with convolutional neural networks till now has mostly been related to classification.  
+
+ 
+
+However, before moving deeper into generative and multimodal models, you need clarity on how images are transformed into compact, meaningful numerical forms that models can reason over. We will study embeddings as a way to move from raw pixel space to structured vector spaces where similarity, distance, and semantics become meaningful.  
+
+ 
+
+We will extend this idea to encoder–decoder architectures, which are needed when a single vector representation is not sufficient and spatial structure must be preserved. This brings in the idea of reconstruction, which will extend to generative paradigms ahead. 
+
+ 
+
+Finally, we will examine U-Net as a concrete example of how embeddings, bottlenecks, and skip connections work together to support dense, spatially aligned outputs. By the end of this session, you should understand why representation learning sits at the heart of both discriminative vision models and modern generative architectures.
+
+
+Images and Embeddings
+
+
+In deep learning, we often treat images as inputs and models as predictors, but we have not yet explicitly addressed what information a model actually retains from an image.  
+
+ 
+
+Raw pixel values are precise but inefficient for learning, because small changes in pixels may not correspond to meaningful semantic changes, while visually similar images can look very different numerically. 
+
+ 
+
+The next video focuses on why representation matters more than raw data when building intelligent vision systems. 
+
+00:00:05 - 00:00:37
+Understanding the need for data representation in computer vision
+Hello everyone. So in this session, let us try to understand what is the need for the representation of the data, right? So we often think of computer vision as not just the classifying gate image, but the core of computer vision is actually the representation of the data, right? So the raw data like an image is a high dimensional signal, right? So to your computer, a picture of cat is just a massive grid of numbers or the pixels.
+00:00:38 - 00:01:24
+Challenges of learning directly from pixel data
+However, these pixels are globally ambiguous, meaning. So these two cats, the A&B, the completely different at the pixel level, even though they are at the same entity here, right? So if you shift an image by just one pixel, every single number in the grid changes, but the meaning remains identical here. So learning directly from the pixel is inefficient because the model has to work too hard to ignore the noise that is present or in a way that by just whatever the noise that we are adding by just changing the single pixel, right?
+00:01:25 - 00:01:53
+Transforming raw pixels into representation space
+So our ultimate goal is that we need to transform these raw pixel into the representation space where the distance actually represents the original meaning of the given input, right? So mathematically, an image is nothing but a tensor of numbers which typically structured as height, width and the colour channels here.
+00:01:54 - 00:02:38
+Mathematical representation of images as tensors
+So while these numbers are precise for a computer to render an image on a screen, they do not capture the actual essence of the from the input, right? So basically in the raw pixel space, we cannot say that you know pixels closer together or more related in terms of what object is, right? So this motivates A transformation from the pixel space to the representation space like feature vectors here, which act as compressed summaries of the given images in the data. And then embeddings will formulize and generalize the data.
+00:02:38 - 00:03:17
+Role of CNN layers in feature extraction
+Generalize this idea that is present the CNN. Basically it will have three different layers. The early layers learn how the low level features like regarding the edges, textures it will learn about those low level features and the deeper layers will capture the abstract concepts like you know the eyes or the ears or wheels etcetera. And the final layers it is basically produce the fixed length feature vectors that act as a compressed summaries of the given input. What is an embedding right?
+00:03:18 - 00:04:09
+Concept of embeddings and their importance
+So embedding is nothing but a mapping of an input from its original mass of space into continuous lower dimensional vector space here, right? So we can formally represent, represent this as a function where X is an input space and this is an embedding space. And the dimension of the embedding is much, much smaller than the given input, right? So again, this embedding isn't just, you know, compression like what we will do as AG5, right? It is a task informed transformation where it discards the noise and keeps the essence needed to preserve the relationship. You might have a question, right?
+00:04:09 - 00:04:59
+Limitations of simple methods like one-hot encoding
+Like why not just use a simple method? Embeddings are important to turn data into numbers right? By using so and so you know techniques like 1 hot encodings. So basically you know these are the sparse and high dimensional in A1 hot system like corn dog. These are mathematically as different as you know this cat and a toaster, right? There is no notion of similarity there. And then another technique is a raw pixel arrays. While they are dense, they are semantically meaningless here because a dark cat and the light cat would be mathematically far apart here, right? So what is the solution for this? Then we will use the encoders.
+00:04:59 - 00:06:16
+Encoders and latent space in data transformation
+So encoders are nothing but these are the specific layers in a model that transforms the data into the latent space. Again, latent space is nothing but it is learnt unobserved the representation space where the underlying structure of the data is captured overall here let us understand the encoders here right? So the layer within a model which converts the raw data to the vector representations are nothing but the encoders. For example, the CNL layers will act as an encoders because they are extracting the features as a vector embeddings for us, right? So in a embedding space, the semantic relationships are reflected in the distance and the direction that they flow. So this allows the model to rank, reason and retrieve the relevant information using the relative distances here, right? So the components of this embedding vector correspond to the abstract. Just learn by the model during the raining phase. An ideal embedding space should have 4 vital properties here right?
+00:06:16 - 00:07:22
+Properties of an ideal embedding space
+The first is the semantic similarity, so the distance between two points corresponding to their meaning here right? And the second is the continuity, meaning small change in the input, for example like slightly changing the light on a photo, it leads to only small changes in the embedding sphere. And then the clustering, which will cluster the similar concepts like, you know, different breeds of dogs, they will naturally group together without needing any explicit labels here if you follow the clustering technique. And the next is the dimensional efficiency where it is like high information density for dimension, meaning we represent a complex 4K image with, you know, just perhaps with only like 512 or 768 numbers here, right? Because of these properties, embeddings are versatile, right?
+00:07:22 - 00:08:06
+Applications of embeddings in AI tasks
+So once you have a good embeddings you can use it for searching, you can use it for clustering or you can using for the transfer learning. Here again, searching is for finding similar images, clustering is for grouping the data and transfer learning is to transfer the knowledge that we gain from the previous pre trained model that is already trained on the huge millions of the data there, right? So speak the language of AI. We must distinguish between 3 terms here, embeddings, activations and the features here.
+00:08:08 - 00:09:07
+Distinguishing between embeddings, activations, and features
+So this embeddings, these are nothing but this is the big picture. Basically it translates the entire input into a single point in the space here. So basically they are dense vectors and much lower in the dimensions here. So they don't represent where things are, but what things are right. And then the activation. Actually these are the signals here. Basically these are nothing but a numerical output of a neuron after an input is processed. Basically it will say how strongly do I see this feature right here. So they represents the networks immediate response to an input at a specific point in the architecture here, right. So again, these are they are often, you know, sparse and high dimensional vectors here.
+00:09:08 - 00:10:13
+Understanding features, activations, and their roles in neural networks
+And the third is the features which are the patterns the network looks for, right? Like for example the shape or for example the circles, right. So they are the concepts being responded to defined by the weights of a filters here, right. So the early layers learn simple physical features, while deeper ones learn more abstract features as we discussed before, right? So for example, a feature is nothing but the template for a shape, The activation is a signal. Indicate how strong the image embeddings aligns with that features, right? Basically this embeddings don't represent wear part. You need to underline this one like embeddings don't represent wear part. But what if output needs the structure here?
+
+You saw why directly working in pixel space is a poor way to capture meaning, even though images are stored as numerical tensors. We discussed the need to move from high-dimensional pixel grids to more compact representations that preserve semantic similarity rather than exact pixel values.  
+
+ 
+
+This can be achieved by representing the images in terms of their “features.” These features can either be physical, such as colour or shape, or a bit more abstract, such as textures, motifs, styles, or even some patterns that may not be describable physically. For example, take a look at the representation of foods below. 
+
+ 
+This leads to the idea of embeddings, where an image is mapped into a lower-dimensional vector space that captures its essential content. Embeddings are produced through encoding, typically using neural networks, and how embedding spaces are structured so that distance and direction reflect meaning derived from features of the data.  
+
+ 
+
+Vector Embeddings | Sea Data | Big Data & Cloud ServicesVector Embeddings
+
+ 
+
+An effective embedding space has useful structural properties. Small changes in the input lead to small changes in the embedding, creating a smooth and continuous space. This makes embeddings useful not just for prediction, but also for ranking, clustering, retrieval, and similarity search. 
+
+ 
+
+In practice, convolutional neural networks act as encoders that perform this transformation. As an image passes through successive convolutional layers, local patterns are combined into increasingly abstract representations, and the final layers produce feature vectors that serve as embeddings. This makes CNNs powerful representation learners rather than just classifiers. 
+
+ 
+
+A vanilla Convolutional Neural Network (CNN) representation.
+
+ 
+
+In summary, we learnt that features are the abstract patterns a network has learned to recognise, such as edges, textures, or object parts. Activations are the numerical responses of neurons indicating how strongly those features are present in a given input. An embedding, on the other hand, is a compact, fixed-length vector that summarises the overall content of the input by combining many such activations into a single representation. 
+
+ 
+
+However, these embeddings intentionally discard spatial structure. They capture what is present in an image, but not where it appears. This is sufficient for tasks like classification, but it becomes limiting when the output itself must be structured or spatially aligned with the input.  
+
+ 
+You're right. I explained the basic concepts, but I didn't cover the complete learning path promised in your notes. I've checked the uploaded material again.
+
+The notes explicitly introduce encoder–decoder architectures, bottlenecks, reconstruction, and U-Net, but they don't include the detailed teaching material for those topics in the provided excerpt. I'll cover all the topics actually present in your notes first, then clearly mark the additional explanations needed to understand the announced topics.
+
+# Complete lesson: Embedding vectors
+
+## 1. Image as a tensor — the mathematical foundation
+
+A computer represents an image as a tensor: an organized collection of numerical values.
+
+For a color image, its shape is commonly:
+
+\\[ \text{Image}\in\mathbb{R}^{H\times W\times C} \\]
+
+- \\(H\\) = height in pixels
+- \\(W\\) = width in pixels
+- \\(C\\) = number of color channels, usually 3 for RGB
+
+For example, a \\(2\times2\\) RGB image contains \\(2\times2\times3=12\\) numerical values.
+
+### Visualizing an RGB image
+
+## R
+
+Red channel
+
+[255, 0]
+
+[0, 255]
+
+## G
+
+Green channel
+
+[0, 255]
+
+[0, 255]
+
+## B
+
+Blue channel
+
+[0, 0]
+
+[255, 255]
+
+Each channel has its own 2 × 2 grid. Together they describe the four RGB pixels. The numbers here are illustrative.
+
+A typical 4K RGB image contains approximately \\(3840\times2160\times3=24.9\\) million channel values.
+
+That is a lot of numbers to process. Also, the numbers describe colors and positions, not necessarily the semantic meaning of the scene.
+
+## 2. Pixel space vs representation space
+
+These are two different ways to describe an image.
+
+### Pixel space
+
+Describes the image using its original pixel values.
+
+Image A: [12, 80, 190, 45, 90, ...] Image B: [18, 74, 185, 51, 86, ...]
+
+A small shift, lighting change, or pose change may alter many values.
+
+### Representation space
+
+Describes an image using learned, meaningful patterns.
+
+Conceptual illustration of learned clusters
+
+The objective is to learn a transformation that makes useful semantic relationships easier to measure.
+
+## 3. Embedding as a mathematical function
+
+The notes describe an embedding as a mapping from a high-dimensional input into a lower-dimensional vector space.
+
+We can write:
+
+\\[ f:X\rightarrow Z \\]
+
+Here:
+
+- \\(X\\) is the input space, such as image tensors.
+- \\(f\\) is the learned encoder or embedding function.
+- \\(Z\\) is the representation space.
+- \\(z=f(x)\\) is the embedding of input image \\(x\\).
+
+For example:
+
+\\[ \underbrace{x\in\mathbb{R}^{224\times224\times3}}\_{\text{150,528 values}} \xrightarrow{\ f\ } \underbrace{z\in\mathbb{R}^{512}}\_{\text{512 values}} \\]
+
+This is an illustrative dimensionality example, not a requirement for every model.
+
+The crucial distinction is that an embedding isn't simply any compressed file. It is a learned, task-informed representation intended to preserve information useful for the model's objective.
+
+## 4. Why not use one-hot encoding?
+
+One-hot encoding represents each category with a vector containing one `1` and otherwise `0`s.
+
+Suppose we have three categories: cat, dog, and toaster.
+
+| Category | One-hot vector |
+| -------- | -------------- |
+| Cat      | `[1, 0, 0]`    |
+| Dog      | `[0, 1, 0]`    |
+| Toaster  | `[0, 0, 1]`    |
+
+This method is useful for representing category identities, but it doesn't inherently encode semantic similarity.
+
+### Compare the vectors
+
+Cat and dog
+
+1
+
+0
+
+0
+
+0
+
+1
+
+0
+
+The Euclidean distance between these one-hot vectors is \\(\sqrt{2}\\).
+
+The same distance occurs between cat and toaster. The encoding alone doesn't know that cats and dogs are more alike.
+
+Learned embeddings can instead place cats and dogs closer together if the training objective teaches the model that they are semantically related.
+
+Remember: one-hot encoding identifies a category; a learned embedding can represent relationships between categories.
+
+## 5. How a CNN learns representations
+
+A convolutional neural network doesn't usually recognize an entire object in one step. It builds representations through successive layers.
+
+Input image
+
+Raw pixels
+
+Early layers
+
+Edges, lines, color changes
+
+Intermediate layers
+
+Textures, curves, repeated patterns
+
+Deeper layers
+
+Object parts and more abstract patterns
+
+Embedding
+
+Compact representation combining learned information
+
+These are typical tendencies, not rigid rules. The exact patterns depend on the architecture, data, and training objective.
+
+### What is a filter?
+
+A convolutional filter is a small set of learned weights that slides across an input feature map. It responds to local patterns.
+
+For example, an edge detector may respond strongly where pixel intensity changes sharply.
+
+A simplified view:
+
+### Input
+
+A simple light-to-dark boundary
+
+### Filter response
+
+Strong response near the edge
+
+The filter weights define what pattern a filter responds to; the activation tells us how strongly it responds at a particular location. In a trained CNN, these weights are generally learned rather than manually programmed.
+
+## 6. Encoder and latent space
+
+An encoder is the part of a model that converts the input into a learned representation. In your notes, CNN layers are given as an example of an encoder.
+
+A latent space is the learned space containing these hidden representations.
+
+Input image \\(x\\)
+
+Encoder \\(f\\)
+
+Latent representation \\(z=f(x)\\)
+
+A point or vector in the learned space
+
+The model learns its representation during training. Ideally, meaningful relationships in the original data become easier to recognize in latent space.
+
+Distance and direction may reflect semantic relationships, but they don't automatically have a universal meaning: that depends on the model and how it was trained.
+
+## 7. The four properties of a useful embedding space
+
+| Property               | Meaning                                                        | Example                                                 |
+| ---------------------- | -------------------------------------------------------------- | ------------------------------------------------------- |
+| Semantic similarity    | Similar meanings have nearby representations                   | Different dog breeds                                    |
+| Continuity             | Small input changes often produce small representation changes | Slight lighting variation                               |
+| Clustering             | Related examples form groups                                   | Cats grouped separately from cars                       |
+| Dimensional efficiency | Useful information is represented compactly                    | Hundreds of numbers instead of millions of pixel values |
+
+One subtle point: clustering without labels is not guaranteed just because embeddings exist. The model's training process must learn a representation that supports the desired grouping.
+
+## 8. Applications of embeddings
+
+[Flickr's New 'Similarity Search' Feature Lets You Find Similar Images Using Deep Neural Networks | Technology News](https://images.openai.com/static-rsc-4/NbWxuvnfL2Yz8wZucw3BYJAq6xpiDzAP_IJallrOw-oPDR66KkAn7ugImE7LQG6NsZ8tKJ9nsyzsHP-HVlfBNnrFiafKOEFEX6OTa6qhYy_3YBRAQkO3swQ7kBiwpoO9KSTbRzU0XblRqHcX98jcfpI5LZh-Q9kwXecc6Ej21Js?purpose=inline)
+
+Similarity search and retrieval
+
+Encode a query image, compare its embedding with stored image embeddings, and return the nearest matches.
+
+[The structure of AlexNet which changed the history of deep learning | by Yuma Ueno | The Deep Hub | Medium](https://images.openai.com/static-rsc-4/m5w1HxR-ktHmUYM9akFT5VHK37wcypHgUXnf9rmGzLcpujq2lL7IJV2wc3MQFgQoMRWzjYrXXr9RzSNL6DZnBTE8pPg3re1IsjtRzuVmxAwWOQrGHmHg5FnX3BkKTWWGCoN4nWYNEGDzAyMbVAV2bfj4GzKBRWxrTdSUgooAdVE?purpose=inline)
+
+Clustering
+
+Group related images by comparing their representations, potentially without using category labels.
+
+[How to Use Vision Transformer for Image Classification | by Eran Feit | Vision Transformers tutorials | Medium](https://images.openai.com/static-rsc-4/RBIPtyB6pujMDvXb8j9BSeSv4Agmjzs2d5Pfvfldf-m2jS0WWNxCjJd0z89x6vNTqfVuyI-AwvPQhedsYZta79FRevZ8XXq7AvRcMGFB-fh1aXs9_0O8-v40opGXvSTrd9wr0yGJG80q9UAN5Nye7dnZ-2AyrcokNsdp_FmsNC4?purpose=inline)
+
+Transfer learning
+
+Reuse a pretrained model's learned representations for a new task, sometimes by training a small classifier on top.
+
+For example, if a CNN has learned useful visual patterns from a large dataset, you may be able to reuse those patterns to classify a smaller dataset of animal species rather than training an entire model from scratch.
+
+## 9. Features vs activations vs embeddings — final comparison
+
+| Term       | What it means                               | Analogy                            |
+| ---------- | ------------------------------------------- | ---------------------------------- |
+| Feature    | A learned pattern or concept                | A template for recognizing an edge |
+| Activation | The numerical response to a pattern         | How strongly the detector responds |
+| Embedding  | A compact representation of the whole input | A summary of the image             |
+
+These terms are related, but they are not interchangeable.
+
+A CNN layer can produce a large activation tensor containing responses at many spatial positions. A later operation may combine that information into a single fixed-length embedding.
+
+And this leads directly to the next important topic: what happens when a single summary is not enough?
+
+# Part 2: The topics missing from the detailed explanation
+
+The introduction in your file names four further concepts: encoder–decoder architectures, reconstruction, bottlenecks, and U-Net. The excerpt doesn't provide their full lesson, so the following is additional explanation to complete the learning path.
+
+## 10. Why do we need an encoder–decoder architecture?
+
+An encoder compresses an input into a representation. But sometimes we need to produce an output that looks like an image, not just a category or vector.
+
+Examples include:
+
+- Reconstructing an image.
+- Removing noise from an image.
+- Generating an image.
+- Segmenting an image into different regions.
+
+An encoder–decoder architecture combines two parts:
+
+Input image
+
+### Encoder
+
+Extracts features and reduces spatial resolution
+
+### Bottleneck
+
+Compact, information-rich representation
+
+### Decoder
+
+Transforms the representation into a desired output
+
+Output image or spatial prediction
+
+Think of it this way:
+
+- The encoder asks, "What useful information can I extract?"
+- The bottleneck holds a compressed representation.
+- The decoder asks, "How can I turn this information into the output I need?"
+
+Not every decoder reconstructs a realistic image. Its output depends on the task and training objective.
+
+## 11. What is a bottleneck?
+
+A bottleneck is the narrowest or most compressed stage of a network's representation.
+
+Imagine compressing a large image into a smaller representation.
+
+Large feature maps
+
+64 × 64 × 64
+
+Smaller feature maps
+
+16 × 16 × 128
+
+Bottleneck
+
+4 × 4 × 256
+
+Illustrative feature-map dimensions, not a prescribed architecture.
+
+Notice something important: the height and width decrease, while the number of channels can increase. Therefore, a bottleneck does not necessarily contain fewer total numbers at every stage. It is the compressed spatial representation that matters here.
+
+The bottleneck is designed to capture useful higher-level information. Excessive compression, however, can cause the model to lose details.
+
+## 12. What is reconstruction?
+
+Reconstruction means producing an approximation of an original input from a learned representation.
+
+A classic example is an autoencoder.
+
+Original image \\(x\\)
+
+Encoder
+
+Latent code \\(z\\)
+
+Decoder
+
+Reconstructed image \\(\hat{x}\\)
+
+The model tries to make the reconstruction resemble the original image.
+
+A simple pixel-based reconstruction loss is:
+
+\\[ L=\frac{1}{N}\sum\_{i=1}^{N}(x_i-\hat{x}\_i)^2 \\]
+
+Here, \\(x_i\\) is an original pixel value and \\(\hat{x}\_i\\) is its reconstructed value. The model learns to reduce the average squared difference.
+
+This is one possible loss function, not the only one. Depending on the task, reconstruction may use other objectives.
+
+## 13. What is U-Net, and why is it special?
+
+U-Net is an encoder–decoder architecture widely used for image segmentation and other tasks requiring spatially aligned outputs.
+
+Its special feature is skip connections: they transfer features from the encoder to corresponding stages of the decoder.
+
+## U-Net architecture
+
+Simplified conceptual diagram
+
+Schematic only; actual U-Net has multiple convolutional blocks and paired skip connections.
+
+### Why are skip connections necessary?
+
+The encoder learns high-level information, but downsampling can lose precise location and boundary details.
+
+The decoder upsamples its feature maps to produce a spatial output. Skip connections give it access to earlier, higher-resolution features.
+
+Think of it as combining two kinds of knowledge:
+
+- Deep features: what the object is.
+- Shallow features: fine details about where its edges and boundaries are.
+
+Together, these can improve pixel-level predictions.
+
+### Example: medical image segmentation
+
+[Imaging | Cerebral Circulation and Cognition Lab | Cumming School of Medicine | University of Calgary](https://images.openai.com/static-rsc-4/PXAKd984IR7GcoUgsOsQkbHCaIBKgmMnXcWDlKVlO79cYQWKLt4TYBzuIY8wy1mwQEhBLUh7qevnt7ZZv4Uhf26AD4IE4xlCFoHRwWTNFyF7JjHylMh8TvBqEfwz6a90-3Jd1pxHZ5G1x5NlwvPyHet58l8esYl9VM1DZ5LshV0?purpose=inline)
+
+Input
+
+An MRI image containing different tissues.
+
+[Directory Tree](https://images.openai.com/static-rsc-4/0zn41GUCTo7wvAm8hs2ok7bUaPnuVKQkzeTgOLSPxYe0V9RQtBcWf2UaQsFhrbykdeAJiYQRAW4oEKkXB4q3RxKbnNXukM8JP1bWlqFo_8zuQDKaBsxpcine0V8nch5x16Glfd8PPdtWH6cU_WRatgoAylait6DrZ2VLsSFO6nw?purpose=inline)
+
+Segmentation output
+
+A prediction assigning each pixel to a region or tissue class.
+
+Unlike image classification, which might output just "brain MRI," segmentation produces a map that identifies which pixels belong to each region.
+
+## 14. Put everything together
+
+## The complete learning roadmap
+
+1. Image tensor: the raw numerical representation of the image.
+2. Features: patterns learned by the network.
+3. Activations: numerical responses to those patterns.
+4. Encoder: transforms input into a learned representation.
+5. Embedding / latent representation: a compact representation useful for learning and comparison.
+6. Bottleneck: the compressed stage of an encoder–decoder.
+7. Decoder: transforms representations into the desired output.
+8. Reconstruction: produces an approximation of the input.
+9. Skip connections: preserve and transfer spatial details.
+10. U-Net: combines deep representations and finer spatial features to produce dense outputs.
+
+The most important distinction to remember is that an embedding summarizes what an image contains, while architectures such as U-Net preserve and combine spatial information when the output needs to indicate where things are.
+
+This covers the concepts named in your material and adds the missing explanations needed to connect them. For an exact continuation of the original lecture, the next video or notes covering encoder–decoder architectures and U-Net would be needed, since those detailed sections aren't included in the uploaded excerpt.
+
+
+In the next video, we will look at cases where we need to have spatial information as well. 
+
+Encoder-Decoder Architecture
+
+Some vision tasks require more than a single label or scalar output. In problems such as image segmentation, depth estimation, and image reconstruction, the model must produce dense, spatially aligned predictions. In these settings, a prediction is required for every pixel rather than for the image as a whole.  
+
+ 
+
+Standard convolutional neural networks designed for classification rely heavily on pooling operations, which discard spatial detail in order to improve invariance and robustness. While effective for recognition tasks, this loss of spatial information makes such architectures unsuitable when the output itself needs structure.  
+
+ 
+
+This requires architectures that can both understand the image and generate structured outputs. Let’s explore this in detail next. 

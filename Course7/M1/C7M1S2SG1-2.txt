@@ -1,0 +1,280 @@
+Object Detection
+
+Session Overview
+
+In this session, we are going to study object detection as a core computer vision capability that extends beyond image classification. Many real-world applications require not only identifying what is present in an image, but also locating multiple objects accurately.  
+
+ 
+
+Object detection relies directly on the image representations and features you have already learned, and it forms a foundation for more advanced vision and generative systems. We will focus on the key ideas that make object detection possible, such as bounding boxes, localisation, and evaluation metrics.  
+
+ 
+
+Along the way, we will look at different modelling approaches used for detection to understand the trade-offs between accuracy and speed, and why modern systems favour end-to-end, real-time designs. By the end of the session, you should have a clear picture of the ideas behind working of object detection techniques and why these basic concepts are essential for building scalable vision systems. 
+
+Introduction to Computer Vision
+
+
+Computer vision deals with how a computer perceives and performs operations or tasks on a given image or video. This field is of wide importance and deals with a large selection of applications. Before we understand these applications in detail, you will learn a bit about the evolution of computer vision over the past few years. 
+
+ 
+
+In the forthcoming video, Georgios will take you through the evolution of CV and its use cases over the years.
+
+00:00:00 - 00:00:31
+Introduction to Grayscale Image Analysis in Computer Vision
+Early examples of practical computer vision involved the analysis of grayscale images as binary ones. An example is shown up here where the input image is a grayscale. It was converted into black and white, where objects are clearly distinguishable, and analysis of the content that this image was done by accessing white pixels as opposed to black. Advancing this a little bit further, we saw operators that would process the grayscale content as such.
+00:00:31 - 00:01:16
+Feature Extraction from Grayscale Images
+Examples included grayscale filters and other types of processes that enabled the output directly in the grayscale. What followed was the introduction of feature extractors, where we saw essentially operators that would take in a grayscale image and identify the contours of objects of interest in this image. The known photograph of the photographer has been analyzed in order to get the contours and clean them up in order to obtain a result as the one that you see in this image. Past this we saw the introduction of color image processing where pixels were being analyzed directly using three channels as opposed to one.
+00:01:17 - 00:01:43
+Color Image Processing and Real-Time Applications
+This enabled the processing of video feeds where for the very first time we saw the introduction of real time applications. Tracking, object detection, object classification and things of the kind started to happen on a frame by frame basis. None of these involved machine learning. However. Machine learning was fused with computer vision in the early 90s where we saw the introduction of support factor machines.
+00:01:44 - 00:02:14
+Machine Learning Integration in Computer Vision
+This evolved along the way to allow for feature abstraction based on knowledge acquired during training. Advancing this further took us to where we are today, where the use of AI powered edge computing is allowing for applications such as autonomous driving and the kind application areas of modern computer vision include image specification, object detection, semantic segmentation and instant segmentation. Example of all these four are shown on the right.
+00:02:15 - 00:02:20
+Modern Applications of AI in Computer Vision
+In this module we will discuss explicitly the task of object detection.
+
+CV began in the 1960s as a simple collection of methods for processing black-and-white images produced by early industrial cameras. Over time, it has evolved to process greyscale and colour images (both 2D and 3D), as well as video, utilising increasingly complex algorithms. Now, CV applications can be used for complex tasks, such as self-driving cars and face detection. The image below shows the evolution of CV applications.
+
+
+Now, based on your understanding of CV, try answering the upcoming questions.
+
+ 
+
+In the upcoming segment, we will discuss object detection in more detail.
+
+Computer Vision - Quiz
+
+
+Modern CV, in combination with machine learning (ML), is tasked frequently with addressing four common problems:
+
+Image classification,
+Object detection,
+Semantic segmentation and
+Instance segmentation.
+The image below shows the applications of CV in addressing these four problems.
+
+From your understanding, what is the task being performed in the ‘Image Recognition’ part?
+
+Ans The classes of the animals present in the image are being provided.- Image recognition/classification would classify the animals present in the image and provide the probabilities of each class.
+
+What, according to your understanding of ‘Object Detection’, is happening in the corresponding image?
+
+Each animal is being categorised into a different class.
+
+The locations of the animals are being identified by the boxes around them.
+
+Both of the above. Ans - Both of the above. Object detection would classify the animals and also provide the coordinates of their locations. Hence, both the options are correct.
+
+Based on your understanding of the given images, how is the semantic segmentation task different from object detection?
+
+Object detection classifies an object and draws a box around it, thus marking its location.
+
+Semantic segmentation classifies objects and draws a box around them, thus marking their locations.
+
+Semantic segmentation categorises the objects in an image into different classes based on their pixels.
+
+Object detection categorises the objects in an image into different classes based on their pixels.
+
+ANs
+Object detection classifies an object and draws a box around it, thus marking its location. --Object detection classifies the objects in an image and also locates them by drawing a bounding box. 
+
+Semantic segmentation categorises the objects in an image into different classes based on their pixels. --Semantic segmentation classifies objects based on their pixels but does not compute the location coordinates.
+
+
+
+Introduction to Object Detection
+
+Before we get started with object detection, we will take a quick look at image classification, with which you are already familiar. In the forthcoming video, you will learn how image classification and object detection differ.
+
+00:00:00 - 00:00:12
+Introduction to Image Classification
+How does object detection differ from image classification? Well, in the case of image classification, the task is to open up an image and identify what is the dominant feature.
+00:00:12 - 00:00:42
+Image Classification with Cats and Dogs Example
+What is the dominant object within that image? In the simple example of cats and dogs, if a cat is sown in the image, then we expect the classifier to detect the cat and give that label at the output. If the opposite is true, well, we expect the dog to be at the output. Of course, we might have combinations of the two, in which case the classifier decides which indeed is the dominant object in the image, and based on that it decides what label to pass at the output.
+00:00:43 - 00:01:16
+Object Detection and Localization
+In the case of object detection, we take this a step further and it's not sufficient only to understand what is being visualized, but also to locate that, to localize that in the image. As you see in the image example on the right, the video will be precise. We have a bounding box around this raccoon and the task is in every given frame to make sure that this bounding box fully contains our target. Next, we will see a couple of applications of object detection, and we will start with traffic monitoring.
+00:01:17 - 00:01:57
+Applications of Object Detection in Traffic Monitoring
+This is a very popular type of application of computer vision and deep learning. And as you see on the image on the video on the right, we are interested in identifying the types of vehicles that are being visualized, the motion patterns, the people and perhaps understand if there are any risks from how all of these together couple. On the video on the right, it is a slightly different example where the different types of vehicles are being identified, they are being classified and they are being counted.
+00:01:57 - 00:02:38
+Object Detection in Remote Sensing
+This is a typical application in case Rd. network monitoring is of paramount in a very different field, that of remote sensing, dealing with satellite images and aerial images. We have similar types of applications but for very different purposes. So the image on the left, you see an image of an oil tan site and as you can see with the green bounding boxes around the different oil tanks, we have detected them, we have classified them, we have counted them and we have estimated their proximity for safety purposes.
+00:02:39 - 00:03:03
+Object Detection in Medical Imaging
+This is a past project that I worked on and one similar one was done for maritime vessels. As you see on the images on the right. Applications of object detection may also be found in medical imaging. An example is shown on the left where the objective is to be able to localize with high precision the location of virus body orbits.
+00:03:03 - 00:03:35
+Object Detection in Regular Photography
+The image that you see on the left shows the detection of lungs in the CP image and the very same technology can be transferred to virus, other imaging developies such as X-rays and the client. On the right image you see a different type of application that does not involve medical imaging. It is a regular photograph where the objective there is to identify automatically the presence of skin balls, and this is really a typical set of applications that one may find for object detection.
+
+Given an image, image classification will be able to categorise the objects inside it into different classes. However, object detection algorithms would not only be able to classify the objects, but also provide you with their locations in the image. Let’s use this image as an example to better understand the difference.
+
+ 
+ 
+
+Let us try to understand the difference between the outputs of the two algorithms in the context of the image above:
+
+ 
+
+Image classification algorithms analyse images and the objects present inside them, and then divide them into different classes: 
+A binary classifier, as the name suggests, will be able to categorise the objects in the above image into two classes, vehicle or not, and so on.
+A multiclass classifier, on the other hand, will be able to categorise objects into multiple classes and tell whether the object present is a car, bus, bike, etc.
+ 
+The output in the case of object detection will include these classes along with the locations of the car, bus and bike, as shown below.
+
+The image that you see above shows traffic surveillance, which is a common application of object detection. Object detection covers a wide range of applications, some of which are mentioned below.
+
+ 
+
+Medical imaging: Object detection is a commonly used technique that detects the presence of unwanted, harmful cells by analysing images of the human brain, lungs, etc. It is also shown to detect the presence of moles, as shown below,
+
+
+Remote sensing: This refers to detecting objects from the images captured by satellites. The image below shows one such example, where an oil tanker is being detected from a satellite image.
+
+Self-driving cars: One of the actively discussed and newest innovations in technology, self-driving cars, use object detection algorithms to detect obstacles on roads. The image below shows the dashboard of a self-driving car, which uses this technology.
+
+Face recognition: Another common application of object detection is detecting human faces. The image below depicts this application.
+
+ 
+
+Traffic monitoring: Traffic monitoring is one of the widely used applications of object detection. You already saw, at the beginning of this segment, how object detection detects the presence of different vehicles, along with their classes.
+
+The coloured boxes that you see around the objects in this image are called bounding boxes. These boxes provide the coordinates of the objects detected inside an image. You will learn about them in detail next, where you will learn about the concept of object localisation.
+
+
+Object Localisation
+
+As you learnt in the previous segments, object detection performs two tasks:
+
+Detecting an object’s class
+Identifying the object’s location through ‘bounding boxes’
+ 
+
+In the forthcoming video, you will learn more about object detection and the concept of localisation.
+
+00:00:00 - 00:00:04
+Introduction to Object Detection and Classification
+Object detection typically runs in parallel within its classification.
+00:00:04 - 00:00:15
+Classification and Regression Heads in Object Detection
+At the end of the network, we usually have a split where one end goes towards what we call the classification head and the second one goes towards the regression head.
+00:00:16 - 00:00:33
+Loss Functions in Object Detection
+Classification is responsible for identifying whether the target is present in the image, and the regression is tasked for identifying the correct bounding box settings for enclosing for localizing the detection.
+00:00:34 - 00:00:49
+Bounding Boxes and Intersection Over Union (IOU) Metric
+At the end of the classification, we have a softmax loss function. The objective is to minimize this, and in the case of the regression head, we have the L2 loss function. Again, the objective is to minimize this.
+00:00:50 - 00:03:02
+Evaluating Network Performance Using IOU
+We will discuss this in greater detail in a few slides from here. The overall goal is the combination of these two loss functions to be minimised such that the network is trained in an optimal way. Object localization involves identifying the correct bounding box that is as close to the contours of the target as possible. The detection in itself is confirmed through the bounding box, which is a very important feature in object detection. The bounding box in itself is represented by 4 attributes, that is, the X&Y coordinates of its centroid, the bounding box height, and the bounding box width. The bounding boxes do not only serve the purpose of delivering an output but also for the purpose of evaluation. A typical metric utilizing bounding boxes for evaluating the performance of our network is known as the intersection of the union, or IOU. Given a bounding box from our predictor and a bounding box from the ground truth, it is possible to combine them in a way that would allow us to see how close the 2 are together and assets understand in a way how good our network is performing. The formula for doing so involves two different metrics. At the top of this division we have the area of the intersection of the two bounding boxes, and at the bottom the area of their union. The area of the intersection is essentially the common area of the two bounding boxes, while the area of the union is very much the area of the two combined. An example of two of these bounding boxes placed on an image and a test limits is shown on the right. So you see the ground truth being represented by the red bounding box and the different bounding box shown in green. As you see the two of them have quite a difference and as such in this specific example one would expect that the IOU would be approximately 70%. In practice, this is very much the minimum IOU that one can tolerate.
+
+So, in the video, you saw how classification and localisation work in parallel in object detection algorithms. The image below provides a summary of the working of object detection algorithms.
+
+You will now learn about each of these elements that we have discussed so far. Object localisation refers to determining the locations of the objects present in an image. The location is given by the coordinates of the bounding boxes. The bounding box vector consists of four elements:
+
+The x coordinates of the centroid, 
+The y coordinates of the centroid,
+The height of the bounding box and
+The width of the bounding box.
+ 
+
+This is shown in the vector below.
+
+
+Now, since the output of an object detection model is primarily a bounding box, you need some method to be able to evaluate how well the model has localised an object and predicted its bounding box.
+
+ 
+
+The standard industry metric that you need to consider for this purpose is intersection over union (IoU). This metric evaluates the accuracy of your model’s prediction of the bounding box by comparing it with the ‘ground truth’ bounding box present in the training set. Take a look at this image, which shows the predicted and ground truth bounding boxes.
+
+
+
+Recall that this is similar to the actual and predicted outputs, which you have been comparing in the case of ML and DL algorithms so far. However, instead of having a single value of the outputs, in the case of object detection algorithms, you will have a vector. 
+
+ 
+
+The IoU is measured by taking the intersection of the two boxes and dividing it by their union. It can be expressed as follows:
+
+IoU = Area of intersection / Area of union
+
+ 
+
+Note that IoU lies between 0 to 1 since it is a fraction.  The image below depicts the numerator and denominator of this formula.
+
+ 
+
+
+
+Next, we will discuss about the loss function for this. Now, based on your learning so far, try answering the upcoming questions.
+
+
+
+
+
+Object Localisation - Quiz
+
+
+You have learnt that IoU is used as an evaluation metric for object detection tasks. You also saw the formula for IoU. Now, based on your understanding, select the correct option(s), which justify(ies) how IoU is a good choice as an evaluation metric.
+
+
+A higher IoU ensures good results.
+
+IoU acts as a good metric as it allows us to analyse how close the predicted location is to the actual one.
+
+
+Compute the IoU for this image.
+
+
+The IoU for this image can be computed as shown below:
+IoU = Area of intersection / Area of union
+
+ 
+
+Therefore, IoU = 12/100 = 0.12, or 12%
+
+-------------------------------------------
+Loss in Object Localisation
+
+We discussed that the output in the case of object detection algorithms is generally a vector instead of a single value. Now, you might wonder how to calculate the loss for such a vector? In the forthcoming video, you will learn about the loss functions for object detection algorithms. 
+
+
+00:00:00 - 00:00:20
+Introduction to Loss Functions in Object Localization
+We briefly mentioned the loss functions before. The regression in object localization typically uses the L1 or L2 loss functions for the purpose of error minimization. The objective is very much to move the predicted bounding box as close as possible to the real 1.
+00:00:21 - 00:01:30
+Comparison of L1 and L2 Loss Functions
+So essentially we are having the displacement of the centroid of the predicted bounding box towards the centre of the one provided in the ground truth. Briefly, the L1 loss function is used to minimize the error which is expressed as the sum of the absolute differences between predicted values and the ground truth values. In the L2 function we have a slightly different formula. We are having the squared differences between the two values. The objective in both cases is to minimize the error between the predicted and actual central location of each of the objects detected. And in reality, L2 is highly preferred compared to L1. However, this assumes that we do not have outliers in our data set. If that is the case, the L2 tends to underperform compared to L1 due to the square differences. Next, and having gone through these, you will be tasked to answer a few sample questions in order to be able to gain a better understanding on each of these concepts separately.
+
+Object detection algorithms will have two losses:
+
+Classification or softmax loss
+Regression losses – L1 and L2 losses
+ 
+
+You are already familiar with these losses, but let us revisit the L1 and L2 losses for object detection. L1 loss is employed to minimise the error that is defined as the sum of all the absolute deviations between the true and projected values. Here is the formula for L1 loss.
+
+Equation
+
+
+L2 loss is used to minimise the error that is defined as the total of all the squared discrepancies between the true and predicted values. Here is the formula for L2 loss.
+
+Equation
+
+
+As you already know, L2 loss is the preferred option in the case of outliers in data.
+
+ 
+
+So, by now, you must have formed a good understanding of how to compute the IoU and loss functions for object detection. In real-world applications, you will not be required to compute them manually. 
+
+ 
+
+Next, we will be discussing some more concepts in object detection.
+
+
+

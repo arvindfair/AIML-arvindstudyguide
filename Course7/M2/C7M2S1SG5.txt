@@ -1,0 +1,413 @@
+Attnesion based encoder decoder architecture 
+
+
+Limitations of Encoder-Decoder Model
+
+You will now explore the challenges associated with standard encoder-decoder models when handling long sentences, understand why these issues arise, and discuss potential ways to address them.
+
+00:00:00 - 00:00:56
+Challenges of fixed-length vector in encoder-decoder models
+It is easy to see that in the sentences which are very long, it might become very difficult for the standard encoder decoder model to compress all the necessary information that is required for the decoder into a single fixed length vector. So please keep this in mind right we need. What is happening currently is the same context vector is being used at all stages of decoding process. Therefore, there is a pressure on the encoder to compress all the necessary information of a source sentence into a fixed length vector. And if the number of words in the input sentence is very high, that might be a very difficult process to do. That is compressing all information in a fixed length vector. So that is an issue that we have identified with the standard encoder decoder module. Now, how do we solve it?
+00:00:56 - 00:02:06
+Introduction to attention mechanism in translation
+Again, I request you to pause for a moment and think what might be a simpler, right, a very simpler way to mitigate this problem. So how do I want you to think about it? Just think how we translate a given sentence into a target sentence. To give you a small hint, let us say you are translating from language A to language B and during the process of language B you have translation. You have achieved, you have come till 3 words. Now ask to translate and come up with the fourth word. Do you really require the context of entire sentence or do you selectively attend? That's where I started bringing this word called attention, right? You attend to what are the required words that you want to look at in order to come up with this next word, right? It might not be very clear in what I am saying, but this should give you a hint on how we translate it. So let us look at these vague ideas in a more rigorous fashion. Now, a new philosophy that we are going to develop is we are going to do something called learning to align and translate.
+00:02:07 - 00:03:59
+Learning to align and translate using attention
+What does it mean? Each time the model that is Decoder generates a word in a translation, it searches for a set of positions in the source sentence where the most relevant information is concentrated. I have underlined the most important words here. What are we saying? We are saying that during the process of a translation, because it is one word at a time, when you want about to generate or a translate or come up with the next word. This we are giving the power to the model to look for positions in the input or a source sentence where the most relevant information is there and pick those contexts for the decoding at this point in time. In a simpler way, what we are saying is the context that is required at each step of the decoding need not be same. We can provide the power to the model to select different contexts at different points of decoding process. So this eases the burden on encoder to compress everything in one fixed vector. So what is happening here? The model predicts a target word based on the context vectors associated with these source positions and all previously generated target words. Now the important point I want you to focus here is at each step the context vector is not same at every point it changes. So the model selects or attends to those context vectors which are actually important at this moment in time. OK, so let us see an example to consolidate all the ideas that we have discussed.
+
+
+You learnt that long sentences can be challenging for standard encoder-decoder models because they must compress all necessary information into a single fixed-length vector. This can be challenging when the input is lengthy.
+
+ 
+
+To address this problem, consider how you naturally translate sentences: you do not rely on the entire context but focus on relevant parts. This insight leads to the concept of attention in translation models.
+
+ 
+
+In this approach, every time the decoder generates a word, it looks for the most relevant information in the source sentence rather than using the same context vector throughout. This way, the burden on the encoder to compress all the context into one fixed vector is reduced. The model can dynamically select the context vectors that are most pertinent to the current word being generated.
+
+ 
+
+This learning to align and translate strategy improves the model's ability to handle long sentences and provides a more nuanced translation process by attending to different parts of the source sentence as needed.
+
+ 
+
+Next, you will further explore this concept with the help of an example.
+
+Attention-Based Encoder-Decoder Model
+
+You will now learn about the concept of attention with the help of an example.
+
+00:00:00 - 00:00:33
+Introduction to translation from English to Python
+The example that I am going to discuss is translation from English to Python, right? So you might be surprised. Generally when we talk about translation, we talk about translation from a natural language to a different natural language. But even this is a translation task. If you think about it, 1 is a natural language and 2nd is a programming language, right? So let us take this as an example to understand all the ideas that we have discussed and ask questions and get answers to them. Right.
+00:00:34 - 00:01:29
+Objective: Build a model to translate English to Python code
+Let us say I give give you an input sentence as follows. So I just say that my statement is as follows. Python program to print Hello world. The first piece of code that we write in Python right? So this is an English statement that is being given to you. Your objective is to build a model that takes this X into consideration, passes this X as an input and generates a piece of code in a programming language called Python which does exactly what is supposed to do, that is print hello world. Now as we have seen, we are going to use the encoder decoder model for it.
+00:01:29 - 00:03:04
+Encoder-decoder model overview for translation
+Encoder doesn't change. The whole objective of encoder is to you know construct contexts of this input sequence and then pass it to the decoder, right. So that process will not change. So you will have initial H1 and you have the first word called Python. This is my first vector embedding. Please recall we have discussed about embedding, right? The first input is a vector embedding corresponding to this word called Python. The function is being applied and you get H2 and then you have a function F and the second word here which is program and so on and so forth until we get this F being applied on the word called world, the vector embedding corresponding to this word called word. And we end up with this is H1, H8, right? So these are the vectors that are currently sitting with us. So in a standard encoder decoder mechanism, what happens? As we have seen, this H8 is supposed to have all the necessary information about this English sentence called Python program to print hello world. And this is being taken and the decoding process starts. But I'll hold that for a moment.
+00:03:04 - 00:05:06
+Attention mechanism in translation process
+I'm going to in fact ask you a question, right? We all know what is the accurate translation for it, right? So it is print and then we say hello world. So this is the command that we can write in a Python interpreter and when we run it now, this essentially prints the statement called hello world. Right now before I start the decoding process, I am going to ask you a question in order to come up with this particular word called print. Please answer. I can pause for a moment as well. Do you really require what you are supposed to print just for this first token, first word? I am not worrying about generating this entire program at once. You always think or in fact at least in this model, do one word at a time, right? So in order to generate this output called print, do you really require to know what you are supposed to print as well, right? So please think for it and let me know right? And as you know the answer would be no. The reason being simple, in order to get this print you do not need to know what you are supposed to print. What you are supposed to print comes next after you start started the word I mean output At the word called print, you worry about what is supposed to be print. So this is what is called an attention mechanism. When you are supposed to emit or output this word called print, you can focus only on certain aspects or certain context of the source sentence. Probably the most important things to focus here are this word called Python And a program and a print. So these are the three things that you would require or attend in order to generate this particular token called print. These things are probably least important to you, the hello world and so on and so forth, correct?
+00:05:06 - 00:07:53
+Detailed explanation of attention mechanism in translation
+So, when the decoder is about to generate an output called print, we want to give it the power to attend to only required information in the input only select them and then generate this output called print. Similarly, let us go to the second word. Once you have generated the print in order to generate hello, of course you have started doing the print right. You can easily guess that the most relevant and important information to look at in order to generate this word hello is in fact hello, right? So to generate this word called hello, the decode decoder has to attend or put lot of focus or attend heavily that is put lot of weight on this word called hello compared to anything else like program or print and so on, right. And similarly for the world it has to attend or focus on this particular word or world more weight has to be given to this particular context rather than the contexts of other vector. So if you can really see what we are doing, you are trying to declutter the things that is at each moment if you use the standard encoder decoder, you are only provided with a single vector C that is it right? Decoder has to use this C and say let me give you the print first, Hello 1st and world first. And we know that that might be a very difficult task to achieve in a longer sentences. Now what happened, what happened now is that at each time the decoder is having the ability or flexibility to select the words in the input sentence which are actually important, relevant to this particular output at this point in time. So at T equal to 1, the decoder is focusing or attending to the words called Python program and print at T equal to let us say 3 because four let us say because the second time you generate this bracket, then you have this a token. And then let us say at T equal to 4, you are going to attend to the word called hello, correct and T equal to five the model the decoder is going to put lot of weight or attend heavily on this word called world and so on and so forth. So this way you have removed the burden of the encoder to put all the information in one particular context vector that the decoder can use to translate, right? So now let us look into this in more rigorous and mathematical fashion.
+
+
+ 
+
+Note: There is an error in the video at 02:32. The professor mistakenly refers to Equation as Equation. 
+
+ 
+
+To understand the concept of attention, we used the example of translating an English sentence into Python code. Consider the English sentence "Python program to print hello world". The goal is to create a model that takes this English input and generates the corresponding Python code.
+
+print("hello world")
+ 
+
+You learnt that using the encoder-decoder model, the encoder processes the input sentence and creates a context vector. For example, it converts the English sentence into vectors - Equation for "Python", Equation for "program", and so forth until Equation for "world".
+
+ 
+
+
+
+ 
+
+In a standard encoder-decoder model, this single context vector (Equation) contains all the information needed for translation. However, this approach can be problematic for long sentences, as it forces the encoder to compress all relevant information into one vector.
+
+ 
+
+To address this, an attention mechanism is used. Instead of relying on a single context vector, the decoder can focus on different parts of the input sentence at each step. For example, when generating the word "print", the decoder might focus on the words "Python" and "program" while ignoring "hello" and "world".
+
+ 
+
+As the decoding progresses:
+
+To generate "print", the decoder attends to the input words "Python" and "program"
+For "hello", it focuses on "hello" itself
+For "world", it pays attention to "world"
+ 
+
+This mechanism allows the decoder to selectively focus on the most relevant parts of the input sentence at each decoding step, making it easier to handle longer sentences and complex translations.
+
+ 
+
+Next, we will consolidate all the points discussed so far.
+
+Attention-Based Encoder-Decoder Model: Summary
+
+
+00:00:00 - 00:02:21
+Adaptive vector selection in neural network decoders
+So let us consolidate all the points that we have discussed so far. Now with this new approach which you have seen. That is at each time point in the decoder, the model has a flexibility to attend to different different vectors at different points in time. This allows the encoder so to make sure that it does not have the onus to encompass or compress all the information into single fixed length vector, which is kind of a tricky and difficult process sometimes. So the model does not attempt now to encode a whole input sentence into a single fixed length vector. Great news. And more than that, what happens instead? It encodes the input sequence, input sentence, sorry, into sequence of vectors. And the decoder chooses a subset of these vectors adaptively. This is a very important statement place. What do we mean by adaptively? Again? You cannot say that we are going to select the same set of subset of vectors at each time, no. Then you are in fact taking away the power of the decoder. You are giving the flexibility to the decoder to adaptively. That is whatever is required at each time step, select those subset of vectors during the translation, right? So that is the power that we are providing to the decoder. It can select a subset of the vectors that the encoder has generated as a result. What happens? This process frees the neural network from having to squash all the information in a source sentence regardless of this length into fixed length vector which we have been discussing and motivating that this might be a difficult process when the input sentence is very long. So we successfully achieved the issues that we faced earlier. Now there is no longer a necessity to have one single vector that represents everything about input sequence. We are good to go with the each individual H1H2H3H4 that we got and then we are telling the decoder, hey, feel free to select the subset of vectors that you want at each time step, right. So thereby we have successfully mitigated the issue that we have seen earlier.
+
+ 
+
+You learnt that the new approach allows the decoder to attend to different vectors at various stages, relieving the encoder from the challenging task of compressing all the information into a single fixed-length vector. Instead of encoding the entire input into one vector, the model now encodes it as a sequence of vectors. The decoder can then adaptively select the most relevant subset of these vectors at each step of the translation process.
+
+ 
+
+This adaptability ensures that the decoder focuses on the most important information at each stage, freeing the neural network from the need to accommodate all the context into one vector. 
+
+ 
+
+By enabling the decoder to choose from individual vectors such as Equation, and Equation, one can effectively address the earlier challenges, especially when dealing with longer sentences.
+
+ 
+
+Next, you will explore the graphical illustration of the model discussed above.
+
+Working of Attention-Based Encoder-Decoder Models
+
+
+00:00:00 - 00:00:33
+Graphical illustration of encoder-decoder model
+First, let us look into graphical illustration of the model that we have just discussed. So here in this particular diagram, this part is the encoder where in this research paper a bidirectional RNN has been used. But you can ignore that particular component and focus on the important thing that the encoder at each point in time generates the updated vectors called H1H, 2H3 till HT, right?
+00:00:33 - 00:01:04
+Encoder generates updated vectors
+So, these are the vectors that are being generated by the encoder at each point in time. Now in a standard encoder decoder mechanism that we have discussed earlier, this is the decoder part, right? At each point in time of decoding, what happens? A single context that is HT is being taken as an input in order to generate the next World called YT, correct?
+00:01:04 - 00:01:25
+Decoder mechanism and context input
+So, this is what we have discussed. So at each stage of the decoding, it looks at the previous word which is YT -1. It looks at current state which is South T and the context coming from the encoder which is HT. Now, what happens now with this attention mechanism that we are discussing currently?
+00:01:25 - 00:03:03
+Attention mechanism in decoder
+At this time step T, this particular decoder will look at all the vectors of the encoder H1H2H3 till HT and puts a certain weight called AT1AT2 till ATT. So what are these weights? These weights represent the relative importance, relative importance of each vector at time step T In particular, AT1 represents at time step T. How important is this vector called H1 for the decoder? What is AT2? It denotes A relative importance. It is a number between zero to 1 as we will see soon. A number that represents how important this particular vector called H2 at this point in time called time step T and so on and so forth. So the decoder at each step before it starts to translate. That is why we said in the previous slide that this is alignment process. It first understands computes what are the relative importance of each context vector in the encoder, your H1SH2S, and then combines them. What do we do? We do this convex combination that is AT1 into H1 plus AT2 into H2 plus, so on up to ATT into HT, correct? So this becomes the context at time step T.
+00:03:03 - 00:03:46
+Convex combination of context vectors
+So that is why I have been repeatedly telling you that at each time step we are giving the flexibility to compute a different context accordingly, right? Whichever is important at that particular time step T. So again to reiterate at its time step, T decoder first computes these weights called 8182 till 80 T which denotes the relative importance of each context vector that that we are having at from coming from the encoder and then combines them appropriately. Now let us go back to the example that we have discussed earlier and try to see how this maps with the process that we are doing.
+00:03:49 - 00:04:00
+Example of encoding process
+So recall this is our encoding process of the translation task that we had where we had an input statement called Python program to print hello world.
+00:04:01 - 00:06:06
+Detailed encoder vector generation
+And then this is our encoder. Let us write the encoder in more detailed fashion because I want you to see all the vectors that has been generated by the encoder. We can call this to be initial H1 and then a function being applied to the first word called Python And this generates H2 and then we have same function being applied on program and then we come up with second or in this sequence 1/3 vector called H3 and the function for this word called 2 and then we have While I am doing this again focus that same function of RNN cell is being used. This is one of the important component of RNN where each state processes exactly the same function which typically uses matrix operations. So we have hello and then we have being this word called world. So we have H5H6 and H7. So there are seven H1 till H7. So I apologize. I apologize for this. It is not H8, in fact it is H7. So these are the vectors that we have obtained from the encoder process. So by processing this particular RNN in there during encoding we have obtained these sequence of vectors called H1H2 so on up to H7. So now that encoder has done its job and then it provides these sequence of vectors H1 till H7 to the decoder for it to translate it into Python program.
+00:06:07 - 00:07:06
+Decoder's first step: attention weights
+Now before I start writing, please tell me what is the first step that the decoder has to do at time step T equal to 1. It has to decide what? As we said in the figure it has to decide A11A12A13 till a 17. So what is this? Before the decoder starts translating, it needs to understand what are the weights? What are the weights that I have to assign to each of this context vectors H1H2 till H7? I will repeat again a 11 represents at time step one. What is the relative importance of this vector H1 at time Step 2, Importance of this vector at time step sorry time step one, importance of the second vector at time step one, importance of the third vector, so on and so forth. At time step one, importance of the 7th vector.
+00:07:06 - 00:08:14
+Ideal attention weight distribution
+In an ideal situation where this particular model has been well trained, can you guess which a, which weight, which attention weight is highest, attention weight corresponding to which context vector is highest? You can pause for a moment and guess what value, which value of a will be highest in order to generate the first word called print. In an ideal situation, of course, the encoder, decoder model, whatever we are learning or training, we will go through this training process and then becomes, you know, rigorous and learns how to do it optimally. But suppose in an ideal situation where you have trained well, what are your expectation on which a value will be highest? And as I discussed earlier, it is not a surprise to understand that the weight a corresponding to this vector called print, right corresponding to the vector called print will be the highest, That is A-15 right will be something pretty close to 1.
+00:08:15 - 00:10:31
+Attention weights for translation task
+Why is that? In order to generate the first word called print, the model if learnt optimally, if trained will will essentially look at the most important component in the input given input sequence and what is the most important component that you want to look at when deciding the first word called print. Of course the context vector corresponding to the word called print. Similarly it will also put some sort of an attention if not high but some decent amount of attention on a word called Python because its is a Python program that we are using. For example, in other languages you might have printf and so on. South, what language that we are translating is also important. So it does put some sort of a focus on this word called Python. It also puts some sort of focus or attention or a weight on this word called Python or a program. But it is not a surprise to say that the focus that it puts on a 16 and a 17, this also will be, you know, non trivial, definitely greater than 0, greater than 0, right? It has to put some sort of an attention to understand that yes, I am printing, but you know, it is a Python And it is a program. But we can reasonably guess that these two will be close to 0, right? Because what is supposed to be print comes later. The objective now is to just output this word called print. Again, I am reiterating that these are all the weights at time step one. Please note the first subscript that we are having. If I say that these are the weights that are uniformly used at all time steps, then I am absolutely wrong. In fact, the model will not learn well in that case. So these are the attention weights A15-A12A13A116 and A-17 that are being used and the time step one and then you, it's an exercise. I can tell you that you can think what are the attention weights to be set for generating this word called hello, and what are the attention weights to be set for generating this word called world and so on. South, That's a good exercise for you to think and understand.
+
+
+You learnt that the model works in the following way:
+
+The encoder processes the input sequence and generates vectors (Equation, etc.) at each time step, representing different parts of the input. Each vector represents the corresponding input word after incorporating information from surrounding words in the sequence, and therefore acts as a contextual embedding of that word.  In a standard setup, the decoder uses a single context vector (Equation) from the encoder to generate the next word.
+  
+
+
+
+Figure 1: The graphical illustration of the proposed model trying to generate the t-th target word Equation given a source sentence (Equation)
+
+Picture Credit: 1409.0473 (arxiv.org)
+ 
+
+However, with the attention mechanism, the decoder does not rely on just one vector. It examines all the encoder-generated vectors or contextual embeddings  (Equation through Equation) and calculates the weights (Equation) for each vector. These weights represent the importance of each vector at the current time step. For example, Equation is the weight for vector Equation is the weight for vector Equation, and so on up to Equation for vector Equation.
+ 
+The decoder then computes a weighted sum of all the encoder vectors (contextual embeddings) based on these weights, which is called a convex combination. This is calculated as follows: 
+
+Equation
+ 
+This weighted sum forms the new context vector used to generate the next word. 
+ 
+
+You then explored the example sentence “Python program to print hello world” to understand how the sequence is processed by the model.
+
+ 
+
+
+ 
+
+After the encoder generates vectors (Equation through Equation) for the input sequence, it passes these vectors to the decoder for translation.
+ 
+At time step t = 1, the decoder calculates the attention weights (Equation) for each encoder vector, where:
+Equation is the weight for vector h1
+Equation is the weight for vector h2
+Equation is the weight for vector h3
+...up to Equation for vector h7
+ 
+In an ideal scenario, the weight for the vector corresponding to the word "print" will be the highest, close to 1, because it is crucial for generating the word "print." Other weights will be lower, reflecting their lesser relevance.
+ 
+The attention weights are used to compute a weighted sum (convex combination) of the encoder vectors. The equation is as follows:
+
+Equation
+ 
+These weights vary at each time step. For instance, while "print" gets the highest weight at time step 1, the weights for generating subsequent words such as "hello" or "world" will differ based on their relevance at each step.
+ 
+This allows the model to focus on the most important parts of the input when generating each word, leading to more accurate translations.
+ 
+
+Next, you will explore how an encoder-decoder model with attention is trained.
+
+
+Training of Attention-Based Encoder-Decoder Models
+
+
+00:00:00 - 00:00:09
+Introduction to data-driven models
+This is should be, you know, common thing for us in any machine learning or data science applications where all these run on data, right.
+00:00:09 - 00:01:05
+Creating language translation datasets
+So this is these are the models that we train using lots and lots of data which can be created. For example, if you want to translate from language A to B, there is no dearth of resources that we can dive into and create this particular data set consisting of two things, absolutely two things, right, which is source language and its appropriate translation. So we are going to create some sort of a table consisting of two columns, 2 columns of language A and its translation in language B, right, sentence one, its translated sentence 1 and so on and so forth. So this we can create, we can create a data set of M such examples which consists of a language A and language B, sentences in language A and its appropriate translation in language B. So this is not difficult to do.
+00:01:06 - 00:01:14
+Training encoder-decoder models
+Now what are we going to do? We are going to train this entire encoder decoder model. This is where I want you to please pay a lot of attention on, right.
+00:01:15 - 00:02:01
+Loss function and cross entropy
+So we are going to train this full encoder, decoder with attention as we call now decoder with attention model with attention on a loss function, right? That is how many of the machine learning algorithms are trained, isn't it? We define a loss function and we ask our model to minimize this loss function. And as you can recollect, this is our cross entropy loss between what we are supposed to predict. That is the ground truth which is coming from this data set and what the model is predicting. If the model is predicting correctly, perfectly what it is supposed to predict, you can assume that the loss function is exactly 0. Otherwise it will incur a loss function.
+00:02:01 - 00:03:16
+Optimizing model parameters
+It incur a loss and then the objective is to minimize, minimize this particular loss function given here. But the story hasn't ended there. When I say minimize, what are the parameters that the model optimizes in order to minimize? Again, I ask you to pause for a second and think. When I say minimizing the certain parameters, what parameters of the model are being optimized in order to achieve a very good objective or a very less loss value? It should be clear that of course one of the parameter is the function called F that is coming from the encoder, right. So we said that at each state of the encoder, it has a function F which is a matrix which is being applied and it is also clear that its is a function G coming from the decoder, correct. So a matrix operation being applied at each state of the decoder process is that are we done or isn't is that it or is that something else right. Please note the model that we are having is encoder decoder with attention, right?
+00:03:16 - 00:04:12
+Encoder-decoder with attention mechanism
+And then there is one function that you have seen earlier which is this function called a, right? So even a has to be trained. So this is what we call as an alignment function, right? Alignment function, right? All three things, all three functions or all three matrix operations are being learnt together. When we say that we optimize this particular loss function and it is common sense as well. Just because your F&G are optimal but the model has not learnt to place correct weights at its time step does not matter, the output will still end up being non optimal right? All these components are placed together and optimized together, learnt and trained together in order to succeed for a task called translating from language A to language B.
+00:04:12 - 00:05:12
+Backpropagation in attention models
+So that is what when we say when we back propagate this loss function across these components. The function F which is being learnt by the encoder, the function G which is being learnt by the decoder and the alignment model which is responsible for learning the weights that are required at each time step. All three things are constantly being improved and learnt towards a common goal of minimizing this particular loss function. The loss function that minimizes the cross entropy between the ground truth translation and the translations that are obtained by the model. So in this way, we have successfully added a component called attention mechanism to this encoder decoder process which is much efficient, seen to be much efficient compared to the standard encoder decoder paradigm.
+00:05:12 - 00:06:19
+Efficiency of attention mechanism
+And one example which has been provided in the research articles that we have seen is a translation from language called English into French. So these highlighted areas represent in order to translate this French words, what are the English corresponding words that it has paid more attention on South? Let us quickly go to this word called European. And you know, you can easily guess that if a model was well trained, it would put more focus on this particular word called European, right? So European and then economic, correct? So it is clear to us that these are the 2 words that the model has to attend to in order to generate a translation. Similarly for economic, the word called economic, it is again implicitly understood that if the model is well trained it would focus on economic and also zone and so on and so forth. So in this way you can see this in this particular example when you are translating from one language to other.
+00:06:20 - 00:07:24
+Training attention models for translation
+So it is exactly focusing on the most important words that are required for translating at that point in time. It is not like the same word is being focused at all the time steps. No, whatever is required at that particular time step, those corresponding words in the source language are being attended to. And how did this model gain that capability? Thanks to the training that we saw last time, right? It is, it is not something that is there right from beginning, isn't it? Initially, the attentions that the model is focusing on might not be optimal, in fact, will not be optimal during initial stages of training. Over the course of training, when we say that you are supposed to learn everything perfectly such that loss function is minimized, the translations are perfect, then the model adjusts, learns and make sure that the weights, the functions, the matrices are well trained such that it achieves this job. And this is something that you can see once the model is trained well.
+00:07:26 - 00:07:34
+
+So this is the advantage of having the attention module attached to this component of encoder and decoder.
+
+You learnt that the encoder-decoder model operates on data to learn and generate translations. For example, when translating between languages, you create a data set with sentences in language A and their translations in language B. This data set consists of pairs of source and target sentences.
+
+ 
+
+For training an encoder-decoder model with attention, this data set is used to minimise a loss function, typically cross-entropy loss. This loss function measures the difference between the model's predicted translations and actual translations. If the model predicts accurately, the loss is zero. Otherwise, the goal is to reduce this loss as much as possible.
+
+ 
+
+The model optimises several components to achieve this, which are listed below:
+
+The function Equation from the encoder, which processes the input sentences
+The function Equation from the decoder, which generates the output sentences
+The alignment function Equation, which determines the attention weights, or how much focus to give each context vector at different time steps
+ 
+
+All these components are trained together. Simply optimising Equationand Equation without properly training the alignment function would result in suboptimal translations. During training, the model adjusts Equation, Equation, and Equation to minimise the loss function, improving the translation quality over time.
+
+ 
+
+For example, while translating English to French, the attention mechanism helps the model focus on the relevant English words for translating specific French words. If the model is well-trained, it will correctly prioritise the words "europèenne" and "èconomique" when translating to their French counterparts, as shown in the image below.
+
+ 
+
+
+
+ 
+
+The attention module enhances the encoder-decoder model by allowing it to dynamically focus on the most relevant parts of the input sentence, improving translation accuracy.
+
+ 
+
+Next, you will explore a Python demonstration of how an encoder–decoder model with attention performs machine translation.
+
+Working of Attention-Based Encoder-Decoder: Python Demonstration
+
+"\Gen AI\Course7\M2\Transformers for Language Models\encoder_decoder_model_with_attention.ipynb"
+
+We will now cover a Python demonstration of an attention-based encoder-decoder model for machine translation. The objective is to observe how attention is incorporated into the training and inference pipelines and how it improves translation quality, especially for longer sentences. 
+
+00:00:00 - 00:00:10
+Introduction to machine translation with attention mechanism
+In this notebook, we are going to see a machine translation work with the attention mechanism. We are going to use the indig NLP library for tokenization.
+00:00:10 - 00:00:23
+English to Hindi translation dataset overview
+We will use the data set used for English to Hindi translation. So although it is being used for English to Hindi translation but the same approach can be adopted for 10 other major Indian languages as shown here.
+00:00:23 - 00:00:35
+Library installation and setup
+We will need to install the indig NLP library using the pip installer and then these are the libraries that we will be needing. So primarily we are going to use Tensorflow as our deep learning framework.
+00:00:35 - 00:00:57
+Dataset structure and training recommendations
+The data set consists of four file, 2 training file and two test file. The trained file consists of 1 file with you know English sentences and another with corresponding Hindi translation and similarly the same thing for the test files. There is a dev file available as well as which you know can be used for the validation part.
+00:00:57 - 00:01:23
+Data download and extraction process
+The training time contains around 84557 translation out of which we are going to use around 70,000 for the training. The test file contains about 1000 translations and for this notebook I'll recommend running this on GPU. If you're running on local, it is recommended that you have a GPU system. In case if you don't with CPU, the training time will be very high.
+00:01:24 - 00:02:09
+Loading and examining training data samples
+So after that you would need to download the particular data set using this West gate. With the particular link it downloads the data as a tar file which is nothing but a compressed file. So we would need to import tar file and uncompress it and once the extraction is complete you get a message like this. After that we can copy them to this set of files like shown over here and we can also install a Nirmala font which is typically used for plotting. So once this is done, we can extract it and we can point the specific versions. Anyway to understand this is how the training data looks like. We will load and see some sample. We have the corresponding Hindi value and their English form in this way.
+00:02:11 - 00:02:28
+Data preprocessing steps
+So after this we will talk about the data preparation part. Once we have loaded the data set, we preprocess the data as follows. Like we will add a start and an end token to each sentence. We will try to clean the sentences by removing the special characters. Then we will create a word index and a reverse word index.
+00:02:29 - 00:03:04
+Tokenization and word index creation
+These are typically used because when we are dealing with the raw string value, we first convert them into token IDs. But when we are doing the decoding part, the model would actually give the output as token IDs again and we would have to decode the token IDs and represent that into a human readable form. So that's why this mapping is very important and as part of the preprocessing we also add sentence to the maximum length. We have around 70,000 sentences and that's why we select the NUM sentences at 70,000.
+00:03:05 - 00:04:03
+Unicode to ASCII conversion and cleaning
+We will use the tokenize function from the Indic NLP library and we will need to tokenize all the input and output pairs that we have in both the languages. Once it is done, the sample sizes should match. It should have 70,000 input samples and 70,000 output sample. And if we see some value let's say if our input is her face like this and it should look like this with tag then we can convert the encoding version of it. Because in some cases, since we are dealing with Hindi here, we can see it has Uchka chahera in terms of the Hindi characters. In some cases, the encoding format can be different. So that's why we can write this particular function to convert the Unicode file into an ASCII representation. So when we are doing the preprocessing step, that is the first thing that we do.
+00:04:03 - 00:04:50
+Preprocessing input and output sequences
+We convert the Unicode to ASCII. We strip any kind of extra, let's say spaces that we have and convert everything to lower. And then if we have some characters which are unwanted, we can substitute that using the regex command. And if we have extra spaces, we can also substitute that with a single space. We can replace everything with space except for these characters that we have selected. Finally we do another strip just in case to remove any kind of extra spaces. And in the last step we add the special token to mark the beginning and the end of the sentence. So this preprocessing we need to do for both input and output and after the preprocessing which is how the input output sequences should look like.
+00:04:51 - 00:05:20
+Tokenization and padding with Keras
+So once this is done we can do the tokenization and the padding part. This will help us to prepare our data better or our model. We will use the Kiras tokenizer to do the tokenization part for any out of the vocabulary word or tokens. Which means that if we have certain tokens which are not present as part of the current vocabulary, we just replace that with an unknown tag which looks like this.
+00:05:21 - 00:06:09
+Train-test split and tensor conversion
+Typically this is useful for the inferencing part. So if we have some new tokens or new sentences or new words rather coming in in the inference part or the inference sentence which is not part of the training data, we can replace that with this unknown tag here. Once we have done the tokenization part, we will get the you know the output in terms of the tensor, the tensor value and the tokenizer you know set of value, the tokenized IDs that we it will create. And then we can make a function which does this for both the source language as well as the target language. And once we run this which is how it you know kind of generates the output in terms of the Max length and the value looks like this the 0 represents the padding part.
+00:06:09 - 00:06:35
+Hyperparameters for training setup
+Now once we have done this, we need to divide the data into a training set and a test set. So we use a train test split ratio of 80s to 20 in this case. And with that we will have around 56,000 samples for the training data and 14,000 samples for the test data. So after the division part, this is where we do the conversion part where we are converting the language into the tensor values like.
+00:06:36 - 00:07:05
+TensorFlow dataset creation for training
+Typically this is where we are doing a mapping of the index to the word and this is how the output looks like. Now for the training part, these are some of the hyper parameters. We need to specify the buffer sites which stole the number of training point. Then we select the batch sites as we are doing a batch training approach and then we divide the buffer size by the batch size to calculate the steps per epoch. We then decide the length of the embedded vector which is 256.
+00:07:05 - 00:08:03
+Encoder-decoder model with attention
+Here we decide the number of the Gru units which is 1024 in this case. And then we do the you know the index mapping especially if we get size of the input and output vocabulary, we add one for the padding token at index zero. And then we convert the you know the the data into a tensor flow data set which is typically used for the training part. It is more optimized for training with tensor flow framework. So once we have done this, we can quickly check the overall shape of the tensor so that everything is kind of working as expected. Then we try to make an encoder decoder model with attention. The encoder model consists of an embedding layer, a Gru layer with 1024 unit. The decoder model consists of an attention layer, an embedding layer and the Gru layer and the tensor layer.
+00:08:04 - 00:09:04
+Encoder model implementation
+The attention model consists of three layers which uses the water now attention model. So this is how the encoder US looks like. We initialize it with the set of hyper parameters. Then in the call function we it basically does the forward pass for the encoder. It starts with the embedding and then it calls the individual GRE units and passes the output to the next state. And then we have to initialize the initial hidden state where we initialize it with zeros depending upon the batch size and the encoder units defined. So we can call the encoder and we can validate the shapes of the encoder output and the hidden state. Then we have the Batano attention mechanism which is an additive attention mechanism. This attention mechanism use the alignment scores between the decoder's current hidden state which is the query and all the encoder output which are the values.
+00:09:05 - 00:09:26
+Bahdanau attention mechanism
+Then uses these codes to create a weighted sum of encoder output or we call that as the context vector. This is the formula for it and using it we calculate the attention weights and using the attention weights we calculate the context vector. If you want to learn more about it, we recommend you to read this particular paper.
+00:09:27 - 00:10:00
+Decoder model implementation
+This is how the class is implemented and once it is created we can validate the output shapes like this. Then we need the decoder, the decoder model for the sequence to sequence architecture with the attention mechanism. So at each step the decoder computes the attention over the encoder outputs using the current hidden state. It then concatenates the attention context with the embedded input token. It then passes through the Gru to get the next hidden state and then projects the vocabulary size to get the output logics.
+00:10:03 - 00:10:54
+Training setup and optimizer selection
+So this is how we can initialize it and then we can use the call function which is a forward pass through the decoder. Once this is done, we call the decoder, we get the decoder output and as well as we can check the overall dimensions in this step. Now the training part. As we discussed, the training is recommended to be done on a GPU machine. If you're using Google Co Lab, make sure that you have changed the runtime environment to a GPU. If you're using a local environment, then it is recommended to have a GPU enabled into it. If you do not have a GPU on a CPU, it will take a long period of time to train it. Now for training it, we need an optimizer. We will use the Atom optimizer and a loss function where we are going to use the sparse categorical cross entropy loss and we calculate the loss function like this.
+00:10:55 - 00:11:51
+Training process and checkpointing
+Then it is also recommended that when we are training, as it is a time consuming process, we need some kind of intermediate checkpoints. So we need to enable these checkpoints so that like in any case if the model training stops or gets interrupted, we can continue from the checkpoints itself. So this is the training step where we have defined all the training parameters and the validation step like this then we can start the overall training process. Now once the training is complete, we need to do prediction using greedy search. So, greedy search is used for decoding of text and then we can use several plots for visualizing the attention weights. For the evaluation part, we are going to use the blue score which is typically a matrix used for evaluating translation results. So we would have the reference data and we would have the generated data. We would pass them both to calculate the blue score.
+00:11:52 - 00:12:23
+Prediction using greedy search and evaluation
+So to evaluate we need to create an evaluate function like which translate a single sentence using the greedy decoding with attention and these are the steps for that. To plot the attention weight we can create this function which will plot the attention weight and then this is where we can create a function for translating it which takes input sentence. It tries to 1st evaluate and get the output and then it tries to give the overall result.
+00:12:24 - 00:13:00
+Visualizing attention weights
+So once we have done that, we can visualize the attention weight in this way. The quick example, although our model needs to be trained further to get better result but we can clearly see that these are some position where the attention weights are high. Similarly if you have another set of sentence, this is how the attention weights will look like. But again, try to train this model for at least 10 epochs and that would give much better result. Similarly, we can calculate the overall translation value and their corresponding blue scores.
+00:13:03 - 00:13:40
+Beam search approach for prediction
+Now, apart from the greedy search approach, we can also have a beam search approach. We can extend the decoder prediction model to use a beam search, which is generally a better approach than a greedy search. It is typically better in terms of the overall performance. So we can define the beam width and the output like this and then we can call this translate beam function which will do a beam search and give us the corresponding result. And again our model needs to be trained for a longer period of time. So please try that.
+
+
+ 
+
+In this implementation, the encoder still produces a sequence of hidden states, one for each input token. However, unlike the basic encoder–decoder model, the decoder no longer depends only on the final encoder state. 
+
+ 
+
+At each decoding step: 
+
+The current decoder hidden state is used to compute alignment scores with all encoder states. 
+
+These scores are normalised to obtain attention weights. A context vector is computed as a weighted combination of encoder outputs. 
+
+ 
+
+This context vector represents the part of the input sequence that is most relevant for predicting the current target word. 
+
+ 
+
+The decoder now receives two sources of information at every time step: 
+
+Its own internal state from previous predictions  
+
+The context vector derived from attention over the input sequence 
+
+ 
+
+By combining these, the decoder can shift its focus across different source tokens as translation progresses rather than treating the entire sentence as a single compressed signal. 
+
+ 
+
+This behaviour reflects the conceptual working of attention discussed earlier but is now implemented within the training loop of a real neural network. 
+
+ 
+
+Training still uses teacher forcing, where the correct target token is provided as the next decoder input during each step. However, the prediction at each time step now depends on the following: 
+
+The evolving decoder state 
+
+Dynamically computed context vectors from the encoder outputs 
+
+ 
+
+Loss is accumulated across all decoding steps and backpropagated through the encoder, attention computation and decoder network. 
+
+ 
+
+As training progresses, the model learns how to predict the next word and how to align segments of the input sentence with corresponding segments in the output sentence. 
+
+ 
+
+During inference, the decoder again generates words one token at a time. At each step, attention weights are recomputed, allowing the model to refer back to different parts of the source sentence as needed. 
+
+ 
+
+Compared with the basic encoder–decoder model, longer sentences are handled more effectively and important contextual information from earlier parts of the input is less likely to be lost. 
+
+ 
+
+This behaviour is visible in the predicted translations, where phrase-level alignment is more consistent across longer sequences.
+
+ 
+
+Next, we will understand the mathematics involved behind this process.
+
